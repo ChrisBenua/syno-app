@@ -1,6 +1,10 @@
 package com.syno_back.backend.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="translations")
@@ -15,12 +19,32 @@ public class DbTranslation {
     @Column(name="comment")
     private String comment;
 
+    @Column(name="transcription")
+    private String transcription;
+
     @Column(name="usage_sample")
     private String usageSample;
+
+    @CreationTimestamp
+    @Column(name="time_created")
+    private LocalDateTime timeCreated;
+
+    @UpdateTimestamp
+    @Column(name="time_modified")
+    private LocalDateTime timeModified;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="source_card_id")
     private DbUserCard sourceCard;
+
+    public DbTranslation(String translation, String comment, String usageSample, String transcription) {
+        this.translation = translation;
+        this.comment = comment;
+        this.usageSample = usageSample;
+        this.transcription = transcription;
+    }
+
+    public DbTranslation() {}
 
     public Long getId() {
         return id;
@@ -42,6 +66,10 @@ public class DbTranslation {
         return sourceCard;
     }
 
+    public String getTranscription() {
+        return transcription;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -60,5 +88,17 @@ public class DbTranslation {
 
     public void setSourceCard(DbUserCard sourceCard) {
         this.sourceCard = sourceCard;
+    }
+
+    public void setTranscription(String transcription) {
+        this.transcription = transcription;
+    }
+
+    public LocalDateTime getTimeCreated() {
+        return timeCreated;
+    }
+
+    public LocalDateTime getTimeModified() {
+        return timeModified;
     }
 }

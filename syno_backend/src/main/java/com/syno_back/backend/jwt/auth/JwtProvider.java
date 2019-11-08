@@ -35,6 +35,7 @@ public class JwtProvider {
     public boolean validateJwtToken(String authToken) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            return true;
         } catch (SignatureException e) {
             logger.error(String.format("Invalid JwtSignature: error: %s", e.getMessage()));
         } catch (MalformedJwtException e) {
