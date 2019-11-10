@@ -8,6 +8,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class Translation implements Serializable {
+
+    @JsonProperty("id")
+    private Long id;
+
     @JsonProperty("translation")
     private String translation;
 
@@ -26,8 +30,9 @@ public class Translation implements Serializable {
     @JsonProperty("time_modified")
     private LocalDateTime timeModified;
 
-    public Translation(String translation, String comment, String transcription, String usageSample, LocalDateTime timeCreated,
+    public Translation(Long id, String translation, String comment, String transcription, String usageSample, LocalDateTime timeCreated,
                        LocalDateTime timeModified) {
+        this.id = id;
         this.translation = translation;
         this.transcription = transcription;
         this.comment = comment;
@@ -37,7 +42,7 @@ public class Translation implements Serializable {
     }
 
     public Translation(DbTranslation translation) {
-        this(translation.getTranslation(), translation.getComment(), translation.getTranscription(), translation.getUsageSample(),
+        this(translation.getId(), translation.getTranslation(), translation.getComment(), translation.getTranscription(), translation.getUsageSample(),
                 translation.getTimeCreated(), translation.getTimeModified());
     }
 

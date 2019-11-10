@@ -22,4 +22,21 @@ public class DbRole {
     public String getName() {
         return name;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
+
+        if (other.getClass().equals(this.getClass())) {
+            return ((DbRole)other).getId().equals(this.getId());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

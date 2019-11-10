@@ -1,13 +1,18 @@
 package com.syno_back.backend.model;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+@Builder
+@AllArgsConstructor
 @Entity
 @Table(name="user_cards")
 public class DbUserCard {
@@ -32,16 +37,18 @@ public class DbUserCard {
     @OneToMany(mappedBy = "sourceCard",
                cascade = CascadeType.ALL,
                orphanRemoval = true)
-    private List<DbTranslation> translations;
+    @Builder.Default
+    private List<DbTranslation> translations = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "source_dictionary_id")
     private DbUserDictionary userDictionary;
 
-    public DbUserCard() {}
+    public DbUserCard() {
+    }
 
-    public DbUserCard(String name, String language) {
-        this.translatedWord = name;
+    public DbUserCard(String translatedWord, String language) {
+        this.translatedWord = translatedWord;
         this.language = language;
     }
 
@@ -79,6 +86,10 @@ public class DbUserCard {
         return timeModified;
     }
 
+    public DbUserDictionary getUserDictionary() {
+        return userDictionary;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -93,9 +104,27 @@ public class DbUserCard {
 
     public void setTranslations(List<DbTranslation> translations) {
         this.translations = translations;
+        translations.forEach(trans -> trans.setSourceCard(this));
     }
 
     public void setUserDictionary(DbUserDictionary userDictionary) {
         this.userDictionary = userDictionary;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
+
+        if (other.getClass().equals(this.getClass())) {
+            return ((DbUserCard)other).getId().equals(this.getId());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
     }
 }

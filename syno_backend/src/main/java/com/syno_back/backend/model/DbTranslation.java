@@ -1,11 +1,15 @@
 package com.syno_back.backend.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Builder
+@AllArgsConstructor
 @Entity
 @Table(name="translations")
 public class DbTranslation {
@@ -100,5 +104,22 @@ public class DbTranslation {
 
     public LocalDateTime getTimeModified() {
         return timeModified;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
+
+        if (other.getClass().equals(this.getClass())) {
+            return ((DbTranslation)other).getId().equals(this.getId());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
     }
 }

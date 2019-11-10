@@ -5,6 +5,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -32,7 +33,7 @@ public class DbUserDictionary {
     @OneToMany(mappedBy = "userDictionary",
                cascade = CascadeType.ALL,
                orphanRemoval = false)
-    private List<DbUserCard> userCards;
+    private List<DbUserCard> userCards = new ArrayList<>();
 
     public void addUserCard(DbUserCard card) {
         card.setUserDictionary(this);
@@ -77,5 +78,22 @@ public class DbUserDictionary {
 
     public void setUserCards(List<DbUserCard> userCards) {
         this.userCards = userCards;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
+
+        if (other.getClass().equals(this.getClass())) {
+            return ((DbUserDictionary)other).getId().equals(this.getId());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
     }
 }

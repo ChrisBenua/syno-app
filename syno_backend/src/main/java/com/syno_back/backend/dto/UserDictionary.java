@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserDictionary implements Serializable {
+    @JsonProperty("id")
+    private Long id;
+
     @JsonProperty("name")
     private String name;
 
@@ -21,7 +24,8 @@ public class UserDictionary implements Serializable {
     @JsonProperty("user_cards")
     private List<UserCard> userCards;
 
-    public UserDictionary(String name, LocalDateTime timeCreated, LocalDateTime timeModified, List<UserCard> userCards) {
+    public UserDictionary(Long id, String name, LocalDateTime timeCreated, LocalDateTime timeModified, List<UserCard> userCards) {
+        this.id = id;
         this.name = name;
         this.timeCreated = timeCreated;
         this.timeModified = timeModified;
@@ -29,7 +33,7 @@ public class UserDictionary implements Serializable {
     }
 
     public UserDictionary(DbUserDictionary userDictionary) {
-        this(userDictionary.getName(), userDictionary.getTimeCreated(), userDictionary.getTimeModified(), userDictionary.getUserCards().stream().map(UserCard::new).collect(Collectors.toList()));
+        this(userDictionary.getId(), userDictionary.getName(), userDictionary.getTimeCreated(), userDictionary.getTimeModified(), userDictionary.getUserCards().stream().map(UserCard::new).collect(Collectors.toList()));
     }
 
     private static final long serialVersionUID = -1664970284520387974L;

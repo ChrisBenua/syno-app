@@ -1,10 +1,12 @@
 package com.syno_back.backend.model;
 
+import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +43,7 @@ public class DbUser {
     @OneToMany(mappedBy = "owner",
                cascade = CascadeType.ALL,
                orphanRemoval = true)
-    private List<DbUserDictionary> userDictionaries;
+    private List<DbUserDictionary> userDictionaries = new ArrayList<>();
 
     public DbUser() {}
 
@@ -77,5 +79,22 @@ public class DbUser {
 
     public void setRoles(Collection<DbRole> roles) {
         this.roles = roles;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
+
+        if (other.getClass().equals(this.getClass())) {
+            return ((DbUser)other).getId().equals(this.getId());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
     }
 }
