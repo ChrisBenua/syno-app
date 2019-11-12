@@ -2,12 +2,16 @@ package com.syno_back.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syno_back.backend.model.DbUserDictionary;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Builder
+@AllArgsConstructor
 public class UserDictionary implements Serializable {
     @JsonProperty("id")
     private Long id;
@@ -23,14 +27,6 @@ public class UserDictionary implements Serializable {
 
     @JsonProperty("user_cards")
     private List<UserCard> userCards;
-
-    public UserDictionary(Long id, String name, LocalDateTime timeCreated, LocalDateTime timeModified, List<UserCard> userCards) {
-        this.id = id;
-        this.name = name;
-        this.timeCreated = timeCreated;
-        this.timeModified = timeModified;
-        this.userCards = userCards;
-    }
 
     public UserDictionary(DbUserDictionary userDictionary) {
         this(userDictionary.getId(), userDictionary.getName(), userDictionary.getTimeCreated(), userDictionary.getTimeModified(), userDictionary.getUserCards().stream().map(UserCard::new).collect(Collectors.toList()));

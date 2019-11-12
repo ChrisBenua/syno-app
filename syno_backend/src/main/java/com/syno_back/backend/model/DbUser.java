@@ -1,5 +1,6 @@
 package com.syno_back.backend.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -11,6 +12,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+@Builder
+@AllArgsConstructor
 @Entity
 @Table(name="users")
 public class DbUser {
@@ -38,11 +41,13 @@ public class DbUser {
             name = "users_roles",
             joinColumns = @JoinColumn(name="user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName = "id"))
-    private Collection<DbRole> roles;
+    @Builder.Default
+    private Collection<DbRole> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "owner",
                cascade = CascadeType.ALL,
                orphanRemoval = true)
+    @Builder.Default
     private List<DbUserDictionary> userDictionaries = new ArrayList<>();
 
     public DbUser() {}
