@@ -1,43 +1,24 @@
 package com.syno_back.backend.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.syno_back.backend.BackendApplication;
-import com.syno_back.backend.config.WebSecurityConfig;
 import com.syno_back.backend.datasource.DbUserDictionaryRepository;
 import com.syno_back.backend.datasource.UserRepository;
 import com.syno_back.backend.dto.NewUserDictionary;
-import com.syno_back.backend.dto.UserCard;
-import com.syno_back.backend.dto.UserDictionary;
-import com.syno_back.backend.jwt.auth.JwtAuthEntryPoint;
 import com.syno_back.backend.model.DbUser;
 import com.syno_back.backend.model.DbUserCard;
 import com.syno_back.backend.model.DbUserDictionary;
-import com.syno_back.backend.service.UserDetailServiceImpl;
 import lombok.val;
 import static org.hamcrest.Matchers.is;
 
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -61,6 +42,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @WebAppConfiguration()
 @ContextConfiguration
 @SpringBootTest
+@ActiveProfiles("test")
 class UserDictionaryControllerTest {
 
     @Autowired

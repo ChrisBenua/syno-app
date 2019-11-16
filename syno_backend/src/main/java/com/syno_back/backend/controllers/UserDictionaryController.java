@@ -5,7 +5,9 @@ import com.syno_back.backend.datasource.UserRepository;
 import com.syno_back.backend.dto.NewUserDictionary;
 import com.syno_back.backend.dto.UserDictionary;
 import com.syno_back.backend.model.DbUserDictionary;
+import com.syno_back.backend.service.IDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +16,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/dicts")
@@ -25,6 +29,9 @@ public class UserDictionaryController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private IDtoMapper<NewUserDictionary, DbUserDictionary> mapper;
 
     @GetMapping(value = "/my_all", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('USER')")
@@ -42,10 +49,8 @@ public class UserDictionaryController {
         if (owner.isEmpty() || userDictionaryRepository.existsByNameAndOwner_Id(newUserDictionary.getName(), owner.get().getId())) {
             return new ResponseEntity<>("Dictionaries can't have same name", HttpStatus.BAD_REQUEST);
         }
-        var newDbUserDict = new DbUserDictionary();
-        newDbUserDict.setOwner(owner.get());
-        newDbUserDict.setName(newUserDictionary.getName());
-        userDictionaryRepository.save(newDbUserDict);
+
+        userDictionaryRepository.save(mapper.convert(newUserDictionary, List.of(Pair.of("owner", owner.get()))));
 
         return ResponseEntity.accepted().body(String.format("Dictionary with name %s created successfully", newUserDictionary.getName()));
     }

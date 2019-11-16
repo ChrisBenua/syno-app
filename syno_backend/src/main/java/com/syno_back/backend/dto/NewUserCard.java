@@ -3,11 +3,17 @@ package com.syno_back.backend.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syno_back.backend.model.DbUserCard;
 import com.syno_back.backend.model.DbUserDictionary;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class NewUserCard implements Serializable {
 
     @JsonProperty("translatedWord")
@@ -18,14 +24,6 @@ public class NewUserCard implements Serializable {
 
     @JsonProperty("translations")
     private List<NewUserTranslation> translations;
-
-    public NewUserCard(String translatedWord, String language, List<NewUserTranslation> translations) {
-        this.translatedWord = translatedWord;
-        this.language = language;
-        this.translations = translations;
-    }
-
-    public NewUserCard() {}
 
     public String getTranslatedWord() {
         return translatedWord;

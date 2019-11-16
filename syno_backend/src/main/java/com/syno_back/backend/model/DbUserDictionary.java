@@ -39,6 +39,7 @@ public class DbUserDictionary {
     @OneToMany(mappedBy = "userDictionary",
                cascade = CascadeType.ALL,
                orphanRemoval = false)
+    @Builder.Default
     private List<DbUserCard> userCards = new ArrayList<>();
 
     public void addUserCard(DbUserCard card) {
