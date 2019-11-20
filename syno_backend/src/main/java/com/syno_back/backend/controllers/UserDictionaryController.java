@@ -33,11 +33,14 @@ public class UserDictionaryController {
     @Autowired
     private IDtoMapper<NewUserDictionary, DbUserDictionary> mapper;
 
+    @Autowired
+    private IDtoMapper<DbUserDictionary, UserDictionary> fromDtoMapper;
+
     @GetMapping(value = "/my_all", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity getUserDictionaries(Authentication auth) {
         var dtoResp = userDictionaryRepository.findByOwner_Email(((User)auth.getPrincipal()).getUsername()).stream().
-                        map(UserDictionary::new);
+                        map((dict) -> fromDtoMapper.convert(dict, null));
         return ResponseEntity.ok(dtoResp);
     }
 
@@ -49,8 +52,10 @@ public class UserDictionaryController {
         if (owner.isEmpty() || userDictionaryRepository.existsByNameAndOwner_Id(newUserDictionary.getName(), owner.get().getId())) {
             return new ResponseEntity<>("Dictionaries can't have same name", HttpStatus.BAD_REQUEST);
         }
-
-        userDictionaryRepository.save(mapper.convert(newUserDictionary, List.of(Pair.of("owner", owner.get()))));
+        var newDbUserDict = mapper.convert(newUserDictionary, null);
+        newDbUserDict = userDictionaryRepository.save(newDbUserDict);
+        owner.get().addUserDictionary(newDbUserDict);
+        userRepository.save(owner.get());
 
         return ResponseEntity.accepted().body(String.format("Dictionary with name %s created successfully", newUserDictionary.getName()));
     }

@@ -1,7 +1,6 @@
 package com.syno_back.backend.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -14,28 +13,38 @@ import java.util.Optional;
 
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="users")
 public class DbUser {
 
+    @Builder.Default
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id = 0L;
 
+    @Getter
+    @Setter
     @Column(name="email")
     private String email;
 
+    @Getter
+    @Setter
     @Column(name="password")
     private String password;
 
+    @Getter
     @CreationTimestamp
     @Column(name="time_created")
     private LocalDateTime timeCreated;
 
+    @Getter
     @UpdateTimestamp
     @Column(name="time_modified")
     private LocalDateTime timeModified;
 
+    @Setter
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
@@ -44,13 +53,12 @@ public class DbUser {
     @Builder.Default
     private Collection<DbRole> roles = new ArrayList<>();
 
+    @Getter
     @OneToMany(mappedBy = "owner",
                cascade = CascadeType.ALL,
                orphanRemoval = true)
     @Builder.Default
     private List<DbUserDictionary> userDictionaries = new ArrayList<>();
-
-    public DbUser() {}
 
     public DbUser(String email, String password) {
         this.email = email;
@@ -62,28 +70,8 @@ public class DbUser {
         userDictionary.setOwner(this);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public List<DbUserDictionary> getUserDictionaries() {
-        return userDictionaries;
-    }
-
     public Optional<Collection<DbRole>> getRoles() {
         return Optional.ofNullable(roles);
-    }
-
-    public void setRoles(Collection<DbRole> roles) {
-        this.roles = roles;
     }
 
     @Override
@@ -100,6 +88,6 @@ public class DbUser {
 
     @Override
     public int hashCode() {
-        return 31;
+        return this.getId().hashCode();
     }
 }

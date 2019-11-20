@@ -19,10 +19,6 @@ class SingleUpdateCardServiceTest {
     @Autowired
     private SingleUpdateCardService updater;
 
-    @org.springframework.boot.test.context.TestConfiguration
-    static class ContextConfiguration {
-    }
-
     @Test
     void update() {
         var userDbCard = DbUserCard.builder().language("Ru-En").translatedWord("word")

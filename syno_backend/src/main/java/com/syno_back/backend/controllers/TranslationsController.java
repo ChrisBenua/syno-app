@@ -1,11 +1,14 @@
 package com.syno_back.backend.controllers;
 
+import com.syno_back.backend.datasource.DbTranslationRepository;
 import com.syno_back.backend.datasource.DbUserCardRepository;
 import com.syno_back.backend.dto.MessageResponse;
 import com.syno_back.backend.dto.NewUserTranslation;
+import com.syno_back.backend.dto.Translation;
 import com.syno_back.backend.model.DbTranslation;
 import com.syno_back.backend.model.DbUserDictionary;
 import com.syno_back.backend.service.ICredentialProvider;
+import com.syno_back.backend.service.IDtoMapper;
 import com.syno_back.backend.service.ITranslationsAdderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/translations/{card_id}")
+@RequestMapping("/api/translations")
 public class TranslationsController {
     @Autowired
     private DbUserCardRepository cardRepository;
@@ -32,7 +35,32 @@ public class TranslationsController {
     @Autowired
     private ITranslationsAdderService translationsAdderService;
 
-    @PostMapping("add_translations")
+    @Autowired
+    private DbTranslationRepository translationRepository;
+
+    @Autowired
+    private IDtoMapper<DbTranslation, Translation> mapper;
+
+
+    @GetMapping("/get_translations")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity getTranslations(@RequestParam(name = "trans_ids", required = true) List<Long> ids) {
+        var trans = translationRepository.findAllById(ids);
+        return new ResponseEntity<>(trans.stream().map(tran -> mapper.convert(tran, null)), HttpStatus.OK);
+    }
+
+    @GetMapping("/get_translation")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity getTranslation(@RequestParam(name = "trans_id", required = true) Long id) {
+        var trans = translationRepository.findById(id);
+        if (trans.isPresent()) {
+            return ResponseEntity.of(trans.map(tr -> mapper.convert(tr, null)));
+        } else {
+            return new ResponseEntity<>(MessageResponse.of(String.format("No such translation with id %d", id)), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/{card_id}/add_translations")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity createTranslation(Authentication auth, @PathVariable("card_id") Long cardId, @Valid @RequestBody List<NewUserTranslation> translation) {
         String userEmail = ((User)auth.getPrincipal()).getUsername();
@@ -42,7 +70,7 @@ public class TranslationsController {
             if (dictCredentialProvider.check(card.getUserDictionary(), auth)) {
                 translationsAdderService.addTranslationsToCard(translation, card);
                 cardRepository.save(card);
-                return new ResponseEntity<>(MessageResponse.of(String.format("%d translations created successfully", translation.size())), HttpStatus.CREATED);
+                return new ResponseEntity<>(MessageResponse.of(String.format("%d translations created successfully", translation.size())), HttpStatus.ACCEPTED);
             } else {
                 return new ResponseEntity<>(MessageResponse.of(String.format("The card %d doesnt belong to user %s", cardId, userEmail)), HttpStatus.FORBIDDEN);
             }

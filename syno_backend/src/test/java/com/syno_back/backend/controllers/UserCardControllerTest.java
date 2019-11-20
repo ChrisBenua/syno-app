@@ -136,7 +136,7 @@ class UserCardControllerTest1 {
 
         var dbUserDict = DbUserDictionary.builder().name("name").owner(userRepository.findAll().get(0)).build();
 
-        userDictionaryRepository.save(dbUserDict);
+        dbUserDict = userDictionaryRepository.save(dbUserDict);
         userDictionaryRepository.flush();
 
         List<NewUserTranslation> translations = new ArrayList<>();
@@ -165,6 +165,55 @@ class UserCardControllerTest1 {
 
     @Test
     @Transactional
+    void addCard404() throws Exception {
+        val email = "email";
+        userRepository.save(DbUser.builder().email(email).password("123").build());
+        userRepository.flush();
+
+        List<NewUserTranslation> translations = new ArrayList<>();
+        translations.add(NewUserTranslation.builder().usageSample("sample").comment("comment").transcription("transcr").translation("trans").build());
+        var newUserCard = NewUserCard.builder().language("ru-en").translatedWord("word").translations(translations).build();
+
+
+        mockMvc.perform(MockMvcRequestBuilders.post(String.format("/api/user_cards/%d/add_card", -1L)).with(user("email").roles("USER"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(new ObjectMapper().writeValueAsString(newUserCard)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    @Transactional
+    void addCardToDiffUserDict() throws Exception {
+        val email = "email";
+        userRepository.save(DbUser.builder().email(email).password("123").build());
+        userRepository.flush();
+
+        val fakeUserEmail = "email1";
+        userRepository.save(DbUser.builder().email(fakeUserEmail).password("123").build());
+        userRepository.flush();
+
+        var dbUserDict = DbUserDictionary.builder().name("name").owner(userRepository.findAll().get(0)).build();
+
+        dbUserDict = userDictionaryRepository.save(dbUserDict);
+        userDictionaryRepository.flush();
+
+        List<NewUserTranslation> translations = new ArrayList<>();
+        translations.add(NewUserTranslation.builder().usageSample("sample").comment("comment").transcription("transcr").translation("trans").build());
+        var newUserCard = NewUserCard.builder().language("ru-en").translatedWord("word").translations(translations).build();
+
+
+        mockMvc.perform(MockMvcRequestBuilders.post(String.format("/api/user_cards/%d/add_card", dbUserDict.getId())).with(user("email1").roles("USER"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(new ObjectMapper().writeValueAsString(newUserCard)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
+    @Transactional
     void updateCardsFromDictionarySelective() throws Exception {
         val email = "email";
         userRepository.save(DbUser.builder().email(email).password("123").build());
@@ -172,7 +221,7 @@ class UserCardControllerTest1 {
 
         var dbUserDict = DbUserDictionary.builder().name("name").owner(userRepository.findAll().get(0)).build();
 
-        userDictionaryRepository.save(dbUserDict);
+        dbUserDict = userDictionaryRepository.save(dbUserDict);
         userDictionaryRepository.flush();
         List<DbUserCard> cards = new ArrayList<>();
         for (int i = 0; i < 10; ++i) {

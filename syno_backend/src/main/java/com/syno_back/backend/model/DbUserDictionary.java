@@ -2,6 +2,7 @@ package com.syno_back.backend.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -14,9 +15,11 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 @Entity
 @Table(name="user_dictionaries")
 public class DbUserDictionary {
+    @Builder.Default
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id = 0L;
@@ -47,30 +50,6 @@ public class DbUserDictionary {
         this.userCards.add(card);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public DbUser getOwner() {
-        return owner;
-    }
-
-    public List<DbUserCard> getUserCards() {
-        return userCards;
-    }
-
-    public LocalDateTime getTimeCreated() {
-        return timeCreated;
-    }
-
-    public LocalDateTime getTimeModified() {
-        return timeModified;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -85,6 +64,7 @@ public class DbUserDictionary {
 
     public void setUserCards(List<DbUserCard> userCards) {
         this.userCards = userCards;
+        this.userCards.forEach(card -> card.setUserDictionary(this));
     }
 
     @Override
@@ -101,6 +81,6 @@ public class DbUserDictionary {
 
     @Override
     public int hashCode() {
-        return 31;
+        return this.getId().hashCode();
     }
 }

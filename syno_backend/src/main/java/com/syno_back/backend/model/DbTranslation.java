@@ -1,7 +1,6 @@
 package com.syno_back.backend.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,6 +9,9 @@ import java.time.LocalDateTime;
 
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name="translations")
 public class DbTranslation {
@@ -48,64 +50,6 @@ public class DbTranslation {
         this.transcription = transcription;
     }
 
-    public DbTranslation() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTranslation() {
-        return translation;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public String getUsageSample() {
-        return usageSample;
-    }
-
-    public DbUserCard getSourceCard() {
-        return sourceCard;
-    }
-
-    public String getTranscription() {
-        return transcription;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setTranslation(String translation) {
-        this.translation = translation;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public void setUsageSample(String usageSample) {
-        this.usageSample = usageSample;
-    }
-
-    public void setSourceCard(DbUserCard sourceCard) {
-        this.sourceCard = sourceCard;
-    }
-
-    public void setTranscription(String transcription) {
-        this.transcription = transcription;
-    }
-
-    public LocalDateTime getTimeCreated() {
-        return timeCreated;
-    }
-
-    public LocalDateTime getTimeModified() {
-        return timeModified;
-    }
-
     @Override
     public boolean equals(Object other) {
         if (other == null) {
@@ -120,6 +64,6 @@ public class DbTranslation {
 
     @Override
     public int hashCode() {
-        return 31;
+        return this.getId().hashCode();
     }
 }

@@ -3,6 +3,8 @@ package com.syno_back.backend.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Builder
+@Getter
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name="user_cards")
@@ -44,9 +48,6 @@ public class DbUserCard {
     @JoinColumn(name = "source_dictionary_id")
     private DbUserDictionary userDictionary;
 
-    public DbUserCard() {
-    }
-
     public DbUserCard(String translatedWord, String language) {
         this.translatedWord = translatedWord;
         this.language = language;
@@ -60,34 +61,6 @@ public class DbUserCard {
     public void removeTranslation(DbTranslation translation) {
         translations.remove(translation);
         translation.setSourceCard(null);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTranslatedWord() {
-        return translatedWord;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public List<DbTranslation> getTranslations() {
-        return translations;
-    }
-
-    public LocalDateTime getTimeCreated() {
-        return timeCreated;
-    }
-
-    public LocalDateTime getTimeModified() {
-        return timeModified;
-    }
-
-    public DbUserDictionary getUserDictionary() {
-        return userDictionary;
     }
 
     public void setId(Long id) {
@@ -125,6 +98,6 @@ public class DbUserCard {
 
     @Override
     public int hashCode() {
-        return 31;
+        return this.getId().hashCode();
     }
 }

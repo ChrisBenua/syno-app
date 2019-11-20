@@ -1,19 +1,16 @@
 package com.syno_back.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class MessageResponse implements Serializable {
     @JsonProperty("message")
     private String message;
-
-    public MessageResponse(String message) {
-        this.message = message;
-    }
-
-    public MessageResponse() {
-    }
 
     public String getMessage() {
         return message;

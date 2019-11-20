@@ -1,9 +1,18 @@
 package com.syno_back.backend.model;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="roles")
 public class DbRole {
 
@@ -13,15 +22,6 @@ public class DbRole {
 
     @Column(name="name")
     private String name;
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
 
     @Override
     public boolean equals(Object other) {
@@ -37,6 +37,6 @@ public class DbRole {
 
     @Override
     public int hashCode() {
-        return 31;
+        return this.getId().hashCode();
     }
 }

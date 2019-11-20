@@ -3,10 +3,16 @@ package com.syno_back.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syno_back.backend.model.DbTranslation;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@Builder
+@AllArgsConstructor
+@Getter
 public class Translation implements Serializable {
 
     @JsonProperty("id")
@@ -29,22 +35,6 @@ public class Translation implements Serializable {
 
     @JsonProperty("time_modified")
     private LocalDateTime timeModified;
-
-    public Translation(Long id, String translation, String comment, String transcription, String usageSample, LocalDateTime timeCreated,
-                       LocalDateTime timeModified) {
-        this.id = id;
-        this.translation = translation;
-        this.transcription = transcription;
-        this.comment = comment;
-        this.usageSample = usageSample;
-        this.timeModified = timeModified;
-        this.timeCreated = timeCreated;
-    }
-
-    public Translation(DbTranslation translation) {
-        this(translation.getId(), translation.getTranslation(), translation.getComment(), translation.getTranscription(), translation.getUsageSample(),
-                translation.getTimeCreated(), translation.getTimeModified());
-    }
 
     private static final long serialVersionUID = -1238970284520387974L;
 

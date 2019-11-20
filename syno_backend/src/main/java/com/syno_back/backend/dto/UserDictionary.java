@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syno_back.backend.model.DbUserDictionary;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 
 @Builder
 @AllArgsConstructor
+@Getter
 public class UserDictionary implements Serializable {
     @JsonProperty("id")
     private Long id;
@@ -27,10 +29,6 @@ public class UserDictionary implements Serializable {
 
     @JsonProperty("user_cards")
     private List<UserCard> userCards;
-
-    public UserDictionary(DbUserDictionary userDictionary) {
-        this(userDictionary.getId(), userDictionary.getName(), userDictionary.getTimeCreated(), userDictionary.getTimeModified(), userDictionary.getUserCards().stream().map(UserCard::new).collect(Collectors.toList()));
-    }
 
     private static final long serialVersionUID = -1664970284520387974L;
 }

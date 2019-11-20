@@ -3,11 +3,14 @@ package com.syno_back.backend.controllers;
 import com.syno_back.backend.datasource.DbUserCardRepository;
 import com.syno_back.backend.datasource.DbUserDictionaryRepository;
 import com.syno_back.backend.dto.*;
+import com.syno_back.backend.model.DbTranslation;
 import com.syno_back.backend.model.DbUserCard;
 import com.syno_back.backend.model.DbUserDictionary;
 import com.syno_back.backend.service.IBatchUpdateEntityService;
 import com.syno_back.backend.service.ICredentialProvider;
+import com.syno_back.backend.service.IDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,10 +19,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -31,16 +31,23 @@ public class UserCardController {
 
     private IBatchUpdateEntityService<UpdateUserCard, DbUserDictionary> batchUserCardUpdater;
 
-    private ICredentialProvider<DbUserDictionary, Authentication> userDictionaryAuthenticationICredentialProvider;
+    private ICredentialProvider<DbUserDictionary, Authentication> userDictCredentialProvider;
+
+    private IDtoMapper<DbUserCard, UserCard> cardMapper;
+
+    private IDtoMapper<NewUserCard, DbUserCard> toDbCardMapper;
 
 
     public UserCardController(@Autowired DbUserCardRepository userCardRepository, @Autowired DbUserDictionaryRepository
             userDictionaryRepository, @Autowired IBatchUpdateEntityService<UpdateUserCard, DbUserDictionary> batchUpdater,
-            ICredentialProvider<DbUserDictionary, Authentication> credentialProvider) {
+            ICredentialProvider<DbUserDictionary, Authentication> credentialProvider, @Autowired IDtoMapper<DbUserCard, UserCard> cardMapper,
+                              @Autowired IDtoMapper<NewUserCard, DbUserCard> toDbCardMapper) {
         this.userCardRepository = userCardRepository;
         this.userDictionaryRepository = userDictionaryRepository;
         this.batchUserCardUpdater = batchUpdater;
-        this.userDictionaryAuthenticationICredentialProvider = credentialProvider;
+        this.userDictCredentialProvider = credentialProvider;
+        this.cardMapper = cardMapper;
+        this.toDbCardMapper = toDbCardMapper;
     }
 
     @PostMapping("/add_card")
@@ -50,19 +57,21 @@ public class UserCardController {
 
         var dict = userDictionaryRepository.findById(userDictId);
         if (dict.isPresent()) {
-            if (userDictionaryAuthenticationICredentialProvider.check(dict.get(), auth)) {
-                var card = newUserCard.toDbUserCard(dict.get());
+            if (userDictCredentialProvider.check(dict.get(), auth)) {
+                var card = toDbCardMapper.convert(newUserCard, null);
+                card = userCardRepository.save(card);
                 dict.get().addUserCard(card);
+
                 userCardRepository.save(card);
                 userDictionaryRepository.save(dict.get());
 
-                return new ResponseEntity<>("User card created successfully", HttpStatus.ACCEPTED);
+                return new ResponseEntity<>(MessageResponse.of("User card created successfully"), HttpStatus.ACCEPTED);
             } else {
-                return new ResponseEntity<>(String.format("DbUserDictionary with id %d doesnt belong to user with email: %s",
-                        userDictId, userEmail), HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>(MessageResponse.of(String.format("DbUserDictionary with id %d doesnt belong to user with email: %s",
+                        userDictId, userEmail)), HttpStatus.FORBIDDEN);
             }
         } else {
-            return new ResponseEntity<>(String.format("No such DbUserDictionary with id %d", userDictId), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(MessageResponse.of(String.format("No such DbUserDictionary with id %d", userDictId)), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -73,17 +82,23 @@ public class UserCardController {
 
         var dict = userDictionaryRepository.findById(userDictId);
         if (dict.isPresent()) {
-            if (userDictionaryAuthenticationICredentialProvider.check(dict.get(), auth)) {
-                var cards = newUserCards.stream().map(newUserCard -> newUserCard.toDbUserCard(dict.get())).collect(Collectors.toList());
-                userCardRepository.saveAll(cards);
+            if (userDictCredentialProvider.check(dict.get(), auth)) {
+                var cards = newUserCards.stream().map(newUserCard -> {
+                    var card = toDbCardMapper.convert(newUserCard, null);
+                    dict.get().addUserCard(card);
+                    return card;
+                }).collect(Collectors.toList());
 
-                return new ResponseEntity<>("User card created successfully", HttpStatus.ACCEPTED);
+                userCardRepository.saveAll(cards);
+                userDictionaryRepository.save(dict.get());
+
+                return new ResponseEntity<>(MessageResponse.of("User card created successfully"), HttpStatus.ACCEPTED);
             } else {
-                return new ResponseEntity<>(String.format("DbUserDictionary with id %d doesnt belong to user with email: %s",
-                        userDictId, userEmail), HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>(MessageResponse.of(String.format("DbUserDictionary with id %d doesnt belong to user with email: %s",
+                        userDictId, userEmail)), HttpStatus.FORBIDDEN);
             }
         } else {
-            return new ResponseEntity<>(String.format("No such DbUserDictionary with id %d", userDictId), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(MessageResponse.of(String.format("No such DbUserDictionary with id %d", userDictId)), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -93,15 +108,15 @@ public class UserCardController {
         String userEmail = ((User)auth.getPrincipal()).getUsername();
         var dict = userDictionaryRepository.findById(userDictId);
         if (dict.isPresent()) {
-            if (userDictionaryAuthenticationICredentialProvider.check(dict.get(), auth)) {
-                var dto = dict.get().getUserCards().stream().map(UserCard::new);
+            if (userDictCredentialProvider.check(dict.get(), auth)) {
+                var dto = dict.get().getUserCards().stream().map((card) -> cardMapper.convert(card, null));
                 return ResponseEntity.ok(dto);
             } else {
-                return new ResponseEntity<>(String.format("DbUserDictionary with id %d doesnt belong to user with email: %s",
-                        userDictId, userEmail), HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>(MessageResponse.of(String.format("DbUserDictionary with id %d doesnt belong to user with email: %s",
+                        userDictId, userEmail)), HttpStatus.FORBIDDEN);
             }
         } else {
-            return new ResponseEntity<>(String.format("No such DbUserDictionary with id %d", userDictId), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(MessageResponse.of(String.format("No such DbUserDictionary with id %d", userDictId)), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -112,7 +127,7 @@ public class UserCardController {
         String userEmail = ((User)auth.getPrincipal()).getUsername();
         var dict = userDictionaryRepository.findById(userDictId);
         if (dict.isPresent()) {
-            if (userDictionaryAuthenticationICredentialProvider.check(dict.get(), auth)) {
+            if (userDictCredentialProvider.check(dict.get(), auth)) {
                 this.batchUserCardUpdater.updateWithOwnerCheck(updateUserCards, dict.get());
 
                 return ResponseEntity.ok(MessageResponse.of("Saved  entities successfully"));

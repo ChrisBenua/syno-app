@@ -145,6 +145,20 @@ class UserDictionaryControllerTest1 {
         var userDict = userDictionaryRepository.findAll().get(0);
         assertEquals(userDict.getOwner().getEmail(), "email");
         assertEquals(userDict.getName(), "name");
+        assertEquals(userDict.getOwner().getUserDictionaries().size(), 1);
+        assertEquals(userDict.getOwner().getUserDictionaries().get(0).getName(), "name");
+    }
 
+    @Test
+    @Transactional
+    void createUserDictionaryNoSuchUser() throws Exception {
+        var newUserDictionary = new NewUserDictionary("name");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/dicts/new_dict").with(user("email").roles("USER"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(new ObjectMapper().writeValueAsString(newUserDictionary)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 }
