@@ -1,13 +1,22 @@
 package com.syno_back.backend.model;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+@Builder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name="user_cards")
 public class DbUserCard {
@@ -32,16 +41,15 @@ public class DbUserCard {
     @OneToMany(mappedBy = "sourceCard",
                cascade = CascadeType.ALL,
                orphanRemoval = true)
-    private List<DbTranslation> translations;
+    @Builder.Default
+    private List<DbTranslation> translations = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "source_dictionary_id")
     private DbUserDictionary userDictionary;
 
-    public DbUserCard() {}
-
-    public DbUserCard(String name, String language) {
-        this.translatedWord = name;
+    public DbUserCard(String translatedWord, String language) {
+        this.translatedWord = translatedWord;
         this.language = language;
     }
 
@@ -53,30 +61,6 @@ public class DbUserCard {
     public void removeTranslation(DbTranslation translation) {
         translations.remove(translation);
         translation.setSourceCard(null);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTranslatedWord() {
-        return translatedWord;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public List<DbTranslation> getTranslations() {
-        return translations;
-    }
-
-    public LocalDateTime getTimeCreated() {
-        return timeCreated;
-    }
-
-    public LocalDateTime getTimeModified() {
-        return timeModified;
     }
 
     public void setId(Long id) {
@@ -93,9 +77,27 @@ public class DbUserCard {
 
     public void setTranslations(List<DbTranslation> translations) {
         this.translations = translations;
+        translations.forEach(trans -> trans.setSourceCard(this));
     }
 
     public void setUserDictionary(DbUserDictionary userDictionary) {
         this.userDictionary = userDictionary;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
+
+        if (other.getClass().equals(this.getClass())) {
+            return ((DbUserCard)other).getId().equals(this.getId());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getId().hashCode();
     }
 }

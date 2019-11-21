@@ -1,15 +1,25 @@
 package com.syno_back.backend.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 @Entity
 @Table(name="user_dictionaries")
 public class DbUserDictionary {
+    @Builder.Default
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id = 0L;
@@ -32,35 +42,12 @@ public class DbUserDictionary {
     @OneToMany(mappedBy = "userDictionary",
                cascade = CascadeType.ALL,
                orphanRemoval = false)
-    private List<DbUserCard> userCards;
+    @Builder.Default
+    private List<DbUserCard> userCards = new ArrayList<>();
 
     public void addUserCard(DbUserCard card) {
         card.setUserDictionary(this);
         this.userCards.add(card);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public DbUser getOwner() {
-        return owner;
-    }
-
-    public List<DbUserCard> getUserCards() {
-        return userCards;
-    }
-
-    public LocalDateTime getTimeCreated() {
-        return timeCreated;
-    }
-
-    public LocalDateTime getTimeModified() {
-        return timeModified;
     }
 
     public void setId(Long id) {
@@ -77,5 +64,23 @@ public class DbUserDictionary {
 
     public void setUserCards(List<DbUserCard> userCards) {
         this.userCards = userCards;
+        this.userCards.forEach(card -> card.setUserDictionary(this));
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
+
+        if (other.getClass().equals(this.getClass())) {
+            return ((DbUserDictionary)other).getId().equals(this.getId());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getId().hashCode();
     }
 }
