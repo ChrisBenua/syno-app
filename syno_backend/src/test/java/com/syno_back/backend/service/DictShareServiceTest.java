@@ -47,8 +47,9 @@ class DictShareServiceTest {
         var dict = DbUserDictionary.builder().name("name").owner(DbUser.builder().id(3L).build()).id(12L).build();
         var existingShare = DbDictShare.builder().id(1L).sharedDictionary(dict).build();
         Mockito.when(repository.findBySharedDictionary_Id(12L)).thenReturn(Optional.of(existingShare));
+        Mockito.when(repository.save(existingShare)).thenReturn(existingShare);
         String uuidStr = shareService.getDictShareCode(dict);
-        Mockito.verify(repository, Mockito.times(0)).save(DbDictShare.builder().id(1L).sharedDictionary(dict).build());
+        Mockito.verify(repository, Mockito.times(1)).save(DbDictShare.builder().id(1L).sharedDictionary(dict).build());
 
         assertEquals(uuidStr, UUID.nameUUIDFromBytes("12".getBytes()).toString());
     }

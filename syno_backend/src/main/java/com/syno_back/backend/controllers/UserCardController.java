@@ -62,7 +62,6 @@ public class UserCardController {
                 card = userCardRepository.save(card);
                 dict.get().addUserCard(card);
 
-                userCardRepository.save(card);
                 userDictionaryRepository.save(dict.get());
 
                 return new ResponseEntity<>(MessageResponse.of("User card created successfully"), HttpStatus.ACCEPTED);
@@ -89,7 +88,6 @@ public class UserCardController {
                     return card;
                 }).collect(Collectors.toList());
 
-                userCardRepository.saveAll(cards);
                 userDictionaryRepository.save(dict.get());
 
                 return new ResponseEntity<>(MessageResponse.of("User card created successfully"), HttpStatus.ACCEPTED);

@@ -23,7 +23,12 @@ public class DictShareService implements IDictShareService {
     public String getDictShareCode(DbUserDictionary dictionary) {
         var shareCandidate = shareRepository.findBySharedDictionary_Id(dictionary.getId());
         if (shareCandidate.isPresent()) {
-            return shareCandidate.get().getShareUUID().toString();
+            var share = shareCandidate.get();
+            share.activate();
+
+            share = shareRepository.save(share);
+
+            return share.getShareUUID().toString();
         } else {
             var dictShare = shareFactory.createDictShare(dictionary);
 

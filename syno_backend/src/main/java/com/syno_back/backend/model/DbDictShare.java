@@ -28,6 +28,9 @@ public class DbDictShare {
     @Column(name="time_modified")
     private LocalDateTime timeModified;
 
+    @Column(name="activation_time")
+    private LocalDateTime activationTime;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="owner_id")
     private DbUser owner;
@@ -35,6 +38,15 @@ public class DbDictShare {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="dict_id", referencedColumnName = "id")
     private DbUserDictionary sharedDictionary;
+
+    public void activate() {
+        this.activationTime = LocalDateTime.now();
+    }
+
+    @PrePersist
+    void setActivationTimeOnPrePersist() {
+        this.activate();
+    }
 
     public static Builder builder() {
         return new Builder();
