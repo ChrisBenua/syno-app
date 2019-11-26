@@ -3,12 +3,12 @@ package com.syno_back.backend.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.syno_back.backend.model.DbTranslation;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class UpdateUserTranslation extends NewUserTranslation {
     @JsonProperty("id")
     private Long id;
-
-    public UpdateUserTranslation() {}
 
     public UpdateUserTranslation(String translation, String comment, String transcription, String usageSample, Long id) {
         super(translation, comment, transcription, usageSample);
@@ -17,15 +17,6 @@ public class UpdateUserTranslation extends NewUserTranslation {
 
     public Long getId() {
         return id;
-    }
-
-    public void updateDbTranslation(DbTranslation translation) {
-        translation.setTranslation(this.getTranslation());
-        translation.setUsageSample(this.getUsageSample());
-        translation.setTranscription(this.getTranscription());
-        translation.setComment(this.getComment());
-
-        //source card doesnt change at all
     }
 
     @Override
@@ -41,6 +32,6 @@ public class UpdateUserTranslation extends NewUserTranslation {
 
     @Override
     public int hashCode() {
-        return 31;
+        return this.getId().hashCode();
     }
 }

@@ -91,3 +91,24 @@ ALTER TABLE public.translations
     ON UPDATE CASCADE
     ON DELETE CASCADE;
 
+CREATE TABLE public.dict_shares
+(
+    id serial not null,
+    share_uuid uuid not null,
+    time_created timestamp,
+    time_modified timestamp,
+    owner_id integer,
+    dict_id integer,
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE public.dict_shares
+    ADD CONSTRAINT dict_share_owner_fkey FOREIGN KEY (owner_id)
+    REFERENCES public.users (id) MATCH SIMPLE;
+
+ALTER TABLE public.dict_shares
+    ADD CONSTRAINT dict_share_dict_fkey FOREIGN KEY (dict_id)
+    REFERENCES public.user_dictionaries (id) MATCH SIMPLE;
+
+ALTER TABLE public.dict_shares
+    ADD COLUMN activation_time timestamp;
