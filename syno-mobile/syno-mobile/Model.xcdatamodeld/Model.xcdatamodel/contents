@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15508" systemVersion="19A603" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DbAppUser" representedClassName="DbAppUser" syncable="YES" codeGenerationType="class">
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="isCurrent" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="password" optional="YES" attributeType="String"/>
+        <relationship name="dictionaries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DbUserDictionary" inverseName="owner" inverseEntity="DbUserDictionary"/>
+    </entity>
+    <entity name="DbTranslation" representedClassName="DbTranslation" syncable="YES" codeGenerationType="class">
+        <attribute name="comment" optional="YES" attributeType="String"/>
+        <attribute name="isSynced" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="serverId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="timeCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="timeModified" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="transcription" optional="YES" attributeType="String"/>
+        <attribute name="translation" optional="YES" attributeType="String"/>
+        <attribute name="usageSample" optional="YES" attributeType="String"/>
+        <relationship name="sourceCard" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DbUserCard" inverseName="translations" inverseEntity="DbUserCard"/>
+    </entity>
+    <entity name="DbUserCard" representedClassName="DbUserCard" syncable="YES" codeGenerationType="class">
+        <attribute name="isSynced" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="language" optional="YES" attributeType="String"/>
+        <attribute name="serverId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="timeCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="timeModified" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="translatedWord" optional="YES" attributeType="String"/>
+        <relationship name="sourceDictionary" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DbUserDictionary" inverseName="userCards" inverseEntity="DbUserDictionary"/>
+        <relationship name="translations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DbTranslation" inverseName="sourceCard" inverseEntity="DbTranslation"/>
+    </entity>
+    <entity name="DbUserDictionary" representedClassName="DbUserDictionary" syncable="YES" codeGenerationType="class">
+        <attribute name="isSynced" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="serverId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="timeCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="timeModified" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DbAppUser" inverseName="dictionaries" inverseEntity="DbAppUser"/>
+        <relationship name="userCards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DbUserCard" inverseName="sourceDictionary" inverseEntity="DbUserCard"/>
+    </entity>
+    <elements>
+        <element name="DbAppUser" positionX="-63" positionY="-18" width="128" height="103"/>
+        <element name="DbTranslation" positionX="-18" positionY="27" width="128" height="178"/>
+        <element name="DbUserCard" positionX="-36" positionY="18" width="128" height="163"/>
+        <element name="DbUserDictionary" positionX="-54" positionY="9" width="128" height="148"/>
+    </elements>
+</model>
