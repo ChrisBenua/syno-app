@@ -105,5 +105,9 @@ class RegistrationLayouter: LoginRegistrationLayouter, IRegistrationLayouter {
         return sv
     }
     
+    override init() {
+        super.init()
+        self.submitButton().setAttributedTitle(NSAttributedString(string: "Зарегистрироваться", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)]), for: UIKit.UIControl.State.normal)
+    }
     
 }

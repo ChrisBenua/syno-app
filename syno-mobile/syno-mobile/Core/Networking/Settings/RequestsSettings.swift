@@ -13,5 +13,7 @@ class RequestSettings {
 
     public static let LoginEndPoint = URLPrefix + "/api/auth/signin"
     
+    public static let RegisterEndPoint = URLPrefix + "/api/auth/signup"
+    
     public static let AllDicts = URLPrefix + "/api/dicts/my_all"
 }

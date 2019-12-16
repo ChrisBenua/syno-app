@@ -29,7 +29,12 @@ class DefaultRequestSender: IRequestSender {
             if let httpResponse = resp as? HTTPURLResponse {
                 if !(200...300).contains(httpResponse.statusCode) {
                     Logger.log("Not 200 status code for \(Parser.self)")
-                    completionHandler(.error("Not 200 status code"))
+                    guard let unwrappedData = data, let message = try? JSONSerialization.jsonObject(with: unwrappedData, options: .allowFragments) as? [String: String] else {
+                        completionHandler(.error("not 200 status code"))
+                        return
+                    }
+                    completionHandler(.error(message["message"]!))
+                    return
                 }
             } else {
                 Logger.log("urlResponse cant be represented as HTTPURLResponse")

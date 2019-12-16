@@ -66,6 +66,8 @@ class GetTranslationDto: Decodable {
     
     let translation: String
     
+    let transcription: String
+    
     let comment: String
     
     let usageSample: String
@@ -74,9 +76,10 @@ class GetTranslationDto: Decodable {
     
     let timeModified: Date
     
-    init(id: Int64, translation: String, comment: String, usageSample: String, timeCreated: Date, timeModified: Date) {
+    init(id: Int64, translation: String, transcription: String, comment: String, usageSample: String, timeCreated: Date, timeModified: Date) {
         self.id = id
         self.translation = translation
+        self.transcription = transcription
         self.comment = comment
         self.usageSample = usageSample
         self.timeCreated = timeCreated

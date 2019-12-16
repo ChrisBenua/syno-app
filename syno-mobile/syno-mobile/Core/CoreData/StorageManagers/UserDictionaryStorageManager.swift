@@ -10,8 +10,8 @@ import Foundation
 import CoreData
 
 class UserDictionaryStorageManager: IUserDictionaryStorageManager {
-    func createUserDictionary(owner: DbAppUser, name: String, timeCreated: Date?, timeModified: Date?, serverId: Int64?, cards: [DbUserCard]?) {
-        DispatchQueue.global(qos: .background).async {
+    func createUserDictionary(owner: DbAppUser, name: String, timeCreated: Date?, timeModified: Date?, serverId: Int64?, cards: [DbUserCard]?, completion: ((DbUserDictionary?) -> Void)?) {
+        //DispatchQueue.global(qos: .background).async {
             let ownerObjectId = owner.objectID
             
             let userDict = DbUserDictionary.insertUserDict(into: self.saveContext)
@@ -33,9 +33,9 @@ class UserDictionaryStorageManager: IUserDictionaryStorageManager {
                 
                 ownerInSaveContext?.addToDictionaries(userDict!)
                 
-                self.stack.performSave(with: self.saveContext, completion: nil)
+                completion?(userDict)
             }
-        }
+        //}
     }
     
     var saveContext: NSManagedObjectContext {

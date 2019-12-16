@@ -11,8 +11,8 @@ import CoreData
 
 
 class UserCardStorageManager: IUserCardsStorageManager {
-    func createUserCard(sourceDict: DbUserDictionary?, translatedWord: String, language: String, timeCreated: Date?, timeModified: Date?, serverId: Int64?, translation: [DbTranslation]?) {
-        DispatchQueue.global(qos: .background).async {
+    func createUserCard(sourceDict: DbUserDictionary?, translatedWord: String, language: String, timeCreated: Date?, timeModified: Date?, serverId: Int64?, translation: [DbTranslation]?, completion: ((DbUserCard?) -> Void)?) {
+        //DispatchQueue.global(qos: .background).async {
             let dictObjectId = sourceDict?.objectID
             
             let card = DbUserCard.insertUserCard(into: self.saveContext)
@@ -22,19 +22,24 @@ class UserCardStorageManager: IUserCardsStorageManager {
                 card?.language = language
                 card?.timeCreated = timeCreated
                 card?.timeModified = timeModified
+                if let serverId = serverId {
+                    card?.serverId = serverId
+                }
                 
                 if let trans = translation {
-                    card?.addToTranslations(NSSet(array: trans))
+                    card?.addToTranslationsUpdateSync(translations: trans)
                 }
                 
                 if let dictObjectId = dictObjectId {
                     let dictInSaveContext = self.saveContext.object(with: dictObjectId) as? DbUserDictionary
                     if let card = card {
-                        dictInSaveContext?.addToUserCards(card)
+                        dictInSaveContext?.addToCardsUpdateSync(card: card)
                     }
                 }
+
+                completion?(card)
             }
-        }
+        //}
     }
     
     var saveContext: NSManagedObjectContext {

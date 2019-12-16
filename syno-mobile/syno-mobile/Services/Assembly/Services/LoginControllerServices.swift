@@ -16,8 +16,10 @@ protocol ILoginService {
 class LoginService: ILoginService {
     private var requestSender: IRequestSender
     private var userDefaultsManager: IUserDefaultsManager
+    private var storageManager: IAppUserStorageManager
     
-    init(requestSender: IRequestSender, userDefaultsManager: IUserDefaultsManager) {
+    init(storageManager: IAppUserStorageManager, requestSender: IRequestSender, userDefaultsManager: IUserDefaultsManager) {
+        self.storageManager = storageManager
         self.requestSender = requestSender
         self.userDefaultsManager = userDefaultsManager
     }
@@ -32,6 +34,7 @@ class LoginService: ILoginService {
             case .success(let loginResp):
                 self.userDefaultsManager.saveToken(token: loginResp.accessToken)
                 self.userDefaultsManager.saveEmail(email: loginResp.email)
+                let _ = self.storageManager.createAppUser(email: loginResp.email, password: loginDto.password, isCurrent: true)
                 completionHandler(.success(loginResp.email))
             }
         }

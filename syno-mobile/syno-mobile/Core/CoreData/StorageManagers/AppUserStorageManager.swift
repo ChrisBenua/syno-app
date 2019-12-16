@@ -29,15 +29,40 @@ class AppUserStorageManager: IAppUserStorageManager {
         self.stack = stack
     }
     
-    func createAppUser(email: String, password: String) {
-        let user = DbAppUser.insertAppUser(into: self.mainContext)
+    func createAppUser(email: String, password: String, isCurrent: Bool) -> DbAppUser? {
+        var res: [DbAppUser] = []
+        
+        do {
+            res = try stack.mainContext.fetch(DbAppUser.requestByEmail(email: email))
+        } catch let err {
+            Logger.log("Cant fetch user by email: \(#function)")
+            Logger.log(err.localizedDescription)
+        }
+        
+        var user: DbAppUser?
+        
+        if !res.isEmpty {
+            user = res.first!
+        } else {
+            user = DbAppUser.insertAppUser(into: self.mainContext)
+        }
         
         self.mainContext.performAndWait {
             user?.email = email
             user?.password = password
+            user?.isCurrent = isCurrent
             
-            self.stack.performSave(with: self.mainContext, completion: nil)
+            self.stack.performSave(with: self.mainContext, completion: { () -> Void in
+                if isCurrent {
+                    self.markAppUserAsCurrent(user: user!)
+                }
+            })
         }
+        return user
+    }
+    
+    func getCurrentAppUser() -> DbAppUser? {
+        return try? stack.mainContext.fetch(DbAppUser.requestActive()).first
     }
     
     func markAppUserAsCurrent(user: DbAppUser) {

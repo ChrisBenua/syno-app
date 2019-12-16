@@ -11,6 +11,10 @@ struct RequestFactory {
             return RequestConfig<DefaultParser<LoginResponseDto>>(request: LoginRequest(loginDto: loginDto), parser: DefaultParser())
         }
         
+        static func register(registerDto: RegisterDto) -> RequestConfig<DefaultParser<MessageResponseDto>> {
+            return RequestConfig<DefaultParser<MessageResponseDto>>(request: RegisterRequest(registerDto: registerDto), parser: DefaultParser())
+        }
+        
         static func allDictsRequest(userDefaultsManager: IUserDefaultsManager) -> RequestConfig<DefaultParser<[GetDictionaryResponseDto]>> {
             return RequestConfig<DefaultParser<[GetDictionaryResponseDto]>>(request: AllDictsRequest(manager: userDefaultsManager), parser: DefaultParser())
         }
