@@ -11,6 +11,21 @@ import CoreData
 
 extension DbUserDictionary {
     
+    func getCards() -> [DbUserCard] {
+        return (self.userCards?.allObjects ?? []) as! [DbUserCard]
+    }
+    
+    func toTestAndLearnCellConfiguration() -> ITestAndLearnCellConfiguration {
+        let allTest: [DbUserTest] = self.tests?.toArray() ?? []
+        let lastPassedTest = allTest.sorted(by: { (lhs, rhs) -> Bool in
+            (lhs.timePassed ?? lhs.timeCreated!) < (rhs.timePassed ?? rhs.timeCreated!)
+        }).first { (test) -> Bool in
+            test.isEnded()
+        }
+        
+        return TestAndLearnCellConfiguration(dictionaryName: self.name, language: (self.userCards?.allObjects.first as? DbUserCard)?.language, gradePercentage: lastPassedTest?.gradePercentage ?? -1.0)
+    }
+    
     func toUserDictCellConfig() -> IDictionaryCellConfiguration {
         let allObjects = self.userCards?.allObjects
         let cardsAmount = allObjects?.count ?? 0

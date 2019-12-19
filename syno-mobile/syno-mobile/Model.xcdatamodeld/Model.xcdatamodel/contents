@@ -34,12 +34,47 @@
         <attribute name="timeCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="timeModified" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DbAppUser" inverseName="dictionaries" inverseEntity="DbAppUser"/>
+        <relationship name="tests" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DbUserTest" inverseName="targetedDict" inverseEntity="DbUserTest"/>
         <relationship name="userCards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DbUserCard" inverseName="sourceDictionary" inverseEntity="DbUserCard"/>
     </entity>
+    <entity name="DbUserTest" representedClassName="DbUserTest" syncable="YES" codeGenerationType="class">
+        <attribute name="gradePercentage" optional="YES" attributeType="Double" defaultValueString="-1" usesScalarValueType="YES"/>
+        <attribute name="timeCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="timePassed" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="targetedDict" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DbUserDictionary" inverseName="tests" inverseEntity="DbUserDictionary"/>
+        <relationship name="testDict" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DbUserTestDict" inverseName="sourceTest" inverseEntity="DbUserTestDict"/>
+    </entity>
+    <entity name="DbUserTestAnswer" representedClassName="DbUserTestAnswer" syncable="YES" codeGenerationType="class">
+        <attribute name="userAnswer" optional="YES" attributeType="String"/>
+        <relationship name="sourceTestCard" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DbUserTestCard" inverseName="userAnswers" inverseEntity="DbUserTestCard"/>
+    </entity>
+    <entity name="DbUserTestCard" representedClassName="DbUserTestCard" syncable="YES" codeGenerationType="class">
+        <attribute name="didAnswer" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="shuffleNumber" optional="YES" attributeType="Integer 32" defaultValueString="-1" usesScalarValueType="YES"/>
+        <attribute name="translatedWord" optional="YES" attributeType="String"/>
+        <relationship name="sourceTestDict" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DbUserTestDict" inverseName="cards" inverseEntity="DbUserTestDict"/>
+        <relationship name="translations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DbUserTestTranslation" inverseName="sourceTestCard" inverseEntity="DbUserTestTranslation"/>
+        <relationship name="userAnswers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DbUserTestAnswer" inverseName="sourceTestCard" inverseEntity="DbUserTestAnswer"/>
+    </entity>
+    <entity name="DbUserTestDict" representedClassName="DbUserTestDict" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="cards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DbUserTestCard" inverseName="sourceTestDict" inverseEntity="DbUserTestCard"/>
+        <relationship name="sourceTest" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DbUserTest" inverseName="testDict" inverseEntity="DbUserTest"/>
+    </entity>
+    <entity name="DbUserTestTranslation" representedClassName="DbUserTestTranslation" syncable="YES" codeGenerationType="class">
+        <attribute name="isRightAnswered" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="translation" optional="YES" attributeType="String"/>
+        <relationship name="sourceTestCard" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DbUserTestCard" inverseName="translations" inverseEntity="DbUserTestCard"/>
+    </entity>
     <elements>
-        <element name="DbAppUser" positionX="-63" positionY="-18" width="128" height="103"/>
-        <element name="DbTranslation" positionX="-18" positionY="27" width="128" height="178"/>
-        <element name="DbUserCard" positionX="-36" positionY="18" width="128" height="163"/>
-        <element name="DbUserDictionary" positionX="-54" positionY="9" width="128" height="148"/>
+        <element name="DbAppUser" positionX="95.1640625" positionY="-88.75" width="128" height="103"/>
+        <element name="DbTranslation" positionX="-123.796875" positionY="-253.60546875" width="128" height="178"/>
+        <element name="DbUserCard" positionX="-311.15625" positionY="54.140625" width="128" height="163"/>
+        <element name="DbUserDictionary" positionX="-318.921875" positionY="-152.9296875" width="128" height="163"/>
+        <element name="DbUserTest" positionX="-95.828125" positionY="114.1796875" width="128" height="118"/>
+        <element name="DbUserTestAnswer" positionX="252.65625" positionY="46.64453125" width="128" height="73"/>
+        <element name="DbUserTestCard" positionX="-179.30078125" positionY="308.40625" width="128" height="133"/>
+        <element name="DbUserTestDict" positionX="133.79296875" positionY="323.40625" width="128" height="88"/>
+        <element name="DbUserTestTranslation" positionX="107.40234375" positionY="43.98828125" width="128" height="88"/>
     </elements>
 </model>

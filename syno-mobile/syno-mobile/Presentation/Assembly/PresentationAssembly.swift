@@ -53,7 +53,7 @@ class PresentationAssembly: IPresentationAssembly {
     }
     
     func testAndLearnViewController() -> TestAndLearnViewController {
-        return TestAndLearnViewController()
+        return TestAndLearnViewController(datasource: TestAndLearnDictionaryDataSource(viewModel: self.serviceAssembly.testAndLearnDictControllerDataProvider()))
     }
     
     

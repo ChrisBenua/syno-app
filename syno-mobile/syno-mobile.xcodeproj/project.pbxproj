@@ -73,6 +73,15 @@
 		AAC6057D2391232A00120B77 /* AllDictsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC6057C2391232A00120B77 /* AllDictsRequest.swift */; };
 		AAC6057F2391237B00120B77 /* DictionaryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC6057E2391237B00120B77 /* DictionaryResponse.swift */; };
 		AAC60582239182D100120B77 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AAC60580239182D100120B77 /* Model.xcdatamodeld */; };
+		AAD4A2DF23AB684F00394693 /* DbUserTestTranslationExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD4A2DE23AB684F00394693 /* DbUserTestTranslationExt.swift */; };
+		AAD4A2E123ABA59900394693 /* DbUserTestCardExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD4A2E023ABA59900394693 /* DbUserTestCardExt.swift */; };
+		AAD4A2E323ABA81D00394693 /* DbUserTestAnswerExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD4A2E223ABA81D00394693 /* DbUserTestAnswerExt.swift */; };
+		AAD4A2E523ABAB3100394693 /* DbUserTestDictExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD4A2E423ABAB3100394693 /* DbUserTestDictExt.swift */; };
+		AAD4A2E723ABB15400394693 /* DbUserTestExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD4A2E623ABB15400394693 /* DbUserTestExt.swift */; };
+		AAD4A2EA23ABD1F800394693 /* TestAndLearnControllerDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD4A2E923ABD1F800394693 /* TestAndLearnControllerDatasource.swift */; };
+		AAD4A2EC23ABD4B300394693 /* TestAndLearnCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD4A2EB23ABD4B300394693 /* TestAndLearnCollectionViewCell.swift */; };
+		AAD4A2EE23ABE1E200394693 /* NSSetExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD4A2ED23ABE1E200394693 /* NSSetExt.swift */; };
+		AAD4A2F123ABE74E00394693 /* TestAndLearnControllerHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD4A2F023ABE74E00394693 /* TestAndLearnControllerHeader.swift */; };
 		AAEBE74923A37FDE00F48684 /* TranslationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE74823A37FDE00F48684 /* TranslationCollectionViewCell.swift */; };
 		AAEBE74B23A39DE400F48684 /* TranslationsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE74A23A39DE400F48684 /* TranslationsCollectionViewController.swift */; };
 		AAEBE74E23A39E7B00F48684 /* TranslationControllerDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE74D23A39E7B00F48684 /* TranslationControllerDatasource.swift */; };
@@ -164,6 +173,15 @@
 		AAC6057C2391232A00120B77 /* AllDictsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllDictsRequest.swift; sourceTree = "<group>"; };
 		AAC6057E2391237B00120B77 /* DictionaryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryResponse.swift; sourceTree = "<group>"; };
 		AAC60581239182D100120B77 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		AAD4A2DE23AB684F00394693 /* DbUserTestTranslationExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DbUserTestTranslationExt.swift; sourceTree = "<group>"; };
+		AAD4A2E023ABA59900394693 /* DbUserTestCardExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DbUserTestCardExt.swift; sourceTree = "<group>"; };
+		AAD4A2E223ABA81D00394693 /* DbUserTestAnswerExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DbUserTestAnswerExt.swift; sourceTree = "<group>"; };
+		AAD4A2E423ABAB3100394693 /* DbUserTestDictExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DbUserTestDictExt.swift; sourceTree = "<group>"; };
+		AAD4A2E623ABB15400394693 /* DbUserTestExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DbUserTestExt.swift; sourceTree = "<group>"; };
+		AAD4A2E923ABD1F800394693 /* TestAndLearnControllerDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAndLearnControllerDatasource.swift; sourceTree = "<group>"; };
+		AAD4A2EB23ABD4B300394693 /* TestAndLearnCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAndLearnCollectionViewCell.swift; sourceTree = "<group>"; };
+		AAD4A2ED23ABE1E200394693 /* NSSetExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSSetExt.swift; sourceTree = "<group>"; };
+		AAD4A2F023ABE74E00394693 /* TestAndLearnControllerHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAndLearnControllerHeader.swift; sourceTree = "<group>"; };
 		AAEBE74823A37FDE00F48684 /* TranslationCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationCollectionViewCell.swift; sourceTree = "<group>"; };
 		AAEBE74A23A39DE400F48684 /* TranslationsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsCollectionViewController.swift; sourceTree = "<group>"; };
 		AAEBE74D23A39E7B00F48684 /* TranslationControllerDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationControllerDatasource.swift; sourceTree = "<group>"; };
@@ -367,6 +385,7 @@
 				AA8C0E17238921EC000CBB73 /* Anchor.swift */,
 				49A16D95769370F236C3331C /* Debug.swift */,
 				49A16AE33CDCA131F1447FDA /* UIAlertController.swift */,
+				AAD4A2ED23ABE1E200394693 /* NSSetExt.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -400,6 +419,11 @@
 				AAB6CEBE2392E71200AAAF0E /* DbUserDictionaryExt.swift */,
 				AAB6CEC22392EC2000AAAF0E /* DbUserCardExt.swift */,
 				AAB6CEC42393BA1C00AAAF0E /* DbTranslationExt.swift */,
+				AAD4A2DE23AB684F00394693 /* DbUserTestTranslationExt.swift */,
+				AAD4A2E023ABA59900394693 /* DbUserTestCardExt.swift */,
+				AAD4A2E223ABA81D00394693 /* DbUserTestAnswerExt.swift */,
+				AAD4A2E423ABAB3100394693 /* DbUserTestDictExt.swift */,
+				AAD4A2E623ABB15400394693 /* DbUserTestExt.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -423,6 +447,7 @@
 		AA8C0E0C23891862000CBB73 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				AAD4A2E823ABD1E100394693 /* TestAndLearnController */,
 				AAEBE74C23A39E5500F48684 /* TranslationController */,
 				AAA5F2CD23A2956500661811 /* DictCardsController */,
 				AA8700E4239949F100C97E18 /* DictController */,
@@ -531,6 +556,8 @@
 				AAEBE75123A4132200F48684 /* ShadowView.swift */,
 				AAEBE75323A4139B00F48684 /* BaseShadowView.swift */,
 				AA2FFD9123A4D48700889BAB /* TranslatedWordView.swift */,
+				AAD4A2EB23ABD4B300394693 /* TestAndLearnCollectionViewCell.swift */,
+				AAD4A2F023ABE74E00394693 /* TestAndLearnControllerHeader.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -545,6 +572,14 @@
 				AAB6CECC2393C87B00AAAF0E /* UserTranslationStorageManager.swift */,
 			);
 			path = StorageManagers;
+			sourceTree = "<group>";
+		};
+		AAD4A2E823ABD1E100394693 /* TestAndLearnController */ = {
+			isa = PBXGroup;
+			children = (
+				AAD4A2E923ABD1F800394693 /* TestAndLearnControllerDatasource.swift */,
+			);
+			path = TestAndLearnController;
 			sourceTree = "<group>";
 		};
 		AAEBE74C23A39E5500F48684 /* TranslationController */ = {
@@ -722,13 +757,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAD4A2F123ABE74E00394693 /* TestAndLearnControllerHeader.swift in Sources */,
 				AA8700CF2398270C00C97E18 /* TranslationFetchService.swift in Sources */,
 				AA8700C9239792B000C97E18 /* RegisterControllerServices.swift in Sources */,
 				AA8C0E10238918FA000CBB73 /* PresentationAssembly.swift in Sources */,
 				AA1B8759238D9CE100D26FCF /* RootAssembly.swift in Sources */,
+				AAD4A2E523ABAB3100394693 /* DbUserTestDictExt.swift in Sources */,
 				AA8700D52399170B00C97E18 /* RegistrationModel.swift in Sources */,
 				AA1B874D238D2A2400D26FCF /* RequestsSettings.swift in Sources */,
 				AAEBE74E23A39E7B00F48684 /* TranslationControllerDatasource.swift in Sources */,
+				AAD4A2EC23ABD4B300394693 /* TestAndLearnCollectionViewCell.swift in Sources */,
 				AA8C0E18238921EC000CBB73 /* Anchor.swift in Sources */,
 				AAB6CECD2393C87B00AAAF0E /* UserTranslationStorageManager.swift in Sources */,
 				AA8C0E1B23892A0F000CBB73 /* UILabelWithInsets.swift in Sources */,
@@ -737,6 +775,7 @@
 				AA8700DD2399356700C97E18 /* DictionaryCellView.swift in Sources */,
 				AA1B874F238D9A8900D26FCF /* LoginModel.swift in Sources */,
 				AA8C0E1223891BBC000CBB73 /* LoginState.swift in Sources */,
+				AAD4A2E323ABA81D00394693 /* DbUserTestAnswerExt.swift in Sources */,
 				AAC605792390F04700120B77 /* LoginRegistrationLayouter.swift in Sources */,
 				AA1B8755238D9B9700D26FCF /* ServiceAssembly.swift in Sources */,
 				AA8C0E1623892051000CBB73 /* CommonUIElements.swift in Sources */,
@@ -754,6 +793,7 @@
 				49A166086AEF7785B19E1514 /* UITextFieldWithInsets.swift in Sources */,
 				AAA5F2CA23A2798800661811 /* ControllerKeyboardExt.swift in Sources */,
 				49A16189873B6C801FB1EFFC /* IParser.swift in Sources */,
+				AAD4A2E723ABB15400394693 /* DbUserTestExt.swift in Sources */,
 				AA8700D72399225900C97E18 /* DictsController.swift in Sources */,
 				AAB6CEC72393C1D200AAAF0E /* AppUserStorageManager.swift in Sources */,
 				AA8700DF23993F9900C97E18 /* CommonTabBarController.swift in Sources */,
@@ -773,12 +813,14 @@
 				49A160132C5591D9CC06BA27 /* IRequestSender.swift in Sources */,
 				49A16167918E9B1E70F2E147 /* DefaultRequestSender.swift in Sources */,
 				AAEBE74923A37FDE00F48684 /* TranslationCollectionViewCell.swift in Sources */,
+				AAD4A2DF23AB684F00394693 /* DbUserTestTranslationExt.swift in Sources */,
 				AAEBE75223A4132200F48684 /* ShadowView.swift in Sources */,
 				AAB6CEB92392E3FD00AAAF0E /* StorageManager.swift in Sources */,
 				AAC6057F2391237B00120B77 /* DictionaryResponse.swift in Sources */,
 				AA1B874A238D29F300D26FCF /* LoginRequest.swift in Sources */,
 				AAC6057B2390F86700120B77 /* RegistrationLayouter.swift in Sources */,
 				AA8700E623994ACE00C97E18 /* DictControllerModel.swift in Sources */,
+				AAD4A2E123ABA59900394693 /* DbUserTestCardExt.swift in Sources */,
 				AAB6CECB2393C6EE00AAAF0E /* UserCardStorageManager.swift in Sources */,
 				AAC60582239182D100120B77 /* Model.xcdatamodeld in Sources */,
 				AAB6CEC92393C4D700AAAF0E /* UserDictionaryStorageManager.swift in Sources */,
@@ -786,10 +828,12 @@
 				AA1B8753238D9ABC00D26FCF /* LoginControllerServices.swift in Sources */,
 				AA8700CB239793A300C97E18 /* MessageResponse.swift in Sources */,
 				AA2FFD9223A4D48700889BAB /* TranslatedWordView.swift in Sources */,
+				AAD4A2EA23ABD1F800394693 /* TestAndLearnControllerDatasource.swift in Sources */,
 				AAC6057D2391232A00120B77 /* AllDictsRequest.swift in Sources */,
 				AA8700C7239791D000C97E18 /* RegistrationRequest.swift in Sources */,
 				49A160CBD53E96CBBA9E3354 /* LoginResponse.swift in Sources */,
 				49A1646F9BDD6D3757510F85 /* UIAlertController.swift in Sources */,
+				AAD4A2EE23ABE1E200394693 /* NSSetExt.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
