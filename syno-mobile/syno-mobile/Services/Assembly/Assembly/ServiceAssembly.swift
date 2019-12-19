@@ -26,6 +26,8 @@ protocol IServiceAssembly {
     func cardsControllerDataProvider() -> ICardsControllerDataProvider
     
     func translationsControllerDataProvider() -> ITranslationControllerDataProvider
+    
+    func testAndLearnDictControllerDataProvider() -> IDictionaryControllerDataProvider
 }
 
 class ServiceAssembly: IServiceAssembly {
@@ -66,5 +68,9 @@ class ServiceAssembly: IServiceAssembly {
     
     func translationsControllerDataProvider() -> ITranslationControllerDataProvider {
         return TranslationControllerDataProvider(storageCoordinator: self.coreAssembly.storageManager)
+    }
+    
+    func testAndLearnDictControllerDataProvider() -> IDictionaryControllerDataProvider {
+        return DictionaryControllerDataProvider(appUserManager: self.coreAssembly.storageManager)
     }
 }

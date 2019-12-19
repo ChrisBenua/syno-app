@@ -48,7 +48,7 @@ class CommonTabBarController: UITabBarController, UITabBarControllerDelegate {
     func setUpViewControllers() {
         let dictsController = templateNavController(unselectedImage: #imageLiteral(resourceName: "open-book"), selectedImage: #imageLiteral(resourceName: "open-book"), rootViewController: self.presentationAssembly.dictsViewController())
         
-        let testAndLearnViewController = templateNavController(unselectedImage: #imageLiteral(resourceName: "shopping-list"), selectedImage: #imageLiteral(resourceName: "open-book"), rootViewController: self.presentationAssembly.testAndLearnViewController())
+        let testAndLearnViewController = templateNavController(unselectedImage: #imageLiteral(resourceName: "shopping-list"), selectedImage: #imageLiteral(resourceName: "shopping-list"), rootViewController: self.presentationAssembly.testAndLearnViewController())
         
         self.viewControllers = [dictsController, testAndLearnViewController]
         self.selectedIndex = 0

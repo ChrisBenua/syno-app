@@ -11,6 +11,11 @@ import CoreData
 
 extension DbUserCard {
     
+    func getTranslations() -> [DbTranslation] {
+        return (self.translations?.allObjects ?? []) as! [DbTranslation]
+    }
+    
+    
     func toCellConfiguration() -> ICardCellConfiguration {
         return CardCellConfiguration(translatedWord: self.translatedWord, translations: (self.translations?.allObjects ?? []).map({ (translation) -> String? in
             (translation as! DbTranslation).translation

@@ -29,14 +29,17 @@ class DictionaryControllerDataProvider: IDictionaryControllerDataProvider {
     }
 }
 
-protocol IDictionaryControllerTableViewDataSource: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+protocol ICommonDictionaryControllerDataSource {
     var fetchedResultsController: NSFetchedResultsController<DbUserDictionary> { get set }
     
     var viewModel: IDictionaryControllerDataProvider { get set }
     
-    var delegate: IDictionaryControllerReactor? { get set}
-    
     func performFetch()
+
+}
+
+protocol IDictionaryControllerTableViewDataSource: ICommonDictionaryControllerDataSource, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    var delegate: IDictionaryControllerReactor? { get set}
 }
 
 protocol IDictionaryControllerReactor: class {
