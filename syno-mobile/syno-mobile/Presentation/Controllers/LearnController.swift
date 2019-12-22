@@ -176,6 +176,7 @@ class LearnCollectionViewController: UIViewController {
     @objc func handleSwipe(_ sender:UIPanGestureRecognizer) {
         if sender.state == .changed {
             let translation = sender.translation(in: contentView)
+            print(translation)
             contentView.transform = CGAffineTransform(translationX: translation.x, y: 0)
         } else if sender.state == .ended {
             let translation = sender.translation(in: contentView)
@@ -197,16 +198,68 @@ class LearnCollectionViewController: UIViewController {
                 
                 UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
                     self.contentView.transform = .identity
+                    print("IDENTITY")
                 })
             }
+        } else if sender.state != .possible {
+            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+                self.contentView.transform = .identity
+                print("IDENTITY222, \(sender.state.rawValue)")
+            })
+        }
+    }
+    
+    @objc func handleSwipes(_ sender: UISwipeGestureRecognizer) {
+        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+            switch sender.direction {
+            case .left:
+                print("Left Swipe")
+                if self.dataSource.state.itemNumber < self.dataSource.viewModel.count - 1 {
+                    self.contentView.transform = CGAffineTransform(translationX: -self.view.frame.width, y: 0)
+                }
+            case .right:
+                print("Right Swipe")
+                if self.dataSource.state.itemNumber > 0 {
+                    self.contentView.transform = CGAffineTransform(translationX: self.view.frame.width, y: 0)
+                }
+            default:
+                print("break")
+                break
+            }
+        }) { (_) in
+            switch sender.direction {
+            case .left:
+                if self.dataSource.state.itemNumber < self.dataSource.viewModel.count - 1 {
+                    self.contentView.transform = CGAffineTransform(translationX: self.view.frame.width, y: 0)
+                    self.actionsDelegate?.onNext()
+
+                }
+            case .right:
+                if self.dataSource.state.itemNumber > 0 {
+                    self.contentView.transform = CGAffineTransform(translationX: -self.view.frame.width, y: 0)
+                    self.actionsDelegate?.onPrev()
+                }
+            default:
+                break
+            }
+            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+                self.contentView.transform = .identity
+            })
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let swipeRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
-        self.contentView.addGestureRecognizer(swipeRecognizer)
+        let recognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
+        recognizer.direction = .left
+        recognizer.delegate = self
+        let recognizer1 = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
+        recognizer1.direction = .right
+        recognizer1.delegate = self
+        self.scrollView.addGestureRecognizer(recognizer)
+        self.scrollView.addGestureRecognizer(recognizer1)
+
         
         self.tabBarController?.tabBar.isHidden = true
         
@@ -237,7 +290,14 @@ class LearnCollectionViewController: UIViewController {
 extension LearnCollectionViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollView.contentOffset.x = 0
+        //handleSwipe(scrollView.panGestureRecognizer)
     }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        //handleSwipe(scrollView.panGestureRecognizer)
+    }
+    
+    //scrollView
 }
 
 extension LearnCollectionViewController: ILearnControllerDataSourceReactor {
@@ -248,5 +308,11 @@ extension LearnCollectionViewController: ILearnControllerDataSourceReactor {
     
     func addItems(indexPaths: [IndexPath]) {
         self.tableView.insertRows(at: indexPaths, with: .automatic)
+    }
+}
+
+extension LearnCollectionViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 }
