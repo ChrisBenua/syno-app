@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class PlainTableViewCell: UITableView {
+class PlainTableView: UITableView {
     override var contentSize:CGSize {
         didSet {
             invalidateIntrinsicContentSize()

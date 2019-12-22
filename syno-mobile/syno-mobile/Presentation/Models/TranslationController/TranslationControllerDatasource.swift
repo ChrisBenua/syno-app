@@ -60,7 +60,7 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TranslationTableViewCell.cellId, for: indexPath) as? TranslationTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TranslationTableViewCell.cellId(), for: indexPath) as? TranslationTableViewCell else {
             fatalError("Cant cast at \(#function)")
         }
         

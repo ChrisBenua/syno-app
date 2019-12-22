@@ -40,7 +40,9 @@ protocol IConfigurableTranslationCell {
 
 class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, ITranslationCellConfiguration, UITextViewDelegate {
     
-    public static let cellId = "TranslationCellId"
+    public class func cellId() -> String {
+        return "TranslationCellId"
+    }
     
     var translation: String?
     

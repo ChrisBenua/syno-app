@@ -22,6 +22,8 @@ protocol IPresentationAssembly {
     func translationsViewController(sourceCard: DbUserCard) -> TranslationsCollectionViewController
     
     func testAndLearnViewController() -> TestAndLearnViewController
+    
+    func learnController(sourceDict: DbUserDictionary) -> LearnCollectionViewController
 }
 
 class PresentationAssembly: IPresentationAssembly {
@@ -53,7 +55,11 @@ class PresentationAssembly: IPresentationAssembly {
     }
     
     func testAndLearnViewController() -> TestAndLearnViewController {
-        return TestAndLearnViewController(datasource: TestAndLearnDictionaryDataSource(viewModel: self.serviceAssembly.testAndLearnDictControllerDataProvider()))
+        return TestAndLearnViewController(datasource: TestAndLearnDictionaryDataSource(viewModel: self.serviceAssembly.testAndLearnDictControllerDataProvider(), presAssembly: self))
+    }
+    
+    func learnController(sourceDict: DbUserDictionary) -> LearnCollectionViewController {
+        return LearnCollectionViewController(dataSource: LearnControllerTableViewDataSource(viewModel: self.serviceAssembly.learnTranslationsControllerDataProvider(sourceDict: sourceDict)))
     }
     
     

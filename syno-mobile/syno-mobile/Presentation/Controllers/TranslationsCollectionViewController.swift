@@ -19,7 +19,7 @@ class TranslationsCollectionViewController: UIViewController {
     
     lazy var tableView: UITableView = {
         
-        let tableView = PlainTableViewCell()
+        let tableView = PlainTableView()
         
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableView.automaticDimension
@@ -36,7 +36,7 @@ class TranslationsCollectionViewController: UIViewController {
         
         tableView.contentInset = UIEdgeInsets(top: 30, left: 5, bottom: 10, right: 5)
         
-        tableView.register(TranslationTableViewCell.self, forCellReuseIdentifier: TranslationTableViewCell.cellId)
+        tableView.register(TranslationTableViewCell.self, forCellReuseIdentifier: TranslationTableViewCell.cellId())
         
         return tableView
     }()
