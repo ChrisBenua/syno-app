@@ -9,10 +9,20 @@
 import Foundation
 import UIKit
 
-class LearnView: UIView {
+protocol ILearnView: UIView, ILearnControllerDataSourceReactor {
+    var controlsView: UIView { get }
+}
+
+class LearnView: UIView, ILearnView {
     var dataSource: ILearnControllerTableViewDataSource
     weak var actionsDelegate: ILearnControllerActionsDelegate?
     weak var scrollViewDelegate: UIScrollViewDelegate?
+    
+    func setHeaderData() {
+        cardNumberLabel.text = "\(self.dataSource.state.itemNumber + 1)/\(self.dataSource.viewModel.count)"
+        translationsNumberLabel.text = "\(self.dataSource.viewModel.getItems(currCardPos: self.dataSource.state.itemNumber).count) переводов"
+        translatedWordView.translatedWordLabel.text = self.dataSource.viewModel.getTranslatedWord(cardPos: self.dataSource.state.itemNumber)
+    }
     
     lazy var tableView: UITableView = {
         let tableView = PlainTableView()
@@ -116,11 +126,17 @@ class LearnView: UIView {
         return translationsNumberLabel
     }()
     
-    init(dataSource: ILearnControllerTableViewDataSource, actionsDelegate: ILearnControllerActionsDelegate, scrollViewDelegate: UIScrollViewDelegate) {
+    init(dataSource: ILearnControllerTableViewDataSource, actionsDelegate: ILearnControllerActionsDelegate?, scrollViewDelegate: UIScrollViewDelegate?) {
         self.dataSource = dataSource
         self.actionsDelegate = actionsDelegate
         self.scrollViewDelegate = scrollViewDelegate
         super.init(frame: .zero)
+        
+        self.addSubview(self.contentView)
+        self.contentView.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        setHeaderData()
+        //self.contentView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1).isActive = true
+        //self.contentView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 1).isActive = true
     }
     
     required init?(coder: NSCoder) {
@@ -146,7 +162,7 @@ class LearnView: UIView {
         
         self.collectionContainerView.anchor(top: self.headerView.bottomAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 20, paddingRight: 0, width: 0, height: 0)
         self.collectionContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        self.collectionContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -30).isActive = true
+        self.collectionContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: 0).isActive = true
         
         return view
     }()
@@ -168,14 +184,25 @@ class LearnView: UIView {
         
         self.contentView.anchor(top: scrollView.topAnchor, left: nil, bottom: scrollView.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         self.contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
-        self.contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -30).isActive = true
+        self.contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -20).isActive = true
         
         return scrollView
     }()
 }
 
+extension LearnView: ILearnControllerDataSourceReactor {
+//    func reload() {
+//        self.tableView.reloadData()
+//        self.setHeaderData()
+//    }
+    
+    func addItems(indexPaths: [IndexPath]) {
+        self.tableView.insertRows(at: indexPaths, with: .automatic)
+    }
+}
+
 class LearnViewGenerator {
-    func generate(dataSource: ILearnControllerTableViewDataSource, actionsDelegate: ILearnControllerActionsDelegate?, scrollViewDelegate: UIScrollViewDelegate) {
-        
+    func generate(dataSource: ILearnControllerTableViewDataSource, actionsDelegate: ILearnControllerActionsDelegate?, scrollViewDelegate: UIScrollViewDelegate?) -> LearnView {
+        return LearnView(dataSource: dataSource, actionsDelegate: actionsDelegate, scrollViewDelegate: scrollViewDelegate)
     }
 }

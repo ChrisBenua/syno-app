@@ -44,9 +44,13 @@ class TestAndLearnViewController: UIViewController {
         return colView
     }()
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tabBarController?.tabBar.isHidden = false
 
         print("testAndLearnViewController")
         self.navigationItem.title = "Обучение"

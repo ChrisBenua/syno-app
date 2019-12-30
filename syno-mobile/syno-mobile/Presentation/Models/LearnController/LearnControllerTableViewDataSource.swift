@@ -19,6 +19,14 @@ class LearnControllerState: ILearnControllerState {
     private var _itemNumber: Int = 0
     var translationsShown: Int = 0
     
+    init() {
+        _itemNumber = 0
+    }
+    
+    init(itemNumber: Int) {
+        self._itemNumber = itemNumber
+    }
+    
     var itemNumber: Int {
         get {
             _itemNumber
@@ -84,12 +92,12 @@ protocol ILearnControllerTableViewDataSource: UITableViewDataSource, UITableView
 protocol ILearnControllerActionsDelegate: class {
     func onPlusOne()
     func onShowAll()
-    func onNext()
-    func onPrev()
+    //func onNext()
+    //func onPrev()
 }
 
 protocol ILearnControllerDataSourceReactor: class {
-    func reload()
+    //func reload()
     func addItems(indexPaths: [IndexPath])
 }
 
@@ -121,6 +129,11 @@ class LearnControllerTableViewDataSource: NSObject, ILearnControllerTableViewDat
         self.state = LearnControllerState()
     }
     
+    init(viewModel: ILearnControllerDataProvider, state: ILearnControllerState) {
+        self.viewModel = viewModel
+        self.state = state
+    }
+    
     func onPlusOne() {
         if (self.state.translationsShown < self.viewModel.getItems(currCardPos: self.state.itemNumber).count) {
             self.state.translationsShown += 1
@@ -137,13 +150,13 @@ class LearnControllerTableViewDataSource: NSObject, ILearnControllerTableViewDat
         delegate?.addItems(indexPaths: items)
     }
     
-    func onNext() {
-        self.state.itemNumber += 1
-        delegate?.reload()
-    }
-    
-    func onPrev() {
-        self.state.itemNumber -= 1
-        delegate?.reload()
-    }
+//    func onNext() {
+//        self.state.itemNumber += 1
+//        delegate?.reload()
+//    }
+//
+//    func onPrev() {
+//        self.state.itemNumber -= 1
+//        delegate?.reload()
+//    }
 }

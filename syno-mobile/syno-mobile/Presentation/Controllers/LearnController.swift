@@ -9,143 +9,35 @@
 import Foundation
 import UIKit
 
+protocol ILearnViewControllerData {
+    var cardsAmount: Int { get }
+    var dictName: String? { get }
+}
+
+class LearnViewControllerData: ILearnViewControllerData {
+    var cardsAmount: Int
+    
+    var dictName: String?
+    
+    init(cardsAmount: Int, dictName: String?) {
+        self.cardsAmount = cardsAmount
+        self.dictName = dictName
+    }
+}
+
 class LearnCollectionViewController: UIViewController {
     
-    private var dataSource: ILearnControllerTableViewDataSource
+    private var data: ILearnViewControllerData
     
-    weak var actionsDelegate: ILearnControllerActionsDelegate?
+    private var learnViews: [ILearnView]
     
-    lazy var tableView: UITableView = {
-        let tableView = PlainTableView()
-        tableView.delegate = self.dataSource
-        tableView.dataSource = self.dataSource
-        tableView.backgroundColor = .clear
-        tableView.separatorStyle = .none
+    private var currCardNumber: Int = 0
         
-        tableView.register(TranslationReadonlyTableViewCell.self, forCellReuseIdentifier: TranslationReadonlyTableViewCell.cellId())
-        
-        return tableView
-    }()
-    
-    lazy var collectionContainerView: UIView = {
-        let view = BaseShadowView()
-        view.shadowView.shadowOffset = CGSize(width: 0, height: 4)
-
-        view.containerViewBackgroundColor = UIColor(red: 247.0/255, green: 247.0/255, blue: 247.0/255, alpha: 1)
-        view.cornerRadius = 20
-        view.backgroundColor = .clear
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(self.controlsView)
-        view.addSubview(self.tableView)
-        
-        self.controlsView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 5, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-        
-        self.tableView.anchor(top: self.controlsView.bottomAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 10, paddingRight: 15, width: 0, height: 0)
-        self.tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        self.tableView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -25).isActive = true
-        
-        return view
-    }()
-    
-    lazy var cardNumberLabel: UILabel = {
-        let cardNumberLabel = UILabel(); cardNumberLabel.translatesAutoresizingMaskIntoConstraints = false
-        cardNumberLabel.font = UIFont.systemFont(ofSize: 20)
-        cardNumberLabel.textAlignment = .center
-        
-        return cardNumberLabel
-    }()
-    
-    lazy var translationsNumberLabel: UILabel = {
-        let translationsNumberLabel = UILabel(); translationsNumberLabel.translatesAutoresizingMaskIntoConstraints = false
-        translationsNumberLabel.font = UIFont.systemFont(ofSize: 20)
-        translationsNumberLabel.textAlignment = .center
-        
-        return translationsNumberLabel
-    }()
-    
-    func updateHeaderData() {
-        cardNumberLabel.text = "\(self.dataSource.state.itemNumber + 1)/\(self.dataSource.viewModel.count)"
-        translationsNumberLabel.text = "\(self.dataSource.viewModel.getItems(currCardPos: self.dataSource.state.itemNumber).count) переводов"
-        translatedWordView.translatedWordLabel.text = self.dataSource.viewModel.getTranslatedWord(cardPos: self.dataSource.state.itemNumber)
+    var contentView: ILearnView {
+        get {
+            return learnViews[currCardNumber]
+        }
     }
-    
-    lazy var translatedWordView: TranslatedWordView = {
-        let translatedWordView = TranslatedWordView()
-        translatedWordView.translatedWordLabel.isUserInteractionEnabled = false
-        
-        return translatedWordView
-    }()
-    
-    lazy var headerView: UIView = {
-        let view = UIView()
-        
-        
-        let cardNumberLabel = self.cardNumberLabel
-        
-        let translationsNumberLabel = self.translationsNumberLabel
-        
-        let sepView = UIView(); sepView.translatesAutoresizingMaskIntoConstraints = false
-        let sepView1 = UIView(); sepView1.translatesAutoresizingMaskIntoConstraints = false
-        
-        let sv = UIStackView(arrangedSubviews: [cardNumberLabel, sepView, translatedWordView, sepView1, translationsNumberLabel])
-        sv.axis = .vertical
-        sv.distribution = .fill
-        
-        sepView.heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.2).isActive = true
-        sepView1.heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.15).isActive = true
-        
-        view.addSubview(sv)
-        sv.anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-        sv.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        sv.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1).isActive = true
-        
-        return view
-    }()
-    
-    lazy var controlsView: UIView = {
-        let plusOneButton = CommonUIElements.defaultSubmitButton(text: "+1", backgroundColor: UIColor.init(red: 96.0/255, green: 157.0/255, blue: 248.0/255, alpha: 1.0))
-        plusOneButton.addTarget(self, action: #selector(onPlusOneClick), for: .touchUpInside)
-        
-        let showAllButton = CommonUIElements.defaultSubmitButton(text: "Все", backgroundColor: UIColor.init(red: 96.0/255, green: 157.0/255, blue: 248.0/255, alpha: 1.0))
-        showAllButton.addTarget(self, action: #selector(onShowAllClick), for: .touchUpInside)
-        
-        let view = UIView()
-        view.addSubview(plusOneButton)
-        view.addSubview(showAllButton)
-        
-        plusOneButton.anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 10, paddingRight: 30, width: 0, height: 0)
-        showAllButton.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: nil, paddingTop: 10, paddingLeft: 30, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
-        
-        plusOneButton.widthAnchor.constraint(equalTo: showAllButton.widthAnchor).isActive = true
-        showAllButton.widthAnchor.constraint(greaterThanOrEqualTo: view.widthAnchor, multiplier: 0.15).isActive = true
-        
-        return view
-    }()
-    
-    @objc func onPlusOneClick() {
-        self.actionsDelegate?.onPlusOne()
-    }
-    
-    @objc func onShowAllClick() {
-        self.actionsDelegate?.onShowAll()
-    }
-    
-    lazy var contentView: UIView = {
-        let view = UIView()
-        view.addSubview(self.headerView)
-        view.addSubview(self.collectionContainerView)
-        
-        self.headerView.anchor(top: view.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-        self.headerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        self.headerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40).isActive = true
-        
-        self.collectionContainerView.anchor(top: self.headerView.bottomAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 20, paddingRight: 0, width: 0, height: 0)
-        self.collectionContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        self.collectionContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -30).isActive = true
-        
-        return view
-    }()
     
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -174,41 +66,70 @@ class LearnCollectionViewController: UIViewController {
     }
     
     @objc func handleSwipes(_ sender: UISwipeGestureRecognizer) {
+        var nextView: ILearnView?
+        var tempContraints: NSLayoutConstraint?
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
             switch sender.direction {
             case .left:
                 print("Left Swipe")
-                if self.dataSource.state.itemNumber < self.dataSource.viewModel.count - 1 {
+                if self.currCardNumber < self.data.cardsAmount - 1 {
                     self.contentView.transform = CGAffineTransform(translationX: -self.view.frame.width, y: 0)
+                    UIView.performWithoutAnimation {
+                        nextView = self.learnViews[self.currCardNumber + 1]
+                        self.scrollView.addSubview(nextView!)
+                        nextView!.translatesAutoresizingMaskIntoConstraints = false
+                        nextView!.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
+//                        tempContraints = nextView!.bottomAnchor.constraint(equalTo: self.contentView.controlsView.bottomAnchor)
+//                        tempContraints?.isActive = true
+                        
+                        nextView!.centerXAnchor.constraint(equalTo: self.scrollView.centerXAnchor).isActive = true
+                        nextView!.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor, constant: -30).isActive = true
+                        
+                        nextView?.transform = CGAffineTransform(translationX: self.view.frame.width, y: 0)
+                    }
+                    nextView?.transform = CGAffineTransform(translationX: 0, y: 0)
                 }
             case .right:
                 print("Right Swipe")
-                if self.dataSource.state.itemNumber > 0 {
+                if self.currCardNumber > 0 {
                     self.contentView.transform = CGAffineTransform(translationX: self.view.frame.width, y: 0)
+                    UIView.performWithoutAnimation {
+                        nextView = self.learnViews[self.currCardNumber - 1]
+                        nextView!.translatesAutoresizingMaskIntoConstraints = false
+
+                        self.scrollView.addSubview(nextView!)
+                        
+                        nextView!.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
+//                        tempContraints = nextView!.bottomAnchor.constraint(equalTo: self.contentView.controlsView.bottomAnchor)
+//                        tempContraints?.isActive = true
+                        
+                        nextView!.centerXAnchor.constraint(equalTo: self.scrollView.centerXAnchor).isActive = true
+                        nextView!.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor, constant: -30).isActive = true
+                        
+                        nextView?.transform = CGAffineTransform(translationX: -self.view.frame.width, y: 0)
+                    }
+                    nextView?.transform = CGAffineTransform(translationX: 0, y: 0)
                 }
             default:
                 print("break")
                 break
             }
         }) { (_) in
+            self.contentView.removeFromSuperview()
+            tempContraints?.isActive = false
+            nextView?.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
             switch sender.direction {
             case .left:
-                if self.dataSource.state.itemNumber < self.dataSource.viewModel.count - 1 {
-                    self.contentView.transform = CGAffineTransform(translationX: self.view.frame.width, y: 0)
-                    self.actionsDelegate?.onNext()
-
+                if self.currCardNumber < self.data.cardsAmount - 1 {
+                    self.currCardNumber += 1
                 }
             case .right:
-                if self.dataSource.state.itemNumber > 0 {
-                    self.contentView.transform = CGAffineTransform(translationX: -self.view.frame.width, y: 0)
-                    self.actionsDelegate?.onPrev()
+                if self.currCardNumber > 0 {
+                    self.currCardNumber -= 1
                 }
             default:
                 break
             }
-            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-                self.contentView.transform = .identity
-            })
         }
     }
     
@@ -230,19 +151,16 @@ class LearnCollectionViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Закончить", style: .done, target: self, action: #selector(endLearn))
         
         self.view.backgroundColor = .white
-        self.dataSource.delegate = self
         
         self.view.addSubview(scrollView)
         scrollView.anchor(top: self.view.topAnchor, left: self.view.leftAnchor, bottom: self.view.bottomAnchor, right: self.view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: UIScreen.main.bounds.width, height: 0)
-        //self.tableView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 1, constant: -60).isActive = true
-        self.navigationItem.title = self.dataSource.viewModel.dictName
+        self.navigationItem.title = self.data.dictName
         self.navigationItem.setHidesBackButton(true, animated:true)
-        updateHeaderData()
     }
     
-    init(dataSource: ILearnControllerTableViewDataSource) {
-        self.dataSource = dataSource
-        self.actionsDelegate = self.dataSource
+    init(data: ILearnViewControllerData, learnViews: [ILearnView]) {
+        self.data = data
+        self.learnViews = learnViews
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -254,26 +172,9 @@ class LearnCollectionViewController: UIViewController {
 extension LearnCollectionViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollView.contentOffset.x = 0
-        //handleSwipe(scrollView.panGestureRecognizer)
     }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        //handleSwipe(scrollView.panGestureRecognizer)
-    }
-    
-    //scrollView
 }
 
-extension LearnCollectionViewController: ILearnControllerDataSourceReactor {
-    func reload() {
-        self.tableView.reloadData()
-        self.updateHeaderData()
-    }
-    
-    func addItems(indexPaths: [IndexPath]) {
-        self.tableView.insertRows(at: indexPaths, with: .automatic)
-    }
-}
 
 extension LearnCollectionViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {

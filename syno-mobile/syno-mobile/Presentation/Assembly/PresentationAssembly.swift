@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol IPresentationAssembly {
     func loginViewController() -> LoginViewController
@@ -59,7 +60,17 @@ class PresentationAssembly: IPresentationAssembly {
     }
     
     func learnController(sourceDict: DbUserDictionary) -> LearnCollectionViewController {
-        return LearnCollectionViewController(dataSource: LearnControllerTableViewDataSource(viewModel: self.serviceAssembly.learnTranslationsControllerDataProvider(sourceDict: sourceDict)))
+        let viewModel = self.serviceAssembly.learnTranslationsControllerDataProvider(sourceDict: sourceDict)
+        
+        var views: [ILearnView] = []
+        
+        for i in 0..<viewModel.count {
+            let ithDataSource = LearnControllerTableViewDataSource(viewModel: viewModel, state: LearnControllerState(itemNumber: i))
+            views.append(LearnViewGenerator().generate(dataSource: ithDataSource, actionsDelegate: ithDataSource, scrollViewDelegate: nil))
+            ithDataSource.delegate = views.last!
+        }
+        
+        return LearnCollectionViewController(data: LearnViewControllerData(cardsAmount: viewModel.count, dictName: viewModel.dictName), learnViews: views)
     }
     
     
