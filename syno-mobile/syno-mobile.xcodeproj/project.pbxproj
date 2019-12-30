@@ -17,6 +17,7 @@
 		49A16D5B5C7461F5D99EAB36 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A16D95769370F236C3331C /* Debug.swift */; };
 		49A16EAD0C4E81E88AF1AD63 /* IRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A166F813DC9E880D839D0A /* IRequest.swift */; };
 		97F228A90ED0055E61FF55C6 /* Pods_syno_mobileTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10F1548EA7F86F27E43B50F4 /* Pods_syno_mobileTests.framework */; };
+		AA12FECA23AFB59100CC8D3B /* LearnViewGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA12FEC923AFB59000CC8D3B /* LearnViewGenerator.swift */; };
 		AA1B874A238D29F300D26FCF /* LoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B8749238D29F300D26FCF /* LoginRequest.swift */; };
 		AA1B874D238D2A2400D26FCF /* RequestsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B874C238D2A2400D26FCF /* RequestsSettings.swift */; };
 		AA1B874F238D9A8900D26FCF /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B874E238D9A8900D26FCF /* LoginModel.swift */; };
@@ -119,6 +120,7 @@
 		49A16D30F945B03CCAC0533F /* IParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IParser.swift; sourceTree = "<group>"; };
 		49A16D95769370F236C3331C /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		9E89B3D67049DB56FF1AD9C7 /* Pods-syno-mobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-syno-mobileTests.release.xcconfig"; path = "Target Support Files/Pods-syno-mobileTests/Pods-syno-mobileTests.release.xcconfig"; sourceTree = "<group>"; };
+		AA12FEC923AFB59000CC8D3B /* LearnViewGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnViewGenerator.swift; sourceTree = "<group>"; };
 		AA1B8749238D29F300D26FCF /* LoginRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRequest.swift; sourceTree = "<group>"; };
 		AA1B874C238D2A2400D26FCF /* RequestsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsSettings.swift; sourceTree = "<group>"; };
 		AA1B874E238D9A8900D26FCF /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
@@ -291,6 +293,14 @@
 				10F1548EA7F86F27E43B50F4 /* Pods_syno_mobileTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AA12FEC823AFB57B00CC8D3B /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				AA12FEC923AFB59000CC8D3B /* LearnViewGenerator.swift */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 		AA1B874B238D2A1500D26FCF /* Settings */ = {
@@ -492,6 +502,7 @@
 		AA8C0E0D2389186A000CBB73 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				AA12FEC823AFB57B00CC8D3B /* Helper */,
 				AAC605732390E5DE00120B77 /* Views */,
 				AA94BC20238841F300B2F16F /* LoginViewController.swift */,
 				AAC605762390EA0100120B77 /* RegistrationViewController.swift */,
@@ -830,6 +841,7 @@
 				49A166086AEF7785B19E1514 /* UITextFieldWithInsets.swift in Sources */,
 				AAA5F2CA23A2798800661811 /* ControllerKeyboardExt.swift in Sources */,
 				49A16189873B6C801FB1EFFC /* IParser.swift in Sources */,
+				AA12FECA23AFB59100CC8D3B /* LearnViewGenerator.swift in Sources */,
 				AAD4A2E723ABB15400394693 /* DbUserTestExt.swift in Sources */,
 				AA8700D72399225900C97E18 /* DictsController.swift in Sources */,
 				AAB6CEC72393C1D200AAAF0E /* AppUserStorageManager.swift in Sources */,

@@ -1,19 +1,18 @@
 //
-//  LearnController.swift
+//  LearnViewGenerator.swift
 //  syno-mobile
 //
-//  Created by Ирина Улитина on 20.12.2019.
+//  Created by Ирина Улитина on 22.12.2019.
 //  Copyright © 2019 Christian Benua. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-class LearnCollectionViewController: UIViewController {
-    
-    private var dataSource: ILearnControllerTableViewDataSource
-    
+class LearnView: UIView {
+    var dataSource: ILearnControllerTableViewDataSource
     weak var actionsDelegate: ILearnControllerActionsDelegate?
+    weak var scrollViewDelegate: UIScrollViewDelegate?
     
     lazy var tableView: UITableView = {
         let tableView = PlainTableView()
@@ -47,28 +46,6 @@ class LearnCollectionViewController: UIViewController {
         
         return view
     }()
-    
-    lazy var cardNumberLabel: UILabel = {
-        let cardNumberLabel = UILabel(); cardNumberLabel.translatesAutoresizingMaskIntoConstraints = false
-        cardNumberLabel.font = UIFont.systemFont(ofSize: 20)
-        cardNumberLabel.textAlignment = .center
-        
-        return cardNumberLabel
-    }()
-    
-    lazy var translationsNumberLabel: UILabel = {
-        let translationsNumberLabel = UILabel(); translationsNumberLabel.translatesAutoresizingMaskIntoConstraints = false
-        translationsNumberLabel.font = UIFont.systemFont(ofSize: 20)
-        translationsNumberLabel.textAlignment = .center
-        
-        return translationsNumberLabel
-    }()
-    
-    func updateHeaderData() {
-        cardNumberLabel.text = "\(self.dataSource.state.itemNumber + 1)/\(self.dataSource.viewModel.count)"
-        translationsNumberLabel.text = "\(self.dataSource.viewModel.getItems(currCardPos: self.dataSource.state.itemNumber).count) переводов"
-        translatedWordView.translatedWordLabel.text = self.dataSource.viewModel.getTranslatedWord(cardPos: self.dataSource.state.itemNumber)
-    }
     
     lazy var translatedWordView: TranslatedWordView = {
         let translatedWordView = TranslatedWordView()
@@ -123,10 +100,37 @@ class LearnCollectionViewController: UIViewController {
         return view
     }()
     
+    lazy var cardNumberLabel: UILabel = {
+        let cardNumberLabel = UILabel(); cardNumberLabel.translatesAutoresizingMaskIntoConstraints = false
+        cardNumberLabel.font = UIFont.systemFont(ofSize: 20)
+        cardNumberLabel.textAlignment = .center
+        
+        return cardNumberLabel
+    }()
+    
+    lazy var translationsNumberLabel: UILabel = {
+        let translationsNumberLabel = UILabel(); translationsNumberLabel.translatesAutoresizingMaskIntoConstraints = false
+        translationsNumberLabel.font = UIFont.systemFont(ofSize: 20)
+        translationsNumberLabel.textAlignment = .center
+        
+        return translationsNumberLabel
+    }()
+    
+    init(dataSource: ILearnControllerTableViewDataSource, actionsDelegate: ILearnControllerActionsDelegate, scrollViewDelegate: UIScrollViewDelegate) {
+        self.dataSource = dataSource
+        self.actionsDelegate = actionsDelegate
+        self.scrollViewDelegate = scrollViewDelegate
+        super.init(frame: .zero)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     @objc func onPlusOneClick() {
         self.actionsDelegate?.onPlusOne()
     }
-    
+        
     @objc func onShowAllClick() {
         self.actionsDelegate?.onShowAll()
     }
@@ -151,7 +155,7 @@ class LearnCollectionViewController: UIViewController {
         let scrollView = UIScrollView()
         scrollView.alwaysBounceVertical = true
         scrollView.alwaysBounceHorizontal = false
-        scrollView.delegate = self
+        scrollView.delegate = scrollViewDelegate
         scrollView.showsHorizontalScrollIndicator = false
         
 //        scrollView.addSubview(self.headerView)
@@ -168,115 +172,10 @@ class LearnCollectionViewController: UIViewController {
         
         return scrollView
     }()
-    
-    @objc func endLearn() {
-        self.navigationController?.popViewController(animated: true)
-    }
-    
-    @objc func handleSwipes(_ sender: UISwipeGestureRecognizer) {
-        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-            switch sender.direction {
-            case .left:
-                print("Left Swipe")
-                if self.dataSource.state.itemNumber < self.dataSource.viewModel.count - 1 {
-                    self.contentView.transform = CGAffineTransform(translationX: -self.view.frame.width, y: 0)
-                }
-            case .right:
-                print("Right Swipe")
-                if self.dataSource.state.itemNumber > 0 {
-                    self.contentView.transform = CGAffineTransform(translationX: self.view.frame.width, y: 0)
-                }
-            default:
-                print("break")
-                break
-            }
-        }) { (_) in
-            switch sender.direction {
-            case .left:
-                if self.dataSource.state.itemNumber < self.dataSource.viewModel.count - 1 {
-                    self.contentView.transform = CGAffineTransform(translationX: self.view.frame.width, y: 0)
-                    self.actionsDelegate?.onNext()
-
-                }
-            case .right:
-                if self.dataSource.state.itemNumber > 0 {
-                    self.contentView.transform = CGAffineTransform(translationX: -self.view.frame.width, y: 0)
-                    self.actionsDelegate?.onPrev()
-                }
-            default:
-                break
-            }
-            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-                self.contentView.transform = .identity
-            })
-        }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        let recognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
-        recognizer.direction = .left
-        recognizer.delegate = self
-        let recognizer1 = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
-        recognizer1.direction = .right
-        recognizer1.delegate = self
-        self.scrollView.addGestureRecognizer(recognizer)
-        self.scrollView.addGestureRecognizer(recognizer1)
-
-        
-        self.tabBarController?.tabBar.isHidden = true
-        
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Закончить", style: .done, target: self, action: #selector(endLearn))
-        
-        self.view.backgroundColor = .white
-        self.dataSource.delegate = self
-        
-        self.view.addSubview(scrollView)
-        scrollView.anchor(top: self.view.topAnchor, left: self.view.leftAnchor, bottom: self.view.bottomAnchor, right: self.view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: UIScreen.main.bounds.width, height: 0)
-        //self.tableView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 1, constant: -60).isActive = true
-        self.navigationItem.title = self.dataSource.viewModel.dictName
-        self.navigationItem.setHidesBackButton(true, animated:true)
-        updateHeaderData()
-    }
-    
-    init(dataSource: ILearnControllerTableViewDataSource) {
-        self.dataSource = dataSource
-        self.actionsDelegate = self.dataSource
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }
 
-extension LearnCollectionViewController: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        scrollView.contentOffset.x = 0
-        //handleSwipe(scrollView.panGestureRecognizer)
-    }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        //handleSwipe(scrollView.panGestureRecognizer)
-    }
-    
-    //scrollView
-}
-
-extension LearnCollectionViewController: ILearnControllerDataSourceReactor {
-    func reload() {
-        self.tableView.reloadData()
-        self.updateHeaderData()
-    }
-    
-    func addItems(indexPaths: [IndexPath]) {
-        self.tableView.insertRows(at: indexPaths, with: .automatic)
-    }
-}
-
-extension LearnCollectionViewController: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+class LearnViewGenerator {
+    func generate(dataSource: ILearnControllerTableViewDataSource, actionsDelegate: ILearnControllerActionsDelegate?, scrollViewDelegate: UIScrollViewDelegate) {
+        
     }
 }
