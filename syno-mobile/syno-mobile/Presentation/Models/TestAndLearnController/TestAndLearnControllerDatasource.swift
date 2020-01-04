@@ -19,6 +19,10 @@ protocol ITestAndLearnStateReactor: class {
     func onStateChanged(newState: TestAndLearnModes)
 }
 
+protocol ITestAndLearnReactor: class {
+    func showLearnController(controller: UIViewController)
+}
+
 protocol ITestAndLearnDictionaryControllerState {
     var testAndLearnMode: TestAndLearnModes { get set }
 }
@@ -33,9 +37,12 @@ class TestAndLearnDictionaryControllerState: ITestAndLearnDictionaryControllerSt
 
 protocol ITestAndLearnDictionaryDataSource: ICommonDictionaryControllerDataSource, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ITestAndLearnHeaderDelegate {
     var state: ITestAndLearnDictionaryControllerState { get }
+    var delegate: ITestAndLearnReactor? { get set }
 }
 
 class TestAndLearnDictionaryDataSource: NSObject, ITestAndLearnDictionaryDataSource {
+    weak var delegate: ITestAndLearnReactor?
+    
     var state: ITestAndLearnDictionaryControllerState
     
     func onSegmentChanged() {
@@ -46,10 +53,13 @@ class TestAndLearnDictionaryDataSource: NSObject, ITestAndLearnDictionaryDataSou
     
     var viewModel: IDictionaryControllerDataProvider
     
+    private var presAssembly: IPresentationAssembly
+    
     var header: TestAndLearnControllerHeader?
     
-    init(viewModel: IDictionaryControllerDataProvider) {
+    init(viewModel: IDictionaryControllerDataProvider, presAssembly: IPresentationAssembly) {
         self.viewModel = viewModel
+        self.presAssembly = presAssembly
         self.state = TestAndLearnDictionaryControllerState()
         fetchedResultsController = self.viewModel.generateDictControllerFRC()
     }
@@ -94,6 +104,11 @@ class TestAndLearnDictionaryDataSource: NSObject, ITestAndLearnDictionaryDataSou
 }
 
 extension TestAndLearnDictionaryDataSource {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let controller = self.presAssembly.learnController(sourceDict: self.fetchedResultsController.object(at: indexPath))
+        self.delegate?.showLearnController(controller: controller)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width / 2-20, height: 100)
     }

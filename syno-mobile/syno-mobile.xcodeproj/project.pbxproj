@@ -17,6 +17,7 @@
 		49A16D5B5C7461F5D99EAB36 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A16D95769370F236C3331C /* Debug.swift */; };
 		49A16EAD0C4E81E88AF1AD63 /* IRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A166F813DC9E880D839D0A /* IRequest.swift */; };
 		97F228A90ED0055E61FF55C6 /* Pods_syno_mobileTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10F1548EA7F86F27E43B50F4 /* Pods_syno_mobileTests.framework */; };
+		AA12FECA23AFB59100CC8D3B /* LearnViewGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA12FEC923AFB59000CC8D3B /* LearnViewGenerator.swift */; };
 		AA1B874A238D29F300D26FCF /* LoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B8749238D29F300D26FCF /* LoginRequest.swift */; };
 		AA1B874D238D2A2400D26FCF /* RequestsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B874C238D2A2400D26FCF /* RequestsSettings.swift */; };
 		AA1B874F238D9A8900D26FCF /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B874E238D9A8900D26FCF /* LoginModel.swift */; };
@@ -24,7 +25,13 @@
 		AA1B8755238D9B9700D26FCF /* ServiceAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B8754238D9B9700D26FCF /* ServiceAssembly.swift */; };
 		AA1B8757238D9C1800D26FCF /* CoreAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B8756238D9C1800D26FCF /* CoreAssembly.swift */; };
 		AA1B8759238D9CE100D26FCF /* RootAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B8758238D9CE100D26FCF /* RootAssembly.swift */; };
+		AA2B9DFB23AC922800A6D45F /* TranslationDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B9DFA23AC922800A6D45F /* TranslationDto.swift */; };
+		AA2B9DFD23AC923400A6D45F /* CardDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B9DFC23AC923400A6D45F /* CardDto.swift */; };
+		AA2B9DFF23AC924F00A6D45F /* DictionaryDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B9DFE23AC924F00A6D45F /* DictionaryDto.swift */; };
 		AA2FFD9223A4D48700889BAB /* TranslatedWordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2FFD9123A4D48700889BAB /* TranslatedWordView.swift */; };
+		AA6A03B923AC9C7500902FBE /* LearnController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6A03B823AC9C7500902FBE /* LearnController.swift */; };
+		AA6A03BC23AC9CE400902FBE /* LearnControllerTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6A03BB23AC9CE400902FBE /* LearnControllerTableViewDataSource.swift */; };
+		AA6A03BE23ACA26A00902FBE /* TranslationReadonlyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6A03BD23ACA26A00902FBE /* TranslationReadonlyTableViewCell.swift */; };
 		AA75298423A7B016004120A0 /* TestAndLearnController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA75298323A7B016004120A0 /* TestAndLearnController.swift */; };
 		AA82AFD3238E91A000A75D92 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA82AFD2238E91A000A75D92 /* UserDefaultsManager.swift */; };
 		AA8700C7239791D000C97E18 /* RegistrationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8700C6239791D000C97E18 /* RegistrationRequest.swift */; };
@@ -85,7 +92,7 @@
 		AAEBE74923A37FDE00F48684 /* TranslationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE74823A37FDE00F48684 /* TranslationCollectionViewCell.swift */; };
 		AAEBE74B23A39DE400F48684 /* TranslationsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE74A23A39DE400F48684 /* TranslationsCollectionViewController.swift */; };
 		AAEBE74E23A39E7B00F48684 /* TranslationControllerDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE74D23A39E7B00F48684 /* TranslationControllerDatasource.swift */; };
-		AAEBE75023A3F49F00F48684 /* PlainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE74F23A3F49E00F48684 /* PlainTableViewCell.swift */; };
+		AAEBE75023A3F49F00F48684 /* PlainTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE74F23A3F49E00F48684 /* PlainTableView.swift */; };
 		AAEBE75223A4132200F48684 /* ShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE75123A4132200F48684 /* ShadowView.swift */; };
 		AAEBE75423A4139B00F48684 /* BaseShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE75323A4139B00F48684 /* BaseShadowView.swift */; };
 		EBC4E2FE5B509D55C5BEC2A5 /* Pods_syno_mobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7F0E228B93E70E1965BAEE8 /* Pods_syno_mobile.framework */; };
@@ -113,6 +120,7 @@
 		49A16D30F945B03CCAC0533F /* IParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IParser.swift; sourceTree = "<group>"; };
 		49A16D95769370F236C3331C /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		9E89B3D67049DB56FF1AD9C7 /* Pods-syno-mobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-syno-mobileTests.release.xcconfig"; path = "Target Support Files/Pods-syno-mobileTests/Pods-syno-mobileTests.release.xcconfig"; sourceTree = "<group>"; };
+		AA12FEC923AFB59000CC8D3B /* LearnViewGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnViewGenerator.swift; sourceTree = "<group>"; };
 		AA1B8749238D29F300D26FCF /* LoginRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRequest.swift; sourceTree = "<group>"; };
 		AA1B874C238D2A2400D26FCF /* RequestsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsSettings.swift; sourceTree = "<group>"; };
 		AA1B874E238D9A8900D26FCF /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
@@ -120,7 +128,13 @@
 		AA1B8754238D9B9700D26FCF /* ServiceAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAssembly.swift; sourceTree = "<group>"; };
 		AA1B8756238D9C1800D26FCF /* CoreAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreAssembly.swift; sourceTree = "<group>"; };
 		AA1B8758238D9CE100D26FCF /* RootAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootAssembly.swift; sourceTree = "<group>"; };
+		AA2B9DFA23AC922800A6D45F /* TranslationDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationDto.swift; sourceTree = "<group>"; };
+		AA2B9DFC23AC923400A6D45F /* CardDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDto.swift; sourceTree = "<group>"; };
+		AA2B9DFE23AC924F00A6D45F /* DictionaryDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryDto.swift; sourceTree = "<group>"; };
 		AA2FFD9123A4D48700889BAB /* TranslatedWordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslatedWordView.swift; sourceTree = "<group>"; };
+		AA6A03B823AC9C7500902FBE /* LearnController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnController.swift; sourceTree = "<group>"; };
+		AA6A03BB23AC9CE400902FBE /* LearnControllerTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnControllerTableViewDataSource.swift; sourceTree = "<group>"; };
+		AA6A03BD23ACA26A00902FBE /* TranslationReadonlyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationReadonlyTableViewCell.swift; sourceTree = "<group>"; };
 		AA75298323A7B016004120A0 /* TestAndLearnController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAndLearnController.swift; sourceTree = "<group>"; };
 		AA82AFD2238E91A000A75D92 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		AA8700C6239791D000C97E18 /* RegistrationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationRequest.swift; sourceTree = "<group>"; };
@@ -185,7 +199,7 @@
 		AAEBE74823A37FDE00F48684 /* TranslationCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationCollectionViewCell.swift; sourceTree = "<group>"; };
 		AAEBE74A23A39DE400F48684 /* TranslationsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsCollectionViewController.swift; sourceTree = "<group>"; };
 		AAEBE74D23A39E7B00F48684 /* TranslationControllerDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationControllerDatasource.swift; sourceTree = "<group>"; };
-		AAEBE74F23A3F49E00F48684 /* PlainTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainTableViewCell.swift; sourceTree = "<group>"; };
+		AAEBE74F23A3F49E00F48684 /* PlainTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainTableView.swift; sourceTree = "<group>"; };
 		AAEBE75123A4132200F48684 /* ShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowView.swift; sourceTree = "<group>"; };
 		AAEBE75323A4139B00F48684 /* BaseShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseShadowView.swift; sourceTree = "<group>"; };
 		B169F42F7A6B5AFCF835DEC5 /* Pods-syno-mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-syno-mobile.release.xcconfig"; path = "Target Support Files/Pods-syno-mobile/Pods-syno-mobile.release.xcconfig"; sourceTree = "<group>"; };
@@ -264,6 +278,7 @@
 		49A16BED519636B8EBC87A5D /* Dtos */ = {
 			isa = PBXGroup;
 			children = (
+				AA2B9DF923AC91F500A6D45F /* LearnController */,
 				49A16C1BD0A167FAFC9866DE /* LoginResponse.swift */,
 				AAC6057E2391237B00120B77 /* DictionaryResponse.swift */,
 				AA8700CA239793A300C97E18 /* MessageResponse.swift */,
@@ -278,6 +293,14 @@
 				10F1548EA7F86F27E43B50F4 /* Pods_syno_mobileTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AA12FEC823AFB57B00CC8D3B /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				AA12FEC923AFB59000CC8D3B /* LearnViewGenerator.swift */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 		AA1B874B238D2A1500D26FCF /* Settings */ = {
@@ -306,6 +329,24 @@
 				AA8700D223990F5400C97E18 /* UserDictsFetchService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		AA2B9DF923AC91F500A6D45F /* LearnController */ = {
+			isa = PBXGroup;
+			children = (
+				AA2B9DFA23AC922800A6D45F /* TranslationDto.swift */,
+				AA2B9DFC23AC923400A6D45F /* CardDto.swift */,
+				AA2B9DFE23AC924F00A6D45F /* DictionaryDto.swift */,
+			);
+			path = LearnController;
+			sourceTree = "<group>";
+		};
+		AA6A03BA23AC9CC500902FBE /* LearnController */ = {
+			isa = PBXGroup;
+			children = (
+				AA6A03BB23AC9CE400902FBE /* LearnControllerTableViewDataSource.swift */,
+			);
+			path = LearnController;
 			sourceTree = "<group>";
 		};
 		AA8700E2239949D500C97E18 /* Login */ = {
@@ -447,6 +488,7 @@
 		AA8C0E0C23891862000CBB73 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				AA6A03BA23AC9CC500902FBE /* LearnController */,
 				AAD4A2E823ABD1E100394693 /* TestAndLearnController */,
 				AAEBE74C23A39E5500F48684 /* TranslationController */,
 				AAA5F2CD23A2956500661811 /* DictCardsController */,
@@ -460,6 +502,7 @@
 		AA8C0E0D2389186A000CBB73 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				AA12FEC823AFB57B00CC8D3B /* Helper */,
 				AAC605732390E5DE00120B77 /* Views */,
 				AA94BC20238841F300B2F16F /* LoginViewController.swift */,
 				AAC605762390EA0100120B77 /* RegistrationViewController.swift */,
@@ -468,6 +511,7 @@
 				AAA5F2CB23A2923800661811 /* DictCardsController.swift */,
 				AAEBE74A23A39DE400F48684 /* TranslationsCollectionViewController.swift */,
 				AA75298323A7B016004120A0 /* TestAndLearnController.swift */,
+				AA6A03B823AC9C7500902FBE /* LearnController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -552,12 +596,13 @@
 				AAA5F2C923A2798800661811 /* ControllerKeyboardExt.swift */,
 				AAA5F2D023A298B800661811 /* CardCellView.swift */,
 				AAEBE74823A37FDE00F48684 /* TranslationCollectionViewCell.swift */,
-				AAEBE74F23A3F49E00F48684 /* PlainTableViewCell.swift */,
+				AAEBE74F23A3F49E00F48684 /* PlainTableView.swift */,
 				AAEBE75123A4132200F48684 /* ShadowView.swift */,
 				AAEBE75323A4139B00F48684 /* BaseShadowView.swift */,
 				AA2FFD9123A4D48700889BAB /* TranslatedWordView.swift */,
 				AAD4A2EB23ABD4B300394693 /* TestAndLearnCollectionViewCell.swift */,
 				AAD4A2F023ABE74E00394693 /* TestAndLearnControllerHeader.swift */,
+				AA6A03BD23ACA26A00902FBE /* TranslationReadonlyTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -768,6 +813,8 @@
 				AAEBE74E23A39E7B00F48684 /* TranslationControllerDatasource.swift in Sources */,
 				AAD4A2EC23ABD4B300394693 /* TestAndLearnCollectionViewCell.swift in Sources */,
 				AA8C0E18238921EC000CBB73 /* Anchor.swift in Sources */,
+				AA6A03BC23AC9CE400902FBE /* LearnControllerTableViewDataSource.swift in Sources */,
+				AA2B9DFF23AC924F00A6D45F /* DictionaryDto.swift in Sources */,
 				AAB6CECD2393C87B00AAAF0E /* UserTranslationStorageManager.swift in Sources */,
 				AA8C0E1B23892A0F000CBB73 /* UILabelWithInsets.swift in Sources */,
 				AAC605752390E5EC00120B77 /* SavingProcessView.swift in Sources */,
@@ -782,6 +829,7 @@
 				AAA5F2CC23A2923800661811 /* DictCardsController.swift in Sources */,
 				AAA5F2D123A298B800661811 /* CardCellView.swift in Sources */,
 				AA8700D92399248E00C97E18 /* DictionaryControllerTableViewDataSource.swift in Sources */,
+				AA2B9DFD23AC923400A6D45F /* CardDto.swift in Sources */,
 				AAB6CEBF2392E71200AAAF0E /* DbUserDictionaryExt.swift in Sources */,
 				AAB6CEC52393BA1C00AAAF0E /* DbTranslationExt.swift in Sources */,
 				AAEBE74B23A39DE400F48684 /* TranslationsCollectionViewController.swift in Sources */,
@@ -793,10 +841,12 @@
 				49A166086AEF7785B19E1514 /* UITextFieldWithInsets.swift in Sources */,
 				AAA5F2CA23A2798800661811 /* ControllerKeyboardExt.swift in Sources */,
 				49A16189873B6C801FB1EFFC /* IParser.swift in Sources */,
+				AA12FECA23AFB59100CC8D3B /* LearnViewGenerator.swift in Sources */,
 				AAD4A2E723ABB15400394693 /* DbUserTestExt.swift in Sources */,
 				AA8700D72399225900C97E18 /* DictsController.swift in Sources */,
 				AAB6CEC72393C1D200AAAF0E /* AppUserStorageManager.swift in Sources */,
 				AA8700DF23993F9900C97E18 /* CommonTabBarController.swift in Sources */,
+				AA6A03B923AC9C7500902FBE /* LearnController.swift in Sources */,
 				49A16D5B5C7461F5D99EAB36 /* Debug.swift in Sources */,
 				AAA5F2CF23A2958600661811 /* CardsControllerDataSource.swift in Sources */,
 				AA1B8757238D9C1800D26FCF /* CoreAssembly.swift in Sources */,
@@ -806,10 +856,12 @@
 				AAC605772390EA0100120B77 /* RegistrationViewController.swift in Sources */,
 				AA8700E1239942FF00C97E18 /* DictsFetchResultsControllerDelegate.swift in Sources */,
 				49A16EAD0C4E81E88AF1AD63 /* IRequest.swift in Sources */,
-				AAEBE75023A3F49F00F48684 /* PlainTableViewCell.swift in Sources */,
+				AAEBE75023A3F49F00F48684 /* PlainTableView.swift in Sources */,
 				AA8700D1239900F800C97E18 /* UserCardsFetchService.swift in Sources */,
 				AA8700CD23981DF600C97E18 /* RegisterState.swift in Sources */,
+				AA6A03BE23ACA26A00902FBE /* TranslationReadonlyTableViewCell.swift in Sources */,
 				49A1669737ADB0F82BF2FAEB /* RequestFactory.swift in Sources */,
+				AA2B9DFB23AC922800A6D45F /* TranslationDto.swift in Sources */,
 				49A160132C5591D9CC06BA27 /* IRequestSender.swift in Sources */,
 				49A16167918E9B1E70F2E147 /* DefaultRequestSender.swift in Sources */,
 				AAEBE74923A37FDE00F48684 /* TranslationCollectionViewCell.swift in Sources */,

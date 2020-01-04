@@ -44,8 +44,14 @@ class TestAndLearnViewController: UIViewController {
         return colView
     }()
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+
         print("testAndLearnViewController")
         self.navigationItem.title = "Обучение"
         
@@ -61,6 +67,7 @@ class TestAndLearnViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         frcDelegate = DefaultCollectionViewFRCDelegate(collectionView: self.collectionView)
         self.dataSource.fetchedResultsController.delegate = frcDelegate
+        self.dataSource.delegate = self
         self.collectionView.dataSource = self.dataSource
     }
     
@@ -69,3 +76,8 @@ class TestAndLearnViewController: UIViewController {
     }
 }
 
+extension TestAndLearnViewController: ITestAndLearnReactor {
+    func showLearnController(controller: UIViewController) {
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+}

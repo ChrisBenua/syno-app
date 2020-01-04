@@ -28,6 +28,8 @@ protocol IServiceAssembly {
     func translationsControllerDataProvider() -> ITranslationControllerDataProvider
     
     func testAndLearnDictControllerDataProvider() -> IDictionaryControllerDataProvider
+    
+    func learnTranslationsControllerDataProvider(sourceDict: DbUserDictionary) -> ILearnControllerDataProvider
 }
 
 class ServiceAssembly: IServiceAssembly {
@@ -72,5 +74,9 @@ class ServiceAssembly: IServiceAssembly {
     
     func testAndLearnDictControllerDataProvider() -> IDictionaryControllerDataProvider {
         return DictionaryControllerDataProvider(appUserManager: self.coreAssembly.storageManager)
+    }
+    
+    func learnTranslationsControllerDataProvider(sourceDict: DbUserDictionary) -> ILearnControllerDataProvider {
+        return LearnControllerDataProvider(dbUserDict: sourceDict)
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol IPresentationAssembly {
     func loginViewController() -> LoginViewController
@@ -22,6 +23,8 @@ protocol IPresentationAssembly {
     func translationsViewController(sourceCard: DbUserCard) -> TranslationsCollectionViewController
     
     func testAndLearnViewController() -> TestAndLearnViewController
+    
+    func learnController(sourceDict: DbUserDictionary) -> LearnCollectionViewController
 }
 
 class PresentationAssembly: IPresentationAssembly {
@@ -53,7 +56,21 @@ class PresentationAssembly: IPresentationAssembly {
     }
     
     func testAndLearnViewController() -> TestAndLearnViewController {
-        return TestAndLearnViewController(datasource: TestAndLearnDictionaryDataSource(viewModel: self.serviceAssembly.testAndLearnDictControllerDataProvider()))
+        return TestAndLearnViewController(datasource: TestAndLearnDictionaryDataSource(viewModel: self.serviceAssembly.testAndLearnDictControllerDataProvider(), presAssembly: self))
+    }
+    
+    func learnController(sourceDict: DbUserDictionary) -> LearnCollectionViewController {
+        let viewModel = self.serviceAssembly.learnTranslationsControllerDataProvider(sourceDict: sourceDict)
+        
+        var views: [ILearnView] = []
+        
+        for i in 0..<viewModel.count {
+            let ithDataSource = LearnControllerTableViewDataSource(viewModel: viewModel, state: LearnControllerState(itemNumber: i))
+            views.append(LearnViewGenerator().generate(dataSource: ithDataSource, actionsDelegate: ithDataSource, scrollViewDelegate: nil))
+            ithDataSource.delegate = views.last!
+        }
+        
+        return LearnCollectionViewController(data: LearnViewControllerData(cardsAmount: viewModel.count, dictName: viewModel.dictName), learnViews: views)
     }
     
     

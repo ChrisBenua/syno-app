@@ -19,7 +19,7 @@ class TranslationsCollectionViewController: UIViewController {
     
     lazy var tableView: UITableView = {
         
-        let tableView = PlainTableViewCell()
+        let tableView = PlainTableView()
         
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableView.automaticDimension
@@ -34,9 +34,9 @@ class TranslationsCollectionViewController: UIViewController {
         
         tableView.separatorStyle = .none
         
-        tableView.contentInset = UIEdgeInsets(top: 30, left: 5, bottom: 10, right: 5)
+        tableView.contentInset = UIEdgeInsets(top: 30, left: 0, bottom: 10, right: 0)
         
-        tableView.register(TranslationTableViewCell.self, forCellReuseIdentifier: TranslationTableViewCell.cellId)
+        tableView.register(TranslationTableViewCell.self, forCellReuseIdentifier: TranslationTableViewCell.cellId())
         
         return tableView
     }()
@@ -52,7 +52,9 @@ class TranslationsCollectionViewController: UIViewController {
         
         view.addSubview(self.tableView)
         
-        self.tableView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 40, paddingLeft: 10, paddingBottom: 10, paddingRight: 15, width: 0, height: 0)
+        self.tableView.anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
+        self.tableView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -30).isActive = true
+        self.tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         return view
     }()
@@ -84,11 +86,13 @@ class TranslationsCollectionViewController: UIViewController {
         scrollView.addSubview(self.collectionViewHeader)
         scrollView.addSubview(self.translatedWordHeader)
         
-        self.translatedWordHeader.anchor(top: scrollView.topAnchor, left: scrollView.leftAnchor, bottom: nil, right: scrollView.rightAnchor, paddingTop: 20, paddingLeft: 15, paddingBottom: 0, paddingRight: 15, width: 0, height: 0)
+        self.translatedWordHeader.anchor(top: scrollView.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        self.translatedWordHeader.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+        self.translatedWordHeader.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 1, constant: -30).isActive = true
         
-        self.collectionViewHeader.anchor(top: self.translatedWordHeader.bottomAnchor, left: scrollView.leftAnchor, bottom: nil, right: scrollView.rightAnchor, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-        
-        self.collectionContainerView.anchor(top: self.collectionViewHeader.bottomAnchor, left: scrollView.leftAnchor, bottom: scrollView.bottomAnchor, right: scrollView.rightAnchor, paddingTop: 15, paddingLeft: 20, paddingBottom: 20, paddingRight: 20, width: 0, height: 0)
+        self.collectionViewHeader.anchor(top: self.translatedWordHeader.bottomAnchor, left: nil, bottom: nil, right: nil, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        self.collectionViewHeader.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
+        self.collectionViewHeader.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
         
         return scrollView
     }()
@@ -106,8 +110,12 @@ class TranslationsCollectionViewController: UIViewController {
         self.view.addSubview(scrollView)
         layout.estimatedItemSize = CGSize(width: UIScreen.main.bounds.width - 40, height: 100)
         scrollView.anchor(top: self.view.topAnchor, left: self.view.leftAnchor, bottom: self.view.bottomAnchor, right: self.view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: UIScreen.main.bounds.width, height: 0)
-        self.tableView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 1, constant: -60).isActive = true
         //scrollView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 1).isActive = true
+        
+        
+        self.collectionContainerView.anchor(top: self.collectionViewHeader.bottomAnchor, left: nil, bottom: scrollView.bottomAnchor, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 20, paddingRight: 0, width: 0, height: 0)
+       self.collectionContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+       self.collectionContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -30).isActive = true
     }
     
     required init?(coder: NSCoder) {
