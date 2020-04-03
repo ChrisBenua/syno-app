@@ -25,6 +25,8 @@ protocol IPresentationAssembly {
     func testAndLearnViewController() -> TestAndLearnViewController
     
     func learnController(sourceDict: DbUserDictionary) -> LearnCollectionViewController
+    
+    func testController(sourceDict: DbUserDictionary) -> TestViewController
 }
 
 class PresentationAssembly: IPresentationAssembly {
@@ -71,6 +73,12 @@ class PresentationAssembly: IPresentationAssembly {
         }
         
         return LearnCollectionViewController(data: LearnViewControllerData(cardsAmount: viewModel.count, dictName: viewModel.dictName), learnViews: views)
+    }
+    
+    func testController(sourceDict: DbUserDictionary) -> TestViewController {
+        let cardsAmount = sourceDict.getCards().count
+        let testView = TestView(datasource: serviceAssembly.testViewControllerDatasource(state: TestControllerState(itemNumber: 0, answers: Array.init(repeating: [], count: cardsAmount)), dictionary: sourceDict))
+        return TestViewController(testView: testView, dictName: sourceDict.name ?? "")
     }
     
     

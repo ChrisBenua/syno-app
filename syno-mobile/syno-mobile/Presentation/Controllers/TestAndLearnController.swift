@@ -77,6 +77,14 @@ class TestAndLearnViewController: UIViewController {
 }
 
 extension TestAndLearnViewController: ITestAndLearnReactor {
+    func onChangeControllerTitle(newMode: TestAndLearnModes) {
+        if (newMode == .learnMode) {
+            self.navigationItem.title = "Обучение"
+        } else {
+            self.navigationItem.title = "Тестирование"
+        }
+    }
+    
     func showLearnController(controller: UIViewController) {
         self.navigationController?.pushViewController(controller, animated: true)
     }

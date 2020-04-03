@@ -30,6 +30,12 @@ protocol IServiceAssembly {
     func testAndLearnDictControllerDataProvider() -> IDictionaryControllerDataProvider
     
     func learnTranslationsControllerDataProvider(sourceDict: DbUserDictionary) -> ILearnControllerDataProvider
+    
+    func testViewControllerDataProvider(dictionary: DbUserDictionary) -> ITestViewControllerDataProvider
+    
+    func testViewControllerDatasource(state: ITestControllerState, dictionary: DbUserDictionary) -> ITestViewControllerDataSource
+    
+    func testViewControllerModel(state: ITestControllerState, dictionary: DbUserDictionary) -> ITestViewControllerModel
 }
 
 class ServiceAssembly: IServiceAssembly {
@@ -78,5 +84,17 @@ class ServiceAssembly: IServiceAssembly {
     
     func learnTranslationsControllerDataProvider(sourceDict: DbUserDictionary) -> ILearnControllerDataProvider {
         return LearnControllerDataProvider(dbUserDict: sourceDict)
+    }
+    
+    func testViewControllerDataProvider(dictionary: DbUserDictionary) -> ITestViewControllerDataProvider {
+        return TestViewControllerDataProvider(sourceDictionary: dictionary)
+    }
+    
+    func testViewControllerDatasource(state: ITestControllerState, dictionary: DbUserDictionary) -> ITestViewControllerDataSource {
+        return TestViewControllerDataSource(state: state, dataProvider: testViewControllerDataProvider(dictionary: dictionary))
+    }
+    
+    func testViewControllerModel(state: ITestControllerState, dictionary: DbUserDictionary) -> ITestViewControllerModel {
+        return TestViewControllerModel(dataSource: testViewControllerDatasource(state: state, dictionary: dictionary))
     }
 }

@@ -92,12 +92,9 @@ protocol ILearnControllerTableViewDataSource: UITableViewDataSource, UITableView
 protocol ILearnControllerActionsDelegate: class {
     func onPlusOne()
     func onShowAll()
-    //func onNext()
-    //func onPrev()
 }
 
 protocol ILearnControllerDataSourceReactor: class {
-    //func reload()
     func addItems(indexPaths: [IndexPath])
 }
 
@@ -150,13 +147,4 @@ class LearnControllerTableViewDataSource: NSObject, ILearnControllerTableViewDat
         delegate?.addItems(indexPaths: items)
     }
     
-//    func onNext() {
-//        self.state.itemNumber += 1
-//        delegate?.reload()
-//    }
-//
-//    func onPrev() {
-//        self.state.itemNumber -= 1
-//        delegate?.reload()
-//    }
 }
