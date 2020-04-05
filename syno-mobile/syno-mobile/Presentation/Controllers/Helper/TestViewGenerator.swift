@@ -18,6 +18,8 @@ protocol IScrollableToPoint: class {
 protocol ITestView: UIView, ITestViewControllerDataSourceReactor, IScrollableToPoint {
     var tableView: UITableView { get }
     var parentController: IScrollableToPoint? { get set }
+    
+    var model: ITestViewControllerModel { get }
 }
 
 class TestView: UIView, ITestView {
@@ -30,12 +32,12 @@ class TestView: UIView, ITestView {
     }
     
     weak var parentController: IScrollableToPoint?
-    var dataSource: ITestViewControllerDataSource
+    var model: ITestViewControllerModel
     
     func setHeaderData() {
-        self.cardNumberLabel.text = "\(dataSource.state.itemNumber + 1)/\(dataSource.dataProvider.count)"
-        self.translatedWordView.translatedWordLabel.text = dataSource.dataProvider.getItem(cardPos: dataSource.state.itemNumber).translatedWord
-        self.translationsNumberLabel.text = "\(dataSource.dataProvider.getItem(cardPos: dataSource.state.itemNumber).translationsCount) переводов"
+        self.cardNumberLabel.text = "\(model.dataSource.state.itemNumber + 1)/\(model.dataSource.dataProvider.count)"
+        self.translatedWordView.translatedWordLabel.text = model.dataSource.dataProvider.getItem(cardPos: model.dataSource.state.itemNumber).translatedWord
+        self.translationsNumberLabel.text = "\(model.dataSource.dataProvider.getItem(cardPos: model.dataSource.state.itemNumber).translationsCount) переводов"
     }
     
     lazy var cardNumberLabel: UILabel = {
@@ -97,15 +99,15 @@ class TestView: UIView, ITestView {
     }()
     
     @objc func onAddAnswerButton() {
-        if (self.dataSource.dataProvider.getItem(cardPos: self.dataSource.state.itemNumber).translationsCount > tableView.numberOfRows(inSection: 0)) {
-            self.dataSource.onAddLineForAnswer()
+        if (self.model.dataSource.dataProvider.getItem(cardPos: self.model.dataSource.state.itemNumber).translationsCount > tableView.numberOfRows(inSection: 0)) {
+            self.model.dataSource.onAddLineForAnswer()
         }
     }
     
     lazy var tableView: UITableView = {
         let tv = PlainTableView()
-        tv.dataSource = self.dataSource
-        tv.delegate = self.dataSource
+        tv.dataSource = self.model.dataSource
+        tv.delegate = self.model.dataSource
         
         tv.backgroundColor = .clear
         tv.separatorColor = .clear
@@ -155,11 +157,11 @@ class TestView: UIView, ITestView {
         return view
     }()
     
-    init(datasource: ITestViewControllerDataSource) {
-        self.dataSource = datasource
+    init(model: ITestViewControllerModel) {
+        self.model = model
         super.init(frame: .zero)
-        self.dataSource.reactor = self
-        self.dataSource.onFocusedLabelDelegate = self
+        self.model.dataSource.reactor = self
+        self.model.dataSource.onFocusedLabelDelegate = self
 
         
         self.addSubview(self.contentView)
@@ -177,5 +179,11 @@ class TestView: UIView, ITestView {
     
     func deleteItems(indexPaths: [IndexPath]) {
         self.tableView.deleteRows(at: indexPaths, with: .automatic)
+    }
+}
+
+class TestViewGenerator {
+    func generate(model: ITestViewControllerModel) -> ITestView {
+        return TestView(model: model)
     }
 }

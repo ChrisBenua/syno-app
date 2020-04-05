@@ -77,8 +77,16 @@ class PresentationAssembly: IPresentationAssembly {
     
     func testController(sourceDict: DbUserDictionary) -> TestViewController {
         let cardsAmount = sourceDict.getCards().count
-        let testView = TestView(datasource: serviceAssembly.testViewControllerDatasource(state: TestControllerState(itemNumber: 0, answers: Array.init(repeating: [], count: cardsAmount)), dictionary: sourceDict))
-        return TestViewController(testView: testView, dictName: sourceDict.name ?? "")
+        var views: [ITestView] = []
+        let answers = AnswersStorage(answers: Array.init(repeating: [], count: cardsAmount))
+        
+        for i in 0..<cardsAmount {
+            let testView = TestView(model: serviceAssembly.testViewControllerModel(state: TestControllerState(itemNumber: i, answers: answers), dictionary: sourceDict))
+            views.append(testView)
+        }
+        
+        
+        return TestViewController(testViews: views, dictName: sourceDict.name ?? "")
     }
     
     

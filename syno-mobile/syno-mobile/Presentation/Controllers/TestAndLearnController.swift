@@ -47,6 +47,7 @@ class TestAndLearnViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
+        self.collectionView.reloadData()
     }
     
     override func viewDidLoad() {

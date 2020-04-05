@@ -38,8 +38,10 @@ extension DbUserTestDict {
             return testCard
         }
         
-        testDict.addToCards(NSSet(array: testCards))
-        
+        testCards.forEach { (card) in
+            testDict.addToCards(card)
+        }
+                
         return testDict
     }
 }

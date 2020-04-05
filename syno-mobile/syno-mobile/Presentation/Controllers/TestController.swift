@@ -11,6 +11,9 @@ import UIKit
 
 class TestViewController: UIViewController, IScrollableToPoint {
     private var lastFocusedPoint: CGPoint?
+    
+    private var currCardNumber: Int = 0
+    
     func scrollToPoint(point: CGPoint) {
         print("scrollToPoint")
         lastFocusedPoint = point
@@ -31,12 +34,14 @@ class TestViewController: UIViewController, IScrollableToPoint {
         }
     }
     
-    private var testView: ITestView
+    private var testViews: [ITestView]
     
-    lazy var contentView: UIView = {
-        testView.parentController = self
-        return testView
-    }()
+    var contentView: UIView {
+        get {
+            testViews[currCardNumber].parentController = self
+            return testViews[currCardNumber]
+        }
+    }
     
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -53,8 +58,8 @@ class TestViewController: UIViewController, IScrollableToPoint {
         return scrollView
     }()
     
-    init(testView: ITestView, dictName: String) {
-        self.testView = testView
+    init(testViews: [ITestView], dictName: String) {
+        self.testViews = testViews
         super.init(nibName: nil, bundle: nil)
         
         self.navigationItem.title = dictName
@@ -62,6 +67,7 @@ class TestViewController: UIViewController, IScrollableToPoint {
         self.tabBarController?.tabBar.isHidden = true
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Закончить", style: .done, target: self, action: #selector(endTest))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Отмена", style: .done, target: self, action: #selector(cancelTest))
         
         self.view.backgroundColor = .white
         
@@ -70,19 +76,116 @@ class TestViewController: UIViewController, IScrollableToPoint {
         self.navigationItem.setHidesBackButton(true, animated:true)
     }
     
+    @objc func cancelTest() {
+        print("cancelTest")
+        
+        self.testViews[currCardNumber].model.cancelTest {
+            DispatchQueue.main.async {
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+    }
+    
     @objc func endTest() {
         print("endTest")
-        self.navigationController?.popViewController(animated: true)
+        self.testViews[currCardNumber].model.endTest { (test) in
+            DispatchQueue.main.async {
+                let okAction = UIAlertAction(title: "Ok", style: .default) { (_) in
+                    self.navigationController?.popViewController(animated: true)
+                }
+                let alertController = UIAlertController(title: "Success", message: "Test ended!", preferredStyle: .alert)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+            }
+        }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    @objc
+    func handleSwipes(_ sender: UISwipeGestureRecognizer) {
+        var success = false
+        var nextView: ITestView?
+        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+            switch sender.direction {
+            case .left:
+                if (self.currCardNumber < self.testViews.count - 1) {
+                    success = true
+                    self.contentView.transform = CGAffineTransform(translationX: -self.view.frame.width, y: 0)
+                    UIView.performWithoutAnimation {
+                        nextView = self.testViews[self.currCardNumber + 1]
+                        self.scrollView.addSubview(nextView!)
+                        nextView!.translatesAutoresizingMaskIntoConstraints = false
+                        nextView!.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
+                        
+                        nextView!.centerXAnchor.constraint(equalTo: self.scrollView.centerXAnchor).isActive = true
+                        nextView!.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor, constant: -30).isActive = true
+                        
+                        nextView?.transform = CGAffineTransform(translationX: self.view.frame.width, y: 0)
+                    }
+                    nextView?.transform = CGAffineTransform(translationX: 0, y: 0)
+                }
+                break
+            case .right:
+                print("Right Swipe")
+                if self.currCardNumber > 0 {
+                    success = true
+                    self.contentView.transform = CGAffineTransform(translationX: self.view.frame.width, y: 0)
+                    UIView.performWithoutAnimation {
+                        nextView = self.testViews[self.currCardNumber - 1]
+                        nextView!.translatesAutoresizingMaskIntoConstraints = false
+
+                        self.scrollView.addSubview(nextView!)
+                        
+                        nextView!.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
+                        nextView!.centerXAnchor.constraint(equalTo: self.scrollView.centerXAnchor).isActive = true
+                        nextView!.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor, constant: -30).isActive = true
+                        
+                        nextView?.transform = CGAffineTransform(translationX: -self.view.frame.width, y: 0)
+                    }
+                    nextView?.transform = CGAffineTransform(translationX: 0, y: 0)
+                }
+                break
+            default:
+                break
+            }
+        }) { (_) in
+            if (success) {
+                self.contentView.removeFromSuperview()
+                nextView?.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
+                switch sender.direction {
+                case .left:
+                    if self.currCardNumber < self.testViews.count - 1 {
+                        self.currCardNumber += 1
+                    }
+                case .right:
+                    if self.currCardNumber > 0 {
+                        self.currCardNumber -= 1
+                    }
+                default:
+                    break
+                }
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .yellow
         self.view.addSubview(scrollView)
+        
+        let recognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
+        recognizer.direction = .left
+        recognizer.delegate = self
+
+        let recognizer1 = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
+        recognizer1.direction = .right
+        recognizer1.delegate = self
+        
+        self.scrollView.addGestureRecognizer(recognizer)
+        self.scrollView.addGestureRecognizer(recognizer1)
         
         let allViewTapGestureReco = UITapGestureRecognizer(target: self, action: #selector(clearKeyboard))
         view.addGestureRecognizer(allViewTapGestureReco)
@@ -94,6 +197,11 @@ class TestViewController: UIViewController, IScrollableToPoint {
     }
 }
 
+extension TestViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+}
 
 extension TestViewController {
     

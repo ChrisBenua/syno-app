@@ -31,6 +31,7 @@ class CoreDataStack: ICoreDataStack {
     
     var storeURL: URL {
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        print("storeURL: \(documentsURL.absoluteString)")
         return documentsURL.appendingPathComponent("Mystore12.sqlite")
     }
     

@@ -87,7 +87,7 @@ class ServiceAssembly: IServiceAssembly {
     }
     
     func testViewControllerDataProvider(dictionary: DbUserDictionary) -> ITestViewControllerDataProvider {
-        return TestViewControllerDataProvider(sourceDictionary: dictionary)
+        return TestViewControllerDataProvider(sourceDictionary: dictionary, storageManager: self.coreAssembly.storageManager)
     }
     
     func testViewControllerDatasource(state: ITestControllerState, dictionary: DbUserDictionary) -> ITestViewControllerDataSource {

@@ -18,7 +18,7 @@ extension DbUserDictionary {
     func toTestAndLearnCellConfiguration() -> ITestAndLearnCellConfiguration {
         let allTest: [DbUserTest] = self.tests?.toArray() ?? []
         let lastPassedTest = allTest.sorted(by: { (lhs, rhs) -> Bool in
-            (lhs.timePassed ?? lhs.timeCreated!) < (rhs.timePassed ?? rhs.timeCreated!)
+            (lhs.timePassed ?? lhs.timeCreated!) > (rhs.timePassed ?? rhs.timeCreated!)
         }).first { (test) -> Bool in
             test.isEnded()
         }

@@ -21,22 +21,50 @@ class TestControllerAnswer: ITestControllerAnswer {
     }
 }
 
+class AnswersStorage {
+    var answers: [[ITestControllerAnswer]]
+    
+    subscript(index: Int) -> [ITestControllerAnswer] {
+        return answers[index]
+    }
+    
+    subscript(index1: Int, index2: Int) -> ITestControllerAnswer {
+        return answers[index1][index2]
+    }
+    
+    func append(pos: Int, answer: ITestControllerAnswer) {
+        self.answers[pos].append(answer)
+    }
+    
+    func remove(pos1: Int, pos2: Int) {
+        self.answers[pos1].remove(at: pos2)
+    }
+    
+    func setAnswer(pos1: Int, pos2: Int, answer: String) {
+        self.answers[pos1][pos2].answer = answer
+    }
+    
+    init(answers: [[ITestControllerAnswer]]) {
+        self.answers = answers
+    }
+}
+
 protocol ITestControllerState {
     var itemNumber: Int { get set }
-    var answers: [[ITestControllerAnswer]] { get set }
+    var answers: AnswersStorage { get set }
 }
 
 class TestControllerState: ITestControllerState {
     var itemNumber: Int
     
-    var answers: [[ITestControllerAnswer]]
+    var answers: AnswersStorage
     
     init() {
         itemNumber = 0
-        answers = []
+        answers = AnswersStorage(answers: [])
     }
     
-    init(itemNumber: Int, answers: [[ITestControllerAnswer]]) {
+    init(itemNumber: Int, answers: AnswersStorage) {
         self.itemNumber = itemNumber
         self.answers = answers
     }
@@ -68,11 +96,20 @@ class UserCardForTestViewController: IUserCardForTestViewController {
     }
 }
 
-protocol ITestViewControllerDataProvider {
+protocol ITestViewControllerCoreDataHandler {
+    func initializeCoreDataTest()
+    
+    func cancelTest(completionBlock: (() -> ())?)
+    
+    func saveCoreDataTest(answers: AnswersStorage,completionBlock: ((DbUserTest) -> ())?)
+}
+
+protocol ITestViewControllerDataProvider: ITestViewControllerCoreDataHandler {
     func getItem(cardPos: Int) -> UserCardForTestViewController
     var count: Int { get }
     var dictName: String? { get }
 }
+
 
 class TestViewControllerDataProvider: ITestViewControllerDataProvider {
     func getItem(cardPos: Int) -> UserCardForTestViewController {
@@ -82,15 +119,74 @@ class TestViewControllerDataProvider: ITestViewControllerDataProvider {
     var count: Int
     
     var dictName: String?
+        
+    private var sourceDict: DbUserDictionary
+    
+    private var cards: [DbUserCard]
     
     private var translatedWords: [UserCardForTestViewController]
     
-    init(sourceDictionary: DbUserDictionary) {
-        self.count = sourceDictionary.getCards().count
-        self.translatedWords = sourceDictionary.getCards().map({ (card) -> UserCardForTestViewController in
+    private var dbUserTest: DbUserTest!
+    
+    private var storageManager: IStorageCoordinator
+    
+    private var dispatchGroup = DispatchGroup()
+    
+    func initializeCoreDataTest() {
+        dbUserTest = DbUserTest.createUserTestFor(context: self.storageManager.stack.mainContext, dict: self.sourceDict)
+        dispatchGroup.enter()
+        self.storageManager.stack.performSave(with: self.storageManager.stack.mainContext) {
+            self.dispatchGroup.leave()
+        }
+    }
+    
+    func cancelTest(completionBlock: (() -> ())?) {
+        self.storageManager.stack.mainContext.delete(dbUserTest)
+        self.storageManager.stack.performSave(with: self.storageManager.stack.mainContext, completion: completionBlock)
+    }
+    
+    func saveCoreDataTest(answers: AnswersStorage, completionBlock: ((DbUserTest) -> ())?) {
+        DispatchQueue.global(qos: .background).async {
+            self.dispatchGroup.wait()
+            
+            print(self.dbUserTest.objectID)
+            self.storageManager.stack.mainContext.performAndWait {
+                for dbTestCard in self.dbUserTest.testDict!.getCards() {
+                    let ind = self.cards.firstIndex(of: dbTestCard.sourceCard!)!
+                    
+                    let currCardAnswers = answers[ind]
+                    
+                    let transArr = dbTestCard.getTranslations()
+                    
+                    for dbTranlsation in transArr {
+                        if (currCardAnswers.filter({ (answer) -> Bool in
+                            return dbTranlsation.translation! == answer.answer
+                            }).count > 0) {
+                            dbTranlsation.isRightAnswered = true
+                        }
+                    }
+                }
+            }
+            
+            self.dbUserTest.endTest()
+            
+            
+            self.storageManager.stack.performSave(with: self.storageManager.stack.mainContext) {
+                completionBlock?(self.dbUserTest)
+            }
+        }
+    }
+    
+    init(sourceDictionary: DbUserDictionary, storageManager: IStorageCoordinator) {
+        self.storageManager = storageManager
+        self.sourceDict = sourceDictionary
+        self.cards = sourceDictionary.getCards()
+        self.count = self.cards.count
+        self.translatedWords = self.cards.map({ (card) -> UserCardForTestViewController in
             return UserCardForTestViewController.initFrom(card: card)
         })
         self.dictName = sourceDictionary.name
+        initializeCoreDataTest()
     }
 }
 
@@ -148,7 +244,9 @@ class TestViewControllerDataSource: NSObject, ITestViewControllerDataSource, ITe
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let removeAction = UIContextualAction(style: .normal, title: "Remove") { (action, view, _) in
-            
+            if let cell = tableView.cellForRow(at: indexPath) {
+                self.onDeleteLineForAnswer(sender: cell)
+            }
         }
         
         removeAction.image = #imageLiteral(resourceName: "criss-cross")
@@ -160,19 +258,19 @@ class TestViewControllerDataSource: NSObject, ITestViewControllerDataSource, ITe
     }
     
     func onAddLineForAnswer() {
-        self.state.answers[state.itemNumber].append(TestControllerAnswer(answer: ""))
+        self.state.answers.append(pos: state.itemNumber, answer: TestControllerAnswer(answer: ""))
         reactor?.addItems(indexPaths: [IndexPath(row: self.state.answers[self.state.itemNumber].count - 1, section: 0)])
     }
     
     func onDeleteLineForAnswer(sender: UITableViewCell) {
         let indexPath = reactor!.tableView.indexPath(for: sender)!
-        self.state.answers[self.state.itemNumber].remove(at: indexPath.row)
+        self.state.answers.remove(pos1: self.state.itemNumber, pos2: indexPath.row)
         reactor?.deleteItems(indexPaths: [indexPath])
     }
     
     func textDidChange(sender: UITableViewCell, text: String?) {
         let indexPath = reactor!.tableView.indexPath(for: sender)!
-        self.state.answers[self.state.itemNumber][indexPath.row].answer = text ?? ""
+        self.state.answers.setAnswer(pos1: self.state.itemNumber, pos2: indexPath.row, answer: text ?? "")
     }
     
     init(state: ITestControllerState, dataProvider: ITestViewControllerDataProvider) {
@@ -183,10 +281,22 @@ class TestViewControllerDataSource: NSObject, ITestViewControllerDataSource, ITe
 
 protocol ITestViewControllerModel {
     var dataSource: ITestViewControllerDataSource { get }
+    
+    func endTest(completionBlock: ((DbUserTest) -> ())?)
+    
+    func cancelTest(completionBlock: (() -> ())?)
 }
 
 class TestViewControllerModel: ITestViewControllerModel {
     var dataSource: ITestViewControllerDataSource
+    
+    func endTest(completionBlock: ((DbUserTest) -> ())?) {
+        self.dataSource.dataProvider.saveCoreDataTest(answers: self.dataSource.state.answers, completionBlock: completionBlock)
+    }
+    
+    func cancelTest(completionBlock: (() -> ())?) {
+        self.dataSource.dataProvider.cancelTest(completionBlock: completionBlock)
+    }
     
     init(dataSource: ITestViewControllerDataSource) {
         self.dataSource = dataSource
