@@ -63,6 +63,8 @@
 		AA94BC26238841FD00B2F16F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA94BC25238841FD00B2F16F /* Assets.xcassets */; };
 		AA94BC29238841FD00B2F16F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA94BC27238841FD00B2F16F /* LaunchScreen.storyboard */; };
 		AA94BC34238841FD00B2F16F /* syno_mobileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA94BC33238841FD00B2F16F /* syno_mobileTests.swift */; };
+		AAA2998B243CCD51007327DB /* UITextFieldWithLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA2998A243CCD51007327DB /* UITextFieldWithLabel.swift */; };
+		AAA2998D243CD5D2007327DB /* UserAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA2998C243CD5D2007327DB /* UserAuthHelper.swift */; };
 		AAA5F2CA23A2798800661811 /* ControllerKeyboardExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA5F2C923A2798800661811 /* ControllerKeyboardExt.swift */; };
 		AAA5F2CC23A2923800661811 /* DictCardsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA5F2CB23A2923800661811 /* DictCardsController.swift */; };
 		AAA5F2CF23A2958600661811 /* CardsControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA5F2CE23A2958600661811 /* CardsControllerDataSource.swift */; };
@@ -174,6 +176,8 @@
 		AA94BC2F238841FD00B2F16F /* syno-mobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "syno-mobileTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA94BC33238841FD00B2F16F /* syno_mobileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = syno_mobileTests.swift; sourceTree = "<group>"; };
 		AA94BC35238841FD00B2F16F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AAA2998A243CCD51007327DB /* UITextFieldWithLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldWithLabel.swift; sourceTree = "<group>"; };
+		AAA2998C243CD5D2007327DB /* UserAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuthHelper.swift; sourceTree = "<group>"; };
 		AAA5F2C923A2798800661811 /* ControllerKeyboardExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerKeyboardExt.swift; sourceTree = "<group>"; };
 		AAA5F2CB23A2923800661811 /* DictCardsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictCardsController.swift; sourceTree = "<group>"; };
 		AAA5F2CE23A2958600661811 /* CardsControllerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsControllerDataSource.swift; sourceTree = "<group>"; };
@@ -336,6 +340,7 @@
 				AA8700CE2398270C00C97E18 /* TranslationFetchService.swift */,
 				AA8700D0239900F800C97E18 /* UserCardsFetchService.swift */,
 				AA8700D223990F5400C97E18 /* UserDictsFetchService.swift */,
+				AAA2998C243CD5D2007327DB /* UserAuthHelper.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -549,6 +554,7 @@
 			children = (
 				AA8C0E1A23892A0F000CBB73 /* UILabelWithInsets.swift */,
 				49A16C3F31A1006430FFAF12 /* UITextFieldWithInsets.swift */,
+				AAA2998A243CCD51007327DB /* UITextFieldWithLabel.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -832,12 +838,14 @@
 				AA1B874D238D2A2400D26FCF /* RequestsSettings.swift in Sources */,
 				AAEBE74E23A39E7B00F48684 /* TranslationControllerDatasource.swift in Sources */,
 				AAD4A2EC23ABD4B300394693 /* TestAndLearnCollectionViewCell.swift in Sources */,
+				AAA2998D243CD5D2007327DB /* UserAuthHelper.swift in Sources */,
 				AA8C0E18238921EC000CBB73 /* Anchor.swift in Sources */,
 				AA6A03BC23AC9CE400902FBE /* LearnControllerTableViewDataSource.swift in Sources */,
 				AA2B9DFF23AC924F00A6D45F /* DictionaryDto.swift in Sources */,
 				AAB6CECD2393C87B00AAAF0E /* UserTranslationStorageManager.swift in Sources */,
 				AA8C0E1B23892A0F000CBB73 /* UILabelWithInsets.swift in Sources */,
 				AAC605752390E5EC00120B77 /* SavingProcessView.swift in Sources */,
+				AAA2998B243CCD51007327DB /* UITextFieldWithLabel.swift in Sources */,
 				AA8C0E1423891DE6000CBB73 /* Colors.swift in Sources */,
 				AA8700DD2399356700C97E18 /* DictionaryCellView.swift in Sources */,
 				AA1B874F238D9A8900D26FCF /* LoginModel.swift in Sources */,

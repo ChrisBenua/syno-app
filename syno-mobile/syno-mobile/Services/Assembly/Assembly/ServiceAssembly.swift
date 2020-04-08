@@ -19,6 +19,8 @@ protocol IServiceAssembly {
     
     var dictsFetchService: IUserDictionaryFetchService { get }
     
+    var userAuthHelper: IUserAuthHelper { get }
+    
     var dictionaryControllerDataProvider: IDictionaryControllerDataProvider { get }
         
     func dictControllerModel() -> DictControllerModel
@@ -49,6 +51,8 @@ class ServiceAssembly: IServiceAssembly {
     
     var cardsFetchService: IUserCardsFetchService
     
+    var userAuthHelper: IUserAuthHelper
+    
     var dictsFetchService: IUserDictionaryFetchService
     
     var dictionaryControllerDataProvider: IDictionaryControllerDataProvider
@@ -64,6 +68,7 @@ class ServiceAssembly: IServiceAssembly {
         self.cardsFetchService = UserCardsFetchService(innerQueue: innerBatchUpdatesQueue,storageManager: coreAssembly.storageManager, translationsFetchService: self.translationsFetchService)
         self.dictsFetchService = UserDictsFetchService(innerQueue: innerBatchUpdatesQueue,storageManager: coreAssembly.storageManager, cardsFetchService: self.cardsFetchService)
         self.dictionaryControllerDataProvider = DictionaryControllerDataProvider(appUserManager: self.coreAssembly.storageManager)
+        self.userAuthHelper = UserAuthHelper(userDefManager: coreAssembly.userDefaultsManager)
     }
     
     func dictControllerModel() -> DictControllerModel {

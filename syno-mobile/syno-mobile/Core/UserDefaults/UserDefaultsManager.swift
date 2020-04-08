@@ -12,6 +12,8 @@ protocol IUserDefaultsManager {
     func saveToken(token: String)
     
     func saveEmail(email: String)
+    
+    func saveTokenTimestamp(date: Date)
 
     func clearToken()
 
@@ -20,12 +22,20 @@ protocol IUserDefaultsManager {
     func getToken() -> String?
     
     func getEmail() -> String?
+    
+    func setNetworkMode(isActive: Bool)
+    
+    func getNetworkMode() -> Bool
+    
+    func getTokenTimestamp() -> Int
 }
 
 class UserDefaultsManager: IUserDefaultsManager {
     
     private static let accessTokenKey: String = "accessTokenKey"
     private static let userEmailKey: String = "userEmailKey"
+    private static let networkModeKey: String = "networkModeKey"
+    private static let accessTokenTimestampKey: String = "accessTokenTimestampKey"
 
     func saveToken(token: String) {
         UserDefaults.standard.set(token, forKey: UserDefaultsManager.accessTokenKey)
@@ -33,6 +43,11 @@ class UserDefaultsManager: IUserDefaultsManager {
 
     func saveEmail(email: String) {
         UserDefaults.standard.set(email, forKey: UserDefaultsManager.userEmailKey)
+    }
+    
+    func saveTokenTimestamp(date: Date) {
+        let timestamp: Int = Int(date.timeIntervalSince1970)
+        UserDefaults.standard.set(timestamp, forKey: UserDefaultsManager.accessTokenTimestampKey)
     }
 
     func getToken() -> String? {
@@ -42,6 +57,10 @@ class UserDefaultsManager: IUserDefaultsManager {
     func getEmail() -> String? {
         return UserDefaults.standard.string(forKey: UserDefaultsManager.userEmailKey)
     }
+    
+    func getTokenTimestamp() -> Int {
+        return UserDefaults.standard.integer(forKey: UserDefaultsManager.accessTokenTimestampKey)
+    }
 
     func clearToken() {
         UserDefaults.standard.removeObject(forKey: UserDefaultsManager.accessTokenKey)
@@ -49,5 +68,13 @@ class UserDefaultsManager: IUserDefaultsManager {
 
     func clearEmail() {
         UserDefaults.standard.removeObject(forKey: UserDefaultsManager.userEmailKey)
+    }
+    
+    func setNetworkMode(isActive: Bool) {
+        UserDefaults.standard.set(isActive, forKey: UserDefaultsManager.networkModeKey)
+    }
+    
+    func getNetworkMode() -> Bool {
+        return (UserDefaults.standard.object(forKey: UserDefaultsManager.networkModeKey) as? Bool) ?? true
     }
 }

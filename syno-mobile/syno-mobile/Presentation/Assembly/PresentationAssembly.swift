@@ -27,6 +27,8 @@ protocol IPresentationAssembly {
     func learnController(sourceDict: DbUserDictionary) -> LearnCollectionViewController
     
     func testController(sourceDict: DbUserDictionary) -> TestViewController
+    
+    func startController() -> UIViewController
 }
 
 class PresentationAssembly: IPresentationAssembly {
@@ -89,6 +91,15 @@ class PresentationAssembly: IPresentationAssembly {
         return TestViewController(testViews: views, dictName: sourceDict.name ?? "")
     }
     
+    func startController() -> UIViewController {
+        if (self.serviceAssembly.userAuthHelper.isAuthorized()) {
+            //DEBUG TODO
+            //return self.mainTabBarController()
+            return self.loginViewController()
+        } else {
+            return self.loginViewController()
+        }
+    }
     
     init(serviceAssembly: IServiceAssembly) {
         self.serviceAssembly = serviceAssembly

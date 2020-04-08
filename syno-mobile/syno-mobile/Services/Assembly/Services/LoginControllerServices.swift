@@ -11,6 +11,8 @@ import Foundation
 
 protocol ILoginService {
     func login(loginDto: LoginDto, completionHandler: @escaping (Result<String>) -> Void)
+    
+    func setNetworkNode(isActive: Bool)
 }
 
 class LoginService: ILoginService {
@@ -24,7 +26,12 @@ class LoginService: ILoginService {
         self.userDefaultsManager = userDefaultsManager
     }
     
+    func setNetworkNode(isActive: Bool) {
+        self.userDefaultsManager.setNetworkMode(isActive: isActive)
+    }
+    
     func login(loginDto: LoginDto, completionHandler: @escaping (Result<String>) -> Void) {
+        self.userDefaultsManager.setNetworkMode(isActive: true)
         let request = RequestFactory.BackendRequests.login(loginDto: loginDto)
         
         self.requestSender.send(requestConfig: request) { (loginResponseResult) in
@@ -34,6 +41,7 @@ class LoginService: ILoginService {
             case .success(let loginResp):
                 self.userDefaultsManager.saveToken(token: loginResp.accessToken)
                 self.userDefaultsManager.saveEmail(email: loginResp.email)
+                self.userDefaultsManager.saveTokenTimestamp(date: Date())
                 let _ = self.storageManager.createAppUser(email: loginResp.email, password: loginDto.password, isCurrent: true)
                 completionHandler(.success(loginResp.email))
             }

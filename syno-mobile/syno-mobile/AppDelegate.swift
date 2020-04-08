@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         
         
-        let controller = RootAssembly().presentationAssembly.loginViewController()
+        let controller = RootAssembly().presentationAssembly.startController()
         window?.rootViewController = controller
         
         return true
