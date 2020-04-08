@@ -25,6 +25,10 @@ protocol IPresentationAssembly {
     func testAndLearnViewController() -> TestAndLearnViewController
     
     func learnController(sourceDict: DbUserDictionary) -> LearnCollectionViewController
+    
+    func testController(sourceDict: DbUserDictionary) -> TestViewController
+    
+    func startController() -> UIViewController
 }
 
 class PresentationAssembly: IPresentationAssembly {
@@ -73,6 +77,29 @@ class PresentationAssembly: IPresentationAssembly {
         return LearnCollectionViewController(data: LearnViewControllerData(cardsAmount: viewModel.count, dictName: viewModel.dictName), learnViews: views)
     }
     
+    func testController(sourceDict: DbUserDictionary) -> TestViewController {
+        let cardsAmount = sourceDict.getCards().count
+        var views: [ITestView] = []
+        let answers = AnswersStorage(answers: Array.init(repeating: [], count: cardsAmount))
+        
+        for i in 0..<cardsAmount {
+            let testView = TestView(model: serviceAssembly.testViewControllerModel(state: TestControllerState(itemNumber: i, answers: answers), dictionary: sourceDict))
+            views.append(testView)
+        }
+        
+        
+        return TestViewController(testViews: views, dictName: sourceDict.name ?? "")
+    }
+    
+    func startController() -> UIViewController {
+        if (self.serviceAssembly.userAuthHelper.isAuthorized()) {
+            //DEBUG TODO
+            //return self.mainTabBarController()
+            return self.loginViewController()
+        } else {
+            return self.loginViewController()
+        }
+    }
     
     init(serviceAssembly: IServiceAssembly) {
         self.serviceAssembly = serviceAssembly

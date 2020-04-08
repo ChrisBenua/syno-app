@@ -19,6 +19,8 @@ protocol IServiceAssembly {
     
     var dictsFetchService: IUserDictionaryFetchService { get }
     
+    var userAuthHelper: IUserAuthHelper { get }
+    
     var dictionaryControllerDataProvider: IDictionaryControllerDataProvider { get }
         
     func dictControllerModel() -> DictControllerModel
@@ -30,6 +32,12 @@ protocol IServiceAssembly {
     func testAndLearnDictControllerDataProvider() -> IDictionaryControllerDataProvider
     
     func learnTranslationsControllerDataProvider(sourceDict: DbUserDictionary) -> ILearnControllerDataProvider
+    
+    func testViewControllerDataProvider(dictionary: DbUserDictionary) -> ITestViewControllerDataProvider
+    
+    func testViewControllerDatasource(state: ITestControllerState, dictionary: DbUserDictionary) -> ITestViewControllerDataSource
+    
+    func testViewControllerModel(state: ITestControllerState, dictionary: DbUserDictionary) -> ITestViewControllerModel
 }
 
 class ServiceAssembly: IServiceAssembly {
@@ -42,6 +50,8 @@ class ServiceAssembly: IServiceAssembly {
     var translationsFetchService: ITranslationFetchService
     
     var cardsFetchService: IUserCardsFetchService
+    
+    var userAuthHelper: IUserAuthHelper
     
     var dictsFetchService: IUserDictionaryFetchService
     
@@ -58,6 +68,7 @@ class ServiceAssembly: IServiceAssembly {
         self.cardsFetchService = UserCardsFetchService(innerQueue: innerBatchUpdatesQueue,storageManager: coreAssembly.storageManager, translationsFetchService: self.translationsFetchService)
         self.dictsFetchService = UserDictsFetchService(innerQueue: innerBatchUpdatesQueue,storageManager: coreAssembly.storageManager, cardsFetchService: self.cardsFetchService)
         self.dictionaryControllerDataProvider = DictionaryControllerDataProvider(appUserManager: self.coreAssembly.storageManager)
+        self.userAuthHelper = UserAuthHelper(userDefManager: coreAssembly.userDefaultsManager)
     }
     
     func dictControllerModel() -> DictControllerModel {
@@ -78,5 +89,17 @@ class ServiceAssembly: IServiceAssembly {
     
     func learnTranslationsControllerDataProvider(sourceDict: DbUserDictionary) -> ILearnControllerDataProvider {
         return LearnControllerDataProvider(dbUserDict: sourceDict)
+    }
+    
+    func testViewControllerDataProvider(dictionary: DbUserDictionary) -> ITestViewControllerDataProvider {
+        return TestViewControllerDataProvider(sourceDictionary: dictionary, storageManager: self.coreAssembly.storageManager)
+    }
+    
+    func testViewControllerDatasource(state: ITestControllerState, dictionary: DbUserDictionary) -> ITestViewControllerDataSource {
+        return TestViewControllerDataSource(state: state, dataProvider: testViewControllerDataProvider(dictionary: dictionary))
+    }
+    
+    func testViewControllerModel(state: ITestControllerState, dictionary: DbUserDictionary) -> ITestViewControllerModel {
+        return TestViewControllerModel(dataSource: testViewControllerDatasource(state: state, dictionary: dictionary))
     }
 }

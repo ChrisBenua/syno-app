@@ -97,6 +97,9 @@ class LoginViewController: UIViewController, ILoginReactor {
         self.layouter.passwordTextField().text = ""
     }
 
+    @objc func skipRegistration() {
+        self.loginModel.skippedRegistration()
+    }
     
     override func viewDidLoad() {
         let allViewTapGestureReco = UITapGestureRecognizer(target: self, action: #selector(clearKeyboard))
@@ -107,6 +110,7 @@ class LoginViewController: UIViewController, ILoginReactor {
         
         layouter.submitButton().addTarget(self, action: #selector(submitLoginCredentials), for: .touchUpInside)
         layouter.alternateAuthButton().addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(registrationLabelClicked)))
+        layouter.skipRegistrationButton().addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(skipRegistration)))
         
         
         

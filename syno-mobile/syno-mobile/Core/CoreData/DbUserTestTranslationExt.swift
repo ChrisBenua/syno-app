@@ -23,6 +23,7 @@ extension DbUserTestTranslation {
             fatalError("Cant insert UserTestTranslation")
         }
         testTranslation.translation = translation
+        testTranslation.isRightAnswered = false
         sourceTestCard?.addToTranslations(testTranslation)
         
         return testTranslation

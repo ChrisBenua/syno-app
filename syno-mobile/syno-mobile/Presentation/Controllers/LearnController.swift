@@ -31,6 +31,10 @@ class LearnCollectionViewController: UIViewController {
     
     private var learnViews: [ILearnView]
     
+    private var rightSwipeGestureRecognizer: UISwipeGestureRecognizer!
+    
+    private var leftSwipeGestureRecognizer: UISwipeGestureRecognizer!
+    
     private var currCardNumber: Int = 0
         
     var contentView: ILearnView {
@@ -45,14 +49,8 @@ class LearnCollectionViewController: UIViewController {
         scrollView.alwaysBounceHorizontal = false
         scrollView.delegate = self
         scrollView.showsHorizontalScrollIndicator = false
-        
-//        scrollView.addSubview(self.headerView)
-//        scrollView.addSubview(self.collectionContainerView)
+
         scrollView.addSubview(self.contentView)
-        
-//        self.headerView.anchor(top: scrollView.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-//        self.headerView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
-//        self.headerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -40).isActive = true
         
         self.contentView.anchor(top: scrollView.topAnchor, left: nil, bottom: scrollView.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         self.contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
@@ -67,20 +65,19 @@ class LearnCollectionViewController: UIViewController {
     
     @objc func handleSwipes(_ sender: UISwipeGestureRecognizer) {
         var nextView: ILearnView?
-        var tempContraints: NSLayoutConstraint?
+        var success: Bool = false
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
             switch sender.direction {
             case .left:
                 print("Left Swipe")
                 if self.currCardNumber < self.data.cardsAmount - 1 {
+                    success = true
                     self.contentView.transform = CGAffineTransform(translationX: -self.view.frame.width, y: 0)
                     UIView.performWithoutAnimation {
                         nextView = self.learnViews[self.currCardNumber + 1]
                         self.scrollView.addSubview(nextView!)
                         nextView!.translatesAutoresizingMaskIntoConstraints = false
                         nextView!.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
-//                        tempContraints = nextView!.bottomAnchor.constraint(equalTo: self.contentView.controlsView.bottomAnchor)
-//                        tempContraints?.isActive = true
                         
                         nextView!.centerXAnchor.constraint(equalTo: self.scrollView.centerXAnchor).isActive = true
                         nextView!.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor, constant: -30).isActive = true
@@ -92,6 +89,7 @@ class LearnCollectionViewController: UIViewController {
             case .right:
                 print("Right Swipe")
                 if self.currCardNumber > 0 {
+                    success = true
                     self.contentView.transform = CGAffineTransform(translationX: self.view.frame.width, y: 0)
                     UIView.performWithoutAnimation {
                         nextView = self.learnViews[self.currCardNumber - 1]
@@ -100,9 +98,6 @@ class LearnCollectionViewController: UIViewController {
                         self.scrollView.addSubview(nextView!)
                         
                         nextView!.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
-//                        tempContraints = nextView!.bottomAnchor.constraint(equalTo: self.contentView.controlsView.bottomAnchor)
-//                        tempContraints?.isActive = true
-                        
                         nextView!.centerXAnchor.constraint(equalTo: self.scrollView.centerXAnchor).isActive = true
                         nextView!.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor, constant: -30).isActive = true
                         
@@ -115,20 +110,21 @@ class LearnCollectionViewController: UIViewController {
                 break
             }
         }) { (_) in
-            self.contentView.removeFromSuperview()
-            tempContraints?.isActive = false
-            nextView?.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
-            switch sender.direction {
-            case .left:
-                if self.currCardNumber < self.data.cardsAmount - 1 {
-                    self.currCardNumber += 1
+            if (success) {
+                self.contentView.removeFromSuperview()
+                nextView?.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
+                switch sender.direction {
+                case .left:
+                    if self.currCardNumber < self.data.cardsAmount - 1 {
+                        self.currCardNumber += 1
+                    }
+                case .right:
+                    if self.currCardNumber > 0 {
+                        self.currCardNumber -= 1
+                    }
+                default:
+                    break
                 }
-            case .right:
-                if self.currCardNumber > 0 {
-                    self.currCardNumber -= 1
-                }
-            default:
-                break
             }
         }
     }
@@ -139,9 +135,11 @@ class LearnCollectionViewController: UIViewController {
         let recognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
         recognizer.direction = .left
         recognizer.delegate = self
+
         let recognizer1 = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
         recognizer1.direction = .right
         recognizer1.delegate = self
+        
         self.scrollView.addGestureRecognizer(recognizer)
         self.scrollView.addGestureRecognizer(recognizer1)
 

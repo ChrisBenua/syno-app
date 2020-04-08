@@ -28,7 +28,7 @@ extension DbUserTestCard {
         guard let testCard = insertUserTestCard(into: context) else {
             fatalError("Cant create DbUserTestCard")
         }
-        
+        testCard.sourceCard = card
         testCard.sourceTestDict = sourceTestDict
         testCard.translatedWord = card.translatedWord
         let _translations = card.translations?.allObjects as? [DbTranslation]

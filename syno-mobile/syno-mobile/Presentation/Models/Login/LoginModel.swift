@@ -10,6 +10,8 @@ import Foundation
 
 protocol ILoginModel {
     func login(loginState: ILoginState)
+    
+    func skippedRegistration()
 
     var controller: ILoginReactor? { get set }
 }
@@ -23,17 +25,10 @@ class LoginModel: ILoginModel {
         self.loginService = loginService
     }
 
-//    func kek() {
-//        var conf = RequestFactory.BackendRequests.allDictsRequest(userDefaultsManager: UserDefaultsManager())
-//        DefaultRequestSender().send(requestConfig: conf) { (result) in
-//            switch result {
-//            case .success(let dicts):
-//                print(dicts.count)
-//            case .error(let str):
-//                print(str)
-//            }
-//        }
-//    }
+    func skippedRegistration() {
+        loginService.setNetworkNode(isActive: false)
+        self.controller?.onSuccessfulLogin(email: "Guest")
+    }
     
     func login(loginState: ILoginState) {
         let loginDto = LoginDto(email: loginState.email, password: loginState.password)

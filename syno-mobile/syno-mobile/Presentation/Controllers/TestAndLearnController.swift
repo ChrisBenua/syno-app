@@ -47,6 +47,7 @@ class TestAndLearnViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
+        self.collectionView.reloadData()
     }
     
     override func viewDidLoad() {
@@ -77,6 +78,14 @@ class TestAndLearnViewController: UIViewController {
 }
 
 extension TestAndLearnViewController: ITestAndLearnReactor {
+    func onChangeControllerTitle(newMode: TestAndLearnModes) {
+        if (newMode == .learnMode) {
+            self.navigationItem.title = "Обучение"
+        } else {
+            self.navigationItem.title = "Тестирование"
+        }
+    }
+    
     func showLearnController(controller: UIViewController) {
         self.navigationController?.pushViewController(controller, animated: true)
     }

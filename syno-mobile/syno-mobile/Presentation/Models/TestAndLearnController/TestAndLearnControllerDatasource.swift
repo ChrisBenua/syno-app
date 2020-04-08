@@ -21,6 +21,8 @@ protocol ITestAndLearnStateReactor: class {
 
 protocol ITestAndLearnReactor: class {
     func showLearnController(controller: UIViewController)
+    
+    func onChangeControllerTitle(newMode: TestAndLearnModes)
 }
 
 protocol ITestAndLearnDictionaryControllerState {
@@ -46,6 +48,12 @@ class TestAndLearnDictionaryDataSource: NSObject, ITestAndLearnDictionaryDataSou
     var state: ITestAndLearnDictionaryControllerState
     
     func onSegmentChanged() {
+        if state.testAndLearnMode == .learnMode {
+            state.testAndLearnMode = .testMode
+        } else {
+            state.testAndLearnMode = .learnMode
+        }
+        delegate?.onChangeControllerTitle(newMode: state.testAndLearnMode)
         print("segment changed")
     }
     
@@ -105,8 +113,13 @@ class TestAndLearnDictionaryDataSource: NSObject, ITestAndLearnDictionaryDataSou
 
 extension TestAndLearnDictionaryDataSource {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let controller = self.presAssembly.learnController(sourceDict: self.fetchedResultsController.object(at: indexPath))
-        self.delegate?.showLearnController(controller: controller)
+        if (self.state.testAndLearnMode == .learnMode) {
+            let controller = self.presAssembly.learnController(sourceDict: self.fetchedResultsController.object(at: indexPath))
+            self.delegate?.showLearnController(controller: controller)
+        } else {
+            let contoller = self.presAssembly.testController(sourceDict: self.fetchedResultsController.object(at: indexPath))
+            self.delegate?.showLearnController(controller: contoller)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

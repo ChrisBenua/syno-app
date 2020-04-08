@@ -19,6 +19,8 @@ protocol ILoginLayouter {
     func alternateAuthButton() -> UIView
     
     func allStackView() -> UIStackView
+    
+    func skipRegistrationButton() -> UIView
 }
 
 
@@ -36,6 +38,8 @@ class LoginRegistrationLayouter: ILoginLayouter {
     private var _alternateAuthButtonContainerView: UIView?
     
     private var _alternateAuthButton: UIView?
+    
+    private var _skipRegistrationButton: UIView?
     
     func passwordTextField() -> UITextField {
         if let passwordTf = _passwordTextField {
@@ -130,15 +134,20 @@ class LoginRegistrationLayouter: ILoginLayouter {
             return but
         }
         
-        let view = UIView(); view.translatesAutoresizingMaskIntoConstraints = false
-
-        view.addSubview(self.alternateAuthButton())
-
-        self.alternateAuthButton().anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-        self.alternateAuthButton().centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        let containerView = UIStackView(arrangedSubviews: [alternateAuthButton(), skipRegistrationButton()])
+        containerView.axis = .horizontal
+        containerView.distribution = .fillEqually
+        containerView.translatesAutoresizingMaskIntoConstraints = false
         
-        _alternateAuthButtonContainerView = view
-        return view
+//        let view = UIView(); view.translatesAutoresizingMaskIntoConstraints = false
+//
+//        view.addSubview(self.alternateAuthButton())
+//
+//        self.alternateAuthButton().anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+//        self.alternateAuthButton().centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+        _alternateAuthButtonContainerView = containerView
+        return containerView
     }
 
     private lazy var allLoginStackView: UIStackView = {
@@ -191,6 +200,21 @@ class LoginRegistrationLayouter: ILoginLayouter {
         //bottomSepView.heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.35).isActive = true
         _allStackView = sv
         return sv
+    }
+    
+    func skipRegistrationButton() -> UIView {
+        if let button = _skipRegistrationButton {
+            return button
+        }
+        
+        let label = UILabel()
+        label.isUserInteractionEnabled = true
+        label.text = "Пропустить"
+        label.textColor = .white
+        label.textAlignment = .center
+        
+        _skipRegistrationButton = label
+        return _skipRegistrationButton!
     }
     
 }

@@ -69,10 +69,10 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     }
     
     lazy var stackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [translationTextField, transcriptionTextField, commentTextField, self.sampleTextField])
+        let stackView = UIStackView(arrangedSubviews: [translationContainerView, transcriptionContainerView, commentContainerView, self.sampleContainer])
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
-        stackView.spacing = 18
+        stackView.spacing = 12
         
         return stackView
     }()
@@ -104,7 +104,7 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     }
     
     lazy var translationTextField: UITextField = {
-        let tf = CommonUIElements.defaultTextField(backgroundColor: .white, edgeInsets: UIEdgeInsets(top: 5, left: 15, bottom: 5, right: 0))
+        let tf = CommonUIElements.defaultTextField(backgroundColor: .white, edgeInsets: UIEdgeInsets(top: 3, left: 15, bottom: 3, right: 0))
         tf.layer.borderWidth = 0
         tf.placeholder = "Перевод"
         tf.font = UIFont.systemFont(ofSize: 18)
@@ -119,7 +119,7 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     }
     
     lazy var commentTextField: UITextField = {
-        let tf = CommonUIElements.defaultTextField(backgroundColor: .white, edgeInsets: UIEdgeInsets(top: 5, left: 15, bottom: 5, right: 0))
+        let tf = CommonUIElements.defaultTextField(backgroundColor: .white, edgeInsets: UIEdgeInsets(top: 3, left: 15, bottom: 3, right: 0))
         tf.placeholder = "Комментарий"
         tf.layer.borderWidth = 0
         tf.font = UIFont.systemFont(ofSize: 18)
@@ -128,7 +128,7 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     }()
     
     lazy var transcriptionTextField: UITextField = {
-        let tf = CommonUIElements.defaultTextField(backgroundColor: .white, edgeInsets: UIEdgeInsets(top: 5, left: 15, bottom: 5, right: 0))
+        let tf = CommonUIElements.defaultTextField(backgroundColor: .white, edgeInsets: UIEdgeInsets(top: 3, left: 15, bottom: 3, right: 0))
         tf.layer.borderWidth = 0
         tf.placeholder = "Транскрипция"
         tf.font = UIFont.systemFont(ofSize: 18)
@@ -139,10 +139,50 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     let sampleTextViewPlaceholder = "Пример"
     
     lazy var sampleTextField: UITextField = {
-        let tf = CommonUIElements.defaultTextField(backgroundColor: .white, edgeInsets: UIEdgeInsets(top: 5, left: 15, bottom: 5, right: 0))
+        let tf = CommonUIElements.defaultTextField(backgroundColor: .white, edgeInsets: UIEdgeInsets(top: 3, left: 15, bottom: 3, right: 0))
         tf.layer.borderWidth = 0
         tf.placeholder = sampleTextViewPlaceholder
         
         return tf
+    }()
+    
+    lazy var sampleContainer: UIView = {
+        let label = UILabelWithInsets(padding: UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0))
+        label.text = "Sample:"
+        label.font = .systemFont(ofSize: 15, weight: .light)
+        label.textColor = .gray
+        
+        let view = UITextFieldWithLabel(textField: sampleTextField, label: label, spacing: 2)
+        return view
+    }()
+    
+    lazy var commentContainerView: UIView = {
+        let label = UILabelWithInsets(padding: UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0))
+        label.text = "Comment:"
+        label.font = .systemFont(ofSize: 15, weight: .light)
+        label.textColor = .gray
+        
+        let view = UITextFieldWithLabel(textField: commentTextField, label: label, spacing: 2)
+        return view
+    }()
+    
+    lazy var transcriptionContainerView: UIView = {
+        let label = UILabelWithInsets(padding: UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0))
+        label.text = "Transcription:"
+        label.font = .systemFont(ofSize: 15, weight: .light)
+        label.textColor = .gray
+        
+        let view = UITextFieldWithLabel(textField: transcriptionTextField, label: label, spacing: 2)
+        return view
+    }()
+    
+    lazy var translationContainerView: UIView = {
+       let label = UILabelWithInsets(padding: UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0))
+       label.text = "Translation:"
+       label.font = .systemFont(ofSize: 15, weight: .light)
+       label.textColor = .gray
+       
+       let view = UITextFieldWithLabel(textField: translationTextField, label: label, spacing: 2)
+       return view
     }()
 }

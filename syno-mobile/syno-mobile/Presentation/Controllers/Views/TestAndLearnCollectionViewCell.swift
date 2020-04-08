@@ -30,20 +30,18 @@ class TestAndLearnCellConfiguration: ITestAndLearnCellConfiguration {
         self.gradePercentage = gradePercentage
     }
     
-    func gradeToStringAndColor() -> (String, UIColor) {
-        let colors = [UIColor(red: 244.0/255, green: 203.0/255, blue: 205.0/255, alpha: 1),
-                      UIColor(red: 253.0/255, green: 214.0/255, blue: 190.0/255, alpha: 1),
-                      UIColor(red: 254.0/255, green: 236.0/255, blue: 188.0/255, alpha: 1),
-                      UIColor(red: 201.0/255, green: 236.0/255, blue: 213.0/255, alpha: 1),
-                      UIColor(red: 198.0/255, green: 251.0/255, blue: 205.0/255, alpha: 1)
-        ]
-        let colorsRange = [20.0, 40.0, 60.0, 80.0, 100.0]
+    func gradeToStringAndColor() -> (String, UIColor) {        
+        let colors = [UIColor(red: 18.0/255, green: 171.0/255, blue: 79.0/255, alpha: 1),
+                      UIColor(red: 134.0/255, green: 240.0/255, blue: 0.0/255, alpha: 1),
+                      UIColor(red: 198.0/255, green: 211.0/255, blue: 49.0/255, alpha: 1),
+            UIColor(red: 245/255, green: 89/255, blue: 89/255, alpha: 1)]
+        let colorsRange = [80.0, 60.0, 40.0, 0.0]
         let colorIndex = colorsRange.firstIndex { (val) -> Bool in
             val <= gradePercentage + 0.0001
         }
         let color = colorIndex == nil ? UIColor.black : colors[colorIndex!]
         
-        let str = self.gradePercentage > -0.5 ? "\(Int(self.gradePercentage))" : "N/A"
+        let str = self.gradePercentage > -0.5 ? "\(Int(self.gradePercentage))%" : "N/A"
         
         return (str, color)
     }
@@ -72,7 +70,7 @@ class TestAndLearnCollectionViewCell: UICollectionViewCell, IConfigurableTestAnd
     
     let gradeLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 15, weight: .regular)
+        label.font = .systemFont(ofSize: 17, weight: .regular)
         label.textAlignment = .center
         
         return label

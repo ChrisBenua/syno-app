@@ -17,17 +17,18 @@ extension DbUserTest {
     
     func endTest() {
         self.timePassed = Date()
-        let allTranslations = (self.targetedDict?.getCards() ?? []).flatMap({ (card) -> [DbTranslation] in
-            return card.getTranslations()
-        })
-        let allCnt = allTranslations.count
+        let allCnt = (self.targetedDict?.getCards() ?? []).map({ (card) -> Int in
+            return card.getTranslations().count
+        }).reduce(0) { (res, new) -> Int in
+            return res + new
+        }
         let passed = (self.testDict?.getCards() ?? []).flatMap({ (card) -> [DbUserTestTranslation] in
             return card.getTranslations()
         }).reduce(0, { (res, trans) -> Int32 in
             return res + (trans.isRightAnswered ? 1 : 0)
         })
         
-        self.gradePercentage = Double(passed) / Double(allCnt)
+        self.gradePercentage = Double(passed) * 100 / Double(allCnt)
     }
     
     static func insertUserTest(context: NSManagedObjectContext) -> DbUserTest? {
