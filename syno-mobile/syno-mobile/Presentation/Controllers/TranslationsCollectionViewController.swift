@@ -13,9 +13,37 @@ class TranslationsCollectionViewController: UIViewController {
     
     private var dataSource: ITranslationControllerDataSource
     
+    lazy var processingSaveView: SavingProcessView = {
+        let view = SavingProcessView()
+        view.setText(text: "Saving")
+        
+        return view
+    }()
+    
     lazy var layout: UICollectionViewFlowLayout = {
         return UICollectionViewFlowLayout()
     }()
+    
+    lazy var controlsView: UIView = {
+        let addButton = UIButton(type: .custom)
+        addButton.setBackgroundImage(#imageLiteral(resourceName: "Group 6"), for: .normal)
+        
+        addButton.addTarget(self, action: #selector(onAddAnswerButton), for: .touchUpInside)
+        
+        let view = UIView()
+        view.addSubview(addButton)
+
+        addButton.anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 25, width: 0, height: 0)
+        addButton.widthAnchor.constraint(greaterThanOrEqualTo: view.widthAnchor, multiplier: 0.08).isActive = true
+        addButton.heightAnchor.constraint(equalTo: addButton.widthAnchor, multiplier: 1).isActive = true
+        addButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 30).isActive = true
+        
+        return view
+    }()
+    
+    @objc func onAddAnswerButton() {
+        self.dataSource.add()
+    }
     
     lazy var tableView: UITableView = {
         
@@ -51,8 +79,11 @@ class TranslationsCollectionViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(self.tableView)
+        view.addSubview(self.controlsView)
         
-        self.tableView.anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
+        self.controlsView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        
+        self.tableView.anchor(top: self.controlsView.bottomAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
         self.tableView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -30).isActive = true
         self.tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
@@ -104,7 +135,7 @@ class TranslationsCollectionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "Новая карточка"
+        self.navigationItem.title = "Карточки"
         self.view.backgroundColor = .white
         
         self.view.addSubview(scrollView)
@@ -112,10 +143,24 @@ class TranslationsCollectionViewController: UIViewController {
         scrollView.anchor(top: self.view.topAnchor, left: self.view.leftAnchor, bottom: self.view.bottomAnchor, right: self.view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: UIScreen.main.bounds.width, height: 0)
         //scrollView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 1).isActive = true
         
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить", style: .plain, target: self, action: #selector(onSaveButtonPressed))
         
         self.collectionContainerView.anchor(top: self.collectionViewHeader.bottomAnchor, left: nil, bottom: scrollView.bottomAnchor, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 20, paddingRight: 0, width: 0, height: 0)
        self.collectionContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
        self.collectionContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -30).isActive = true
+    }
+    
+    @objc func onSaveButtonPressed() {
+        self.processingSaveView.showSavingProcessView(sourceView: self)
+        self.dataSource.save {
+            DispatchQueue.main.async {
+                let timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { (timer) in
+                    self.processingSaveView.dismissSavingProcessView()
+                    self.navigationController?.popViewController(animated: true)
+                }
+                
+            }
+        }
     }
     
     required init?(coder: NSCoder) {

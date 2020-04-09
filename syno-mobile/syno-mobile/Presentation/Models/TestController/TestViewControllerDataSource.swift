@@ -160,7 +160,7 @@ class TestViewControllerDataProvider: ITestViewControllerDataProvider {
                     
                     for dbTranlsation in transArr {
                         if (currCardAnswers.filter({ (answer) -> Bool in
-                            return dbTranlsation.translation! == answer.answer
+                            return dbTranlsation.translation!.lowercased() == answer.answer.lowercased()
                             }).count > 0) {
                             dbTranlsation.isRightAnswered = true
                         }

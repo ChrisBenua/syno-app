@@ -65,6 +65,8 @@
 		AA94BC34238841FD00B2F16F /* syno_mobileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA94BC33238841FD00B2F16F /* syno_mobileTests.swift */; };
 		AAA2998B243CCD51007327DB /* UITextFieldWithLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA2998A243CCD51007327DB /* UITextFieldWithLabel.swift */; };
 		AAA2998D243CD5D2007327DB /* UserAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA2998C243CD5D2007327DB /* UserAuthHelper.swift */; };
+		AAA29991243E26E6007327DB /* NewOrEditCardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA29990243E26E6007327DB /* NewOrEditCardController.swift */; };
+		AAA29993243E27FB007327DB /* UITextViewWithLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA29992243E27FB007327DB /* UITextViewWithLabel.swift */; };
 		AAA5F2CA23A2798800661811 /* ControllerKeyboardExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA5F2C923A2798800661811 /* ControllerKeyboardExt.swift */; };
 		AAA5F2CC23A2923800661811 /* DictCardsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA5F2CB23A2923800661811 /* DictCardsController.swift */; };
 		AAA5F2CF23A2958600661811 /* CardsControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA5F2CE23A2958600661811 /* CardsControllerDataSource.swift */; };
@@ -178,6 +180,8 @@
 		AA94BC35238841FD00B2F16F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AAA2998A243CCD51007327DB /* UITextFieldWithLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldWithLabel.swift; sourceTree = "<group>"; };
 		AAA2998C243CD5D2007327DB /* UserAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuthHelper.swift; sourceTree = "<group>"; };
+		AAA29990243E26E6007327DB /* NewOrEditCardController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOrEditCardController.swift; sourceTree = "<group>"; };
+		AAA29992243E27FB007327DB /* UITextViewWithLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextViewWithLabel.swift; sourceTree = "<group>"; };
 		AAA5F2C923A2798800661811 /* ControllerKeyboardExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerKeyboardExt.swift; sourceTree = "<group>"; };
 		AAA5F2CB23A2923800661811 /* DictCardsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictCardsController.swift; sourceTree = "<group>"; };
 		AAA5F2CE23A2958600661811 /* CardsControllerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsControllerDataSource.swift; sourceTree = "<group>"; };
@@ -536,6 +540,7 @@
 				AA75298323A7B016004120A0 /* TestAndLearnController.swift */,
 				AA6A03B823AC9C7500902FBE /* LearnController.swift */,
 				AA4B780623C136E9005A9CC9 /* TestController.swift */,
+				AAA29990243E26E6007327DB /* NewOrEditCardController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -555,6 +560,7 @@
 				AA8C0E1A23892A0F000CBB73 /* UILabelWithInsets.swift */,
 				49A16C3F31A1006430FFAF12 /* UITextFieldWithInsets.swift */,
 				AAA2998A243CCD51007327DB /* UITextFieldWithLabel.swift */,
+				AAA29992243E27FB007327DB /* UITextViewWithLabel.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -850,6 +856,7 @@
 				AA8700DD2399356700C97E18 /* DictionaryCellView.swift in Sources */,
 				AA1B874F238D9A8900D26FCF /* LoginModel.swift in Sources */,
 				AA8C0E1223891BBC000CBB73 /* LoginState.swift in Sources */,
+				AAA29991243E26E6007327DB /* NewOrEditCardController.swift in Sources */,
 				AAD4A2E323ABA81D00394693 /* DbUserTestAnswerExt.swift in Sources */,
 				AAC605792390F04700120B77 /* LoginRegistrationLayouter.swift in Sources */,
 				AA1B8755238D9B9700D26FCF /* ServiceAssembly.swift in Sources */,
@@ -869,6 +876,7 @@
 				49A166086AEF7785B19E1514 /* UITextFieldWithInsets.swift in Sources */,
 				AAA5F2CA23A2798800661811 /* ControllerKeyboardExt.swift in Sources */,
 				49A16189873B6C801FB1EFFC /* IParser.swift in Sources */,
+				AAA29993243E27FB007327DB /* UITextViewWithLabel.swift in Sources */,
 				AA12FECA23AFB59100CC8D3B /* LearnViewGenerator.swift in Sources */,
 				AAD4A2E723ABB15400394693 /* DbUserTestExt.swift in Sources */,
 				AA8700D72399225900C97E18 /* DictsController.swift in Sources */,

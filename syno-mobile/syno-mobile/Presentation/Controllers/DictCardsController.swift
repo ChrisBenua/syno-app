@@ -52,8 +52,16 @@ class DictCardsController: UIViewController {
         self.dataSource.performFetch()
         self.view.addSubview(self.collectionView)
         
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Group 6"), style: .plain, target: self, action: #selector(addCard))
+        
         collectionView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         collectionView.reloadData()
+    }
+    
+    @objc func addCard() {
+        let controller = self.assembly.newCardController()
+        self.navigationController?.pushViewController(controller, animated: true)
     }
     
     required init?(coder: NSCoder) {

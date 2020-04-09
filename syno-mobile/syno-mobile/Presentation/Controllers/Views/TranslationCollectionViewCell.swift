@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AVFoundation
 import UIKit
 
 protocol ITranslationCellConfiguration {
@@ -52,6 +53,8 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     
     var sample: String?
     
+    var delegate: ITranslationCellDidChangeDelegate?
+    
     func updateUI() {
         self.translationTextField.text = translation
         self.transcriptionTextField.text = transcription
@@ -84,7 +87,10 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
         view.containerViewBackgroundColor = UIColor(red: 240.0/255, green: 240.0/255, blue: 240.0/255, alpha: 1)
         
         view.addSubview(self.stackView)
-        self.stackView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 15, paddingLeft: 15, paddingBottom: 15, paddingRight: 15, width: 0, height: 0)
+        view.addSubview(self.speakButton)
+        self.stackView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 22, paddingLeft: 15, paddingBottom: 15, paddingRight: 15, width: 0, height: 0)
+        
+        self.speakButton.anchor(top: view.topAnchor, left: nil, bottom: nil, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 10, width: 0, height: -0)
         
         return view
     }()
@@ -109,6 +115,8 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
         tf.placeholder = "Перевод"
         tf.font = UIFont.systemFont(ofSize: 18)
         
+        tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        
         return tf
     }()
     
@@ -124,6 +132,8 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
         tf.layer.borderWidth = 0
         tf.font = UIFont.systemFont(ofSize: 18)
         
+        tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        
         return tf
     }()
     
@@ -132,6 +142,8 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
         tf.layer.borderWidth = 0
         tf.placeholder = "Транскрипция"
         tf.font = UIFont.systemFont(ofSize: 18)
+        
+        tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
         return tf
     }()
@@ -142,13 +154,22 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
         let tf = CommonUIElements.defaultTextField(backgroundColor: .white, edgeInsets: UIEdgeInsets(top: 3, left: 15, bottom: 3, right: 0))
         tf.layer.borderWidth = 0
         tf.placeholder = sampleTextViewPlaceholder
+        tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
         return tf
     }()
     
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+        delegate?.update(caller: self, newConf: generateCellConf())
+    }
+    
+    func generateCellConf() -> TranslationCellConfiguration {
+        return TranslationCellConfiguration(translation: self.translationTextField.text, transcription: self.transcriptionTextField.text, comment: self.commentTextField.text, sample: self.sampleTextField.text)
+    }
+    
     lazy var sampleContainer: UIView = {
         let label = UILabelWithInsets(padding: UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0))
-        label.text = "Sample:"
+        label.text = "Пример:"
         label.font = .systemFont(ofSize: 15, weight: .light)
         label.textColor = .gray
         
@@ -158,7 +179,7 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     
     lazy var commentContainerView: UIView = {
         let label = UILabelWithInsets(padding: UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0))
-        label.text = "Comment:"
+        label.text = "Комментарий:"
         label.font = .systemFont(ofSize: 15, weight: .light)
         label.textColor = .gray
         
@@ -168,7 +189,7 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     
     lazy var transcriptionContainerView: UIView = {
         let label = UILabelWithInsets(padding: UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0))
-        label.text = "Transcription:"
+        label.text = "Транскрипция:"
         label.font = .systemFont(ofSize: 15, weight: .light)
         label.textColor = .gray
         
@@ -178,11 +199,26 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     
     lazy var translationContainerView: UIView = {
        let label = UILabelWithInsets(padding: UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0))
-       label.text = "Translation:"
+       label.text = "Перевод:"
        label.font = .systemFont(ofSize: 15, weight: .light)
        label.textColor = .gray
        
        let view = UITextFieldWithLabel(textField: translationTextField, label: label, spacing: 2)
        return view
     }()
+    
+    lazy var speakButton: UIButton = {
+        let button = UIButton(type: UIButton.ButtonType.system)
+        
+        button.setImage(#imageLiteral(resourceName: "volume"), for: .normal)
+        button.setImage(#imageLiteral(resourceName: "volume-1"), for: UIControl.State.focused)
+        
+        button.addTarget(self, action: #selector(onSpeakButtonPressed), for: .touchUpInside)
+        
+        return button
+    }()
+    
+    @objc func onSpeakButtonPressed() {
+        AVSpeechSynthesizer().speak(AVSpeechUtterance(string: self.translationTextField.text ?? ""))
+    }
 }

@@ -29,6 +29,8 @@ protocol IPresentationAssembly {
     func testController(sourceDict: DbUserDictionary) -> TestViewController
     
     func startController() -> UIViewController
+    
+    func newCardController() -> NewOrEditCardController
 }
 
 class PresentationAssembly: IPresentationAssembly {
@@ -99,6 +101,10 @@ class PresentationAssembly: IPresentationAssembly {
         } else {
             return self.loginViewController()
         }
+    }
+    
+    func newCardController() -> NewOrEditCardController {
+        return NewOrEditCardController()
     }
     
     init(serviceAssembly: IServiceAssembly) {
