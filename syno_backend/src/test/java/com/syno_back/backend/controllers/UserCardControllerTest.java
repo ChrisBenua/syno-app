@@ -79,7 +79,7 @@ class UserCardControllerTest {
         Mockito.when(userRepository.findByEmail("email")).thenReturn(Optional.of(dbUser));
 
         List<DbUserCard> cards = new ArrayList<>();
-        cards.add(DbUserCard.builder().language("ru-en").id(2L).translatedWord("word").build());
+        cards.add(DbUserCard.builder().id(2L).translatedWord("word").build());
         DbUserDictionary dictionary = DbUserDictionary.builder().id(1L).name("name").owner(dbUser).userCards(cards).build();
 
         Mockito.when(userDictionaryRepository.findById(1L)).thenReturn(Optional.of(dictionary));
@@ -141,7 +141,7 @@ class UserCardControllerTest1 {
 
         List<NewUserTranslation> translations = new ArrayList<>();
         translations.add(NewUserTranslation.builder().usageSample("sample").comment("comment").transcription("transcr").translation("trans").build());
-        var newUserCard = NewUserCard.builder().language("ru-en").translatedWord("word").translations(translations).build();
+        var newUserCard = NewUserCard.builder().translatedWord("word").translations(translations).build();
 
 
         mockMvc.perform(MockMvcRequestBuilders.post(String.format("/api/user_cards/%d/add_card", dbUserDict.getId())).with(user("email").roles("USER"))
@@ -154,7 +154,6 @@ class UserCardControllerTest1 {
         cardRepository.flush();
         dbUserDict = userDictionaryRepository.findById(dbUserDict.getId()).get();
         assertEquals(dbUserDict.getUserCards().size(), 1);
-        assertEquals(dbUserDict.getUserCards().get(0).getLanguage(), "ru-en");
         assertEquals(dbUserDict.getUserCards().get(0).getTranslatedWord(), "word");
         assertEquals(dbUserDict.getUserCards().get(0).getTranslations().size(), 1);
         assertEquals(dbUserDict.getUserCards().get(0).getTranslations().get(0).getUsageSample(), "sample");
@@ -172,7 +171,7 @@ class UserCardControllerTest1 {
 
         List<NewUserTranslation> translations = new ArrayList<>();
         translations.add(NewUserTranslation.builder().usageSample("sample").comment("comment").transcription("transcr").translation("trans").build());
-        var newUserCard = NewUserCard.builder().language("ru-en").translatedWord("word").translations(translations).build();
+        var newUserCard = NewUserCard.builder().translatedWord("word").translations(translations).build();
 
 
         mockMvc.perform(MockMvcRequestBuilders.post(String.format("/api/user_cards/%d/add_card", -1L)).with(user("email").roles("USER"))
@@ -201,7 +200,7 @@ class UserCardControllerTest1 {
 
         List<NewUserTranslation> translations = new ArrayList<>();
         translations.add(NewUserTranslation.builder().usageSample("sample").comment("comment").transcription("transcr").translation("trans").build());
-        var newUserCard = NewUserCard.builder().language("ru-en").translatedWord("word").translations(translations).build();
+        var newUserCard = NewUserCard.builder().translatedWord("word").translations(translations).build();
 
 
         mockMvc.perform(MockMvcRequestBuilders.post(String.format("/api/user_cards/%d/add_card", dbUserDict.getId())).with(user("email1").roles("USER"))
@@ -225,7 +224,7 @@ class UserCardControllerTest1 {
         userDictionaryRepository.flush();
         List<DbUserCard> cards = new ArrayList<>();
         for (int i = 0; i < 10; ++i) {
-            var dbUserCard = DbUserCard.builder().translatedWord("word_"+i).language("en-ru").userDictionary(dbUserDict).build();
+            var dbUserCard = DbUserCard.builder().translatedWord("word_"+i).userDictionary(dbUserDict).build();
             for (int j = 0; j < 5; ++j) {
                 int num = i * 10 + j;
                 var trans = DbTranslation.builder().usageSample("sample_" + num).comment("comment_" + num)
@@ -246,7 +245,7 @@ class UserCardControllerTest1 {
                 translations.add(new UpdateUserTranslation("new_trans_" + num, "new_comment_" + num,
                         "new_transcr_" + num, "new_sample_" + num, cards.get(i).getTranslations().get(j).getId()));
             }
-            UpdateUserCard card = new UpdateUserCard(cards.get(i).getId(), "new_word_" + i, "ru-en", translations);
+            UpdateUserCard card = new UpdateUserCard(cards.get(i).getId(), "new_word_" + i, translations);
             updateUserCards.add(card);
         }
 

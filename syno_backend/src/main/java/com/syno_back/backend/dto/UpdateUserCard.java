@@ -20,9 +20,6 @@ public class UpdateUserCard {
     @JsonProperty("translated_word")
     private String translatedWord;
 
-    @JsonProperty("language")
-    private String language;
-
     @JsonProperty("translations")
     private List<UpdateUserTranslation> translations;
 
@@ -32,10 +29,6 @@ public class UpdateUserCard {
 
     public String getTranslatedWord() {
         return translatedWord;
-    }
-
-    public String getLanguage() {
-        return language;
     }
 
     public List<UpdateUserTranslation> getTranslations() {

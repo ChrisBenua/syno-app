@@ -53,7 +53,9 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     
     var sample: String?
     
-    var delegate: ITranslationCellDidChangeDelegate?
+    weak var delegate: ITranslationCellDidChangeDelegate?
+    
+    var lastFocusedTextFieldBottomPoint: CGPoint?
     
     func updateUI() {
         self.translationTextField.text = translation
@@ -64,6 +66,7 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     
     func setup(config: ITranslationCellConfiguration) {
         self.translation = config.translation
+        //print("transccript: \()")
         self.comment = config.comment
         self.sample = config.sample
         self.transcription = config.transcription
@@ -116,6 +119,8 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
         tf.font = UIFont.systemFont(ofSize: 18)
         
         tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        tf.addTarget(self, action: #selector(didEndEditingTextField(_:)), for: .editingDidEnd)
+        tf.addTarget(self, action: #selector(editingDidBegin(_:)), for: .editingDidBegin)
         
         return tf
     }()
@@ -133,6 +138,8 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
         tf.font = UIFont.systemFont(ofSize: 18)
         
         tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        tf.addTarget(self, action: #selector(didEndEditingTextField(_:)), for: .editingDidEnd)
+        tf.addTarget(self, action: #selector(editingDidBegin(_:)), for: .editingDidBegin)
         
         return tf
     }()
@@ -144,6 +151,8 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
         tf.font = UIFont.systemFont(ofSize: 18)
         
         tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        tf.addTarget(self, action: #selector(didEndEditingTextField(_:)), for: .editingDidEnd)
+        tf.addTarget(self, action: #selector(editingDidBegin(_:)), for: .editingDidBegin)
         
         return tf
     }()
@@ -155,11 +164,44 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
         tf.layer.borderWidth = 0
         tf.placeholder = sampleTextViewPlaceholder
         tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        tf.addTarget(self, action: #selector(didEndEditingTextField(_:)), for: .editingDidEnd)
+        tf.addTarget(self, action: #selector(editingDidBegin(_:)), for: .editingDidBegin)
         
         return tf
     }()
     
+    @objc func editingDidBegin(_ textField: UITextField) {
+        let bottomTextFieldPointYCoord = textField.frame.origin.y + textField.bounds.height
+        
+        let point = CGPoint(x: textField.frame.origin.x, y: bottomTextFieldPointYCoord)
+        self.lastFocusedTextFieldBottomPoint = textField.convert(point, to: self.contentView)
+        self.delegate?.setLastFocusedPoint(point: lastFocusedTextFieldBottomPoint!, sender: self)
+    }
+    
+    @objc func didEndEditingTextField(_ textField: UITextField) {
+        
+        if textField == self.translationTextField && self.translationTextField.isUserInteractionEnabled {
+            if (self.transcriptionTextField.text ?? "").count == 0 {
+                let res = self.delegate?.getTranscription(for: textField.text ?? "")
+                print("Trans: \(res)")
+                self.transcriptionTextField.text = res
+            }
+        }
+        
+        var ok = true
+        for el in [sampleTextField, commentTextField, translationTextField, transcriptionTextField] {
+            if el.isEditing {
+                ok = false
+            }
+        }
+        
+        if ok {
+            self.delegate?.didEndEditing()
+        }
+    }
+    
     @objc private func textFieldDidChange(_ textField: UITextField) {
+        
         delegate?.update(caller: self, newConf: generateCellConf())
     }
     

@@ -12,11 +12,18 @@ import UIKit
 
 protocol IDictionaryControllerDataProvider {
     func generateDictControllerFRC() -> NSFetchedResultsController<DbUserDictionary>
+    
+    func undoLastChanges()
+    
+    func commitChanges()
+    
+    func delete(object: NSManagedObject)
 }
 
 class DictionaryControllerDataProvider: IDictionaryControllerDataProvider {
     
     private var appUserManager: IStorageCoordinator
+    private var undoManager: UndoManager?
     
     init(appUserManager: IStorageCoordinator) {
         self.appUserManager = appUserManager
@@ -27,6 +34,22 @@ class DictionaryControllerDataProvider: IDictionaryControllerDataProvider {
         
         return frc
     }
+    
+    func undoLastChanges() {
+        self.undoManager?.endUndoGrouping()
+        self.undoManager?.undo()
+    }
+    
+    func commitChanges() {
+        self.appUserManager.stack.performSave(with: self.appUserManager.stack.mainContext, completion: nil)
+    }
+    
+    func delete(object: NSManagedObject) {
+        self.appUserManager.stack.mainContext.undoManager = UndoManager()
+        self.undoManager = self.appUserManager.stack.mainContext.undoManager
+        self.undoManager?.beginUndoGrouping()
+        self.appUserManager.stack.mainContext.delete(object)
+    }
 }
 
 protocol ICommonDictionaryControllerDataSource {
@@ -35,18 +58,39 @@ protocol ICommonDictionaryControllerDataSource {
     var viewModel: IDictionaryControllerDataProvider { get set }
     
     func performFetch()
-
 }
 
 protocol IDictionaryControllerTableViewDataSource: ICommonDictionaryControllerDataSource, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     var delegate: IDictionaryControllerReactor? { get set}
+    
+    func getNewDictController() -> UIViewController
+    
+    func undoLastDeletion()
+   
+    func commitChanges()
+   
+    func delete(object: NSManagedObject)
 }
 
 protocol IDictionaryControllerReactor: class {
     func showCardsController(controller: UIViewController)
+    
+    func onItemDeleted()
 }
 
 class DictionaryControllerTableViewDataSource: NSObject, IDictionaryControllerTableViewDataSource {
+    func undoLastDeletion() {
+        self.viewModel.undoLastChanges()
+    }
+    
+    func commitChanges() {
+        self.viewModel.commitChanges()
+    }
+    
+    func delete(object: NSManagedObject) {
+        self.viewModel.delete(object: object)
+    }
+    
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         guard let sections = self.fetchedResultsController.sections else {
@@ -67,6 +111,7 @@ class DictionaryControllerTableViewDataSource: NSObject, IDictionaryControllerTa
         let cellData = self.fetchedResultsController.object(at: indexPath)
         
         cell.setup(config: cellData.toUserDictCellConfig())
+        print("Dequing cell at: \(indexPath)")
         return cell
     }
     
@@ -85,6 +130,10 @@ class DictionaryControllerTableViewDataSource: NSObject, IDictionaryControllerTa
             Logger.log("Cant perform fetch")
             Logger.log(err.localizedDescription)
         }
+    }
+    
+    func getNewDictController() -> UIViewController {
+        return self.presAssembly.newDictController()
     }
     
     init(viewModel: IDictionaryControllerDataProvider, presAssembly: IPresentationAssembly) {
@@ -112,5 +161,19 @@ extension DictionaryControllerTableViewDataSource {
         let controller = self.presAssembly.cardsViewController(sourceDict: item)
         
         self.delegate?.showCardsController(controller: controller)
+    }
+    
+    @available(iOS 13.0, *)
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (_) -> UIMenu? in
+            let menu = UIMenu(title: "Actions", children: [
+                UIAction(title: "Delete", image: UIImage.init(systemName: "trash.fill"), attributes: .destructive, handler: { (action) in
+                    print("Action happened!!!")
+                    self.delegate?.onItemDeleted()
+                    self.delete(object: self.fetchedResultsController.object(at: indexPath))
+                })
+            ])
+            return menu
+        }
     }
 }

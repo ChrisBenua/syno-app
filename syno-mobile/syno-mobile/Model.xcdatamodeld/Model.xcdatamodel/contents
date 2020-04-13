@@ -19,7 +19,6 @@
     </entity>
     <entity name="DbUserCard" representedClassName="DbUserCard" syncable="YES" codeGenerationType="class">
         <attribute name="isSynced" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
-        <attribute name="language" optional="YES" attributeType="String"/>
         <attribute name="serverId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="timeCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="timeModified" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -30,6 +29,7 @@
     </entity>
     <entity name="DbUserDictionary" representedClassName="DbUserDictionary" syncable="YES" codeGenerationType="class">
         <attribute name="isSynced" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="language" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="serverId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="timeCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -71,8 +71,8 @@
     <elements>
         <element name="DbAppUser" positionX="95.1640625" positionY="-88.75" width="128" height="103"/>
         <element name="DbTranslation" positionX="-123.796875" positionY="-253.60546875" width="128" height="178"/>
-        <element name="DbUserCard" positionX="-311.15625" positionY="54.140625" width="128" height="178"/>
-        <element name="DbUserDictionary" positionX="-318.921875" positionY="-152.9296875" width="128" height="163"/>
+        <element name="DbUserCard" positionX="-311.15625" positionY="54.140625" width="128" height="163"/>
+        <element name="DbUserDictionary" positionX="-318.921875" positionY="-152.9296875" width="128" height="178"/>
         <element name="DbUserTest" positionX="-95.828125" positionY="114.1796875" width="128" height="118"/>
         <element name="DbUserTestAnswer" positionX="252.65625" positionY="46.64453125" width="128" height="73"/>
         <element name="DbUserTestCard" positionX="-179.30078125" positionY="308.40625" width="128" height="148"/>

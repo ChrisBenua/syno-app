@@ -17,14 +17,17 @@ class GetDictionaryResponseDto: Decodable {
     
     let timeModified: Date
     
+    let language: String
+    
     let userCards: [GetCardResponseDto]
     
-    init(id: Int64, name: String, timeCreated: Date, timeModified: Date, userCards: [GetCardResponseDto]) {
+    init(id: Int64, name: String, timeCreated: Date, timeModified: Date, language: String, userCards: [GetCardResponseDto]) {
         self.id = id
         self.name = name
         self.timeCreated = timeCreated
         self.timeModified = timeModified
         self.userCards = userCards
+        self.language = language
     }
 
 }
@@ -33,32 +36,20 @@ class GetCardResponseDto: Decodable {
     let id: Int64
     
     let translatedWord: String
-    
-    let language: String
-    
+        
     let timeCreated: Date
     
     let timeModified: Date
     
     let translations: [GetTranslationDto]
     
-    init(id: Int64, translatedWord: String, language: String, timeCreated: Date, timeModified: Date, translations: [GetTranslationDto]) {
+    init(id: Int64, translatedWord: String, timeCreated: Date, timeModified: Date, translations: [GetTranslationDto]) {
         self.id = id
         self.translatedWord = translatedWord
-        self.language = language
         self.timeCreated = timeCreated
         self.timeModified = timeModified
         self.translations = translations
     }
-    
-//    enum CodingKeys: String, CodingKey {
-//        case id
-//        case translatedWord = "translated_word"
-//        case language
-//        case timeCreated = "time_created"
-//        case timeModified = "time_modified"
-//        case translations
-//    }
 }
 
 class GetTranslationDto: Decodable {

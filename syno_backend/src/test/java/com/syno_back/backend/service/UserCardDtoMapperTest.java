@@ -21,7 +21,7 @@ class UserCardDtoMapperTest {
 
     @Test
     void convert() {
-        NewUserCard card = NewUserCard.builder().language("lan").translatedWord("word").translations(List.of(
+        NewUserCard card = NewUserCard.builder().translatedWord("word").translations(List.of(
                 NewUserTranslation.builder().translation("trans1").build(),
                 NewUserTranslation.builder().translation("trans2").build()
         )).build();
@@ -29,7 +29,6 @@ class UserCardDtoMapperTest {
         var result = mapper.convert(card, null);
 
         assertEquals(result.getTranslatedWord(), "word");
-        assertEquals(result.getLanguage(), "lan");
         assertEquals(result.getTranslations().size(), 2);
         assertEquals(result.getTranslations().get(0).getTranslation(), "trans1");
         assertEquals(result.getTranslations().get(1).getTranslation(), "trans2");

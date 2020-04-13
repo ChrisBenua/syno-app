@@ -19,11 +19,11 @@ protocol IAppUserStorageManager {
 }
 
 protocol IUserDictionaryStorageManager {
-    func createUserDictionary(owner: DbAppUser, name: String, timeCreated: Date?, timeModified: Date?, serverId: Int64?, cards: [DbUserCard]?, completion: ((DbUserDictionary?) -> Void)?)
+    func createUserDictionary(owner: DbAppUser, name: String, timeCreated: Date?, timeModified: Date?,language: String?, serverId: Int64?, cards: [DbUserCard]?, completion: ((DbUserDictionary?) -> Void)?)
 }
 
 protocol IUserCardsStorageManager {
-    func createUserCard(sourceDict: DbUserDictionary?, translatedWord: String, language: String, timeCreated: Date?, timeModified: Date?, serverId: Int64?, translation: [DbTranslation]?, completion: ((DbUserCard?) -> Void)?)
+    func createUserCard(sourceDict: DbUserDictionary?, translatedWord: String, timeCreated: Date?, timeModified: Date?, serverId: Int64?, translation: [DbTranslation]?, completion: ((DbUserCard?) -> Void)?)
 }
 
 protocol ITranslationsStorageManager {
@@ -65,12 +65,12 @@ class StorageManager: IStorageCoordinator {
         self.userManager.markAppUserAsCurrent(user: user)
     }
     
-    func createUserDictionary(owner: DbAppUser, name: String, timeCreated: Date?, timeModified: Date?, serverId: Int64?, cards: [DbUserCard]?, completion: ((DbUserDictionary?) -> Void)?) {
-        self.dictManager.createUserDictionary(owner: owner, name: name, timeCreated: timeCreated, timeModified: timeModified, serverId: serverId, cards: cards, completion: completion)
+    func createUserDictionary(owner: DbAppUser, name: String, timeCreated: Date?, timeModified: Date?, language: String?, serverId: Int64?, cards: [DbUserCard]?, completion: ((DbUserDictionary?) -> Void)?) {
+        self.dictManager.createUserDictionary(owner: owner, name: name, timeCreated: timeCreated, timeModified: timeModified, language: language, serverId: serverId, cards: cards, completion: completion)
     }
     
-    func createUserCard(sourceDict: DbUserDictionary?, translatedWord: String, language: String, timeCreated: Date?, timeModified: Date?, serverId: Int64?, translation: [DbTranslation]?, completion: ((DbUserCard?) -> Void)?) {
-        self.cardsManager.createUserCard(sourceDict: sourceDict, translatedWord: translatedWord, language: language, timeCreated: timeCreated, timeModified: timeModified, serverId: serverId, translation: translation, completion: completion)
+    func createUserCard(sourceDict: DbUserDictionary?, translatedWord: String, timeCreated: Date?, timeModified: Date?, serverId: Int64?, translation: [DbTranslation]?, completion: ((DbUserCard?) -> Void)?) {
+        self.cardsManager.createUserCard(sourceDict: sourceDict, translatedWord: translatedWord, timeCreated: timeCreated, timeModified: timeModified, serverId: serverId, translation: translation, completion: completion)
     }
     
     func createTranslation(sourceCard: DbUserCard?, usageSample: String, translation: String, transcription: String, comment: String, serverId: Int64?, timeCreated: Date?, timeModified: Date?, completion: ((DbTranslation?) -> Void)?) {

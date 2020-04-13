@@ -17,7 +17,6 @@ public class SingleUpdateCardService implements ISingleUpdateService<DbUserCard,
     @Override
     public void update(UpdateUserCard dto, DbUserCard userCard) {
         userCard.setTranslatedWord(dto.getTranslatedWord());
-        userCard.setLanguage(dto.getLanguage());
 
         if (dto.getTranslations() != null)
             updateTranslationService.updateWithOwnerCheck(dto.getTranslations(), userCard);

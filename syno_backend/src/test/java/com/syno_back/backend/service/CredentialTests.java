@@ -48,7 +48,7 @@ public class CredentialTests {
         DbUser user = DbUser.builder().email("email").password("123").id(1L).build();
         DbUserDictionary dict = DbUserDictionary.builder().name("name").owner(user).id(2L).build();
         DbUserDictionary fakeDict = DbUserDictionary.builder().name("name").owner(user).id(4L).build();
-        DbUserCard card = DbUserCard.builder().language("lan").translatedWord("word").id(3L).userDictionary(dict).build();
+        DbUserCard card = DbUserCard.builder().translatedWord("word").id(3L).userDictionary(dict).build();
 
         assertTrue(cardCredentialProvider.check(card, dict));
         assertFalse(cardCredentialProvider.check(card, fakeDict));
@@ -56,8 +56,8 @@ public class CredentialTests {
 
     @Test
     void testTranslationCredentialProvider() {
-        DbUserCard card = DbUserCard.builder().language("lan").translatedWord("word").id(3L).build();
-        DbUserCard fakeCard = DbUserCard.builder().language("lan").translatedWord("word").id(4L).build();
+        DbUserCard card = DbUserCard.builder().translatedWord("word").id(3L).build();
+        DbUserCard fakeCard = DbUserCard.builder().translatedWord("word").id(4L).build();
 
         DbTranslation translation = DbTranslation.builder().usageSample("sample").comment("comment").transcription("trans").sourceCard(card).build();
 

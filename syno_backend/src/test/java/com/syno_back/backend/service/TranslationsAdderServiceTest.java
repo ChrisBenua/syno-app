@@ -20,7 +20,7 @@ class TranslationsAdderServiceTest {
 
     @Test
     void addTranslationsToCard() {
-        DbUserCard card = DbUserCard.builder().translatedWord("w").language("r").id(1L).build();
+        DbUserCard card = DbUserCard.builder().translatedWord("w").id(1L).build();
         List<NewUserTranslation> translations = List.of(NewUserTranslation.builder().build(), NewUserTranslation.builder().build());
 
         adderService.addTranslationsToCard(translations, card);

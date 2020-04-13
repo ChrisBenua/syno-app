@@ -18,7 +18,7 @@ public class DbUserCardCloner implements IEntityCloner<DbUserCard> {
 
     @Override
     public DbUserCard clone(DbUserCard cloneable) {
-        var clonedCard = DbUserCard.builder().language(cloneable.getLanguage())
+        var clonedCard = DbUserCard.builder()
                 .translatedWord(cloneable.getTranslatedWord())
                 .build();
         var clonedTranslations = cloneable.getTranslations().stream().map(trans -> translationCloner.clone(trans)).collect(Collectors.toList());

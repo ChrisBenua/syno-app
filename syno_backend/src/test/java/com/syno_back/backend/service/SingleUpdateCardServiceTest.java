@@ -21,18 +21,16 @@ class SingleUpdateCardServiceTest {
 
     @Test
     void update() {
-        var userDbCard = DbUserCard.builder().language("Ru-En").translatedWord("word")
+        var userDbCard = DbUserCard.builder().translatedWord("word")
                 .id(1L)
                 .build();
 
         var updateUserCard = UpdateUserCard.builder()
-                .language("En-Ru")
                 .id(userDbCard.getId())
                 .translatedWord("new_word").build();
         updater.update(updateUserCard, userDbCard);
 
         assertEquals(userDbCard.getId(), updateUserCard.getId());
         assertEquals(userDbCard.getTranslatedWord(), updateUserCard.getTranslatedWord());
-        assertEquals(userDbCard.getLanguage(), updateUserCard.getLanguage());
     }
 }

@@ -64,6 +64,7 @@ class DictionaryCollectionViewCell: UICollectionViewCell, IConfigurableDictionar
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         self.backgroundView = UIImageView(image: #imageLiteral(resourceName: "DictCellBackgroung"))
         //self.backgroundColor = UIColor.init(red: 239.0/255, green: 239.0/255, blue: 239.0/255, alpha: 1.0)
         
@@ -131,5 +132,4 @@ class DictionaryCollectionViewCell: UICollectionViewCell, IConfigurableDictionar
         
         return label
     }()
-    
 }

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class UserDictionaryDtoMapper implements IDtoMapper<NewUserDictionary, DbUserDictionary> {
     @Override
     public DbUserDictionary convert(NewUserDictionary dto, Iterable<Pair<String, ?>> additionalFields) {
-        var builder = DbUserDictionary.builder().name(dto.getName());
+        var builder = DbUserDictionary.builder().name(dto.getName()).language(dto.getLanguage());
 
         ReflectionUtils.setFields(builder, additionalFields);
 

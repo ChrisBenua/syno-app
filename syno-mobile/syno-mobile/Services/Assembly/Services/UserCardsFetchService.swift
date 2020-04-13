@@ -38,7 +38,6 @@ class UserCardsFetchService: IUserCardsFetchService {
                     if let fetchedCards = res {
                         for card in fetchedCards {
                             if let cardDto = cardsMap[card.serverId] {
-                                card.language = cardDto.language
                                 card.translatedWord = cardDto.translatedWord
                                 card.timeModified = cardDto.timeModified
                                 card.timeCreated = cardDto.timeCreated
@@ -58,7 +57,7 @@ class UserCardsFetchService: IUserCardsFetchService {
                             if let cardDto = cardsMap[notUsedId] {
                                 let sourceDict = sourceDictProvider(cardDto)
                                 
-                                self.storageManager.createUserCard(sourceDict: sourceDict, translatedWord: cardDto.translatedWord, language: cardDto.language, timeCreated: cardDto.timeCreated, timeModified: cardDto.timeModified, serverId: cardDto.id, translation: nil) { (newCard) in
+                                self.storageManager.createUserCard(sourceDict: sourceDict, translatedWord: cardDto.translatedWord, timeCreated: cardDto.timeCreated, timeModified: cardDto.timeModified, serverId: cardDto.id, translation: nil) { (newCard) in
                                     self.translationsFetchService.updateTranslations(translations: cardDto.translations, doSave: true, sourceCardProvider: { (trans) -> DbUserCard? in
                                         newCard
                                     }, completion: nil)

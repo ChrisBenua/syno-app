@@ -27,6 +27,9 @@ public class DbUserDictionary {
     @Column(name="name")
     private String name;
 
+    @Column(name="language")
+    private String language;
+
     @CreationTimestamp
     @Column(name="time_created")
     private LocalDateTime timeCreated;

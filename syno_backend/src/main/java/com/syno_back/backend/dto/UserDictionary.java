@@ -21,6 +21,9 @@ public class UserDictionary implements Serializable {
     @JsonProperty("name")
     private String name;
 
+    @JsonProperty("language")
+    private String language;
+
     @JsonProperty("time_created")
     private LocalDateTime timeCreated;
 

@@ -30,7 +30,11 @@ protocol IPresentationAssembly {
     
     func startController() -> UIViewController
     
-    func newCardController() -> NewOrEditCardController
+    func newCardController(tempSourceCard: DbUserCard) -> NewOrEditCardController
+    
+    func newDictController() -> UIViewController
+    
+    func testResultsController(sourceTest: DbUserTest) -> UIViewController
 }
 
 class PresentationAssembly: IPresentationAssembly {
@@ -54,7 +58,7 @@ class PresentationAssembly: IPresentationAssembly {
     }
     
     func translationsViewController(sourceCard: DbUserCard) -> TranslationsCollectionViewController {
-        return TranslationsCollectionViewController(dataSource: TranslationControllerDataSource(viewModel: self.serviceAssembly.translationsControllerDataProvider(), sourceCard: sourceCard))
+        return TranslationsCollectionViewController(dataSource: TranslationControllerDataSource(viewModel: self.serviceAssembly.translationsControllerDataProvider(), sourceCard: sourceCard, phonemesManager: self.serviceAssembly.phonemesManager, isAutoPhonemesEnabled: true))
     }
     
     func mainTabBarController() -> CommonTabBarController {
@@ -90,7 +94,7 @@ class PresentationAssembly: IPresentationAssembly {
         }
         
         
-        return TestViewController(testViews: views, dictName: sourceDict.name ?? "")
+        return TestViewController(testViews: views, dictName: sourceDict.name ?? "", presAssembly: self)
     }
     
     func startController() -> UIViewController {
@@ -103,8 +107,16 @@ class PresentationAssembly: IPresentationAssembly {
         }
     }
     
-    func newCardController() -> NewOrEditCardController {
-        return NewOrEditCardController()
+    func newCardController(tempSourceCard: DbUserCard) -> NewOrEditCardController {
+        return NewOrEditCardController(dataSource: TranslationControllerDataSource(viewModel: self.serviceAssembly.translationsControllerDataProvider(), sourceCard: tempSourceCard, phonemesManager: self.serviceAssembly.phonemesManager, isAutoPhonemesEnabled: true))
+    }
+    
+    func newDictController() -> UIViewController {
+        return NewDictController(model: self.serviceAssembly.newDictControllerModel)
+    }
+    
+    func testResultsController(sourceTest: DbUserTest) -> UIViewController {
+        return TestResultsViewController(dataSource: self.serviceAssembly.testResultsControllerDataSource(sourceTest: sourceTest))
     }
     
     init(serviceAssembly: IServiceAssembly) {

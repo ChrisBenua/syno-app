@@ -74,7 +74,7 @@ class ShareDictControllerTest {
         user = userRepository.save(user);
         cloningUser = userRepository.save(cloningUser);
 
-        card = DbUserCard.builder().id(4L).language("lan").translatedWord("word").build();
+        card = DbUserCard.builder().id(4L).translatedWord("word").build();
         dictionary.addUserCard(card);
 
         trans = DbTranslation.builder().id(5L).usageSample("sample").transcription("transcr").translation("tr")
@@ -123,7 +123,6 @@ class ShareDictControllerTest {
         var clonedCard = clonedDict.getUserCards().get(0);
         assertEquals(clonedCard.getTranslatedWord(), card.getTranslatedWord());
         assertEquals(clonedCard.getUserDictionary(), clonedDict);
-        assertEquals(clonedCard.getLanguage(), card.getLanguage());
         assertEquals(clonedCard.getTranslations().size(), 1);
 
         var clonedTrans = clonedCard.getTranslations().get(0);

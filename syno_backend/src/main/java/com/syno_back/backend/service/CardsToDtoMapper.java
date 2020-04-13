@@ -22,7 +22,7 @@ public class CardsToDtoMapper implements IDtoMapper<DbUserCard, UserCard>  {
 
     @Override
     public UserCard convert(DbUserCard dto, Iterable<Pair<String, ?>> additionalFields) {
-        var builder = UserCard.builder().language(dto.getLanguage()).id(dto.getId()).translatedWord(dto.getTranslatedWord())
+        var builder = UserCard.builder().id(dto.getId()).translatedWord(dto.getTranslatedWord())
                 .translations(dto.getTranslations().stream().map((card) -> translationMapper.convert(card, null)).collect(Collectors.toList()))
                 .timeCreated(dto.getTimeCreated()).timeModified(dto.getTimeModified());
         return builder.build();

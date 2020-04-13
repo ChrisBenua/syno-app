@@ -23,7 +23,7 @@ extension DbUserDictionary {
             test.isEnded()
         }
         
-        return TestAndLearnCellConfiguration(dictionaryName: self.name, language: (self.userCards?.allObjects.first as? DbUserCard)?.language, gradePercentage: lastPassedTest?.gradePercentage ?? -1.0)
+        return TestAndLearnCellConfiguration(dictionaryName: self.name, language: self.language, gradePercentage: lastPassedTest?.gradePercentage ?? -1.0)
     }
     
     func toUserDictCellConfig() -> IDictionaryCellConfiguration {
@@ -34,7 +34,7 @@ extension DbUserDictionary {
         }
         
         
-        return DictionaryCellConfiguration(dictName: self.name, language: (allObjects?.first as? DbUserCard)?.language, cardsAmount: cardsAmount, translationsAmount: transAmount)
+        return DictionaryCellConfiguration(dictName: self.name, language: self.language, cardsAmount: cardsAmount, translationsAmount: transAmount)
     }
     
     public func setName(name: String?) {

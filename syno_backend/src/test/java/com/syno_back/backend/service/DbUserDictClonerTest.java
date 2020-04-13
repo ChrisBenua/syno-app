@@ -22,7 +22,7 @@ class DbUserDictClonerTest {
     void testClone() {
         DbUser user = DbUser.builder().id(1L).password("123").email("email").build();
         DbUserDictionary dict = DbUserDictionary.builder().id(2L).name("name").owner(user).build();
-        DbUserCard card = DbUserCard.builder().language("lan").translatedWord("word").id(3L).build();
+        DbUserCard card = DbUserCard.builder().translatedWord("word").id(3L).build();
         dict.addUserCard(card);
         user.addUserDictionary(dict);
 
@@ -38,7 +38,6 @@ class DbUserDictClonerTest {
             var standardCard = dict.getUserCards().get(cardIndex);
 
             assertEquals(clonedCard.getTranslations().size(), standardCard.getTranslations().size());
-            assertEquals(clonedCard.getLanguage(), standardCard.getLanguage());
             assertEquals(clonedCard.getTranslatedWord(), standardCard.getTranslatedWord());
             assertEquals(clonedCard.getUserDictionary(), clonedDict);
 

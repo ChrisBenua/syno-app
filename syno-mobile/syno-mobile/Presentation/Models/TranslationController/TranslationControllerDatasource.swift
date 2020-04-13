@@ -18,6 +18,8 @@ protocol ITranslationControllerDataProvider {
     func add()
     func deleteAt(ind: Int)
     func performSave(completionHandler: (() -> ())?)
+    func updateTranslatedWord(translatedWord: String?)
+    func deleteTempCard(completionHandler: (() -> Void)?)
 }
 
 protocol ITranslationControllerDataSource: UITableViewDataSource, UITableViewDelegate, ITranslationCellDidChangeDelegate {
@@ -27,6 +29,9 @@ protocol ITranslationControllerDataSource: UITableViewDataSource, UITableViewDel
     func add()
     func deleteAt(ind: Int)
     func save(completionHandler: (() -> ())?)
+    func updateTranslatedWord(newTranslatedWord: String?)
+    //for new card controller
+    func deleteTempCard(completionHandler: (() -> Void)?)
 }
 
 
@@ -107,11 +112,31 @@ class TranslationControllerDataProvider: ITranslationControllerDataProvider {
         if let objId = self.translations![ind].transObjectID {
             self.shouldDeleteTransObjectIds.append(objId)
         }
+        
+        self.translations?.remove(at: ind)
+    }
+    
+    func deleteTempCard(completionHandler: (() -> Void)?) {
+        DispatchQueue.global(qos: .background).async {
+            let context = self._sourceCard.managedObjectContext!
+            context.performAndWait {
+                context.delete(self._sourceCard)
+            }
+            
+            self.storageCoordinator.stack.performSave(with: context, completion: completionHandler)
+        }
     }
     
     func performSave(completionHandler: (() -> ())?) {
         DispatchQueue.global(qos: .background).async {
             self.storageCoordinator.stack.mainContext.performAndWait {
+                
+                if let transWord = self.newTranslatedWord {
+                    let objId = self._sourceCard.objectID
+                    let card = self.storageCoordinator.stack.mainContext.object(with: objId) as! DbUserCard
+                    card.translatedWord = transWord
+                }
+                
                 for trans in self.translations ?? [] {
                     if let objId = trans.transObjectID {
                         let dbTranslation = self.storageCoordinator.stack.mainContext.object(with: objId) as! DbTranslation
@@ -142,6 +167,12 @@ class TranslationControllerDataProvider: ITranslationControllerDataProvider {
         }
     }
     
+    func updateTranslatedWord(translatedWord: String?) {
+        newTranslatedWord = translatedWord
+    }
+    
+    private var newTranslatedWord: String?
+    
     private var translations: [TranslationCellWrapper]?
         
     private var _sourceCard: DbUserCard!
@@ -166,9 +197,25 @@ class TranslationControllerDataProvider: ITranslationControllerDataProvider {
 
 protocol ITranslationCellDidChangeDelegate: class {
     func update(caller: UITableViewCell, newConf: ITranslationCellConfiguration)
+    
+    func getTranscription(for word: String) -> String?
+    
+    func setLastFocusedPoint(point: CGPoint,sender: UIView)
+    
+    func didEndEditing()
+    
+    func getLastFocusedPoint() -> CGPoint?
 }
 
 class TranslationControllerDataSource: NSObject, ITranslationControllerDataSource {
+    
+    func getTranscription(for word: String) -> String? {
+        if (isAutoPhonemesEnabled) {
+            return self.phonemesManager.getPhoneme(for: word)
+        }
+        return nil
+    }
+
     func update(caller: UITableViewCell, newConf: ITranslationCellConfiguration) {
         self.updateAt(ind: self.tableView.indexPath(for: caller)!.row, newTranslation: newConf)
     }
@@ -185,7 +232,11 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
     
     func deleteAt(ind: Int) {
         self.viewModel.deleteAt(ind: ind)
-        self.tableView.deleteRows(at: [IndexPath(row: ind, section: 0)], with: .automatic)
+        self.tableView.performBatchUpdates({
+            self.tableView.deleteRows(at: [IndexPath(row: ind, section: 0)], with: .automatic)
+        }) { (_) in
+            self.tableView.contentOffset = CGPoint(x: 0, y: 0)
+        }
     }
     
     func save(completionHandler: (() -> ())?) {
@@ -195,6 +246,20 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         self.tableView = tableView
         return items.count
+    }
+    
+    @available(iOS 13.0, *)
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (_) -> UIMenu? in
+            let menu = UIMenu(title: "Actions", children: [
+                UIAction(title: "Delete", image: UIImage.init(systemName: "trash.fill"), attributes: .destructive, handler: { (action) in
+                    self.deleteAt(ind: indexPath.row)
+                    
+                    print("Action happened!!!")
+                })
+            ])
+            return menu
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -210,15 +275,45 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
     
     var tableView: UITableView!
     
+    private var lastFocusedPoint: CGPoint?
+    
+    private var phonemesManager: IPhonemesManager
+    
+    weak var controllerDelegate: IScrollableToPoint?
+    
+    private var isAutoPhonemesEnabled: Bool
+    
     var items: [ITranslationCellConfiguration] {
         get {
             return viewModel.getTranslations()
         }
     }
     
-    init(viewModel: ITranslationControllerDataProvider, sourceCard: DbUserCard) {
+    func updateTranslatedWord(newTranslatedWord: String?) {
+        self.viewModel.updateTranslatedWord(translatedWord: newTranslatedWord)
+    }
+    
+    func deleteTempCard(completionHandler: (() -> Void)?) {
+        self.viewModel.deleteTempCard(completionHandler: completionHandler)
+    }
+    
+    func setLastFocusedPoint(point: CGPoint, sender: UIView) {
+        self.lastFocusedPoint = sender.convert(point, to: self.tableView)
+    }
+    
+    func getLastFocusedPoint() -> CGPoint? {
+        return lastFocusedPoint
+    }
+    
+    func didEndEditing() {
+        self.controllerDelegate?.scrollToTop()
+    }
+    
+    init(viewModel: ITranslationControllerDataProvider, sourceCard: DbUserCard, phonemesManager: IPhonemesManager, isAutoPhonemesEnabled: Bool = true) {
         self.viewModel = viewModel
         self.viewModel.sourceCard = sourceCard
+        self.phonemesManager = phonemesManager
+        self.isAutoPhonemesEnabled = isAutoPhonemesEnabled
     }
     
 }

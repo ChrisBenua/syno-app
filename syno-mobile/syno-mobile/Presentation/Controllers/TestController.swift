@@ -12,6 +12,8 @@ import UIKit
 class TestViewController: UIViewController, IScrollableToPoint {
     private var lastFocusedPoint: CGPoint?
     
+    private var presAssembly: IPresentationAssembly
+    
     private var currCardNumber: Int = 0
     
     func scrollToPoint(point: CGPoint) {
@@ -24,6 +26,7 @@ class TestViewController: UIViewController, IScrollableToPoint {
     }
     
     func scrollToTop(_ scrollView: UIScrollView, animated: Bool = true) {
+        self.scrollView.contentInset.bottom = 0
         if #available(iOS 11.0, *) {
             let expandedBar = (navigationController?.navigationBar.frame.height ?? 64.0 > 44.0)
             let largeTitles = (navigationController?.navigationBar.prefersLargeTitles) ?? false
@@ -58,8 +61,9 @@ class TestViewController: UIViewController, IScrollableToPoint {
         return scrollView
     }()
     
-    init(testViews: [ITestView], dictName: String) {
+    init(testViews: [ITestView], dictName: String, presAssembly: IPresentationAssembly) {
         self.testViews = testViews
+        self.presAssembly = presAssembly
         super.init(nibName: nil, bundle: nil)
         
         self.navigationItem.title = dictName
@@ -91,7 +95,8 @@ class TestViewController: UIViewController, IScrollableToPoint {
         self.testViews[currCardNumber].model.endTest { (test) in
             DispatchQueue.main.async {
                 let okAction = UIAlertAction(title: "Ok", style: .default) { (_) in
-                    self.navigationController?.popViewController(animated: true)
+                    self.navigationController?.pushViewController(self.presAssembly
+                        .testResultsController(sourceTest: test), animated: true)
                 }
                 let alertController = UIAlertController(title: "Success", message: "Test ended!", preferredStyle: .alert)
                 alertController.addAction(okAction)
@@ -212,6 +217,7 @@ extension TestViewController {
             
             let neededShift = UIScreen.main.bounds.height - lastFocusedPoint!.y - keyboardHeight + 60
             if (neededShift < 0) {
+                self.scrollView.contentInset.bottom = -neededShift + scrollView.contentOffset.y + 20
                 self.scrollView.setContentOffset(CGPoint(x: 0, y: -neededShift), animated: true)
             }
         }

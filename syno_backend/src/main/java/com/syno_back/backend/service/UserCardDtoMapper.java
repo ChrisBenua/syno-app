@@ -25,7 +25,7 @@ public class UserCardDtoMapper implements IDtoMapper<NewUserCard, DbUserCard> {
     @Override
     public DbUserCard convert(@NonNull NewUserCard dto, Iterable<Pair<String, ?>> additionalFields) {
         var translations = dto.getTranslations().stream().map(trans -> translationDtoMapper.convert(trans, null));
-        var cardBuilder = DbUserCard.builder().translatedWord(dto.getTranslatedWord()).language(dto.getLanguage());
+        var cardBuilder = DbUserCard.builder().translatedWord(dto.getTranslatedWord());
 
         ReflectionUtils.setFields(cardBuilder, additionalFields);
 

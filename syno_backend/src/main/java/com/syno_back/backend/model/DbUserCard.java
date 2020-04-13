@@ -27,9 +27,6 @@ public class DbUserCard {
     @Column(name="translated_word")
     private String translatedWord;
 
-    @Column(name="language")
-    private String language;
-
     @CreationTimestamp
     @Column(name="time_created")
     private LocalDateTime timeCreated;
@@ -48,9 +45,8 @@ public class DbUserCard {
     @JoinColumn(name = "source_dictionary_id")
     private DbUserDictionary userDictionary;
 
-    public DbUserCard(String translatedWord, String language) {
+    public DbUserCard(String translatedWord) {
         this.translatedWord = translatedWord;
-        this.language = language;
     }
 
     public void addTranslation(DbTranslation translation) {
@@ -69,10 +65,6 @@ public class DbUserCard {
 
     public void setTranslatedWord(String translatedWord) {
         this.translatedWord = translatedWord;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
     }
 
     public void setTranslations(List<DbTranslation> translations) {

@@ -20,4 +20,22 @@ class PlainTableView: UITableView {
         layoutIfNeeded()
         return CGSize(width: UIView.noIntrinsicMetric, height: contentSize.height)
     }
+    
+    override func reloadData() {
+        super.reloadData()
+        self.invalidateIntrinsicContentSize()
+    }
+    
+    override func deleteRows(at indexPaths: [IndexPath], with animation: UITableView.RowAnimation) {
+        super.deleteRows(at: indexPaths, with: animation)
+        self.invalidateIntrinsicContentSize()
+    }
+    override init(frame: CGRect, style: UITableView.Style) {
+        super.init(frame: frame, style: style)
+        self.isScrollEnabled = false
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
 }

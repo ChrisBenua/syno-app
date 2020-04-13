@@ -18,6 +18,8 @@ class DictCardsController: UIViewController {
     
     var dataSource: ICardsControllerDataSource
     
+    var notifView: BottomNotificationView?
+    
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let colView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -44,6 +46,12 @@ class DictCardsController: UIViewController {
         self.collectionView.dataSource = self.dataSource
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.notifView?.removeFromSuperview()
+        self.dataSource.commitChanges()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -53,15 +61,19 @@ class DictCardsController: UIViewController {
         self.view.addSubview(self.collectionView)
         
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Group 6"), style: .plain, target: self, action: #selector(addCard))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addCard))
         
         collectionView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         collectionView.reloadData()
     }
     
     @objc func addCard() {
-        let controller = self.assembly.newCardController()
-        self.navigationController?.pushViewController(controller, animated: true)
+        self.dataSource.createEmptyUserCard { (tempCard) in
+            DispatchQueue.main.async {
+                let controller = self.assembly.newCardController(tempSourceCard: tempCard)
+                self.navigationController?.pushViewController(controller, animated: true)
+            }
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -75,4 +87,30 @@ extension DictCardsController: ICardsDataSourceReactor {
         let controller = self.assembly.translationsViewController(sourceCard: item)
         self.navigationController?.pushViewController(controller, animated: true)
     }
+    
+    func onItemDeleted() {
+        let notifView = BottomNotificationView()
+        notifView.cancelButtonLabel.text = "Отмена"
+        notifView.messageLabel.text = "Карточка будет удалена"
+        notifView.timerLabel.text = "5"
+        notifView.delegate = self
+        self.view.addSubview(notifView)
+        self.view.bringSubviewToFront(notifView)
+        notifView.anchor(top: nil, left: self.view.safeAreaLayoutGuide.leftAnchor, bottom: self.view.safeAreaLayoutGuide.bottomAnchor, right: self.view.safeAreaLayoutGuide.rightAnchor, paddingTop: 0, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0)
+        self.notifView = notifView
+    }
+}
+
+extension DictCardsController: IBottomNotificationViewDelegate {
+    func onCancelButtonPressed() {
+        print("CancelPressed")
+        self.dataSource.undoLastDeletion()
+    }
+    
+    func onTimerDone() {
+        print("TIMER DONE")
+        self.dataSource.commitChanges()
+    }
+    
+    
 }

@@ -14,5 +14,8 @@ public class NewUserDictionary implements Serializable {
     @JsonProperty("name")
     private String name;
 
+    @JsonProperty("language")
+    private String language;
+
     private static final long serialVersionUID = -1264970284522287974L;
 }

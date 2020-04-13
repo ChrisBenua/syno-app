@@ -13,6 +13,7 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
     func showCardsController(controller: UIViewController) {
         self.navigationController!.pushViewController(controller, animated: true)
     }
+    var notifView: BottomNotificationView?
     
     private let rowHeight: CGFloat = 80
     
@@ -26,7 +27,7 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
         self.dataSource = datasource
         self.model = model
         super.init(nibName: nil, bundle: nil)
-        frcDelegate = DefaultCollectionViewFRCDelegate(collectionView: self.collectionView)
+        frcDelegate = DictsControllerCollectionViewFRCDelegate(collectionView: self.collectionView)
         self.dataSource.fetchedResultsController.delegate = frcDelegate
         self.collectionView.dataSource = self.dataSource
     }
@@ -49,8 +50,14 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
         return colView
     }()
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.notifView?.removeFromSuperview()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        collectionView.reloadData()
     }
     
     override func viewDidLoad() {
@@ -65,14 +72,39 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
         
         self.view.addSubview(self.collectionView)
         model.initialFetch()
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(onAddNewDictionary))
 
         collectionView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         collectionView.reloadData()
     }
     
-    override func viewDidLayoutSubviews() {
-        collectionView.reloadData()
+    @objc func onAddNewDictionary() {
+        self.navigationController?.pushViewController(self.dataSource.getNewDictController(), animated: true)
+    }
+    
+    func onItemDeleted() {
+        let notifView = BottomNotificationView()
+        notifView.cancelButtonLabel.text = "Отмена"
+        notifView.messageLabel.text = "Словарь будет удален"
+        notifView.timerLabel.text = "5"
+        notifView.delegate = self
+        self.view.addSubview(notifView)
+        self.view.bringSubviewToFront(notifView)
+        
+        notifView.anchor(top: nil, left: self.view.safeAreaLayoutGuide.leftAnchor, bottom: self.view.safeAreaLayoutGuide.bottomAnchor, right: self.view.safeAreaLayoutGuide.rightAnchor, paddingTop: 0, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0)
+        self.notifView = notifView
     }
 }
 
-
+extension DictsViewController: IBottomNotificationViewDelegate {
+    func onCancelButtonPressed() {
+        self.dataSource.undoLastDeletion()
+    }
+    
+    func onTimerDone() {
+        self.dataSource.commitChanges()
+    }
+    
+    
+}

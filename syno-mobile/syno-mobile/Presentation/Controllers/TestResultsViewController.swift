@@ -1,0 +1,128 @@
+//
+//  TestResultsViewController.swift
+//  syno-mobile
+//
+//  Created by Ирина Улитина on 11.04.2020.
+//  Copyright © 2020 Christian Benua. All rights reserved.
+//
+
+import Foundation
+import UIKit
+
+class TestResultsViewController: UIViewController {
+    
+    private var dataSource: ITestResultsControllerDataSource
+    
+    lazy var resultTextLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Результат"
+        label.font = .systemFont(ofSize: 26)
+        label.textAlignment = .right
+        
+        return label
+    }()
+    
+    lazy var resultPercentageLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 26)
+        label.textAlignment = .left
+        let result = GradeToStringAndColor.gradeToStringAndColor(gradePercentage: Double(self.dataSource.getPercentageScore()))
+        label.textColor = result.1
+        label.text = result.0
+        
+        return label
+    }()
+    
+    lazy var reportTextLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Отчёт"
+        label.font = .systemFont(ofSize: 26)
+        label.textAlignment = .center
+        
+        return label
+    }()
+    
+    lazy var tableView: UITableView = {
+        let tableView = PlainTableView()
+        tableView.backgroundColor = .clear
+        tableView.separatorColor = .clear
+        tableView.delegate = self.dataSource
+        tableView.dataSource = self.dataSource
+        
+        tableView.register(TestResultsTableViewCell.self, forCellReuseIdentifier: TestResultsTableViewCell.cellId)
+        
+        return tableView
+    }()
+    
+    lazy var headerView: UIView = {
+        let view = UIView()
+        let innerView = UIView()
+        
+        let sv = UIStackView(arrangedSubviews: [self.resultTextLabel, self.resultPercentageLabel])
+        sv.axis = .horizontal
+        sv.distribution = .fill
+        sv.spacing = 20
+        innerView.addSubview(sv)
+        
+        sv.anchor(top: innerView.topAnchor, left: nil, bottom: innerView.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        sv.centerXAnchor.constraint(equalTo: innerView.centerXAnchor).isActive = true
+        
+        let stackView = UIStackView(arrangedSubviews: [innerView, self.reportTextLabel])
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.spacing = 20
+        
+        view.addSubview(stackView)
+        stackView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 20, paddingLeft: 20, paddingBottom: 10, paddingRight: 20, width: 0, height: 0)
+        return view
+    }()
+    
+    lazy var contentView: UIView = {
+        let view = UIView()
+        view.addSubview(self.headerView)
+        view.addSubview(self.tableView)
+        
+        self.headerView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        self.tableView.anchor(top: self.headerView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 10, paddingLeft: 20, paddingBottom: 0, paddingRight: 20, width: 0, height: 0)
+        
+        return view
+    }()
+    
+    lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.alwaysBounceVertical = true
+        scrollView.alwaysBounceHorizontal = false
+        scrollView.showsHorizontalScrollIndicator = true
+        
+        scrollView.addSubview(self.contentView)
+        self.contentView.anchor(top: scrollView.contentLayoutGuide.topAnchor, left: nil, bottom: scrollView.contentLayoutGuide.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        self.contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+        self.contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -10).isActive = true
+        
+        return scrollView
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.tabBarController?.tabBar.isHidden = false
+        self.view.backgroundColor = .white
+        self.view.addSubview(scrollView)
+        scrollView.anchor(top: self.view.topAnchor, left: self.view.leftAnchor, bottom: self.view.bottomAnchor, right: self.view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: UIScreen.main.bounds.width, height: 0)
+        self.navigationItem.title = "Результат: " + (self.dataSource.getDictName() ?? "")
+        self.navigationItem.hidesBackButton = true
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Закончить", style: .done, target: self, action: #selector(goBackToTestAndLearnController))
+    }
+    
+    @objc func goBackToTestAndLearnController() {
+        self.navigationController?.popToRootViewController(animated: true)
+    }
+    
+    init(dataSource: ITestResultsControllerDataSource) {
+        self.dataSource = dataSource
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}

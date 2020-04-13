@@ -26,6 +26,7 @@ class LoginModel: ILoginModel {
     }
 
     func skippedRegistration() {
+        loginService.createGuestUser()
         loginService.setNetworkNode(isActive: false)
         self.controller?.onSuccessfulLogin(email: "Guest")
     }

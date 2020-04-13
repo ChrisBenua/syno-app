@@ -21,14 +21,13 @@ class CardsToDtoMapperTest {
 
     @Test
     void convert() {
-        DbUserCard card = DbUserCard.builder().id(1L).language("lan").translatedWord("word")
+        DbUserCard card = DbUserCard.builder().id(1L).translatedWord("word")
                 .translations(List.of(DbTranslation.builder().id(2L).usageSample("s").comment("c").transcription("t")
                         .translation("tr").timeCreated(LocalDateTime.now()).timeModified(LocalDateTime.now()).build()))
                 .timeCreated(LocalDateTime.now()).timeModified(LocalDateTime.now()).build();
         var result = mapper.convert(card, null);
 
         assertEquals(result.getId(), card.getId());
-        assertEquals(result.getLanguage(), card.getLanguage());
         assertEquals(result.getTimeCreated(), card.getTimeCreated());
         assertEquals(result.getTimeModified(), card.getTimeModified());
         assertEquals(result.getTranslatedWord(), card.getTranslatedWord());

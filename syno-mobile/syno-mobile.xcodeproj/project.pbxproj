@@ -25,10 +25,15 @@
 		AA1B8755238D9B9700D26FCF /* ServiceAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B8754238D9B9700D26FCF /* ServiceAssembly.swift */; };
 		AA1B8757238D9C1800D26FCF /* CoreAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B8756238D9C1800D26FCF /* CoreAssembly.swift */; };
 		AA1B8759238D9CE100D26FCF /* RootAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B8758238D9CE100D26FCF /* RootAssembly.swift */; };
+		AA268FAE244092C9005AE946 /* NewDictController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA268FAD244092C9005AE946 /* NewDictController.swift */; };
+		AA268FB1244092FD005AE946 /* NewDictControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA268FB0244092FD005AE946 /* NewDictControllerModel.swift */; };
+		AA268FB32440ED98005AE946 /* BottomNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA268FB22440ED98005AE946 /* BottomNotificationView.swift */; };
 		AA2B9DFB23AC922800A6D45F /* TranslationDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B9DFA23AC922800A6D45F /* TranslationDto.swift */; };
 		AA2B9DFD23AC923400A6D45F /* CardDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B9DFC23AC923400A6D45F /* CardDto.swift */; };
 		AA2B9DFF23AC924F00A6D45F /* DictionaryDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B9DFE23AC924F00A6D45F /* DictionaryDto.swift */; };
 		AA2FFD9223A4D48700889BAB /* TranslatedWordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2FFD9123A4D48700889BAB /* TranslatedWordView.swift */; };
+		AA3686792444C228003599D0 /* phonemes.txt in Resources */ = {isa = PBXBuildFile; fileRef = AA3686782444C228003599D0 /* phonemes.txt */; };
+		AA36867B2444D92A003599D0 /* PhonemesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA36867A2444D92A003599D0 /* PhonemesManager.swift */; };
 		AA4B780723C136E9005A9CC9 /* TestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4B780623C136E9005A9CC9 /* TestController.swift */; };
 		AA4B780A23C138D4005A9CC9 /* TestViewControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4B780923C138D4005A9CC9 /* TestViewControllerDataSource.swift */; };
 		AA4B780C23C1BF29005A9CC9 /* TestControllerTranslationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4B780B23C1BF29005A9CC9 /* TestControllerTranslationTableViewCell.swift */; };
@@ -52,6 +57,11 @@
 		AA8700DF23993F9900C97E18 /* CommonTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8700DE23993F9900C97E18 /* CommonTabBarController.swift */; };
 		AA8700E1239942FF00C97E18 /* DictsFetchResultsControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8700E0239942FF00C97E18 /* DictsFetchResultsControllerDelegate.swift */; };
 		AA8700E623994ACE00C97E18 /* DictControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8700E523994ACE00C97E18 /* DictControllerModel.swift */; };
+		AA88C7D524420DB9002E3549 /* TestResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA88C7D424420DB9002E3549 /* TestResultsViewController.swift */; };
+		AA88C7D724420F2B002E3549 /* TestResultsTableViewHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA88C7D624420F2B002E3549 /* TestResultsTableViewHeaderCell.swift */; };
+		AA88C7D924421255002E3549 /* GradeToStringAndColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA88C7D824421255002E3549 /* GradeToStringAndColor.swift */; };
+		AA88C7DC24421D13002E3549 /* TestResultsControllerDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA88C7DB24421D13002E3549 /* TestResultsControllerDatasource.swift */; };
+		AA88C7DE2442242D002E3549 /* TestResultsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA88C7DD2442242D002E3549 /* TestResultsTableViewCell.swift */; };
 		AA8C0E10238918FA000CBB73 /* PresentationAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8C0E0F238918FA000CBB73 /* PresentationAssembly.swift */; };
 		AA8C0E1223891BBC000CBB73 /* LoginState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8C0E1123891BBC000CBB73 /* LoginState.swift */; };
 		AA8C0E1423891DE6000CBB73 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8C0E1323891DE6000CBB73 /* Colors.swift */; };
@@ -136,10 +146,15 @@
 		AA1B8754238D9B9700D26FCF /* ServiceAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAssembly.swift; sourceTree = "<group>"; };
 		AA1B8756238D9C1800D26FCF /* CoreAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreAssembly.swift; sourceTree = "<group>"; };
 		AA1B8758238D9CE100D26FCF /* RootAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootAssembly.swift; sourceTree = "<group>"; };
+		AA268FAD244092C9005AE946 /* NewDictController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDictController.swift; sourceTree = "<group>"; };
+		AA268FB0244092FD005AE946 /* NewDictControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDictControllerModel.swift; sourceTree = "<group>"; };
+		AA268FB22440ED98005AE946 /* BottomNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomNotificationView.swift; sourceTree = "<group>"; };
 		AA2B9DFA23AC922800A6D45F /* TranslationDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationDto.swift; sourceTree = "<group>"; };
 		AA2B9DFC23AC923400A6D45F /* CardDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDto.swift; sourceTree = "<group>"; };
 		AA2B9DFE23AC924F00A6D45F /* DictionaryDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryDto.swift; sourceTree = "<group>"; };
 		AA2FFD9123A4D48700889BAB /* TranslatedWordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslatedWordView.swift; sourceTree = "<group>"; };
+		AA3686782444C228003599D0 /* phonemes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = phonemes.txt; sourceTree = "<group>"; };
+		AA36867A2444D92A003599D0 /* PhonemesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhonemesManager.swift; sourceTree = "<group>"; };
 		AA4B780623C136E9005A9CC9 /* TestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestController.swift; sourceTree = "<group>"; };
 		AA4B780923C138D4005A9CC9 /* TestViewControllerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewControllerDataSource.swift; sourceTree = "<group>"; };
 		AA4B780B23C1BF29005A9CC9 /* TestControllerTranslationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestControllerTranslationTableViewCell.swift; sourceTree = "<group>"; };
@@ -163,6 +178,11 @@
 		AA8700DE23993F9900C97E18 /* CommonTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonTabBarController.swift; sourceTree = "<group>"; };
 		AA8700E0239942FF00C97E18 /* DictsFetchResultsControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictsFetchResultsControllerDelegate.swift; sourceTree = "<group>"; };
 		AA8700E523994ACE00C97E18 /* DictControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictControllerModel.swift; sourceTree = "<group>"; };
+		AA88C7D424420DB9002E3549 /* TestResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResultsViewController.swift; sourceTree = "<group>"; };
+		AA88C7D624420F2B002E3549 /* TestResultsTableViewHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResultsTableViewHeaderCell.swift; sourceTree = "<group>"; };
+		AA88C7D824421255002E3549 /* GradeToStringAndColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradeToStringAndColor.swift; sourceTree = "<group>"; };
+		AA88C7DB24421D13002E3549 /* TestResultsControllerDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResultsControllerDatasource.swift; sourceTree = "<group>"; };
+		AA88C7DD2442242D002E3549 /* TestResultsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResultsTableViewCell.swift; sourceTree = "<group>"; };
 		AA8C0E0F238918FA000CBB73 /* PresentationAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationAssembly.swift; sourceTree = "<group>"; };
 		AA8C0E1123891BBC000CBB73 /* LoginState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginState.swift; sourceTree = "<group>"; };
 		AA8C0E1323891DE6000CBB73 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -349,6 +369,14 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		AA268FAF244092EC005AE946 /* NewDictController */ = {
+			isa = PBXGroup;
+			children = (
+				AA268FB0244092FD005AE946 /* NewDictControllerModel.swift */,
+			);
+			path = NewDictController;
+			sourceTree = "<group>";
+		};
 		AA2B9DF923AC91F500A6D45F /* LearnController */ = {
 			isa = PBXGroup;
 			children = (
@@ -357,6 +385,15 @@
 				AA2B9DFE23AC924F00A6D45F /* DictionaryDto.swift */,
 			);
 			path = LearnController;
+			sourceTree = "<group>";
+		};
+		AA3686772444C204003599D0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				AA3686782444C228003599D0 /* phonemes.txt */,
+				AA36867A2444D92A003599D0 /* PhonemesManager.swift */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		AA4B780823C13885005A9CC9 /* TestController */ = {
@@ -405,6 +442,14 @@
 			path = DictController;
 			sourceTree = "<group>";
 		};
+		AA88C7DA24421CFA002E3549 /* TestResultsController */ = {
+			isa = PBXGroup;
+			children = (
+				AA88C7DB24421D13002E3549 /* TestResultsControllerDatasource.swift */,
+			);
+			path = TestResultsController;
+			sourceTree = "<group>";
+		};
 		AA8C0E022389179A000CBB73 /* Assembly */ = {
 			isa = PBXGroup;
 			children = (
@@ -416,6 +461,7 @@
 		AA8C0E03238917CB000CBB73 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				AA3686772444C204003599D0 /* Resources */,
 				AA8C0E0A2389184D000CBB73 /* UserDefaults */,
 				AA8C0E092389183C000CBB73 /* CoreData */,
 				AA8C0E082389182C000CBB73 /* Networking */,
@@ -453,6 +499,7 @@
 				49A16D95769370F236C3331C /* Debug.swift */,
 				49A16AE33CDCA131F1447FDA /* UIAlertController.swift */,
 				AAD4A2ED23ABE1E200394693 /* NSSetExt.swift */,
+				AA88C7D824421255002E3549 /* GradeToStringAndColor.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -514,6 +561,8 @@
 		AA8C0E0C23891862000CBB73 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				AA88C7DA24421CFA002E3549 /* TestResultsController */,
+				AA268FAF244092EC005AE946 /* NewDictController */,
 				AA4B780823C13885005A9CC9 /* TestController */,
 				AA6A03BA23AC9CC500902FBE /* LearnController */,
 				AAD4A2E823ABD1E100394693 /* TestAndLearnController */,
@@ -541,6 +590,8 @@
 				AA6A03B823AC9C7500902FBE /* LearnController.swift */,
 				AA4B780623C136E9005A9CC9 /* TestController.swift */,
 				AAA29990243E26E6007327DB /* NewOrEditCardController.swift */,
+				AA268FAD244092C9005AE946 /* NewDictController.swift */,
+				AA88C7D424420DB9002E3549 /* TestResultsViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -635,6 +686,9 @@
 				AAD4A2F023ABE74E00394693 /* TestAndLearnControllerHeader.swift */,
 				AA6A03BD23ACA26A00902FBE /* TranslationReadonlyTableViewCell.swift */,
 				AA4B780B23C1BF29005A9CC9 /* TestControllerTranslationTableViewCell.swift */,
+				AA268FB22440ED98005AE946 /* BottomNotificationView.swift */,
+				AA88C7D624420F2B002E3549 /* TestResultsTableViewHeaderCell.swift */,
+				AA88C7DD2442242D002E3549 /* TestResultsTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -752,6 +806,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA94BC29238841FD00B2F16F /* LaunchScreen.storyboard in Resources */,
+				AA3686792444C228003599D0 /* phonemes.txt in Resources */,
 				AA94BC26238841FD00B2F16F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -851,12 +906,14 @@
 				AAB6CECD2393C87B00AAAF0E /* UserTranslationStorageManager.swift in Sources */,
 				AA8C0E1B23892A0F000CBB73 /* UILabelWithInsets.swift in Sources */,
 				AAC605752390E5EC00120B77 /* SavingProcessView.swift in Sources */,
+				AA88C7DC24421D13002E3549 /* TestResultsControllerDatasource.swift in Sources */,
 				AAA2998B243CCD51007327DB /* UITextFieldWithLabel.swift in Sources */,
 				AA8C0E1423891DE6000CBB73 /* Colors.swift in Sources */,
 				AA8700DD2399356700C97E18 /* DictionaryCellView.swift in Sources */,
 				AA1B874F238D9A8900D26FCF /* LoginModel.swift in Sources */,
 				AA8C0E1223891BBC000CBB73 /* LoginState.swift in Sources */,
 				AAA29991243E26E6007327DB /* NewOrEditCardController.swift in Sources */,
+				AA88C7D924421255002E3549 /* GradeToStringAndColor.swift in Sources */,
 				AAD4A2E323ABA81D00394693 /* DbUserTestAnswerExt.swift in Sources */,
 				AAC605792390F04700120B77 /* LoginRegistrationLayouter.swift in Sources */,
 				AA1B8755238D9B9700D26FCF /* ServiceAssembly.swift in Sources */,
@@ -871,11 +928,13 @@
 				AA75298423A7B016004120A0 /* TestAndLearnController.swift in Sources */,
 				AA94BC21238841F300B2F16F /* LoginViewController.swift in Sources */,
 				AAB6CEC32392EC2000AAAF0E /* DbUserCardExt.swift in Sources */,
+				AA268FAE244092C9005AE946 /* NewDictController.swift in Sources */,
 				AAB6CEBD2392E48C00AAAF0E /* DbAppUserExt.swift in Sources */,
 				AA94BC1D238841F300B2F16F /* AppDelegate.swift in Sources */,
 				49A166086AEF7785B19E1514 /* UITextFieldWithInsets.swift in Sources */,
 				AAA5F2CA23A2798800661811 /* ControllerKeyboardExt.swift in Sources */,
 				49A16189873B6C801FB1EFFC /* IParser.swift in Sources */,
+				AA88C7D524420DB9002E3549 /* TestResultsViewController.swift in Sources */,
 				AAA29993243E27FB007327DB /* UITextViewWithLabel.swift in Sources */,
 				AA12FECA23AFB59100CC8D3B /* LearnViewGenerator.swift in Sources */,
 				AAD4A2E723ABB15400394693 /* DbUserTestExt.swift in Sources */,
@@ -887,6 +946,7 @@
 				AAA5F2CF23A2958600661811 /* CardsControllerDataSource.swift in Sources */,
 				AA4B780A23C138D4005A9CC9 /* TestViewControllerDataSource.swift in Sources */,
 				AA1B8757238D9C1800D26FCF /* CoreAssembly.swift in Sources */,
+				AA36867B2444D92A003599D0 /* PhonemesManager.swift in Sources */,
 				AA82AFD3238E91A000A75D92 /* UserDefaultsManager.swift in Sources */,
 				AA8700D323990F5400C97E18 /* UserDictsFetchService.swift in Sources */,
 				AAEBE75423A4139B00F48684 /* BaseShadowView.swift in Sources */,
@@ -901,8 +961,11 @@
 				49A1669737ADB0F82BF2FAEB /* RequestFactory.swift in Sources */,
 				AA2B9DFB23AC922800A6D45F /* TranslationDto.swift in Sources */,
 				49A160132C5591D9CC06BA27 /* IRequestSender.swift in Sources */,
+				AA268FB32440ED98005AE946 /* BottomNotificationView.swift in Sources */,
 				49A16167918E9B1E70F2E147 /* DefaultRequestSender.swift in Sources */,
 				AAEBE74923A37FDE00F48684 /* TranslationCollectionViewCell.swift in Sources */,
+				AA268FB1244092FD005AE946 /* NewDictControllerModel.swift in Sources */,
+				AA88C7D724420F2B002E3549 /* TestResultsTableViewHeaderCell.swift in Sources */,
 				AAD4A2DF23AB684F00394693 /* DbUserTestTranslationExt.swift in Sources */,
 				AAEBE75223A4132200F48684 /* ShadowView.swift in Sources */,
 				AAB6CEB92392E3FD00AAAF0E /* StorageManager.swift in Sources */,
@@ -925,6 +988,7 @@
 				AA8700C7239791D000C97E18 /* RegistrationRequest.swift in Sources */,
 				49A160CBD53E96CBBA9E3354 /* LoginResponse.swift in Sources */,
 				49A1646F9BDD6D3757510F85 /* UIAlertController.swift in Sources */,
+				AA88C7DE2442242D002E3549 /* TestResultsTableViewCell.swift in Sources */,
 				AAD4A2EE23ABE1E200394693 /* NSSetExt.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -43,6 +43,7 @@ protocol ITestAndLearnDictionaryDataSource: ICommonDictionaryControllerDataSourc
 }
 
 class TestAndLearnDictionaryDataSource: NSObject, ITestAndLearnDictionaryDataSource {
+    
     weak var delegate: ITestAndLearnReactor?
     
     var state: ITestAndLearnDictionaryControllerState

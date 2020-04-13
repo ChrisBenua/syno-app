@@ -13,6 +13,8 @@ protocol ILoginService {
     func login(loginDto: LoginDto, completionHandler: @escaping (Result<String>) -> Void)
     
     func setNetworkNode(isActive: Bool)
+    
+    func createGuestUser()
 }
 
 class LoginService: ILoginService {
@@ -24,6 +26,12 @@ class LoginService: ILoginService {
         self.storageManager = storageManager
         self.requestSender = requestSender
         self.userDefaultsManager = userDefaultsManager
+    }
+    
+    func createGuestUser() {
+        if (self.storageManager.getCurrentAppUser() == nil) {
+            self.storageManager.createAppUser(email: "Guest", password: "none", isCurrent: true)
+        }
     }
     
     func setNetworkNode(isActive: Bool) {

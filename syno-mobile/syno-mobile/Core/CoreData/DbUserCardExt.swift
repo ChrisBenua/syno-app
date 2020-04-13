@@ -32,13 +32,6 @@ extension DbUserCard {
             self.translatedWord = word
         }
     }
-
-    public func setLanguage(language: String?) {
-        if self.language != language {
-            self.isSynced = false
-            self.language = language
-        }
-    }
     
     public func addToTranslationsUpdateSync(translation: DbTranslation) {
         self.isSynced = false

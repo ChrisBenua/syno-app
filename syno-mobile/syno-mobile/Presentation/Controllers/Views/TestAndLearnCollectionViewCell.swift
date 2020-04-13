@@ -13,8 +13,6 @@ protocol ITestAndLearnCellConfiguration {
     var dictionaryName: String? { get }
     var language: String? { get }
     var gradePercentage: Double { get }
-    
-    func gradeToStringAndColor() -> (String, UIColor)
 }
 
 class TestAndLearnCellConfiguration: ITestAndLearnCellConfiguration {
@@ -28,22 +26,6 @@ class TestAndLearnCellConfiguration: ITestAndLearnCellConfiguration {
         self.dictionaryName = dictionaryName
         self.language = language
         self.gradePercentage = gradePercentage
-    }
-    
-    func gradeToStringAndColor() -> (String, UIColor) {        
-        let colors = [UIColor(red: 18.0/255, green: 171.0/255, blue: 79.0/255, alpha: 1),
-                      UIColor(red: 134.0/255, green: 240.0/255, blue: 0.0/255, alpha: 1),
-                      UIColor(red: 198.0/255, green: 211.0/255, blue: 49.0/255, alpha: 1),
-            UIColor(red: 245/255, green: 89/255, blue: 89/255, alpha: 1)]
-        let colorsRange = [80.0, 60.0, 40.0, 0.0]
-        let colorIndex = colorsRange.firstIndex { (val) -> Bool in
-            val <= gradePercentage + 0.0001
-        }
-        let color = colorIndex == nil ? UIColor.black : colors[colorIndex!]
-        
-        let str = self.gradePercentage > -0.5 ? "\(Int(self.gradePercentage))%" : "N/A"
-        
-        return (str, color)
     }
 }
 
@@ -120,9 +102,9 @@ class TestAndLearnCollectionViewCell: UICollectionViewCell, IConfigurableTestAnd
     }()
     
     func updateUI() {
-        self.gradeLabel.text = self.config?.gradeToStringAndColor().0
+        self.gradeLabel.text = GradeToStringAndColor.gradeToStringAndColor(gradePercentage: self.config!.gradePercentage).0
         if self.config != nil {
-            self.gradeLabel.textColor = self.config!.gradeToStringAndColor().1
+            self.gradeLabel.textColor = GradeToStringAndColor.gradeToStringAndColor(gradePercentage: self.config!.gradePercentage).1
         }
         self.nameLabel.text = self.config?.dictionaryName
         self.languageLabel.text = self.config?.language

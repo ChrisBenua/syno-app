@@ -11,6 +11,8 @@ import Foundation
 protocol IServiceAssembly {
     var loginService: ILoginService { get }
     
+    var phonemesManager: IPhonemesManager { get }
+    
     var registerService: IRegisterService { get }
     
     var translationsFetchService: ITranslationFetchService { get }
@@ -22,6 +24,8 @@ protocol IServiceAssembly {
     var userAuthHelper: IUserAuthHelper { get }
     
     var dictionaryControllerDataProvider: IDictionaryControllerDataProvider { get }
+    
+    var newDictControllerModel: INewDictControllerModel { get }
         
     func dictControllerModel() -> DictControllerModel
     
@@ -38,10 +42,22 @@ protocol IServiceAssembly {
     func testViewControllerDatasource(state: ITestControllerState, dictionary: DbUserDictionary) -> ITestViewControllerDataSource
     
     func testViewControllerModel(state: ITestControllerState, dictionary: DbUserDictionary) -> ITestViewControllerModel
+    
+    func testResultsControllerDataProvider(sourceTest: DbUserTest) -> ITestResultsControllerDataProvider
+    
+    func testResultsControllerDataSource(sourceTest: DbUserTest) -> ITestResultsControllerDataSource
 }
 
 class ServiceAssembly: IServiceAssembly {
+    var newDictControllerModel: INewDictControllerModel
+    
     private let coreAssembly: ICoreAssembly
+    
+    var phonemesManager: IPhonemesManager {
+        get {
+            coreAssembly.phonemesManager
+        }
+    }
     
     var loginService: ILoginService
     
@@ -69,6 +85,7 @@ class ServiceAssembly: IServiceAssembly {
         self.dictsFetchService = UserDictsFetchService(innerQueue: innerBatchUpdatesQueue,storageManager: coreAssembly.storageManager, cardsFetchService: self.cardsFetchService)
         self.dictionaryControllerDataProvider = DictionaryControllerDataProvider(appUserManager: self.coreAssembly.storageManager)
         self.userAuthHelper = UserAuthHelper(userDefManager: coreAssembly.userDefaultsManager)
+        self.newDictControllerModel = NewDictControllerModel(storageManager: coreAssembly.storageManager)
     }
     
     func dictControllerModel() -> DictControllerModel {
@@ -101,5 +118,14 @@ class ServiceAssembly: IServiceAssembly {
     
     func testViewControllerModel(state: ITestControllerState, dictionary: DbUserDictionary) -> ITestViewControllerModel {
         return TestViewControllerModel(dataSource: testViewControllerDatasource(state: state, dictionary: dictionary))
+    }
+    
+    func testResultsControllerDataProvider(sourceTest: DbUserTest) -> ITestResultsControllerDataProvider {
+        return TestResultsControllerDataProvider(test: sourceTest)
+    }
+    
+    func testResultsControllerDataSource(sourceTest: DbUserTest) -> ITestResultsControllerDataSource {
+        let dataProvider = testResultsControllerDataProvider(sourceTest: sourceTest)
+        return TestResultsControllerDataSource(dataProvider: dataProvider, state: TestResultsControllerState(withDefaultSize: dataProvider.totalCards()))
     }
 }

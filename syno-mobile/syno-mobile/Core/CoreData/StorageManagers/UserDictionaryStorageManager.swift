@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 class UserDictionaryStorageManager: IUserDictionaryStorageManager {
-    func createUserDictionary(owner: DbAppUser, name: String, timeCreated: Date?, timeModified: Date?, serverId: Int64?, cards: [DbUserCard]?, completion: ((DbUserDictionary?) -> Void)?) {
+    func createUserDictionary(owner: DbAppUser, name: String, timeCreated: Date?, timeModified: Date?, language: String?, serverId: Int64?, cards: [DbUserCard]?, completion: ((DbUserDictionary?) -> Void)?) {
         //DispatchQueue.global(qos: .background).async {
             let ownerObjectId = owner.objectID
             
@@ -20,6 +20,7 @@ class UserDictionaryStorageManager: IUserDictionaryStorageManager {
                 let ownerInSaveContext = self.saveContext.object(with: ownerObjectId) as? DbAppUser
                 
                 userDict?.name = name
+                userDict?.language = language
                 userDict?.timeCreated = timeCreated
                 userDict?.timeModified = timeModified
                 

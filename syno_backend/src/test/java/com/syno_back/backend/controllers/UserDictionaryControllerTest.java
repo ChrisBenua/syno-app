@@ -77,7 +77,7 @@ class UserDictionaryControllerTest {
                 .id(1L).email(email).password("123").build()));
         ArrayList<DbUserDictionary> mockReturnValue = new ArrayList<>();
         ArrayList<DbUserCard> mockCards = new ArrayList<DbUserCard>();
-        mockCards.add(DbUserCard.builder().language("ru-en").id(2L).translatedWord("word").translations(new ArrayList<>()).build());
+        mockCards.add(DbUserCard.builder().id(2L).translatedWord("word").translations(new ArrayList<>()).build());
         mockReturnValue.add(DbUserDictionary.builder().name("name").id(1L).userCards(mockCards).build());
         Mockito.when(userDictionaryRepository.findByOwner_Email(email)).thenReturn(mockReturnValue);
 
@@ -131,7 +131,7 @@ class UserDictionaryControllerTest1 {
         userRepository.save(DbUser.builder().email(email).password("123").build());
         userRepository.flush();
 
-        var newUserDictionary = new NewUserDictionary("name");
+        var newUserDictionary = new NewUserDictionary("name", "ru-en");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/dicts/new_dict").with(user("email").roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -145,6 +145,7 @@ class UserDictionaryControllerTest1 {
         var userDict = userDictionaryRepository.findAll().get(0);
         assertEquals(userDict.getOwner().getEmail(), "email");
         assertEquals(userDict.getName(), "name");
+        assertEquals(userDict.getLanguage(), "ru-en");
         assertEquals(userDict.getOwner().getUserDictionaries().size(), 1);
         assertEquals(userDict.getOwner().getUserDictionaries().get(0).getName(), "name");
     }
@@ -152,7 +153,7 @@ class UserDictionaryControllerTest1 {
     @Test
     @Transactional
     void createUserDictionaryNoSuchUser() throws Exception {
-        var newUserDictionary = new NewUserDictionary("name");
+        var newUserDictionary = new NewUserDictionary("name", "ru-en");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/dicts/new_dict").with(user("email").roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)

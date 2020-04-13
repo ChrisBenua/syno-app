@@ -100,7 +100,7 @@ class UserDictsFetchService: IUserDictionaryFetchService {
                         
                         for notUsedId in notUsedIds {
                             if let dictDto = dictsMap[notUsedId] {
-                                self.storageManager.createUserDictionary(owner: owner, name: dictDto.name, timeCreated: dictDto.timeCreated, timeModified: dictDto.timeModified, serverId: dictDto.id, cards: nil) { (newDict) in
+                                self.storageManager.createUserDictionary(owner: owner, name: dictDto.name, timeCreated: dictDto.timeCreated, timeModified: dictDto.timeModified, language: dictDto.language, serverId: dictDto.id, cards: nil) { (newDict) in
                                     self.cardsFetchService.updateCards(cards: dictDto.userCards, doSave: true, sourceDictProvider: { (card) -> DbUserDictionary? in
                                         return newDict
                                     }, completion: nil)

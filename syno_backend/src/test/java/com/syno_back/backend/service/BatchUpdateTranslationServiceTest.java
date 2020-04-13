@@ -52,12 +52,10 @@ class BatchUpdateTranslationServiceTest {
 
     private Tuple fillOk() {
         var card1 = DbUserCard.builder()
-                .language("Ru1")
                 .translatedWord("word1").build();
         cardRepository.save(card1);
 
         var card2 = DbUserCard.builder()
-                .language("Ru2")
                 .translatedWord("word2").build();
         cardRepository.save(card2);
         cardRepository.flush();

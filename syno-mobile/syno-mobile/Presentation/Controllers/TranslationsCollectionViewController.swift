@@ -9,9 +9,31 @@
 import Foundation
 import UIKit
 
-class TranslationsCollectionViewController: UIViewController {
+class TranslationsCollectionViewController: UIViewController, IScrollableToPoint {
+    func scrollToPoint(point: CGPoint) {
+        print("")
+    }
     
-    private var dataSource: ITranslationControllerDataSource
+    func scrollToTop() {
+        print(#function)
+        scrollToTop(self.scrollView, animated: true)
+    }
+    
+    func scrollToTop(_ scrollView: UIScrollView, animated: Bool = true) {
+        self.scrollView.contentInset.bottom = 0
+        if #available(iOS 11.0, *) {
+            let expandedBar = (navigationController?.navigationBar.frame.height ?? 64.0 > 44.0)
+            let largeTitles = (navigationController?.navigationBar.prefersLargeTitles) ?? false
+            let offset: CGFloat = (largeTitles && !expandedBar) ? 52: 0
+            print("Setting content offsest")
+            scrollView.setContentOffset(CGPoint(x: 0, y: -(scrollView.adjustedContentInset.top + offset)), animated: animated)
+        } else {
+            scrollView.setContentOffset(CGPoint(x: 0, y: -scrollView.contentInset.top), animated: animated)
+        }
+    }
+    
+    
+    var dataSource: ITranslationControllerDataSource
     
     lazy var processingSaveView: SavingProcessView = {
         let view = SavingProcessView()
@@ -102,9 +124,14 @@ class TranslationsCollectionViewController: UIViewController {
     lazy var translatedWordHeader: UIView = {
         let header = TranslatedWordView()
         header.translatedWordLabel.text = self.dataSource.viewModel.sourceCard.translatedWord
+        header.translatedWordLabel.addTarget(self, action: #selector(onTranslatedWordChanded(_:)), for: .editingChanged)
         
         return header
     }()
+    
+    @objc func onTranslatedWordChanded(_ textField: UITextField) {
+        self.dataSource.updateTranslatedWord(newTranslatedWord: textField.text)
+    }
     
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -117,7 +144,7 @@ class TranslationsCollectionViewController: UIViewController {
         scrollView.addSubview(self.collectionViewHeader)
         scrollView.addSubview(self.translatedWordHeader)
         
-        self.translatedWordHeader.anchor(top: scrollView.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        self.translatedWordHeader.anchor(top: scrollView.contentLayoutGuide.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         self.translatedWordHeader.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
         self.translatedWordHeader.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 1, constant: -30).isActive = true
         
@@ -137,6 +164,13 @@ class TranslationsCollectionViewController: UIViewController {
         super.viewDidLoad()
         self.navigationItem.title = "Карточки"
         self.view.backgroundColor = .white
+        
+        let allViewTapGestureReco = UITapGestureRecognizer(target: self, action: #selector(clearKeyboard(_:)))
+        view.addGestureRecognizer(allViewTapGestureReco)
+        allViewTapGestureReco.cancelsTouchesInView = false
+        allViewTapGestureReco.delegate = self
+        
+        self.addKeyboardObservers(showSelector: #selector(showKeyboard(notification:)), hideSelector: #selector(hideKeyboard(notification:)))
         
         self.view.addSubview(scrollView)
         layout.estimatedItemSize = CGSize(width: UIScreen.main.bounds.width - 40, height: 100)
@@ -171,6 +205,45 @@ class TranslationsCollectionViewController: UIViewController {
 extension TranslationsCollectionViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollView.contentOffset.x = 0
+    }
+}
+
+extension TranslationsCollectionViewController {
+    
+    @objc func showKeyboard(notification: NSNotification) {
+        if let keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height {
+            print("keyboard height:\(keyboardHeight)")
+            
+            if let lastFocusedPoint = self.dataSource.getLastFocusedPoint() {
+                print("Last Focused Point: \(lastFocusedPoint)")
+                let point = self.tableView.convert(lastFocusedPoint, to: self.view)
+                print("Converted Point: \(point)")
+                let neededShift = UIScreen.main.bounds.height - point.y - keyboardHeight - 40
+                print("Needed shift: \(neededShift)")
+                if (neededShift < 0) {
+                    print(scrollView.contentOffset)
+                    self.scrollView.contentInset.bottom = -neededShift + scrollView.contentOffset.y + 20
+                    self.scrollView.setContentOffset(CGPoint(x: 0, y: -neededShift + scrollView.contentOffset.y), animated: true)
+                }
+            }
+        }
+    }
+    
+    @objc func hideKeyboard(notification: Notification) {
+        Logger.log("Hide")
+    }
+    
+    @objc func clearKeyboard(_ sender: UITapGestureRecognizer) {
+        print(sender.location(in: self.view))
+        view.endEditing(true)
+        self.scrollToTop()
+    }
+}
+
+extension TranslationsCollectionViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        print(#function)
+        return false
     }
 }
 

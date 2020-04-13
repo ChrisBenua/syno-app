@@ -22,9 +22,6 @@ public class UserCard implements Serializable {
     @JsonProperty("translated_word")
     private String translatedWord;
 
-    @JsonProperty("language")
-    private String language;
-
     @JsonProperty("time_created")
     private LocalDateTime timeCreated;
 

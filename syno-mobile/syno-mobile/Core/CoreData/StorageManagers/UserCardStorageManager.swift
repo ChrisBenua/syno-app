@@ -11,7 +11,7 @@ import CoreData
 
 
 class UserCardStorageManager: IUserCardsStorageManager {
-    func createUserCard(sourceDict: DbUserDictionary?, translatedWord: String, language: String, timeCreated: Date?, timeModified: Date?, serverId: Int64?, translation: [DbTranslation]?, completion: ((DbUserCard?) -> Void)?) {
+    func createUserCard(sourceDict: DbUserDictionary?, translatedWord: String, timeCreated: Date?, timeModified: Date?, serverId: Int64?, translation: [DbTranslation]?, completion: ((DbUserCard?) -> Void)?) {
         //DispatchQueue.global(qos: .background).async {
             let dictObjectId = sourceDict?.objectID
             
@@ -19,7 +19,6 @@ class UserCardStorageManager: IUserCardsStorageManager {
             
             self.saveContext.performAndWait {
                 card?.translatedWord = translatedWord
-                card?.language = language
                 card?.timeCreated = timeCreated
                 card?.timeModified = timeModified
                 if let serverId = serverId {
