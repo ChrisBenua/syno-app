@@ -20,11 +20,12 @@ class TranslationToDtoMapperTest {
     
     @Test
     void convert() {
-        DbTranslation translation = DbTranslation.builder().transcription("t").comment("c").translation("tr").id(1L)
+        DbTranslation translation = DbTranslation.builder().pin("pin").transcription("t").comment("c").translation("tr").id(1L)
                 .usageSample("s").timeModified(LocalDateTime.now()).timeCreated(LocalDateTime.now()).build();
         var result = mapper.convert(translation, null);
 
         assertEquals(result.getId(), translation.getId());
+        assertEquals(result.getPin(), "pin");
         assertEquals(result.getComment(), translation.getComment());
         assertEquals(result.getTimeCreated(), translation.getTimeCreated());
         assertEquals(result.getTimeModified(), translation.getTimeModified());

@@ -32,7 +32,7 @@ public class DbDictShare {
     private LocalDateTime activationTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="owner_id")
+    @JoinColumn(name="owner_id", referencedColumnName = "id")
     private DbUser owner;
 
     @OneToOne(cascade = CascadeType.ALL)

@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Builder
 @Getter
@@ -26,6 +27,9 @@ public class DbUserCard {
 
     @Column(name="translated_word")
     private String translatedWord;
+
+    @Column(name="pin")
+    private String pin;
 
     @CreationTimestamp
     @Column(name="time_created")
@@ -86,6 +90,12 @@ public class DbUserCard {
             return ((DbUserCard)other).getId().equals(this.getId());
         }
         return false;
+    }
+
+    @PrePersist
+    private void setUUID() {
+        if (pin == null)
+            this.pin = UUID.randomUUID().toString();
     }
 
     @Override

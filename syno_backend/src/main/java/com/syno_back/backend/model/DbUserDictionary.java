@@ -1,9 +1,6 @@
 package com.syno_back.backend.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,6 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Builder
 @AllArgsConstructor
@@ -27,13 +25,19 @@ public class DbUserDictionary {
     @Column(name="name")
     private String name;
 
+    @Column(name="pin")
+    private String pin;
+
+    @Setter
     @Column(name="language")
     private String language;
 
+    @Setter
     @CreationTimestamp
     @Column(name="time_created")
     private LocalDateTime timeCreated;
 
+    @Setter
     @UpdateTimestamp
     @Column(name="time_modified")
     private LocalDateTime timeModified;
@@ -70,6 +74,10 @@ public class DbUserDictionary {
         this.userCards.forEach(card -> card.setUserDictionary(this));
     }
 
+    public void removeUserCard(DbUserCard card) {
+        this.userCards.remove(card);
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == null) {
@@ -80,6 +88,12 @@ public class DbUserDictionary {
             return ((DbUserDictionary)other).getId().equals(this.getId());
         }
         return false;
+    }
+
+    @PrePersist
+    private void setUUID() {
+        if (pin == null)
+            this.pin = UUID.randomUUID().toString();
     }
 
     @Override

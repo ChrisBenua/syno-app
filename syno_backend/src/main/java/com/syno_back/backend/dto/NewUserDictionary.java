@@ -14,6 +14,9 @@ public class NewUserDictionary implements Serializable {
     @JsonProperty("name")
     private String name;
 
+    @JsonProperty("pin")
+    private String pin;
+
     @JsonProperty("language")
     private String language;
 

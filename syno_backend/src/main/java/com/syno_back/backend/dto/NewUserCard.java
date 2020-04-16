@@ -18,6 +18,9 @@ public class NewUserCard implements Serializable {
     @JsonProperty("translated_word")
     private String translatedWord;
 
+    @JsonProperty("pin")
+    private String pin;
+
     @JsonProperty("translations")
     private List<NewUserTranslation> translations;
 }

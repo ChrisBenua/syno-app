@@ -6,6 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Builder
 @AllArgsConstructor
@@ -30,6 +31,9 @@ public class DbTranslation {
 
     @Column(name="usage_sample")
     private String usageSample;
+
+    @Column(name="pin")
+    private String pin;
 
     @CreationTimestamp
     @Column(name="time_created")
@@ -60,6 +64,12 @@ public class DbTranslation {
             return ((DbTranslation)other).getId().equals(this.getId());
         }
         return false;
+    }
+
+    @PrePersist
+    private void setUUID() {
+        if (pin == null)
+            this.pin = UUID.randomUUID().toString();
     }
 
     @Override

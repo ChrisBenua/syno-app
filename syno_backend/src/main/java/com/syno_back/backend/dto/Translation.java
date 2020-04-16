@@ -18,6 +18,9 @@ public class Translation implements Serializable {
     @JsonProperty("id")
     private Long id;
 
+    @JsonProperty("pin")
+    private String pin;
+
     @JsonProperty("translation")
     private String translation;
 

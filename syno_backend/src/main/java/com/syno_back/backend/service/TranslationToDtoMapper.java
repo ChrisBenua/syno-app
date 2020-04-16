@@ -11,7 +11,7 @@ public class TranslationToDtoMapper implements IDtoMapper<DbTranslation, Transla
     public Translation convert(DbTranslation dto, Iterable<Pair<String, ?>> additionalFields) {
         var builder = Translation.builder().id(dto.getId()).comment(dto.getComment()).transcription(dto.getTranscription())
                 .timeCreated(dto.getTimeCreated()).timeModified(dto.getTimeModified()).translation(dto.getTranslation())
-                .usageSample(dto.getUsageSample());
+                .usageSample(dto.getUsageSample()).pin(dto.getPin());
         return builder.build();
     }
 }

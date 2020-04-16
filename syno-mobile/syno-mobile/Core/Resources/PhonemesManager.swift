@@ -26,7 +26,8 @@ class PhonemesManager: IPhonemesManager {
     func initialize() {
         if (!isInitialized) {
             self.dispatchGroup.enter()
-            DispatchQueue.global(qos: .background).async {
+            Logger.log("started initializing dict")
+            DispatchQueue.global(qos: .userInitiated).async {
                 let path = Bundle.main.path(forResource: "phonemes", ofType: "txt")!
                 let str = try! String(contentsOfFile: path, encoding: .utf8)
                 for line in str.split(separator: "\n") {
@@ -36,6 +37,7 @@ class PhonemesManager: IPhonemesManager {
                     self.dict[String(arr[0])] = String(arr[1])
                 }
                 self.dispatchGroup.leave()
+                Logger.log("ended initializing dict")
             }
         }
     

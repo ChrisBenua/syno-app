@@ -39,7 +39,7 @@ protocol IConfigurableTranslationCell {
 }
 
 
-class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, ITranslationCellConfiguration, UITextViewDelegate {
+class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, ITranslationCellConfiguration {
     
     public class func cellId() -> String {
         return "TranslationCellId"
@@ -116,6 +116,7 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
         let tf = CommonUIElements.defaultTextField(backgroundColor: .white, edgeInsets: UIEdgeInsets(top: 3, left: 15, bottom: 3, right: 0))
         tf.layer.borderWidth = 0
         tf.placeholder = "Перевод"
+        tf.delegate = self
         tf.font = UIFont.systemFont(ofSize: 18)
         
         tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
@@ -136,7 +137,8 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
         tf.placeholder = "Комментарий"
         tf.layer.borderWidth = 0
         tf.font = UIFont.systemFont(ofSize: 18)
-        
+        tf.delegate = self
+
         tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         tf.addTarget(self, action: #selector(didEndEditingTextField(_:)), for: .editingDidEnd)
         tf.addTarget(self, action: #selector(editingDidBegin(_:)), for: .editingDidBegin)
@@ -149,7 +151,8 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
         tf.layer.borderWidth = 0
         tf.placeholder = "Транскрипция"
         tf.font = UIFont.systemFont(ofSize: 18)
-        
+        tf.delegate = self
+
         tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         tf.addTarget(self, action: #selector(didEndEditingTextField(_:)), for: .editingDidEnd)
         tf.addTarget(self, action: #selector(editingDidBegin(_:)), for: .editingDidBegin)
@@ -162,6 +165,7 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     lazy var sampleTextField: UITextField = {
         let tf = CommonUIElements.defaultTextField(backgroundColor: .white, edgeInsets: UIEdgeInsets(top: 3, left: 15, bottom: 3, right: 0))
         tf.layer.borderWidth = 0
+        tf.delegate = self
         tf.placeholder = sampleTextViewPlaceholder
         tf.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         tf.addTarget(self, action: #selector(didEndEditingTextField(_:)), for: .editingDidEnd)
@@ -201,7 +205,6 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     }
     
     @objc private func textFieldDidChange(_ textField: UITextField) {
-        
         delegate?.update(caller: self, newConf: generateCellConf())
     }
     
@@ -262,5 +265,17 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     
     @objc func onSpeakButtonPressed() {
         AVSpeechSynthesizer().speak(AVSpeechUtterance(string: self.translationTextField.text ?? ""))
+    }
+}
+
+extension TranslationTableViewCell: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        let arr = [self.translationTextField, self.transcriptionTextField, self.commentTextField, self.sampleTextField]
+        let ind = arr.firstIndex(of: textField)!
+        if (ind < arr.count - 1) {
+            arr[ind + 1].becomeFirstResponder()
+        }
+        return true
     }
 }

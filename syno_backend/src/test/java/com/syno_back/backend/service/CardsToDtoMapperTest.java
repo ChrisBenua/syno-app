@@ -21,19 +21,21 @@ class CardsToDtoMapperTest {
 
     @Test
     void convert() {
-        DbUserCard card = DbUserCard.builder().id(1L).translatedWord("word")
-                .translations(List.of(DbTranslation.builder().id(2L).usageSample("s").comment("c").transcription("t")
+        DbUserCard card = DbUserCard.builder().id(1L).pin("pin").translatedWord("word")
+                .translations(List.of(DbTranslation.builder().id(2L).pin("trans").usageSample("s").comment("c").transcription("t")
                         .translation("tr").timeCreated(LocalDateTime.now()).timeModified(LocalDateTime.now()).build()))
                 .timeCreated(LocalDateTime.now()).timeModified(LocalDateTime.now()).build();
         var result = mapper.convert(card, null);
 
         assertEquals(result.getId(), card.getId());
+        assertEquals(result.getPin(), "pin");
         assertEquals(result.getTimeCreated(), card.getTimeCreated());
         assertEquals(result.getTimeModified(), card.getTimeModified());
         assertEquals(result.getTranslatedWord(), card.getTranslatedWord());
         assertEquals(result.getTranslations().size(), 1);
 
         for (int i = 0; i < card.getTranslations().size(); ++i) {
+            assertEquals(result.getTranslations().get(i).getPin(), "trans");
             assertEquals(result.getTranslations().get(i).getId(), card.getTranslations().get(i).getId());
             assertEquals(result.getTranslations().get(i).getComment(), card.getTranslations().get(i).getComment());
             assertEquals(result.getTranslations().get(i).getTimeCreated(), card.getTranslations().get(i).getTimeCreated());

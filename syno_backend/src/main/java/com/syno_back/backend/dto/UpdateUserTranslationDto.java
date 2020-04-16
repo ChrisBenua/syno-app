@@ -1,20 +1,18 @@
 package com.syno_back.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.syno_back.backend.model.DbTranslation;
-import com.syno_back.backend.model.DbUserCard;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
+import java.time.LocalDateTime;
 
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class NewUserTranslation implements Serializable {
+@Builder
+public class UpdateUserTranslationDto {
     @JsonProperty("pin")
     private String pin;
 
@@ -29,4 +27,10 @@ public class NewUserTranslation implements Serializable {
 
     @JsonProperty("usage_sample")
     private String usageSample;
+
+    @JsonProperty("time_created")
+    private LocalDateTime timeCreated;
+
+    @JsonProperty("time_modified")
+    private LocalDateTime timeModified;
 }

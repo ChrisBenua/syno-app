@@ -21,7 +21,7 @@ class UserDictionaryDtoMapperTest {
 
     @Test
     void convert() {
-        var dto = new NewUserDictionary("name", "ru-en");
+        var dto = new NewUserDictionary("name","pin", "ru-en");
         var owner = DbUser.builder().email("email").password("pass").id(1L).build();
 
         var dbDict = mapper.convert(dto,  List.of(Pair.of("owner", owner)));
@@ -32,7 +32,7 @@ class UserDictionaryDtoMapperTest {
 
     @Test
     void noSuchMethodInBuilder() {
-        var dto = new NewUserDictionary("name", "ru-en");
+        var dto = new NewUserDictionary("name", "pin", "ru-en");
         var owner = DbUser.builder().email("email").password("pass").id(1L).build();
         assertThrows(RuntimeException.class, () -> mapper.convert(dto,  List.of(Pair.of("OwNer", owner))));
     }

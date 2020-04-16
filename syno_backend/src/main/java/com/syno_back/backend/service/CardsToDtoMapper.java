@@ -24,7 +24,7 @@ public class CardsToDtoMapper implements IDtoMapper<DbUserCard, UserCard>  {
     public UserCard convert(DbUserCard dto, Iterable<Pair<String, ?>> additionalFields) {
         var builder = UserCard.builder().id(dto.getId()).translatedWord(dto.getTranslatedWord())
                 .translations(dto.getTranslations().stream().map((card) -> translationMapper.convert(card, null)).collect(Collectors.toList()))
-                .timeCreated(dto.getTimeCreated()).timeModified(dto.getTimeModified());
+                .timeCreated(dto.getTimeCreated()).timeModified(dto.getTimeModified()).pin(dto.getPin());
         return builder.build();
     }
 }

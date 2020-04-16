@@ -3,8 +3,11 @@ package com.syno_back.backend.controllers;
 import com.syno_back.backend.datasource.DbUserDictionaryRepository;
 import com.syno_back.backend.datasource.UserRepository;
 import com.syno_back.backend.dto.NewUserDictionary;
+import com.syno_back.backend.dto.UpdateRequestDto;
 import com.syno_back.backend.dto.UserDictionary;
+import com.syno_back.backend.jwt.ResponseMessage;
 import com.syno_back.backend.model.DbUserDictionary;
+import com.syno_back.backend.service.IDictsUpdateService;
 import com.syno_back.backend.service.IDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -35,6 +39,9 @@ public class UserDictionaryController {
 
     @Autowired
     private IDtoMapper<DbUserDictionary, UserDictionary> fromDtoMapper;
+
+    @Autowired
+    private IDictsUpdateService dictsUpdateService;
 
     @GetMapping(value = "/my_all", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('USER')")
@@ -58,5 +65,16 @@ public class UserDictionaryController {
         userRepository.save(owner.get());
 
         return ResponseEntity.accepted().body(String.format("Dictionary with name %s created successfully", newUserDictionary.getName()));
+    }
+
+    @PostMapping(value = "/update")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity updateUserDicts(Authentication auth, @Valid @RequestBody UpdateRequestDto requestDto) {
+        String userEmail = ((User)auth.getPrincipal()).getUsername();
+        var owner = userRepository.findByEmail(userEmail);
+
+        dictsUpdateService.performUpdates(owner.get(), requestDto);
+
+        return ResponseEntity.ok(new ResponseMessage("Updated successfully"));
     }
 }

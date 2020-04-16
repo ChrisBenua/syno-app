@@ -77,17 +77,19 @@ class UserDictionaryControllerTest {
                 .id(1L).email(email).password("123").build()));
         ArrayList<DbUserDictionary> mockReturnValue = new ArrayList<>();
         ArrayList<DbUserCard> mockCards = new ArrayList<DbUserCard>();
-        mockCards.add(DbUserCard.builder().id(2L).translatedWord("word").translations(new ArrayList<>()).build());
-        mockReturnValue.add(DbUserDictionary.builder().name("name").id(1L).userCards(mockCards).build());
+        mockCards.add(DbUserCard.builder().pin("card").id(2L).translatedWord("word").translations(new ArrayList<>()).build());
+        mockReturnValue.add(DbUserDictionary.builder().pin("dict").name("name").id(1L).userCards(mockCards).build());
         Mockito.when(userDictionaryRepository.findByOwner_Email(email)).thenReturn(mockReturnValue);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/dicts/my_all").with(user("email").roles("USER"))).andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", is("name")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", is(1)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].user_cards[0].language", is("ru-en")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].pin", is("dict")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].user_cards[0].translated_word", is("word")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].user_cards[0].id", is(2)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].user_cards[0].id", is(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].user_cards[0].pin", is("card")))
+        ;
 
     }
 }
@@ -131,7 +133,7 @@ class UserDictionaryControllerTest1 {
         userRepository.save(DbUser.builder().email(email).password("123").build());
         userRepository.flush();
 
-        var newUserDictionary = new NewUserDictionary("name", "ru-en");
+        var newUserDictionary = new NewUserDictionary("name", "pin", "ru-en");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/dicts/new_dict").with(user("email").roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -146,6 +148,7 @@ class UserDictionaryControllerTest1 {
         assertEquals(userDict.getOwner().getEmail(), "email");
         assertEquals(userDict.getName(), "name");
         assertEquals(userDict.getLanguage(), "ru-en");
+        assertNotNull(userDict.getPin());
         assertEquals(userDict.getOwner().getUserDictionaries().size(), 1);
         assertEquals(userDict.getOwner().getUserDictionaries().get(0).getName(), "name");
     }
@@ -153,7 +156,7 @@ class UserDictionaryControllerTest1 {
     @Test
     @Transactional
     void createUserDictionaryNoSuchUser() throws Exception {
-        var newUserDictionary = new NewUserDictionary("name", "ru-en");
+        var newUserDictionary = new NewUserDictionary("name", "pin", "ru-en");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/dicts/new_dict").with(user("email").roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)

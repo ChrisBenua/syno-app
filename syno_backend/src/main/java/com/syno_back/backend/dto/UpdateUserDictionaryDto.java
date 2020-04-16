@@ -1,23 +1,19 @@
 package com.syno_back.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.syno_back.backend.model.DbUserDictionary;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
-public class UserDictionary implements Serializable {
-    @JsonProperty("id")
-    private Long id;
-
+@Builder
+public class UpdateUserDictionaryDto {
     @JsonProperty("pin")
     private String pin;
 
@@ -34,7 +30,5 @@ public class UserDictionary implements Serializable {
     private LocalDateTime timeModified;
 
     @JsonProperty("user_cards")
-    private List<UserCard> userCards;
-
-    private static final long serialVersionUID = -1664970284520387974L;
+    private List<UpdateUserCardDto> userCards;
 }

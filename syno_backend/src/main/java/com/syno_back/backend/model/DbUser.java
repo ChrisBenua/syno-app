@@ -60,6 +60,10 @@ public class DbUser {
     @Builder.Default
     private List<DbUserDictionary> userDictionaries = new ArrayList<>();
 
+    public void removeDictionary(DbUserDictionary dict) {
+        userDictionaries.remove(dict);
+    }
+
     public DbUser(String email, String password) {
         this.email = email;
         this.password = password;

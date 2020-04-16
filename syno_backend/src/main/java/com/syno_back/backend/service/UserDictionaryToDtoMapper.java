@@ -22,7 +22,7 @@ public class UserDictionaryToDtoMapper implements IDtoMapper<DbUserDictionary, U
 
     @Override
     public UserDictionary convert(@NonNull DbUserDictionary dto, Iterable<Pair<String, ?>> additionalFields) {
-        return UserDictionary.builder().id(dto.getId()).name(dto.getName()).timeCreated(dto.getTimeCreated())
+        return UserDictionary.builder().id(dto.getId()).pin(dto.getPin()).name(dto.getName()).timeCreated(dto.getTimeCreated())
                 .timeModified(dto.getTimeModified()).language(dto.getLanguage()).userCards(dto.getUserCards().stream().map((card) -> cardMapper.convert(card, null)).collect(Collectors.toList()))
                 .build();
     }

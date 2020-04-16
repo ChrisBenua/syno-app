@@ -40,10 +40,10 @@ public class ShareDictController {
     private UserRepository userRepository;
 
     public ShareDictController(@Autowired ICredentialProvider<DbUserDictionary, Authentication> provider,
-                                @Autowired DbDictShareRepository shareRepository,
-                                @Autowired DbUserDictionaryRepository repository, @Autowired IDictShareService shareService,
-                                @Autowired IEntityCloner<DbUserDictionary> dictCloner,
-                                @Autowired UserRepository userRepository) {
+                               @Autowired DbDictShareRepository shareRepository,
+                               @Autowired DbUserDictionaryRepository repository, @Autowired IDictShareService shareService,
+                               @Autowired IEntityCloner<DbUserDictionary> dictCloner,
+                               @Autowired UserRepository userRepository) {
         this.dictCredentialProvider = provider;
         this.shareRepository = shareRepository;
         this.dictionaryRepository = repository;
