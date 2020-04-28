@@ -1,16 +1,10 @@
-//
-//  TranslatedWordView.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 14.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// View for displaying translated word
 class TranslatedWordView: UIView {
     
+    /// background shadow view
     lazy var shadowView: UIView = {
         let view = BaseShadowView()
         view.containerViewBackgroundColor = UIColor(red: 239.0/255, green: 239.0/255, blue: 239.0/255, alpha: 1)
@@ -20,6 +14,7 @@ class TranslatedWordView: UIView {
         return view
     }()
     
+    /// TextField for displaying translated word
     lazy var translatedWordLabel: UITextField = {
         let label = UITextField()
         label.font = .systemFont(ofSize: 20, weight: .regular)

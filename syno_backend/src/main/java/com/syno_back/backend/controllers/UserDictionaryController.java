@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/dicts")
@@ -47,7 +48,7 @@ public class UserDictionaryController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity getUserDictionaries(Authentication auth) {
         var dtoResp = userDictionaryRepository.findByOwner_Email(((User)auth.getPrincipal()).getUsername()).stream().
-                        map((dict) -> fromDtoMapper.convert(dict, null));
+                        map((dict) -> fromDtoMapper.convert(dict, null)).collect(Collectors.toList());
         return ResponseEntity.ok(dtoResp);
     }
 

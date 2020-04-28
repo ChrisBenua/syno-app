@@ -1,11 +1,3 @@
-//
-//  Anchor.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 23.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
@@ -22,7 +14,7 @@ extension UIView {
      - Parameter paddingBottom: padding constant from bottomAnchor
      - Parameter paddingRight: padding constant from rightAnchor
      - Parameter height: if one of Top or Bottom anchors isn't set, you have to set height explicitly
-     - Parameter width: id one of Left or Right anchor isn't set, you have to set width explicitly
+     - Parameter width: if one of Left or Right anchor isn't set, you have to set width explicitly
      */
     func anchor(top: NSLayoutYAxisAnchor?, left: NSLayoutXAxisAnchor?, bottom: NSLayoutYAxisAnchor?, right: NSLayoutXAxisAnchor?,  paddingTop: CGFloat, paddingLeft: CGFloat, paddingBottom: CGFloat, paddingRight: CGFloat, width: CGFloat, height: CGFloat) {
         

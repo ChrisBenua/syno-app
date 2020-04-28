@@ -1,15 +1,16 @@
-//
-//  AppUserStorageManager.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 01.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import CoreData
 
 class AppUserStorageManager: IAppUserStorageManager {
+    func getCurrentUserEmail() -> String? {
+        let user = self.getCurrentAppUser()!
+        var email: String? = nil
+        user.managedObjectContext?.performAndWait {
+            email = user.email
+        }
+        return email
+    }
+    
     
     var saveContext: NSManagedObjectContext {
         get {
@@ -62,21 +63,28 @@ class AppUserStorageManager: IAppUserStorageManager {
     }
     
     func getCurrentAppUser() -> DbAppUser? {
-        return try? stack.mainContext.fetch(DbAppUser.requestActive()).first
+        var res: [DbAppUser] = []
+        self.stack.mainContext.performAndWait {
+            res = try! self.stack.mainContext.fetch(DbAppUser.requestActive())
+        }
+        return res.first
+        
     }
     
     func markAppUserAsCurrent(user: DbAppUser) {
-        let userObjectId = user.objectID
-        let fetchRequest: NSFetchRequest<DbAppUser> = DbAppUser.fetchRequest()
-        let allUsers = try! self.mainContext.fetch(fetchRequest)
-        
-        for usr in allUsers {
-            if usr.objectID != userObjectId {
-                usr.isCurrent = false
+        self.mainContext.perform {
+            let userObjectId = user.objectID
+            let fetchRequest: NSFetchRequest<DbAppUser> = DbAppUser.fetchRequest()
+            let allUsers = try! self.mainContext.fetch(fetchRequest)
+            
+            for usr in allUsers {
+                if usr.objectID != userObjectId {
+                    usr.isCurrent = false
+                }
             }
+            user.isCurrent = true
+            self.stack.performSave(with: self.mainContext, completion: nil)
         }
-        user.isCurrent = true
-        self.stack.performSave(with: self.mainContext, completion: nil)
     }
 }
 

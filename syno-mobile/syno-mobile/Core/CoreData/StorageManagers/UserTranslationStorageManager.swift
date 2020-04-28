@@ -1,17 +1,9 @@
-//
-//  UserTranslationStorageManager.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 01.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import CoreData
 
 
 class UserTranslationStorageManager: ITranslationsStorageManager {
-    func createTranslation(sourceCard: DbUserCard?, usageSample: String, translation: String, transcription: String, comment: String, serverId: Int64?, timeCreated: Date?, timeModified: Date?, completion: ((DbTranslation?) -> Void)?) {
+    func createTranslation(sourceCard: DbUserCard?, usageSample: String, translation: String, transcription: String, comment: String, serverId: Int64?, timeCreated: Date?, timeModified: Date?, pin: String?, completion: ((DbTranslation?) -> Void)?) {
         //DispatchQueue.global(qos: .background).async {
             let sourceCardObjectId = sourceCard?.objectID
             
@@ -28,10 +20,15 @@ class UserTranslationStorageManager: ITranslationsStorageManager {
                     dbTranslation?.serverId = servId
                 }
                 
+                if let pin = pin {
+                    dbTranslation?.pin = pin
+                }
+                
                 if let objId = sourceCardObjectId {
                     let cardInSaveCtx_ = DbUserCard.getCardWith(objectId: objId, context: self.saveContext)
                     if let cardInSaveCtx = cardInSaveCtx_ {
                         cardInSaveCtx.addToTranslations(dbTranslation!)
+                        dbTranslation?.sourceCard = cardInSaveCtx
                     }
                 }
                 

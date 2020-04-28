@@ -1,11 +1,3 @@
-//
-//  DictsFetchResultsControllerDelegate.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 05.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 import CoreData
@@ -28,7 +20,7 @@ class DictsControllerCollectionViewFRCDelegate: NSObject, IDefaultCollectionView
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("Type: \(type), indexPath: \(indexPath)")
+        Logger.log("Type: \(type), indexPath: \(indexPath)")
         if (type == .delete) {
             if indexPath != nil {
                 self.collectionView.deleteItems(at: [indexPath!])
@@ -76,24 +68,7 @@ class DefaultCollectionViewFRCDelegate: NSObject, IDefaultCollectionViewFetchRes
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("Type: \(type), indexPath: \(indexPath)")
-//        if (type == .delete) {
-//            if indexPath != nil {
-//                self.collectionView.deleteItems(at: [indexPath!])
-//            }
-//        } else if (type == .insert) {
-//            if indexPath != nil {
-//                self.collectionView.reloadData()
-//            }
-//        } else if (type == .move) {
-//            if indexPath != nil {
-//                self.collectionView.moveItem(at: indexPath!, to: newIndexPath!)
-//            }
-//        } else if (type == .update) {
-//            if indexPath != nil {
-//                self.collectionView.reloadItems(at: [indexPath!])
-//            }
-//        }
+        Logger.log("Type: \(type), indexPath: \(indexPath)")
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {

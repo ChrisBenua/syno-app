@@ -1,16 +1,11 @@
-//
-//  TestResultsTableViewCell.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 11.04.2020.
-//  Copyright © 2020 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// Protocol defines data needed for `TestResultsTableViewCell`
 protocol ITestResultsTableViewCellConfiguration {
+    /// Current translation
     var translation: String? { get }
+    /// Cells background color
     var backgroundColor: UIColor { get }
 }
 
@@ -19,16 +14,24 @@ class TestResultsTableViewCellConfiguration: ITestResultsTableViewCellConfigurat
     
     var backgroundColor: UIColor
     
+    /**
+     Creates new `TestResultsTableViewCellConfiguration`
+     - Parameter translation: Current translation
+     - Parameter backgroundColor:Cells background color
+     */
     init(translation: String?, backgroundColor: UIColor) {
         self.translation = translation
         self.backgroundColor = backgroundColor
     }
 }
 
+/// Protocol for updating `TestResultsTableViewCell`
 protocol IConfigurableTestResultsTableViewCell {
+    /// Updates cell's state
     func configure(config: ITestResultsTableViewCellConfiguration)
 }
 
+/// TableView cell for displaying user's result on current translation
 class TestResultsTableViewCell: UITableViewCell, IConfigurableTestResultsTableViewCell {
     static let cellId = "TestResultsTableViewCellId"
 
@@ -39,10 +42,9 @@ class TestResultsTableViewCell: UITableViewCell, IConfigurableTestResultsTableVi
     func configure(config: ITestResultsTableViewCellConfiguration) {
         self.translationLabel.text = config.translation
         self.baseShadowView.shadowView.backgroundColor = config.backgroundColor
-
-        print("Color: \(config.backgroundColor)")
     }
     
+    /// Label for displaying current translation
     lazy var translationLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 18)
@@ -51,6 +53,7 @@ class TestResultsTableViewCell: UITableViewCell, IConfigurableTestResultsTableVi
         return label
     }()
     
+    /// Main view
     lazy var baseShadowView: BaseShadowView = {
         let view = BaseShadowView()
         view.cornerRadius = 20

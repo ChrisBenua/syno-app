@@ -1,11 +1,3 @@
-//
-//  DbUserTestCardExt.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 19.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import CoreData
 
@@ -23,7 +15,6 @@ extension DbUserTestCard {
         return testCard
     }
     
-    //Additionaly set shuffle number!!!
     static func fromDbUserCard(context: NSManagedObjectContext, card: DbUserCard, sourceTestDict: DbUserTestDict?) -> DbUserTestCard {
         guard let testCard = insertUserTestCard(into: context) else {
             fatalError("Cant create DbUserTestCard")

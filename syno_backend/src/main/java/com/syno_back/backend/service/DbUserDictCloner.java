@@ -17,7 +17,7 @@ public class DbUserDictCloner implements IEntityCloner<DbUserDictionary> {
 
     @Override
     public DbUserDictionary clone(DbUserDictionary cloneable) {
-        DbUserDictionary clonedDict = DbUserDictionary.builder().name(cloneable.getName()).build();
+        DbUserDictionary clonedDict = DbUserDictionary.builder().name(cloneable.getName()).language(cloneable.getLanguage()).build();
 
         var clonedCards = cloneable.getUserCards().stream().map(card -> cardCloner.clone(card)).collect(Collectors.toList());
         clonedDict.setUserCards(clonedCards);

@@ -1,18 +1,15 @@
-//
-// Created by Ирина Улитина on 26.11.2019.
-// Copyright (c) 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
 extension UIAlertAction {
+    /// Default ok action
     static var okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
 }
 
 extension UIAlertController {
-    static func okAlertController(title: String) -> UIAlertController {
-        let controller = UIAlertController(title: title, message: nil, preferredStyle: .alert)
+    /// Alert Controller with dummy ok action
+    static func okAlertController(title: String, message: String? = nil) -> UIAlertController {
+        let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
         controller.addAction(UIAlertAction.okAction)
         return controller
     }

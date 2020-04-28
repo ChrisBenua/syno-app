@@ -1,11 +1,3 @@
-//
-//  RequestsSettings.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 26.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 
 class RequestSettings {
@@ -16,4 +8,12 @@ class RequestSettings {
     public static let RegisterEndPoint = URLPrefix + "/api/auth/signup"
     
     public static let AllDicts = URLPrefix + "/api/dicts/my_all"
+    
+    public static let UploadDicts = URLPrefix + "/api/dicts/update"
+    
+    public static let AddShare = URLPrefix + "/api/dict_share/add_share"
+    
+    public static func getShare(shareUUID: String) -> String {
+        return URLPrefix + "/api/dict_share/get_share/\(shareUUID)"
+    }
 }

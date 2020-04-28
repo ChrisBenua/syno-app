@@ -1,11 +1,3 @@
-//
-//  NewDictControllerModel.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 10.04.2020.
-//  Copyright © 2020 Christian Benua. All rights reserved.
-//
-
 import Foundation
 
 protocol INewDictControllerNewDictDto {
@@ -32,14 +24,14 @@ class NewDictControllerModel: INewDictControllerModel {
     private var storageManager: IStorageCoordinator
     
     func createNewDict(newDict: INewDictControllerNewDictDto, completionHandler: (() -> Void)?) {
-        self.storageManager.stack.mainContext.performAndWait {
-            let dict = DbUserDictionary.insertUserDict(into: self.storageManager.stack.mainContext)!
+        self.storageManager.stack.saveContext.performAndWait {
+            let dict = DbUserDictionary.insertUserDict(into: self.storageManager.stack.saveContext)!
             dict.timeCreated = Date()
             dict.name = newDict.name
             dict.language = newDict.language
-            dict.owner = storageManager.getCurrentAppUser()
+            dict.owner = try! self.storageManager.stack.saveContext.fetch(DbAppUser.requestActive()).first
             
-            self.storageManager.stack.performSave(with: self.storageManager.stack.mainContext, completion: completionHandler)
+            self.storageManager.stack.performSave(with: self.storageManager.stack.saveContext, completion: completionHandler)
         }
     }
     

@@ -1,11 +1,3 @@
-//
-//  TestViewControllerDataSource.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 05.01.2020.
-//  Copyright © 2020 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
@@ -149,7 +141,6 @@ class TestViewControllerDataProvider: ITestViewControllerDataProvider {
         DispatchQueue.global(qos: .background).async {
             self.dispatchGroup.wait()
             
-            print(self.dbUserTest.objectID)
             self.storageManager.stack.mainContext.performAndWait {
                 for dbTestCard in self.dbUserTest.testDict!.getCards() {
                     let ind = self.cards.firstIndex(of: dbTestCard.sourceCard!)!
@@ -160,16 +151,14 @@ class TestViewControllerDataProvider: ITestViewControllerDataProvider {
                     
                     for dbTranlsation in transArr {
                         if (currCardAnswers.filter({ (answer) -> Bool in
-                            return dbTranlsation.translation!.lowercased() == answer.answer.lowercased().trimmingCharacters(in: .whitespaces)
+                            return dbTranlsation.translation!.lowercased().trimmingCharacters(in: .whitespaces) == answer.answer.lowercased().trimmingCharacters(in: .whitespaces)
                             }).count > 0) {
                             dbTranlsation.isRightAnswered = true
                         }
                     }
                 }
+                self.dbUserTest.endTest()
             }
-            
-            self.dbUserTest.endTest()
-            
             
             self.storageManager.stack.performSave(with: self.storageManager.stack.mainContext) {
                 completionBlock?(self.dbUserTest)
@@ -218,7 +207,7 @@ class TestViewControllerDataSource: NSObject, ITestViewControllerDataSource, ITe
     weak var onFocusedLabelDelegate: IScrollableToPoint?
     
     func endEditingInCell(cell: UITableViewCell) {
-        print("ednediting")
+        Logger.log("end editing")
         onFocusedLabelDelegate?.scrollToTop()
     }
         
@@ -276,6 +265,15 @@ class TestViewControllerDataSource: NSObject, ITestViewControllerDataSource, ITe
     init(state: ITestControllerState, dataProvider: ITestViewControllerDataProvider) {
         self.state = state
         self.dataProvider = dataProvider
+        
+        super.init()
+        addAnswers()
+    }
+    
+    func addAnswers() {
+        for _ in 0..<self.dataProvider.getItem(cardPos: self.state.itemNumber).translationsCount {
+            onAddLineForAnswer()
+        }
     }
 }
 

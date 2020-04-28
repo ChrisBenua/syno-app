@@ -1,14 +1,7 @@
-//
-//  LearnViewGenerator.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 22.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// Defines needed actions with LearnView
 protocol ILearnView: UIView, ILearnControllerDataSourceReactor {
     var controlsView: UIView { get }
 }
@@ -18,12 +11,14 @@ class LearnView: UIView, ILearnView {
     weak var actionsDelegate: ILearnControllerActionsDelegate?
     weak var scrollViewDelegate: UIScrollViewDelegate?
     
+    /// Updates card number, number of translations and translated word
     func setHeaderData() {
         cardNumberLabel.text = "\(self.dataSource.state.itemNumber + 1)/\(self.dataSource.viewModel.count)"
         translationsNumberLabel.text = "\(self.dataSource.viewModel.getItems(currCardPos: self.dataSource.state.itemNumber).count) переводов"
         translatedWordView.translatedWordLabel.text = self.dataSource.viewModel.getTranslatedWord(cardPos: self.dataSource.state.itemNumber)
     }
     
+    /// TableView with translations
     lazy var tableView: UITableView = {
         let tableView = PlainTableView()
         tableView.delegate = self.dataSource
@@ -36,6 +31,7 @@ class LearnView: UIView, ILearnView {
         return tableView
     }()
     
+    /// Wrapper view for `tableView` and `controlsView`
     lazy var collectionContainerView: UIView = {
         let view = BaseShadowView()
         view.shadowView.shadowOffset = CGSize(width: 0, height: 4)
@@ -57,6 +53,7 @@ class LearnView: UIView, ILearnView {
         return view
     }()
     
+    /// View for displaying current translated word
     lazy var translatedWordView: TranslatedWordView = {
         let translatedWordView = TranslatedWordView()
         translatedWordView.translatedWordLabel.isUserInteractionEnabled = false
@@ -64,9 +61,9 @@ class LearnView: UIView, ILearnView {
         return translatedWordView
     }()
     
+    /// Wrapper view with `cardNumberLabel`, `translatedWordView`, `translationsNumberLabel`
     lazy var headerView: UIView = {
         let view = UIView()
-        
         
         let cardNumberLabel = self.cardNumberLabel
         
@@ -90,11 +87,12 @@ class LearnView: UIView, ILearnView {
         return view
     }()
     
+    /// View with action buttons
     lazy var controlsView: UIView = {
-        let plusOneButton = CommonUIElements.defaultSubmitButton(text: "+1", backgroundColor: UIColor.init(red: 96.0/255, green: 157.0/255, blue: 248.0/255, alpha: 1.0))
+        let plusOneButton = CommonUIElements.defaultSubmitButton(text: "+1", backgroundColor: UIColor.init(red: 73.0/255, green: 116.0/255, blue: 171.0/255, alpha: 0.65))
         plusOneButton.addTarget(self, action: #selector(onPlusOneClick), for: .touchUpInside)
         
-        let showAllButton = CommonUIElements.defaultSubmitButton(text: "Все", backgroundColor: UIColor.init(red: 96.0/255, green: 157.0/255, blue: 248.0/255, alpha: 1.0))
+        let showAllButton = CommonUIElements.defaultSubmitButton(text: "Все", backgroundColor: UIColor.init(red: 73.0/255, green: 116.0/255, blue: 171.0/255, alpha: 0.65))
         showAllButton.addTarget(self, action: #selector(onShowAllClick), for: .touchUpInside)
         
         let view = UIView()
@@ -110,6 +108,7 @@ class LearnView: UIView, ILearnView {
         return view
     }()
     
+    /// Label for displaying index number of current card
     lazy var cardNumberLabel: UILabel = {
         let cardNumberLabel = UILabel(); cardNumberLabel.translatesAutoresizingMaskIntoConstraints = false
         cardNumberLabel.font = UIFont.systemFont(ofSize: 20)
@@ -118,6 +117,7 @@ class LearnView: UIView, ILearnView {
         return cardNumberLabel
     }()
     
+    /// Label for displaying number of translations in current card
     lazy var translationsNumberLabel: UILabel = {
         let translationsNumberLabel = UILabel(); translationsNumberLabel.translatesAutoresizingMaskIntoConstraints = false
         translationsNumberLabel.font = UIFont.systemFont(ofSize: 20)
@@ -126,6 +126,12 @@ class LearnView: UIView, ILearnView {
         return translationsNumberLabel
     }()
     
+    /**
+     Creates new `LearnView`
+     - Parameter dataSource: `tableView`'s data source and delegate
+     - Parameter actionsDelegate: instance for reacting on actions buttons clicks
+     - Parameter scrollViewDelegate: instance for reacting on scrolling in tableView scrolling
+     */
     init(dataSource: ILearnControllerTableViewDataSource, actionsDelegate: ILearnControllerActionsDelegate?, scrollViewDelegate: UIScrollViewDelegate?) {
         self.dataSource = dataSource
         self.actionsDelegate = actionsDelegate
@@ -135,22 +141,24 @@ class LearnView: UIView, ILearnView {
         self.addSubview(self.contentView)
         self.contentView.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         setHeaderData()
-        //self.contentView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1).isActive = true
-        //self.contentView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 1).isActive = true
     }
     
+    /// Forbidden to instantiate from Storyboard
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// +1 button click listener
     @objc func onPlusOneClick() {
         self.actionsDelegate?.onPlusOne()
     }
         
+    /// All button click listener
     @objc func onShowAllClick() {
         self.actionsDelegate?.onShowAll()
     }
     
+    /// Wrapper-view for all views on screen
     lazy var contentView: UIView = {
         let view = UIView()
         view.addSubview(self.headerView)
@@ -167,6 +175,7 @@ class LearnView: UIView, ILearnView {
         return view
     }()
     
+    /// Scroll view with all view inside it
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.alwaysBounceVertical = true
@@ -174,13 +183,7 @@ class LearnView: UIView, ILearnView {
         scrollView.delegate = scrollViewDelegate
         scrollView.showsHorizontalScrollIndicator = false
         
-//        scrollView.addSubview(self.headerView)
-//        scrollView.addSubview(self.collectionContainerView)
         scrollView.addSubview(self.contentView)
-        
-//        self.headerView.anchor(top: scrollView.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-//        self.headerView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
-//        self.headerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -40).isActive = true
         
         self.contentView.anchor(top: scrollView.topAnchor, left: nil, bottom: scrollView.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         self.contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
@@ -191,17 +194,21 @@ class LearnView: UIView, ILearnView {
 }
 
 extension LearnView: ILearnControllerDataSourceReactor {
-//    func reload() {
-//        self.tableView.reloadData()
-//        self.setHeaderData()
-//    }
-    
     func addItems(indexPaths: [IndexPath]) {
-        self.tableView.insertRows(at: indexPaths, with: .automatic)
+        UIView.performWithoutAnimation {
+            self.tableView.insertRows(at: indexPaths, with: .none)
+        }
     }
 }
 
+/// Class for generating `LearnView`s
 class LearnViewGenerator {
+    /**
+     Generates new `LearnView`
+     - Parameter dataSource: `tableView`'s data source and delegate
+     - Parameter actionsDelegate: instance for reacting on actions buttons clicks
+     - Parameter scrollViewDelegate: instance for reacting on scrolling in tableView scrolling
+     */
     func generate(dataSource: ILearnControllerTableViewDataSource, actionsDelegate: ILearnControllerActionsDelegate?, scrollViewDelegate: UIScrollViewDelegate?) -> LearnView {
         return LearnView(dataSource: dataSource, actionsDelegate: actionsDelegate, scrollViewDelegate: scrollViewDelegate)
     }

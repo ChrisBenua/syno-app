@@ -1,23 +1,18 @@
-//
-//  TestController.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 05.01.2020.
-//  Copyright © 2020 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// Controller where user takes tests
 class TestViewController: UIViewController, IScrollableToPoint {
+    /// Last focused point to adjust view when keyboard is shown
     private var lastFocusedPoint: CGPoint?
     
+    /// Assembly for creating view controllers
     private var presAssembly: IPresentationAssembly
     
+    /// Shown card number
     private var currCardNumber: Int = 0
     
     func scrollToPoint(point: CGPoint) {
-        print("scrollToPoint")
         lastFocusedPoint = point
     }
     
@@ -36,16 +31,18 @@ class TestViewController: UIViewController, IScrollableToPoint {
             scrollView.setContentOffset(CGPoint(x: 0, y: -scrollView.contentInset.top), animated: animated)
         }
     }
-    
+    /// `ITestView` for each card in dictionary
     private var testViews: [ITestView]
     
-    var contentView: UIView {
+    /// Gets current `ITestView`
+    var contentView: ITestView {
         get {
             testViews[currCardNumber].parentController = self
             return testViews[currCardNumber]
         }
     }
     
+    /// Main scroll view with all views inside
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.alwaysBounceVertical = true
@@ -61,6 +58,12 @@ class TestViewController: UIViewController, IScrollableToPoint {
         return scrollView
     }()
     
+    /**
+      Creates new `TestViewController`
+     - Parameter testViews: `ITestView` for each card in dictionary
+     - Parameter dictName: Dictionary name
+     - Parameter presAssembly: assembly to create view controllers
+     */
     init(testViews: [ITestView], dictName: String, presAssembly: IPresentationAssembly) {
         self.testViews = testViews
         self.presAssembly = presAssembly
@@ -80,8 +83,9 @@ class TestViewController: UIViewController, IScrollableToPoint {
         self.navigationItem.setHidesBackButton(true, animated:true)
     }
     
+    /// Cancel button click listener
     @objc func cancelTest() {
-        print("cancelTest")
+        Logger.log("cancelled test")
         
         self.testViews[currCardNumber].model.cancelTest {
             DispatchQueue.main.async {
@@ -90,8 +94,9 @@ class TestViewController: UIViewController, IScrollableToPoint {
         }
     }
     
+    /// End test button click listener
     @objc func endTest() {
-        print("endTest")
+        Logger.log("Test ended")
         self.testViews[currCardNumber].model.endTest { (test) in
             DispatchQueue.main.async {
                 let okAction = UIAlertAction(title: "Ok", style: .default) { (_) in
@@ -109,9 +114,16 @@ class TestViewController: UIViewController, IScrollableToPoint {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// `UISwipeGestureRecognizer` handlers
     @objc
     func handleSwipes(_ sender: UISwipeGestureRecognizer) {
         var success = false
+        let pt = sender.location(in: self.contentView.tableView)
+        
+        if self.contentView.tableView.bounds.contains(pt) {
+            return
+        }
+        
         var nextView: ITestView?
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
             switch sender.direction {
@@ -122,6 +134,7 @@ class TestViewController: UIViewController, IScrollableToPoint {
                     UIView.performWithoutAnimation {
                         nextView = self.testViews[self.currCardNumber + 1]
                         self.scrollView.addSubview(nextView!)
+                        nextView!.parentController = self
                         nextView!.translatesAutoresizingMaskIntoConstraints = false
                         nextView!.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
                         
@@ -134,14 +147,14 @@ class TestViewController: UIViewController, IScrollableToPoint {
                 }
                 break
             case .right:
-                print("Right Swipe")
+                Logger.log("Right Swipe")
                 if self.currCardNumber > 0 {
                     success = true
                     self.contentView.transform = CGAffineTransform(translationX: self.view.frame.width, y: 0)
                     UIView.performWithoutAnimation {
                         nextView = self.testViews[self.currCardNumber - 1]
                         nextView!.translatesAutoresizingMaskIntoConstraints = false
-
+                        nextView!.parentController = self
                         self.scrollView.addSubview(nextView!)
                         
                         nextView!.topAnchor.constraint(equalTo: self.scrollView.topAnchor).isActive = true
@@ -209,13 +222,17 @@ extension TestViewController: UIGestureRecognizerDelegate {
 }
 
 extension TestViewController {
-    
+    /**
+    Keyboard showing listener
+    - Parameter notification: contains inner data about notification
+    */
     @objc func showKeyboard(notification: NSNotification) {
         if let keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height {
-            print("lastPoint: \(lastFocusedPoint?.y)")
-            print("keyboard height:\(keyboardHeight)")
+            Logger.log("lastPoint: \(lastFocusedPoint?.y)")
+            Logger.log("keyboard height:\(keyboardHeight)")
             
             let neededShift = UIScreen.main.bounds.height - lastFocusedPoint!.y - keyboardHeight + 60
+            Logger.log("neededShift: \(neededShift)")
             if (neededShift < 0) {
                 self.scrollView.contentInset.bottom = -neededShift + scrollView.contentOffset.y + 20
                 self.scrollView.setContentOffset(CGPoint(x: 0, y: -neededShift), animated: true)
@@ -223,10 +240,15 @@ extension TestViewController {
         }
     }
     
+    /**
+    Keyboard hiding listener
+    - Parameter notification: contains inner data about notification
+    */
     @objc func hideKeyboard(notification: NSNotification) {
         Logger.log("Hide")
     }
     
+    /// Tap gesture recignizer handler: ends editing in whole view
     @objc func clearKeyboard() {
         view.endEditing(true)
     }

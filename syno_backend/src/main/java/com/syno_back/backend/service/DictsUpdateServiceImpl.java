@@ -73,6 +73,7 @@ public class DictsUpdateServiceImpl implements IDictsUpdateService {
             if (!updatedPins.contains(updateDictDto.getPin())) {
                 var newDbDict = DbUserDictionary.builder()
                         .pin(updateDictDto.getPin())
+                        .language(updateDictDto.getLanguage())
                         .owner(user)
                         .name(updateDictDto.getName())
                         .timeCreated(updateDictDto.getTimeCreated())

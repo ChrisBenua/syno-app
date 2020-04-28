@@ -1,18 +1,19 @@
-//
-//  PlainTableViewCell.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 13.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// TableView without scrolling
 class PlainTableView: UITableView {
     override var contentSize:CGSize {
         didSet {
             invalidateIntrinsicContentSize()
+        }
+    }
+    
+    override var contentOffset: CGPoint {
+        get {
+            return super.contentOffset
+        } set (newValue) {
+            super.contentOffset = CGPoint(x: 0, y: 0)
         }
     }
 

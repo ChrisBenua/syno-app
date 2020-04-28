@@ -1,58 +1,7 @@
-//
-//  UserDictsFetchService.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 05.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
+import CoreData
 
-protocol IAtomicCounterSubscriber {
-    var notifyOn: Int { get }
-    func notify()
-}
-
-class AtomicCounter {
-    private let innerQueue = DispatchQueue(label: "atomicCounterQueue", qos: .background, attributes: .concurrent)
-    private var value: Int
-    private var notifications: [IAtomicCounterSubscriber] = []
-    
-    init(value: Int = 0) {
-        self.value = value
-    }
-    
-    func increment() {
-        innerQueue.async(flags: .barrier) {
-            self.value += 1
-            self.notifications.filter({ $0.notifyOn == self.value }).forEach { (sub) in
-                sub.notify()
-            }
-        }
-    }
-    
-    func decrement() {
-        innerQueue.async(flags: .barrier) {
-            self.value -= 1
-            self.notifications.filter({ $0.notifyOn == self.value }).forEach { (sub) in
-                sub.notify()
-            }
-        }
-    }
-    
-    func get() -> Int {
-        innerQueue.sync {
-            self.value
-        }
-    }
-    
-    func subscribe(subscriber: IAtomicCounterSubscriber) {
-        innerQueue.async(flags: .barrier) {
-            self.notifications.append(subscriber)
-        }
-    }
-}
-
+/// Class responsible for updating user's dictionaries
 class UserDictsFetchService: IUserDictionaryFetchService {
     
     private let innerQueue: DispatchQueue// = DispatchQueue(label: "UserDictsFetchService")
@@ -61,64 +10,78 @@ class UserDictsFetchService: IUserDictionaryFetchService {
     
     private var cardsFetchService: IUserCardsFetchService
         
+    /**
+     Creates new `UserDictsFetchService`
+     - Parameter innerQueue: queue where to perform async tasks
+     - Parameter storageManager: instance for CRUD operations with CodeData objects
+     - Parameter cardsFetchService: instance for updating/creating cards in dictionary
+     */
     init(innerQueue: DispatchQueue,storageManager: IStorageCoordinator, cardsFetchService: IUserCardsFetchService) {
         self.innerQueue = innerQueue
         self.storageManager = storageManager
         self.cardsFetchService = cardsFetchService
     }
     
-    func updateDicts(dicts: [GetDictionaryResponseDto], owner: DbAppUser, completion: (() -> Void)?) {
-        let serverIds = dicts.map{ $0.id }
-
-        let dictsMap = Dictionary<Int64, GetDictionaryResponseDto>.init(uniqueKeysWithValues: dicts.map({($0.id, $0)}))
-        var notUsedIds = Set.init(serverIds)
+    func updateDicts(dicts: [GetDictionaryResponseDto], owner: DbAppUser, shouldDelete: Bool = true, completion: (() -> Void)?) {
+        //let allUserDicts: [DbUserDictionary] = owner.dictionaries?.toArray() ?? []
+        var updatedPins = Set<String>()
+        let existingPins = Set(dicts.map { (el) -> String in
+            return el.pin
+        })
         
-        let request = DbUserDictionary.requestDictWithIds(ids: serverIds)
-        var res: [DbUserDictionary]?
+        let dispatchGroup = DispatchGroup()
         
         self.storageManager.stack.saveContext.performAndWait {
-            //self.innerQueue.sync {
-                do {
-                    res = try self.storageManager.stack.saveContext.fetch(request)
-                    
-                    if let fetchedDicts = res {
-                        for dict in fetchedDicts {
-                            if let dictDto = dictsMap[dict.serverId] {
-                                dict.name = dictDto.name
-                                dict.timeModified = dictDto.timeModified
-                                
-                                self.cardsFetchService.updateCards(cards: dictDto.userCards, doSave: false, sourceDictProvider: { (cardDto) -> DbUserDictionary? in
-                                    return dict
-                                }, completion: nil)
-                                
-                                notUsedIds.remove(dictDto.id)
-                                
-                            } else {
-                                self.storageManager.stack.saveContext.delete(dict)
-                            }
-                        }
+            var toRemove: [DbUserDictionary] = []
+            let allUserDicts: [DbUserDictionary] = (self.storageManager.stack.saveContext.object(with: owner.objectID) as! DbAppUser).dictionaries?.toArray() ?? []
+            for dict in allUserDicts {
+                if (!existingPins.contains(dict.pin!)) {
+                    toRemove.append(dict)
+                } else {
+                    let updateDictDto = dicts.filter { (el) -> Bool in
+                        el.pin == dict.pin
+                    }.first
+                    if let updateDictDto = updateDictDto {
+                        updatedPins.insert(dict.pin!)
                         
-                        for notUsedId in notUsedIds {
-                            if let dictDto = dictsMap[notUsedId] {
-                                self.storageManager.createUserDictionary(owner: owner, name: dictDto.name, timeCreated: dictDto.timeCreated, timeModified: dictDto.timeModified, language: dictDto.language, serverId: dictDto.id, cards: nil) { (newDict) in
-                                    self.cardsFetchService.updateCards(cards: dictDto.userCards, doSave: true, sourceDictProvider: { (card) -> DbUserDictionary? in
-                                        return newDict
-                                    }, completion: nil)
-                                }
-                            }
+                        dict.setName(name: updateDictDto.name)
+                        dict.language = updateDictDto.language
+                        //dispatchGroup.wait()
+                        //updateCards
+                        dispatchGroup.enter()
+                        self.innerQueue.async {
+                            self.cardsFetchService.updateCards(cards: updateDictDto.userCards, doSave: false, sourceDict: dict, completion: { () in
+                                dispatchGroup.leave()
+                            })
                         }
                     }
-                    
-                    self.storageManager.performSave(in: self.storageManager.stack.saveContext, completion: completion)
-                    
-                } catch let err {
-                    Logger.log("Cant fetch Dicts in \(#function)")
-                    Logger.log(err.localizedDescription)
                 }
-
-            //}
+            }
+            
+            if (shouldDelete) {
+                for el in toRemove {
+                    owner.removeFromDictionaries(el)
+                    self.storageManager.stack.saveContext.delete(el)
+                }
+            }
+            
+            for updateDictDto in dicts {
+                if (!updatedPins.contains(updateDictDto.pin)) {
+                    self.innerQueue.async {
+                    //dispatchGroup.wait()
+                    dispatchGroup.enter()
+                        self.storageManager.createUserDictionary(owner: owner, name: updateDictDto.name, timeCreated: updateDictDto.timeCreated, timeModified: updateDictDto.timeModified, language: updateDictDto.language, serverId: updateDictDto.id, cards: nil, pin: updateDictDto.pin) { (newDict) in
+                            self.cardsFetchService.updateCards(cards: updateDictDto.userCards, doSave: true, sourceDict: newDict, completion: { () in
+                                dispatchGroup.leave()
+                            })
+                        }
+                    }
+                }
+            }
+            self.innerQueue.async {
+                dispatchGroup.wait()
+                self.storageManager.performSave(in: self.storageManager.stack.saveContext, completion: completion)
+            }
         }
     }
-    
-    
 }

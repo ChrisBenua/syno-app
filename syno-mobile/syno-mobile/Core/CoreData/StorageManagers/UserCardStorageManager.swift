@@ -1,17 +1,9 @@
-//
-//  UserCardStorageManager.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 01.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import CoreData
 
 
 class UserCardStorageManager: IUserCardsStorageManager {
-    func createUserCard(sourceDict: DbUserDictionary?, translatedWord: String, timeCreated: Date?, timeModified: Date?, serverId: Int64?, translation: [DbTranslation]?, completion: ((DbUserCard?) -> Void)?) {
+    func createUserCard(sourceDict: DbUserDictionary?, translatedWord: String, timeCreated: Date?, timeModified: Date?, serverId: Int64?, translation: [DbTranslation]?, pin: String?, completion: ((DbUserCard?) -> Void)?) {
         //DispatchQueue.global(qos: .background).async {
             let dictObjectId = sourceDict?.objectID
             
@@ -26,13 +18,16 @@ class UserCardStorageManager: IUserCardsStorageManager {
                 }
                 
                 if let trans = translation {
-                    card?.addToTranslationsUpdateSync(translations: trans)
+                    card?.addToTranslations(NSSet(array: trans))
+                }
+                if let pin = pin {
+                    card?.pin = pin
                 }
                 
                 if let dictObjectId = dictObjectId {
                     let dictInSaveContext = self.saveContext.object(with: dictObjectId) as? DbUserDictionary
                     if let card = card {
-                        dictInSaveContext?.addToCardsUpdateSync(card: card)
+                        dictInSaveContext?.addToUserCards(card)
                     }
                 }
 

@@ -1,25 +1,21 @@
-//
-//  TestAndLearnControllerHeader.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 19.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// Protocol for defining `TestAndLearnControllerHeader` event handler
 protocol ITestAndLearnHeaderDelegate: class {
+    /// mode changed: from 'test' to 'learn' or vice versa
     func onSegmentChanged()
 }
 
+/// View for displaying mode of TestAndLearnController and recent user's tests
 class TestAndLearnControllerHeader: UICollectionViewCell {
     static let headerId = "TestAndLearnControllerHeaderId"
     
     weak var delegate: ITestAndLearnHeaderDelegate?
     
-    private let selectedSegmentTintColor = UIColor.init(red: 96.0/255, green: 157.0/255, blue: 248.0/255, alpha: 1)
+    private let selectedSegmentTintColor = UIColor.init(red: 73.0/255, green: 116.0/255, blue: 171.0/255, alpha: 0.65)
     
+    /// Segment control for selecting mode: 'learn' or 'test'
     lazy var segmentControl: UISegmentedControl = {
         let control = UISegmentedControl(items: ["Обучение", "Тест"])
                 
@@ -38,6 +34,18 @@ class TestAndLearnControllerHeader: UICollectionViewCell {
         return control
     }()
     
+    /// TableView for displaying user's recent tests
+    lazy var tableView: UITableView = {
+        let tableView = PlainTableView()
+        tableView.backgroundColor = .clear
+        tableView.separatorColor = .clear
+        
+        tableView.register(RecentTestTableViewCell.self, forCellReuseIdentifier: RecentTestTableViewCell.cellId)
+        
+        return tableView
+    }()
+    
+    /// Segment control change listener: notifies `delegate`
     @objc func onSegmentChanged() {
         if #available(iOS 13.0, *) {
         } else {
@@ -53,12 +61,13 @@ class TestAndLearnControllerHeader: UICollectionViewCell {
         let widthMult: CGFloat = 0.7
         self.segmentControl.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         
-        
         self.contentView.addSubview(view)
-        view.anchor(top: self.contentView.topAnchor, left: nil, bottom: self.contentView.bottomAnchor, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
+        self.contentView.addSubview(self.tableView)
+        view.anchor(top: self.contentView.topAnchor, left: nil, bottom: self.tableView.topAnchor, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 20, paddingRight: 0, width: 0, height: 0)
         view.widthAnchor.constraint(equalTo: self.contentView.widthAnchor, multiplier: widthMult).isActive = true
         view.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
-
+        
+        tableView.anchor(top: nil, left: self.contentView.leftAnchor, bottom: self.contentView.bottomAnchor, right: self.contentView.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
     }
     
     required init?(coder: NSCoder) {

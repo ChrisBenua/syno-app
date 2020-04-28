@@ -1,28 +1,53 @@
-//
-//  DictsController.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 05.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// Controller for presenting dicts in edit mode
 class DictsViewController: UIViewController, IDictionaryControllerReactor {
+    /// Process view for sharing process
+    lazy var processingSaveView: SavingProcessView = {
+        let view = SavingProcessView()
+        view.setText(text: "Sharing...")
+        
+        return view
+    }()
+    
+    /// shows `processingSaveView`
+    func showSharingProcessView() {
+        processingSaveView.showSavingProcessView(sourceView: self)
+    }
+    
+    /// Show success alert controller
+    func showSharingResultView(text: String, title: String) {
+        processingSaveView.dismissSavingProcessView()
+        
+        let alertController = UIAlertController(title: title, message: text, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (_) in
+            alertController.dismiss(animated: true, completion: nil)
+        }))
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     func showCardsController(controller: UIViewController) {
         self.navigationController!.pushViewController(controller, animated: true)
     }
+    
+    /// Cancel deletion view
     var notifView: BottomNotificationView?
     
-    private let rowHeight: CGFloat = 80
-    
+    /// FetchResultsController delegate
     var frcDelegate: IDefaultCollectionViewFetchResultControllerDelegate?
     
+    /// Service responsible for data formatting for collection view logic
     var dataSource: IDictionaryControllerTableViewDataSource
     
+    /// Service responsible for inner logic of `DictsViewController` controller
     var model: IDictControllerModel
     
+    /**
+     Creates new `DictsViewController`
+     - Parameter datasource: Service responsible for data formatting for collection view logic
+     - Parameter model: Service responsible for inner logic of `DictsViewController` controller
+     */
     init(datasource: IDictionaryControllerTableViewDataSource, model: IDictControllerModel) {
         self.dataSource = datasource
         self.model = model
@@ -36,6 +61,7 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// Collection view for displaying user's dictionaries
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let colView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -63,26 +89,58 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
     override func viewDidLoad() {
         self.navigationItem.title = "Словари"
 
-//        self.view.addSubview(self.tableView)
-//
-//        tableView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         self.dataSource.performFetch()
         self.dataSource.delegate = self
-        //self.tableView.reloadData()
         
         self.view.addSubview(self.collectionView)
-        model.initialFetch()
+        
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(onAddNewDictionary))
+        self.navigationItem.rightBarButtonItem?.tintColor = .headerMainColor
+        
 
         collectionView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         collectionView.reloadData()
+        
+        askForFetch()
     }
     
+    /// On TabBar plus button click handler
     @objc func onAddNewDictionary() {
-        self.navigationController?.pushViewController(self.dataSource.getNewDictController(), animated: true)
+        let actionController = UIAlertController(title: "Новый словарь", message: nil, preferredStyle: .actionSheet)
+        actionController.addAction(UIAlertAction(title: "Свой", style: .default, handler: { (_) in
+            self.navigationController?.pushViewController(self.dataSource.getNewDictController(), animated: true)
+        }))
+        actionController.addAction(UIAlertAction(title: "Добавить по коду", style: .default, handler: { (_) in
+            self.navigationController?.pushViewController(self.dataSource.addShareController(), animated: true)
+        }))
+        actionController.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) in
+            actionController.dismiss(animated: true, completion: nil)
+        }))
+        
+        self.present(actionController, animated: true, completion: nil)
     }
     
+    /// Ask if user wants to download dictionaries from server
+    func askForFetch() {
+        if self.dataSource.fetchedResultsController.fetchedObjects?.count == 0 && self.dataSource.isAuthorized() {
+            let alertController = UIAlertController(title: "Загрузка", message: "Загрузить копию?", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "Ok", style: .default) { (_) in
+                self.model.initialFetch(completion: { (_) in
+                })
+            }
+            let cancelAction = UIAlertAction(title: "Отмена", style: .cancel) { (_) in
+                alertController.dismiss(animated: true, completion: nil)
+            }
+            
+            alertController.addAction(okAction)
+            alertController.addAction(cancelAction)
+            
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    /// Called when dictionary was deleted and presents `notifView` to cancel action
     func onItemDeleted() {
         let notifView = BottomNotificationView()
         notifView.cancelButtonLabel.text = "Отмена"
@@ -105,6 +163,4 @@ extension DictsViewController: IBottomNotificationViewDelegate {
     func onTimerDone() {
         self.dataSource.commitChanges()
     }
-    
-    
 }

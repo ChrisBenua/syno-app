@@ -11,6 +11,6 @@ import java.io.Serializable;
 @Builder
 public class NewDictShare implements Serializable {
     @NonNull
-    @JsonProperty("share_dict_id")
-    private Long shareDictId;
+    @JsonProperty("share_dict_pin")
+    private String shareDictPin;
 }

@@ -1,18 +1,13 @@
-//
-//  RegistrationModel.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 05.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 
 protocol IRegistrationReactor: class {
+    /// Called when model started performing registration request
     func startedProcessingRegistration()
     
+    /// Called when model failed to perform registration request
     func failed(error: String)
     
+    /// Called when model performed registration successfully
     func success()
 }
 

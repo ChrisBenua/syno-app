@@ -1,11 +1,3 @@
-//
-//  DictionaryControllerTableViewDataSource.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 05.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import CoreData
 import UIKit
@@ -18,19 +10,32 @@ protocol IDictionaryControllerDataProvider {
     func commitChanges()
     
     func delete(object: NSManagedObject)
+    
+    func isAuthorized() -> Bool
+    
 }
 
 class DictionaryControllerDataProvider: IDictionaryControllerDataProvider {
     
     private var appUserManager: IStorageCoordinator
     private var undoManager: UndoManager?
+    private var deletedObjects: [NSManagedObjectID] = []
     
     init(appUserManager: IStorageCoordinator) {
         self.appUserManager = appUserManager
     }
     
+    func isAuthorized() -> Bool {
+        var isAuth = false
+        self.appUserManager.stack.saveContext.performAndWait {
+            isAuth = self.appUserManager.getCurrentAppUser()?.email != "Guest"
+        }
+        return isAuth
+    }
+    
     func generateDictControllerFRC() -> NSFetchedResultsController<DbUserDictionary> {
-        let frc = NSFetchedResultsController(fetchRequest: DbUserDictionary.requestSortedByName(owner: appUserManager.getCurrentAppUser()!), managedObjectContext: self.appUserManager.stack.mainContext, sectionNameKeyPath: nil, cacheName: nil)
+        let userInMainContext = self.appUserManager.stack.mainContext.object(with: appUserManager.getCurrentAppUser()!.objectID) as! DbAppUser
+        let frc = NSFetchedResultsController(fetchRequest: DbUserDictionary.requestSortedByName(owner: userInMainContext), managedObjectContext: self.appUserManager.stack.mainContext, sectionNameKeyPath: nil, cacheName: nil)
         
         return frc
     }
@@ -38,10 +43,24 @@ class DictionaryControllerDataProvider: IDictionaryControllerDataProvider {
     func undoLastChanges() {
         self.undoManager?.endUndoGrouping()
         self.undoManager?.undo()
+        self.deletedObjects = []
     }
     
     func commitChanges() {
-        self.appUserManager.stack.performSave(with: self.appUserManager.stack.mainContext, completion: nil)
+        commitSaveContextChanges()
+        deletedObjects = []
+        self.appUserManager.stack.performSave(with: self.appUserManager.stack.saveContext, completion: nil)
+    }
+    
+    func commitSaveContextChanges() {
+        if deletedObjects.count > 0 {
+            self.appUserManager.stack.saveContext.performAndWait {
+                for el in deletedObjects {
+                    self.appUserManager.stack.saveContext.delete( self.appUserManager.stack.saveContext.object(with: el))
+                }
+            }
+            deletedObjects = []
+        }
     }
     
     func delete(object: NSManagedObject) {
@@ -49,6 +68,11 @@ class DictionaryControllerDataProvider: IDictionaryControllerDataProvider {
         self.undoManager = self.appUserManager.stack.mainContext.undoManager
         self.undoManager?.beginUndoGrouping()
         self.appUserManager.stack.mainContext.delete(object)
+        let objectId = object.objectID
+        
+        self.commitSaveContextChanges()
+        
+        self.deletedObjects.append(objectId)
     }
 }
 
@@ -65,17 +89,28 @@ protocol IDictionaryControllerTableViewDataSource: ICommonDictionaryControllerDa
     
     func getNewDictController() -> UIViewController
     
+    func addShareController() -> UIViewController
+    
     func undoLastDeletion()
    
     func commitChanges()
    
     func delete(object: NSManagedObject)
+    
+    func isAuthorized() -> Bool
+    
+    func createShare(dict: DbUserDictionary)
+
 }
 
 protocol IDictionaryControllerReactor: class {
     func showCardsController(controller: UIViewController)
     
     func onItemDeleted()
+    
+    func showSharingProcessView()
+    
+    func showSharingResultView(text: String, title: String)
 }
 
 class DictionaryControllerTableViewDataSource: NSObject, IDictionaryControllerTableViewDataSource {
@@ -91,6 +126,9 @@ class DictionaryControllerTableViewDataSource: NSObject, IDictionaryControllerTa
         self.viewModel.delete(object: object)
     }
     
+    func isAuthorized() -> Bool {
+        return self.viewModel.isAuthorized()
+    }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         guard let sections = self.fetchedResultsController.sections else {
@@ -111,13 +149,14 @@ class DictionaryControllerTableViewDataSource: NSObject, IDictionaryControllerTa
         let cellData = self.fetchedResultsController.object(at: indexPath)
         
         cell.setup(config: cellData.toUserDictCellConfig())
-        print("Dequing cell at: \(indexPath)")
         return cell
     }
     
     var fetchedResultsController: NSFetchedResultsController<DbUserDictionary>
     
     var viewModel: IDictionaryControllerDataProvider
+    
+    var shareService: IDictShareService
     
     private var presAssembly: IPresentationAssembly
     
@@ -136,10 +175,29 @@ class DictionaryControllerTableViewDataSource: NSObject, IDictionaryControllerTa
         return self.presAssembly.newDictController()
     }
     
-    init(viewModel: IDictionaryControllerDataProvider, presAssembly: IPresentationAssembly) {
+    func addShareController() -> UIViewController {
+        return self.presAssembly.addShareController()
+    }
+    
+    func createShare(dict: DbUserDictionary) {
+        self.delegate?.showSharingProcessView()
+        self.shareService.createShare(dictObjectID: dict.objectID) { (result) in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let str):
+                    self.delegate?.showSharingResultView(text: str, title: "Успех!")
+                case .error(let err):
+                    self.delegate?.showSharingResultView(text: err, title: "Ошибка!")
+                }
+            }
+        }
+    }
+    
+    init(viewModel: IDictionaryControllerDataProvider, shareService: IDictShareService, presAssembly: IPresentationAssembly) {
         self.viewModel = viewModel
         self.fetchedResultsController = self.viewModel.generateDictControllerFRC()
         self.presAssembly = presAssembly
+        self.shareService = shareService
     }
 }
 
@@ -167,10 +225,14 @@ extension DictionaryControllerTableViewDataSource {
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (_) -> UIMenu? in
             let menu = UIMenu(title: "Actions", children: [
-                UIAction(title: "Delete", image: UIImage.init(systemName: "trash.fill"), attributes: .destructive, handler: { (action) in
-                    print("Action happened!!!")
-                    self.delegate?.onItemDeleted()
-                    self.delete(object: self.fetchedResultsController.object(at: indexPath))
+                UIAction(title: "Удалить", image: UIImage.init(systemName: "trash.fill"), attributes: .destructive, handler: { (action) in
+                Timer.scheduledTimer(withTimeInterval: 0.7, repeats: false) { (_) in
+                        self.delegate?.onItemDeleted()
+                        self.delete(object: self.fetchedResultsController.object(at: indexPath))
+                    }
+                }),
+                UIAction(title: "Поделиться", image: UIImage.init(systemName: "square.and.arrow.up"), handler: { (action) in
+                    self.createShare(dict: self.fetchedResultsController.object(at: indexPath))
                 })
             ])
             return menu

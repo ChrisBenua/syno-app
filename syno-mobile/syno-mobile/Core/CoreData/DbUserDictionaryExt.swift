@@ -1,11 +1,3 @@
-//
-//  DbUserDictionaryExt.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 30.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import CoreData
 
@@ -40,25 +32,15 @@ extension DbUserDictionary {
     public func setName(name: String?) {
         if self.name != name {
             self.name = name
-            self.isSynced = false
-        }
-    }
-    
-    public func addToCardsUpdateSync(card: DbUserCard) {
-        self.isSynced = false
-        self.addToUserCards(card)
-    }
-    
-    public func addToCardsUpdateSync(cards: [DbUserCard]) {
-        if cards.count > 0 {
-            self.isSynced = false
-            self.addToUserCards(NSSet(array: cards))
         }
     }
     
     static func insertUserDict(into context: NSManagedObjectContext) -> DbUserDictionary? {
-        guard let dict = NSEntityDescription.insertNewObject(forEntityName: "DbUserDictionary", into: context) as? DbUserDictionary else {
-            return nil
+        var dict: DbUserDictionary? = nil
+        context.performAndWait {
+            dict = NSEntityDescription.insertNewObject(forEntityName: "DbUserDictionary", into: context) as? DbUserDictionary
+            dict?.pin = PinGenerator.generatePin()
+
         }
         
         return dict

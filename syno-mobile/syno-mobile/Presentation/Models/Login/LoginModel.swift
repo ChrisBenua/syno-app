@@ -1,11 +1,3 @@
-//
-//  LoginModel.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 26.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 
 protocol ILoginModel {
@@ -26,9 +18,11 @@ class LoginModel: ILoginModel {
     }
 
     func skippedRegistration() {
-        loginService.createGuestUser()
-        loginService.setNetworkNode(isActive: false)
-        self.controller?.onSuccessfulLogin(email: "Guest")
+        let didCreateGuestUser = loginService.createGuestUser()
+        if (didCreateGuestUser) {
+            loginService.setNetworkMode(isActive: false)
+        }
+        self.controller?.onSuccessfulLogin(email: self.loginService.currentUserEmail())
     }
     
     func login(loginState: ILoginState) {

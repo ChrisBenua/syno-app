@@ -1,24 +1,23 @@
-//
-// Created by Ирина Улитина on 25.11.2019.
-// Copyright (c) 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 
+/// Protocol for logging messages
 protocol Loggable {
     func debugOutput(_ message: String)
 }
 
+/// Actual debug logger that prints messages in Developer console
 class DebugLogger: Loggable {
     func debugOutput(_ message: String) {
         print(message)
     }
 }
 
+/// In Release version Logger doesnt do anything to increase perfomance
 class ReleaseLogger: Loggable {
     func debugOutput(_ message: String) {}
 }
 
+/// Class for accessing needed logger
 class Logger {
 
     private static let shared = Logger()

@@ -1,14 +1,8 @@
-//
-//  UserAuthHelper.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 07.04.2020.
-//  Copyright © 2020 Christian Benua. All rights reserved.
-//
-
 import Foundation
 
+/// Protocol for checking if user had logged in before
 protocol IUserAuthHelper {
+    /// Function for checking if user had logged in before and his token is valid
     func isAuthorized() -> Bool
 }
 
@@ -23,7 +17,10 @@ class UserAuthHelper: IUserAuthHelper {
         
         return true
     }
-    
+    /**
+     Created new `UserAuthHelper`
+     - Parameter userDefManager: instance responsilbe for storing and getting items from User Defaults
+     */
     init(userDefManager: IUserDefaultsManager) {
         self.userDefManager = userDefManager
     }

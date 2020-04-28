@@ -1,21 +1,24 @@
-//
-//  RegisterControllerServices.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 04.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 
+/// Protocol for handling registration
 protocol IRegisterService {
+    /**
+     Perform registration
+     - Parameter registerDto: user credentials
+     - Parameter completionHandler: completion callback
+     */
     func register(registerDto: RegisterDto, completionHandler: ((Result<String>) -> Void)?)
 }
 
+/// Class for handling registration
 class RegisterService: IRegisterService {
     
     private let requestSender: IRequestSender
     
+    /**
+     Creates new RegisterService
+     - Parameter requestSender: instance for completing web requests
+     */
     init(requestSender: IRequestSender) {
         self.requestSender = requestSender
     }

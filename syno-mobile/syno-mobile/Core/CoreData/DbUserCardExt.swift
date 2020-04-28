@@ -1,11 +1,3 @@
-//
-//  DbUserCardExt.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 30.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import CoreData
 
@@ -26,30 +18,12 @@ extension DbUserCard {
         }))
     }
     
-    public func setTranslatedWord(word: String?) {
-        if self.translatedWord != word  {
-            self.isSynced = false
-            self.translatedWord = word
-        }
-    }
-    
-    public func addToTranslationsUpdateSync(translation: DbTranslation) {
-        self.isSynced = false
-        self.addToTranslations(translation)
-    }
-    
-    public func addToTranslationsUpdateSync(translations: [DbTranslation]) {
-        if translations.count > 0 {
-            self.addToTranslations(NSSet(array: translations))
-            self.isSynced = false
-        }
-    }
-    
     static func insertUserCard(into context: NSManagedObjectContext) -> DbUserCard? {
-        guard let userCard = NSEntityDescription.insertNewObject(forEntityName: "DbUserCard", into: context) as? DbUserCard else {
-            return nil
+        var userCard: DbUserCard? = nil
+        context.performAndWait {
+            userCard = NSEntityDescription.insertNewObject(forEntityName: "DbUserCard", into: context) as? DbUserCard
+            userCard?.pin = PinGenerator.generatePin()
         }
-        
         return userCard
     }
     

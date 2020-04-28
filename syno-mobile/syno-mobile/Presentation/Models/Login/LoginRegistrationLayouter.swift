@@ -1,11 +1,3 @@
-//
-//  LoginRegistrationLayouter.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 29.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
@@ -81,7 +73,6 @@ class LoginRegistrationLayouter: ILoginLayouter {
         let button = CommonUIElements.defaultSubmitButton(text: "Войти", cornerRadius: 25)
         button.setAttributedTitle(NSAttributedString(string: "Войти", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)]), for: UIKit.UIControl.State.normal)
 
-        //button.addTarget(self, action: #selector(submitLoginCredentials), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         
         _submitButton = button
@@ -103,17 +94,6 @@ class LoginRegistrationLayouter: ILoginLayouter {
 
         return sv
     }
-
-    lazy var synoTitleAboveEmailLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 40)
-        label.textColor = .white
-        label.text = "Syno"
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-
-        return label
-    }()
     
     func alternateAuthButton() -> UIView {
         if let v = _alternateAuthButton {
@@ -139,13 +119,6 @@ class LoginRegistrationLayouter: ILoginLayouter {
         containerView.distribution = .fillEqually
         containerView.translatesAutoresizingMaskIntoConstraints = false
         
-//        let view = UIView(); view.translatesAutoresizingMaskIntoConstraints = false
-//
-//        view.addSubview(self.alternateAuthButton())
-//
-//        self.alternateAuthButton().anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-//        self.alternateAuthButton().centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        
         _alternateAuthButtonContainerView = containerView
         return containerView
     }
@@ -154,14 +127,14 @@ class LoginRegistrationLayouter: ILoginLayouter {
         let synoTitleLoginSepView = UIView(); synoTitleLoginSepView.translatesAutoresizingMaskIntoConstraints = false
         let loginButtonRegistrationSepView = UIView(); loginButtonRegistrationSepView.translatesAutoresizingMaskIntoConstraints = false
         let bottomSepView = UIView(); bottomSepView.translatesAutoresizingMaskIntoConstraints = false
-        let sv = UIStackView(arrangedSubviews: [synoTitleAboveEmailLabel, synoTitleLoginSepView, generateInnerStackView(),
+        let sv = UIStackView(arrangedSubviews: [synoTitleLoginSepView, generateInnerStackView(),
                                                 loginButtonRegistrationSepView, self.alternateAuthButtonContainerView(), bottomSepView])
 
         sv.axis = .vertical
         sv.distribution = .fill
 
-        synoTitleAboveEmailLabel.heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.15).isActive = true
-        synoTitleLoginSepView.heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.035).isActive = true
+        //synoTitleAboveEmailLabel.heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.15).isActive = true
+        synoTitleLoginSepView.heightAnchor.constraint(equalToConstant: 30).isActive = true
         loginButtonRegistrationSepView.heightAnchor.constraint(equalToConstant: 18).isActive = true
         alternateAuthButtonContainerView().heightAnchor.constraint(equalToConstant: 40).isActive = true
         bottomSepView.heightAnchor.constraint(equalToConstant: 30).isActive = true
@@ -191,13 +164,24 @@ class LoginRegistrationLayouter: ILoginLayouter {
         }
         
         let topSepView = UIView(); topSepView.translatesAutoresizingMaskIntoConstraints = false
-        //let bottomSepView = UIView(); bottomSepView.translatesAutoresizingMaskIntoConstraints = false
+        let imageView = UIImageView(image: #imageLiteral(resourceName: "logo"))
+        let imageContainerView = UIView()
+        topSepView.addSubview(imageContainerView)
+        imageContainerView.addSubview(imageView)
+        imageContainerView.anchor(top: nil, left: topSepView.leftAnchor, bottom: topSepView.bottomAnchor, right: topSepView.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        imageContainerView.heightAnchor.constraint(equalTo: topSepView.heightAnchor, multiplier: 0.4).isActive = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.centerXAnchor.constraint(equalTo: imageContainerView.centerXAnchor).isActive = true
+        imageView.topAnchor.constraint(equalTo: imageContainerView.topAnchor).isActive = true
+        imageView.widthAnchor.constraint(equalTo: topSepView.widthAnchor, multiplier: 0.6).isActive = true
+        imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1.0 / 1.7).isActive = true
+
         let sv = UIStackView(arrangedSubviews: [topSepView, formBackgroundView])
         sv.axis = .vertical
         sv.distribution = .fill
 
-        topSepView.heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.55).isActive = true
-        //bottomSepView.heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.35).isActive = true
+        topSepView.heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.6).isActive = true
+
         _allStackView = sv
         return sv
     }

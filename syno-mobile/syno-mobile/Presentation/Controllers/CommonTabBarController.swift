@@ -1,18 +1,15 @@
-//
-//  CommonTabBarController.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 05.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// Main tab bar controller with `DictionariesViewController`, `TestAndLearnController` and `HomeController`
 class CommonTabBarController: UITabBarController, UITabBarControllerDelegate {
-    
+    /// Assembly for creating view controllers
     private let presentationAssembly: IPresentationAssembly
     
+    /**
+     Creates new `CommonTabBarController`
+     - Parameter presentationAssembly: Assembly for creating view controllers
+     */
     init(presentationAssembly: IPresentationAssembly) {
         self.presentationAssembly = presentationAssembly
         
@@ -23,6 +20,7 @@ class CommonTabBarController: UITabBarController, UITabBarControllerDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// View above tabBar to separate view and tabBar
     let separatorView : UIView = {
         let v = UIView()
         
@@ -34,6 +32,7 @@ class CommonTabBarController: UITabBarController, UITabBarControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.delegate = self
+        self.tabBar.tintColor = .headerMainColor
         setUpViewControllers()
         
         tabBar.addSubview(separatorView)
@@ -44,16 +43,25 @@ class CommonTabBarController: UITabBarController, UITabBarControllerDelegate {
             item.imageInsets = UIEdgeInsets(top: 4, left: 0, bottom: -4, right: 0)
         }
     }
-
+    
+    /// Fills tab bar view controllers
     func setUpViewControllers() {
         let dictsController = templateNavController(unselectedImage: #imageLiteral(resourceName: "open-book"), selectedImage: #imageLiteral(resourceName: "open-book"), rootViewController: self.presentationAssembly.dictsViewController())
         
         let testAndLearnViewController = templateNavController(unselectedImage: #imageLiteral(resourceName: "shopping-list"), selectedImage: #imageLiteral(resourceName: "shopping-list"), rootViewController: self.presentationAssembly.testAndLearnViewController())
         
-        self.viewControllers = [dictsController, testAndLearnViewController]
+        let homeController = templateNavController(unselectedImage: #imageLiteral(resourceName: "home"), selectedImage: #imageLiteral(resourceName: "home"), rootViewController: presentationAssembly.homeController())
+        
+        self.viewControllers = [dictsController, testAndLearnViewController, homeController]
         self.selectedIndex = 0
     }
 
+    /**
+     Wraps ViewController in `UINavigationController`
+     - Parameter unselectedImage: tabbar image for unselected state
+     - Parameter selectedImage: tabBar image for selected state
+     - Parameter rootViewController: viewController to be wrapped
+     */
     fileprivate func templateNavController(unselectedImage : UIImage, selectedImage : UIImage?, rootViewController : UIViewController = UIViewController()) -> UINavigationController {
         let Controller = rootViewController
         let NavController = UINavigationController(rootViewController: Controller)
@@ -61,14 +69,4 @@ class CommonTabBarController: UITabBarController, UITabBarControllerDelegate {
         NavController.tabBarItem.selectedImage = selectedImage
         return NavController
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

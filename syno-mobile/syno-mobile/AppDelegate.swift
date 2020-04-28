@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 22.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import UIKit
 
 @UIApplicationMain
@@ -26,10 +18,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
-
-    // MARK: UISceneSession Lifecycle
-
-    
-
 }
 

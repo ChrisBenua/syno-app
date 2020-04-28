@@ -1,18 +1,9 @@
-//
-//  RegistrationLayouter.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 29.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
 protocol IRegistrationLayouter: ILoginLayouter {
     func passwordConfirmationTextField() -> UITextField
 }
-
 
 class RegistrationLayouter: LoginRegistrationLayouter, IRegistrationLayouter {
     private var _passwordConfirmationTextField: UITextField?
@@ -94,12 +85,25 @@ class RegistrationLayouter: LoginRegistrationLayouter, IRegistrationLayouter {
         }
         
         let topSepView = UIView(); topSepView.translatesAutoresizingMaskIntoConstraints = false
+        let imageView = UIImageView(image: #imageLiteral(resourceName: "logo"))
+        let imageContainerView = UIView()
+        topSepView.addSubview(imageContainerView)
+        imageContainerView.addSubview(imageView)
+        imageContainerView.anchor(top: nil, left: topSepView.leftAnchor, bottom: topSepView.bottomAnchor, right: topSepView.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        imageContainerView.heightAnchor.constraint(equalTo: topSepView.heightAnchor, multiplier: 0.5).isActive = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.centerXAnchor.constraint(equalTo: imageContainerView.centerXAnchor).isActive = true
+        imageView.topAnchor.constraint(equalTo: imageContainerView.topAnchor).isActive = true
+        imageView.widthAnchor.constraint(equalTo: topSepView.widthAnchor, multiplier: 0.6).isActive = true
+        imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1.0 / 1.7).isActive = true
+        
+        
         //let bottomSepView = UIView(); bottomSepView.translatesAutoresizingMaskIntoConstraints = false
         let sv = UIStackView(arrangedSubviews: [topSepView, formBackgroundView])
         sv.axis = .vertical
         sv.distribution = .fill
 
-        topSepView.heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.55/1.392).isActive = true
+        topSepView.heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.48).isActive = true
         //bottomSepView.heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.35).isActive = true
         _allStackView = sv
         return sv

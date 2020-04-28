@@ -1,30 +1,30 @@
-//
-//  BottomNotificationView.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 10.04.2020.
-//  Copyright © 2020 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// `BottomNotificationView` events listener protocol
 protocol IBottomNotificationViewDelegate: class {
+    /// Cancel button click listener
     func onCancelButtonPressed()
     
+    /// Timer done event listener
     func onTimerDone()
 }
 
+/// Telegram like notification view
 class BottomNotificationView: UIView {
-    
+    /// event listener
     weak var delegate: IBottomNotificationViewDelegate?
     
+    /// Countdown Timer
     private var timer: Timer?
     
+    /// Countdown timeout
     var timeout: TimeInterval = 5.0
     
+    /// Timeleft on countdown
     private var timeLeft: TimeInterval!
     
+    /// Label for displaying message
     lazy var messageLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17)
@@ -34,6 +34,7 @@ class BottomNotificationView: UIView {
         return label
     }()
     
+    /// Label for `timeLeft` value
     lazy var timerLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 22)
@@ -46,6 +47,7 @@ class BottomNotificationView: UIView {
         return label
     }()
     
+    /// Button for cancelling action
     lazy var cancelButtonLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 22)
@@ -60,8 +62,8 @@ class BottomNotificationView: UIView {
         return label
     }()
     
+    /// `cancelButtonLabel` click listener
     @objc func onCancelButtonTapped() {
-        print("cancel!")
         timer?.invalidate()
         
         UIView.transition(with: cancelButtonLabel, duration: 0.2, options: .transitionCrossDissolve, animations: {
@@ -76,6 +78,7 @@ class BottomNotificationView: UIView {
         }
     }
     
+    /// initializes `timer`
     func initTimer() {
         timer?.invalidate()
         timeLeft = self.timeout

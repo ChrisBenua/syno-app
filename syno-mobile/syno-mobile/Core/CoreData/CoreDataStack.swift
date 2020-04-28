@@ -1,11 +1,3 @@
-//
-//  CoreDataStack.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 30.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import CoreData
 
@@ -27,11 +19,9 @@ protocol ICoreDataStack {
 }
 
 class CoreDataStack: ICoreDataStack {
-    //public static var shared: CoreDataStack = CoreDataStack()
-    
     var storeURL: URL {
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        print("storeURL: \(documentsURL.absoluteString)")
+        Logger.log("storeURL: \(documentsURL.absoluteString)")
         return documentsURL.appendingPathComponent("Mystore12.sqlite")
     }
     
@@ -91,15 +81,13 @@ class CoreDataStack: ICoreDataStack {
             do {
                 try context.save()
             } catch let err {
-                print("Save error \(err)")
+                Logger.log("Save error \(err)")
             }
             
             if let parentContext = context.parent {
                 self.performSave(with: parentContext, completion: completion)
             } else {
-                //DispatchQueue.main.async {
-                    completion?()
-                //}
+                completion?()
             }
             
         }

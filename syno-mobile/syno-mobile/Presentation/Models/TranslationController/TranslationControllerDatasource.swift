@@ -1,11 +1,3 @@
-//
-//  TranslationControllerDatasource.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 13.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import CoreData
 import UIKit
@@ -105,7 +97,7 @@ class TranslationControllerDataProvider: ITranslationControllerDataProvider {
     }
     
     func add() {
-        self.translations?.append(TranslationCellWrapper(translation: TranslationCellConfiguration(translation: "", transcription: "", comment: "", sample: ""), objectId: nil))
+        self.translations?.insert(TranslationCellWrapper(translation: TranslationCellConfiguration(translation: "", transcription: "", comment: "", sample: ""), objectId: nil), at: 0)
     }
     
     func deleteAt(ind: Int) {
@@ -129,38 +121,38 @@ class TranslationControllerDataProvider: ITranslationControllerDataProvider {
     
     func performSave(completionHandler: (() -> ())?) {
         DispatchQueue.global(qos: .background).async {
-            self.storageCoordinator.stack.mainContext.performAndWait {
+            self.storageCoordinator.stack.saveContext.performAndWait {
+                let objId = self._sourceCard.objectID
+                let card = self.storageCoordinator.stack.saveContext.object(with: objId) as! DbUserCard
                 
                 if let transWord = self.newTranslatedWord {
-                    let objId = self._sourceCard.objectID
-                    let card = self.storageCoordinator.stack.mainContext.object(with: objId) as! DbUserCard
                     card.translatedWord = transWord
                 }
                 
                 for trans in self.translations ?? [] {
                     if let objId = trans.transObjectID {
-                        let dbTranslation = self.storageCoordinator.stack.mainContext.object(with: objId) as! DbTranslation
+                        let dbTranslation = self.storageCoordinator.stack.saveContext.object(with: objId) as! DbTranslation
                         dbTranslation.comment = trans.comment
                         dbTranslation.transcription = trans.transcription
                         dbTranslation.translation = trans.translation
                         dbTranslation.usageSample = trans.sample
                     } else {
-                        let dbTranslation = DbTranslation.insertTranslation(into: self.storageCoordinator.stack.mainContext)
+                        let dbTranslation = DbTranslation.insertTranslation(into: self.storageCoordinator.stack.saveContext)
                         dbTranslation?.comment = trans.comment
                         dbTranslation?.transcription = trans.transcription
                         dbTranslation?.translation = trans.translation
                         dbTranslation?.usageSample = trans.sample
-                        dbTranslation?.sourceCard = self._sourceCard
+                        dbTranslation?.sourceCard = card
                         dbTranslation?.timeCreated = Date()
                     }
                 }
                 
                 for delObjId in self.shouldDeleteTransObjectIds {
-                    let obj = self.storageCoordinator.stack.mainContext.object(with: delObjId)
-                    self.storageCoordinator.stack.mainContext.delete(obj)
+                    let obj = self.storageCoordinator.stack.saveContext.object(with: delObjId)
+                    self.storageCoordinator.stack.saveContext.delete(obj)
                 }
                 
-                self.storageCoordinator.stack.performSave(with: self.storageCoordinator.stack.mainContext) {
+                self.storageCoordinator.stack.performSave(with: self.storageCoordinator.stack.saveContext) {
                     completionHandler?()
                 }
             }
@@ -209,6 +201,8 @@ protocol ITranslationCellDidChangeDelegate: class {
 
 class TranslationControllerDataSource: NSObject, ITranslationControllerDataSource {
     
+    var cellHeights: [IndexPath: CGFloat] = [:]
+    
     func getTranscription(for word: String) -> String? {
         if (isAutoPhonemesEnabled) {
             return self.phonemesManager.getPhoneme(for: word)
@@ -225,22 +219,27 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
     }
     
     func add() {
-        let cnt = self.viewModel.getTranslations().count
         self.viewModel.add()
-        self.tableView.insertRows(at: [IndexPath(row: cnt, section: 0)], with: .automatic)
+        self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
     }
     
     func deleteAt(ind: Int) {
         self.viewModel.deleteAt(ind: ind)
-        self.tableView.performBatchUpdates({
-            self.tableView.deleteRows(at: [IndexPath(row: ind, section: 0)], with: .automatic)
-        }) { (_) in
-            self.tableView.contentOffset = CGPoint(x: 0, y: 0)
+        UIView.performWithoutAnimation {
+            self.tableView.reloadData()
         }
     }
     
     func save(completionHandler: (() -> ())?) {
         self.viewModel.performSave(completionHandler: completionHandler)
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cellHeights[indexPath] = cell.frame.size.height
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return cellHeights[indexPath] ?? 200
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -253,9 +252,9 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (_) -> UIMenu? in
             let menu = UIMenu(title: "Actions", children: [
                 UIAction(title: "Delete", image: UIImage.init(systemName: "trash.fill"), attributes: .destructive, handler: { (action) in
-                    self.deleteAt(ind: indexPath.row)
-                    
-                    print("Action happened!!!")
+                    UIView.animate(withDuration: 0, delay: 0.5, animations: { () in }) { (_) in
+                        self.deleteAt(ind: indexPath.row)
+                    }
                 })
             ])
             return menu

@@ -70,7 +70,7 @@ class ShareDictControllerTest {
     void commonPart() {
         user = userRepository.saveAndFlush(DbUser.builder().email("email").password("1").build());
         cloningUser = userRepository.saveAndFlush(DbUser.builder().email("fakeemail").password("1").build());
-        dictionary = dictionaryRepository.saveAndFlush(DbUserDictionary.builder().name("name").owner(user).build());
+        dictionary = dictionaryRepository.saveAndFlush(DbUserDictionary.builder().name("name").pin("pin").owner(user).build());
         user.addUserDictionary(dictionary);
 
         card = DbUserCard.builder().translatedWord("word").build();
@@ -90,7 +90,7 @@ class ShareDictControllerTest {
 
         mockMvc.perform(post("/api/dict_share/add_share").with(user("email").roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(String.format("{\"share_dict_id\":%d}", dictionary.getId()))
+                .content(String.format("{\"share_dict_pin\": \"%s\"}", dictionary.getPin()))
                 .characterEncoding("UTF-8"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk());

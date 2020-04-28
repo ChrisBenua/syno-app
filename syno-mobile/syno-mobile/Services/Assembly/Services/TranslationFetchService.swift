@@ -1,23 +1,39 @@
-//
-//  EntitiesFetchService.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 04.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 
+/// Protocol with defing logic updating `DbTranslation`s
 protocol ITranslationFetchService {
-    func updateTranslations(translations: [GetTranslationDto], doSave: Bool, sourceCardProvider: (GetTranslationDto) -> DbUserCard?, completion: (()->Void)?) -> Void
+    /**
+     Updates given translations
+     - Parameter translations: Translations dtos -- after this function linked `DbTranslation`s should match `translations`
+     - Parameter doSave: Should save changes
+     - Parameter sourceCard: Card which translations should be updated
+     - Parameter completion: Completion callback
+     */
+    func updateTranslations(translations: [GetTranslationDto], doSave: Bool, sourceCard: DbUserCard?, completion: (()->Void)?) -> Void
 }
 
+/// Protocol with updating `DbUserCard`s logic
 protocol IUserCardsFetchService {
-    func updateCards(cards: [GetCardResponseDto], doSave: Bool, sourceDictProvider: (GetCardResponseDto) -> DbUserDictionary?, completion: (()->Void)?)
+    /**
+     Updates given cards
+     - Parameter cards: Cards dtos -- after this functions linked `DbUserCard`s should match `cards`
+     - Parameter doSave: Should save changes
+     - Parameter sourceDict: Dictionary which cards should be updated
+     - Parameter completion: Completion callback
+     */
+    func updateCards(cards: [GetCardResponseDto], doSave: Bool, sourceDict: DbUserDictionary?, completion: (()->Void)?)
 }
 
+/// Protocol with updating `DbUserDictionary`s logic
 protocol IUserDictionaryFetchService {
-    func updateDicts(dicts: [GetDictionaryResponseDto], owner: DbAppUser, completion: (()->Void)?)
+    /**
+     Updates given Dictionaries
+     - Parameter dicts: Dicts dtos -- after this function linked `DbUserDictionary`s should match `dicts`
+     - Parameter owner: User, whos dictionaries will be updated
+     - Parameter shouldDelete: should Delete Dictionaries that not in `dicts`
+     - Parameter completion: completion callback
+     */
+    func updateDicts(dicts: [GetDictionaryResponseDto], owner: DbAppUser, shouldDelete: Bool, completion: (()->Void)?)
 }
 
 class DbTranslationFetchService: ITranslationFetchService {
@@ -25,65 +41,68 @@ class DbTranslationFetchService: ITranslationFetchService {
     private var storageManager: IStorageCoordinator
     private let innerQueue: DispatchQueue
     
+    /**
+     Creates new `DbTranslationFetchService`
+     - Parameter innerQueue: queue for submitting asynchronious tasks
+     - Parameter storageManager: instance for handling saving/modification of `DbUserDictionary`, `DbUserCard` and `DbUserTranslations`
+     */
     init(innerQueue: DispatchQueue, storageManager: IStorageCoordinator) {
         self.storageManager = storageManager
         self.innerQueue = innerQueue
     }
     
-    func updateTranslations(translations: [GetTranslationDto], doSave: Bool = false, sourceCardProvider: (GetTranslationDto) -> DbUserCard?, completion: (()->Void)?) {
-        
-        let serverIds = translations.map{ $0.id }
-        
-        let translationMap = Dictionary<Int64, GetTranslationDto>.init(uniqueKeysWithValues: translations.map({ ($0.id, $0) }))
-        var notUsedIds = Set.init(serverIds)
-        
-        let request = DbTranslation.requestTranslationsWithIds(ids: serverIds)
-        var res: [DbTranslation]?
+    func updateTranslations(translations: [GetTranslationDto], doSave: Bool = false, sourceCard: DbUserCard?, completion: (()->Void)?) {
         self.storageManager.stack.saveContext.performAndWait {
-            //self.innerQueue.sync {
-                do {
-                    res = try self.storageManager.stack.saveContext.fetch(request)
+            let allTranslations: [DbTranslation] = sourceCard?.translations?.toArray() ?? []
+            let existingPins = Set(translations.map { (el) -> String in
+                el.pin
+            })
+            
+            var updatedPins = Set<String>()
+            var toRemove: [DbTranslation] = []
+            let dispatchGroup = DispatchGroup()
+        
+            for dbTranslation in allTranslations {
+                if existingPins.contains(dbTranslation.pin!) {
+                    updatedPins.insert(dbTranslation.pin!)
                     
-                    if let fetchedTranslations = res {
-                        for translation in fetchedTranslations {
-                            if let transDto = translationMap[translation.serverId] {
-                                translation.comment = transDto.comment
-                                translation.timeModified = transDto.timeModified
-                                translation.transcription = transDto.transcription
-                                translation.usageSample = transDto.usageSample
-                                translation.serverId = transDto.id
-                                
-                                translation.isSynced = true
-
-                                notUsedIds.remove(translation.serverId)
-                            } else {
-                                self.storageManager.stack.saveContext.delete(translation)
-                            }
-                        
-                        }
-                           
-                        for notUsedId in notUsedIds {
-                            if let transDto = translationMap[notUsedId] {
-                                let sourceCard = sourceCardProvider(transDto)
-                                
-                                self.storageManager.createTranslation(sourceCard: sourceCard, usageSample: transDto.usageSample, translation: transDto.translation, transcription: transDto.transcription, comment: transDto.comment, serverId: transDto.id, timeCreated: transDto.timeCreated, timeModified: transDto.timeModified, completion: { (trans) -> Void in
-                                    self.storageManager.performSave(in: self.storageManager.stack.saveContext, completion: completion)
-                                })
-                                sourceCard?.isSynced = true
-                            }
-                        }
-                        
-                        if doSave {
-                            self.storageManager.performSave(in: self.storageManager.stack.saveContext, completion: completion)
-                        } else {
-                            completion?()
-                        }
+                    let updateTransDto = translations.filter { (el) -> Bool in
+                        el.pin == dbTranslation.pin
+                    }.first
+                    
+                    if let updateTransDto = updateTransDto {
+                        dbTranslation.comment = updateTransDto.comment
+                        dbTranslation.transcription = updateTransDto.transcription
+                        dbTranslation.translation = updateTransDto.translation
+                        dbTranslation.usageSample = updateTransDto.usageSample
+                        dbTranslation.timeModified = updateTransDto.timeModified
                     }
-                } catch let err {
-                    Logger.log("Cant fetch Translations in \(#function)")
-                    Logger.log(err.localizedDescription)
+                    
+                } else {
+                    toRemove.append(dbTranslation)
                 }
-            //}
+            }
+            
+            for el in toRemove {
+                sourceCard?.removeFromTranslations(el)
+                self.storageManager.stack.saveContext.delete(el)
+            }
+            
+            for updateTranslation in translations {
+                if !updatedPins.contains(updateTranslation.pin) {
+                    self.innerQueue.async(group: dispatchGroup) {
+                        self.storageManager.createTranslation(sourceCard: sourceCard, usageSample: updateTranslation.usageSample, translation: updateTranslation.translation, transcription: updateTranslation.transcription, comment: updateTranslation.comment, serverId: updateTranslation.id, timeCreated: updateTranslation.timeCreated, timeModified: updateTranslation.timeModified, pin: updateTranslation.pin, completion: { (trans) -> Void in
+                        })
+                    }
+                }
+            }
+            dispatchGroup.notify(queue: self.innerQueue) {
+                if doSave {
+                    self.storageManager.stack.performSave(with: self.storageManager.stack.saveContext, completion: completion)
+                } else {
+                    completion?()
+                }
+            }
         }
     }
 }

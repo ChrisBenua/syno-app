@@ -1,11 +1,3 @@
-//
-//  DictionaryResponse.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 29.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 
 class GetDictionaryResponseDto: Decodable {
@@ -17,17 +9,20 @@ class GetDictionaryResponseDto: Decodable {
     
     let timeModified: Date
     
-    let language: String
+    let language: String?
     
     let userCards: [GetCardResponseDto]
     
-    init(id: Int64, name: String, timeCreated: Date, timeModified: Date, language: String, userCards: [GetCardResponseDto]) {
+    let pin: String
+    
+    init(id: Int64, name: String, timeCreated: Date, timeModified: Date, language: String?, userCards: [GetCardResponseDto], pin: String) {
         self.id = id
         self.name = name
         self.timeCreated = timeCreated
         self.timeModified = timeModified
         self.userCards = userCards
         self.language = language
+        self.pin = pin
     }
 
 }
@@ -43,12 +38,15 @@ class GetCardResponseDto: Decodable {
     
     let translations: [GetTranslationDto]
     
-    init(id: Int64, translatedWord: String, timeCreated: Date, timeModified: Date, translations: [GetTranslationDto]) {
+    let pin: String
+    
+    init(id: Int64, translatedWord: String, timeCreated: Date, timeModified: Date, translations: [GetTranslationDto], pin: String) {
         self.id = id
         self.translatedWord = translatedWord
         self.timeCreated = timeCreated
         self.timeModified = timeModified
         self.translations = translations
+        self.pin = pin
     }
 }
 
@@ -67,7 +65,9 @@ class GetTranslationDto: Decodable {
     
     let timeModified: Date
     
-    init(id: Int64, translation: String, transcription: String, comment: String, usageSample: String, timeCreated: Date, timeModified: Date) {
+    let pin: String
+    
+    init(id: Int64, translation: String, transcription: String, comment: String, usageSample: String, timeCreated: Date, timeModified: Date, pin: String) {
         self.id = id
         self.translation = translation
         self.transcription = transcription
@@ -75,16 +75,6 @@ class GetTranslationDto: Decodable {
         self.usageSample = usageSample
         self.timeCreated = timeCreated
         self.timeModified = timeModified
+        self.pin = pin
     }
-    
-    
-    
-//    enum CodingKeys: String, CodingKey {
-//        case id
-//        case translation
-//        case comment
-//        case usageSample = "usage_sample"
-//        case timeCreated = "time_created"
-//        case timeModified = "time_modified"
-//    }
 }

@@ -14,6 +14,8 @@ public interface DbUserDictionaryRepository extends JpaRepository<DbUserDictiona
 
     List<DbUserDictionary> findByPinIn(Collection<String> pins);
 
+    Optional<DbUserDictionary> findByOwner_EmailAndPin(String email, String pin);
+
     List<DbUserDictionary> findByOwner_Email(String email);
 
     boolean existsByNameAndOwner_Email(String name, String email);

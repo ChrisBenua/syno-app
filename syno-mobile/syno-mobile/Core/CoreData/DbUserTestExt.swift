@@ -1,11 +1,3 @@
-//
-//  DbUserTest.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 19.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import CoreData
 
@@ -50,9 +42,10 @@ extension DbUserTest {
         return userTest
     }
     
-    static func requestLatestTests() -> NSFetchRequest<DbUserTest> {
+    static func requestLatestTests(limit: Int = 5) -> NSFetchRequest<DbUserTest> {
         let request: NSFetchRequest<DbUserTest> = DbUserTest.fetchRequest()
-        request.fetchLimit = 5
+        request.fetchLimit = limit
+        request.predicate = NSPredicate(format: "timePassed != NULL")
         request.sortDescriptors = [NSSortDescriptor(key: "timeCreated", ascending: false)]
         
         return request

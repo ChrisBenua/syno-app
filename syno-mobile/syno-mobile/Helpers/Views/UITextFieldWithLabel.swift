@@ -1,19 +1,16 @@
-//
-//  UITextFieldWithLabel.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 07.04.2020.
-//  Copyright © 2020 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// TextField with label above it
 class UITextFieldWithLabel: UIView {
+    /// Actual TextField
     private var textField: UITextField
+    /// Actual Label
     private var label: UILabel
+    /// Spacing between Label and TextField
     private var spacing: CGFloat
     
+    /// Layouts views inside `UITextFieldWithLabel`
     private func layout() {
         let sv = UIStackView(arrangedSubviews: [label, textField])
         sv.axis = .vertical
@@ -24,6 +21,12 @@ class UITextFieldWithLabel: UIView {
         sv.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
     }
     
+    /**
+     Creates new `UITextFieldWithLabel` with given textField, Label and spacing
+     - Parameter textField: given TextField to layout inside this view
+     - Parameter label: given Label to layout inside this view
+     - Parameter spacing: space in points between label and TextField
+    */
     init(textField: UITextField, label: UILabel, spacing: CGFloat) {
         self.textField = textField
         self.label = label
@@ -32,6 +35,7 @@ class UITextFieldWithLabel: UIView {
         layout()
     }
     
+    /// Creates simple `UITextFieldWithLabel` with default Label and TextField
     init() {
         self.textField = UITextField()
         self.label = UILabel()
@@ -40,14 +44,23 @@ class UITextFieldWithLabel: UIView {
         layout()
     }
     
+    /// Forbidden to create from Storyboard
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /**
+     Function for styling TextField
+     - Parameter styleFunc: callback for styling TextField
+     */
     func styleTextField(styleFunc: (UITextField) -> ()) {
         styleFunc(textField)
     }
     
+    /**
+     Function for styling Label
+    - Parameter styleFunc: callback for styling Label
+     */
     func styleLabel(styleFunc: (UILabel) -> ()) {
         styleFunc(label);
     }

@@ -1,16 +1,9 @@
-//
-//  GradeToStringAndColor.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 11.04.2020.
-//  Copyright © 2020 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// Class for generating string and color for grades
 class GradeToStringAndColor {
-    
+    /// Converts grade to color
     static func gradeToColor(gradePercentage: Double) -> UIColor {
         let colors = [UIColor(red: 18.0/255, green: 171.0/255, blue: 79.0/255, alpha: 1),
                       UIColor(red: 134.0/255, green: 240.0/255, blue: 0.0/255, alpha: 1),
@@ -25,6 +18,7 @@ class GradeToStringAndColor {
         return color
     }
     
+    /// Converts grade to string description and color
     static func gradeToStringAndColor(gradePercentage: Double) -> (String, UIColor) {
         let str = gradePercentage > -0.5 ? "\(Int(gradePercentage))%" : "N/A"
         

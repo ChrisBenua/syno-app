@@ -1,11 +1,3 @@
-//
-//  LearnControllerTableViewDataSource.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 20.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
@@ -114,7 +106,7 @@ class LearnControllerTableViewDataSource: NSObject, ILearnControllerTableViewDat
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TranslationReadonlyTableViewCell.cellId(), for: indexPath) as? TranslationReadonlyTableViewCell else {
             fatalError()
         }
-        let transDto = self.viewModel.getItem(cardPos: self.state.itemNumber, transPos: indexPath.row)
+        let transDto = self.viewModel.getItem(cardPos: self.state.itemNumber, transPos: self.state.translationsShown - indexPath.row - 1)
         
         cell.setup(config: TranslationCellConfiguration(translation: transDto.translation, transcription: transDto.transcription, comment: transDto.comment, sample: transDto.sample))
         
@@ -134,12 +126,12 @@ class LearnControllerTableViewDataSource: NSObject, ILearnControllerTableViewDat
     func onPlusOne() {
         if (self.state.translationsShown < self.viewModel.getItems(currCardPos: self.state.itemNumber).count) {
             self.state.translationsShown += 1
-            self.delegate?.addItems(indexPaths: [IndexPath(row: self.state.translationsShown - 1, section: 0)])
+            self.delegate?.addItems(indexPaths: [IndexPath(row: 0, section: 0)])
         }
     }
     
     func onShowAll() {
-        let items = (self.state.translationsShown..<self.viewModel.getItems(currCardPos: self.state.itemNumber).count).map { (row) -> IndexPath in
+        let items = (0..<self.viewModel.getItems(currCardPos: self.state.itemNumber).count - self.state.translationsShown).map { (row) -> IndexPath in
             return IndexPath(row: row, section: 0)
         }
         

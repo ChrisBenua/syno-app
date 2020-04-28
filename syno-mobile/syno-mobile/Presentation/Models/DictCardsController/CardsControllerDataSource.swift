@@ -1,11 +1,3 @@
-//
-//  CardsControllerDataSource.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 12.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 import CoreData
@@ -27,18 +19,24 @@ class CardsControllerDataProvider: ICardsControllerDataProvider {
     private var storageCoordinator: IStorageCoordinator
     private var lastDeletedObject: NSManagedObject?
     private var undoManager: UndoManager?
+    private var deletedObjects: [NSManagedObjectID] = []
     
     init(storageCoordinator: IStorageCoordinator) {
         self.storageCoordinator = storageCoordinator
     }
     
     func createEmptyUserCard(sourceDict: DbUserDictionary, completionHandler: ((DbUserCard) -> Void)?) {
-        let card = DbUserCard.insertUserCard(into: self.storageCoordinator.stack.mainContext)!
-        card.sourceDictionary = sourceDict
-        card.timeCreated = Date()
-        
-        self.storageCoordinator.stack.performSave(with: self.storageCoordinator.stack.mainContext) {
-            completionHandler?(card)
+        self.storageCoordinator.stack.saveContext.performAndWait {
+            let card = DbUserCard.insertUserCard(into: self.storageCoordinator.stack.saveContext)!
+            card.sourceDictionary = self.storageCoordinator.stack.saveContext.object(with: sourceDict.objectID) as! DbUserDictionary
+            card.timeCreated = Date()
+            
+            self.storageCoordinator.stack.performSave(with: self.storageCoordinator.stack.saveContext) {
+                let objectId = card.objectID
+                DispatchQueue.main.async {
+                    completionHandler?(self.storageCoordinator.stack.mainContext.object(with: objectId) as! DbUserCard)
+                }
+            }
         }
     }
     
@@ -46,23 +44,40 @@ class CardsControllerDataProvider: ICardsControllerDataProvider {
         return NSFetchedResultsController(fetchRequest: DbUserCard.requestCardsFrom(sourceDict: sourceDict), managedObjectContext: storageCoordinator.stack.mainContext, sectionNameKeyPath: nil, cacheName: nil)
     }
     
+    func commitSaveContextChanges() {
+        if deletedObjects.count > 0 {
+            self.storageCoordinator.stack.saveContext.performAndWait {
+                for el in deletedObjects {
+                    self.storageCoordinator.stack.saveContext.delete( self.storageCoordinator.stack.saveContext.object(with: el))
+                }
+                deletedObjects = []
+            }
+        }
+    }
+    
     func deleteManagedObject(object: NSManagedObject) {
-        lastDeletedObject = object
         self.storageCoordinator.stack.mainContext.undoManager = UndoManager()
         self.undoManager = self.storageCoordinator.stack.mainContext.undoManager
         self.undoManager?.beginUndoGrouping()
         self.storageCoordinator.stack.mainContext.delete(object)
+        let objectId = object.objectID
+        
+        self.commitSaveContextChanges()
+        
+        self.deletedObjects.append(objectId)
     }
     
     func undoLastDeletion() {
-        if let obj = lastDeletedObject {
-            self.undoManager?.endUndoGrouping()
-            self.undoManager?.undo()
-        }
+        self.undoManager?.endUndoGrouping()
+        self.undoManager?.undo()
+        self.deletedObjects = []
     }
     
     func commitChanges() {
-        self.storageCoordinator.stack.performSave(with: self.storageCoordinator.stack.mainContext, completion: nil)
+        commitSaveContextChanges()
+        deletedObjects = []
+        self.storageCoordinator.stack.performSave(with: self.storageCoordinator.stack.saveContext, completion: nil)
+
     }
 }
 
@@ -127,7 +142,6 @@ class CardsControllerDataSource: NSObject, ICardsControllerDataSource {
         let cellData = self.fetchedResultsController.object(at: indexPath)
         
         cell.setup(configuration: cellData.toCellConfiguration())
-        print("Dequeuing cell at: \(indexPath)")
         return cell
     }
     
@@ -171,9 +185,10 @@ extension CardsControllerDataSource {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (_) -> UIMenu? in
             let menu = UIMenu(title: "Actions", children: [
                 UIAction(title: "Delete", image: UIImage.init(systemName: "trash.fill"), attributes: .destructive, handler: { (action) in
-                    print("Action happened!!!")
-                    self.viewModel.deleteManagedObject(object: self.fetchedResultsController.object(at: indexPath))
-                    self.delegate?.onItemDeleted()
+                    Timer.scheduledTimer(withTimeInterval: 0.9, repeats: false) { (_) in
+                        self.viewModel.deleteManagedObject(object: self.fetchedResultsController.object(at: indexPath))
+                        self.delegate?.onItemDeleted()
+                    }
                 })
             ])
             return menu

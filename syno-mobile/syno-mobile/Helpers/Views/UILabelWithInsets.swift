@@ -1,11 +1,3 @@
-//
-//  UILabelWithInsets.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 23.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
@@ -22,19 +14,18 @@ class UILabelWithInsets: UILabel {
     
     /// Create a new UILabelWithInsets instance programamtically with default insets
     override init(frame: CGRect) {
-        padding = UIEdgeInsets.zero // set desired insets value according to your needs
+        padding = UIEdgeInsets.zero
         super.init(frame: frame)
     }
     
-    /// Create a new PaddingLabel instance from Storyboard with default insets
+    /// Create a new `UILabelWithInsets` instance from Storyboard with default insets
     required init?(coder aDecoder: NSCoder) {
-        padding = UIEdgeInsets.zero // set desired insets value according to your needs
+        padding = UIEdgeInsets.zero
         super.init(coder: aDecoder)
     }
     
     /// Draws text in rect with insets
     override func drawText(in rect: CGRect) {
-        
         super.drawText(in: rect.inset(by: self.padding))
     }
     

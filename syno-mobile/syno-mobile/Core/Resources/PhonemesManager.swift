@@ -1,11 +1,3 @@
-//
-//  PhonemesManager.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 13.04.2020.
-//  Copyright © 2020 Christian Benua. All rights reserved.
-//
-
 import Foundation
 
 protocol IPhonemesManager {
@@ -45,10 +37,14 @@ class PhonemesManager: IPhonemesManager {
     
     func getPhoneme(for word: String) -> String? {
         self.dispatchGroup.wait()
-        if (!isInitialized) {
-            initialize()
+        var result: [String] = []
+        for el in word.lowercased().trimmingCharacters(in: .whitespaces).components(separatedBy: CharacterSet.alphanumerics.inverted) {
+            if let transcr = dict[el] {
+                result.append(transcr)
+            }
         }
-        return dict[word.lowercased().trimmingCharacters(in: .whitespaces)]
+        
+        return result.joined(separator: "  ")
     }
 }
 

@@ -1,20 +1,19 @@
-//
-//  TestResultsTableViewHeaderCell.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 11.04.2020.
-//  Copyright © 2020 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// Protocol for defining data for `TestResultsTableViewHeaderView`
 protocol ITestResultsHeaderConfiguration {
+    /// Card's translated word
     var translatedWord: String? { get }
+    /// number of right answered in this card
     var rightAnswered: Int { get }
+    /// number of translations in this card
     var allTranslations: Int { get }
+    /// index of section in table view
     var section: Int { get }
+    /// is current section expanded
     var isExpanded: Bool { get }
+    /// should animate indicator rotation
     var shouldAnimate: Bool { get }
 }
 
@@ -31,6 +30,15 @@ class TestResultsHeaderConfiguration: ITestResultsHeaderConfiguration {
     
     var shouldAnimate: Bool
     
+    /**
+     Creates new `TestResultsHeaderConfiguration`
+     - Parameter translatedWord: Card's translated word
+     - Parameter rightAnswered: number of right answered in this card
+     - Parameter allTranslations:number of translations in this card
+     - Parameter section:index of section in table view
+     - Parameter isExpanded:is current section expanded
+     - Parameter shouldAnimate:should animate indicator rotation
+     */
     init(translatedWord: String?, rightAnswered: Int, allTranslations: Int, section: Int, isExpanded: Bool, shouldAnimate: Bool) {
         self.translatedWord = translatedWord
         self.rightAnswered = rightAnswered
@@ -41,14 +49,17 @@ class TestResultsHeaderConfiguration: ITestResultsHeaderConfiguration {
     }
 }
 
+/// Protocol for updating `TestResultsTableViewHeaderView`
 protocol IConfigurableTestResultsHeader {
     func configure(config: ITestResultsHeaderConfiguration)
 }
 
+/// Protocol for handling `TestResultsTableViewHeaderView` events
 protocol ITestResultsHeaderViewDelegate: class {
     func didChangeExpandStateAt(section: Int)
 }
 
+/// Class for displaying section header in TestResultsController
 class TestResultsTableViewHeaderView: UIView, IConfigurableTestResultsHeader {
             
     var config: ITestResultsHeaderConfiguration!
@@ -61,15 +72,14 @@ class TestResultsTableViewHeaderView: UIView, IConfigurableTestResultsHeader {
         updateUI()
     }
     
+    /// Updates `translatedWordLabel`, `cardResultLabel`
     func updateUI() {
         self.translatedWordLabel.text = config.translatedWord
         self.cardResultLabel.text = "\(config.rightAnswered)/\(config.allTranslations)"
         self.cardResultLabel.textColor = GradeToStringAndColor.gradeToColor(gradePercentage: Double(config.rightAnswered) / Double(config.allTranslations) * 100)
-//        if !self.config.isExpanded && !self.config.shouldAnimate {
-//            self.expandButton.transform = CGAffineTransform(rotationAngle: -CGFloat.pi)
-//        }
     }
     
+    /// Main container view
     lazy var baseShadowView: UIView = {
         let view = BaseShadowView()
         view.cornerRadius = 20
@@ -91,6 +101,7 @@ class TestResultsTableViewHeaderView: UIView, IConfigurableTestResultsHeader {
         return view
     }()
     
+    /// Label for displaying current translated word
     lazy var translatedWordLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -100,6 +111,7 @@ class TestResultsTableViewHeaderView: UIView, IConfigurableTestResultsHeader {
         return label
     }()
     
+    /// Label for displaying test results in current card
     lazy var cardResultLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -109,6 +121,7 @@ class TestResultsTableViewHeaderView: UIView, IConfigurableTestResultsHeader {
         return label
     }()
     
+    /// Button for expanding and collapsing current section
     lazy var expandButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .clear
@@ -117,7 +130,6 @@ class TestResultsTableViewHeaderView: UIView, IConfigurableTestResultsHeader {
         button.setImage(image, for: .normal)
         button.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         
-        //button.addTarget(self, action: #selector(expandButtonClicked), for: .touchUpInside)
         button.transform = CGAffineTransform(rotationAngle: CGFloat.pi - 1e-7)
         
         return button
@@ -157,6 +169,7 @@ class TestResultsTableViewHeaderView: UIView, IConfigurableTestResultsHeader {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// `expandButton` click listener
     @objc func expandButtonClicked() {
         self.delegate?.didChangeExpandStateAt(section: self.config.section)
     }

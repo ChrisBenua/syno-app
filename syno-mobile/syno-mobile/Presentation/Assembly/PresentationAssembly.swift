@@ -1,11 +1,3 @@
-//
-//  PresentationAssembly.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 23.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
@@ -35,6 +27,12 @@ protocol IPresentationAssembly {
     func newDictController() -> UIViewController
     
     func testResultsController(sourceTest: DbUserTest) -> UIViewController
+    
+    func homeController() -> UIViewController
+    
+    func loginFromHomeViewController() -> UIViewController
+    
+    func addShareController() -> UIViewController
 }
 
 class PresentationAssembly: IPresentationAssembly {
@@ -50,7 +48,7 @@ class PresentationAssembly: IPresentationAssembly {
     }
     
     func dictsViewController() -> DictsViewController {
-        return DictsViewController(datasource: DictionaryControllerTableViewDataSource(viewModel: self.serviceAssembly.dictionaryControllerDataProvider, presAssembly: self), model: serviceAssembly.dictControllerModel())
+        return DictsViewController(datasource: DictionaryControllerTableViewDataSource(viewModel: self.serviceAssembly.dictionaryControllerDataProvider, shareService: self.serviceAssembly.dictShareService, presAssembly: self), model: serviceAssembly.dictControllerModel())
     }
     
     func cardsViewController(sourceDict: DbUserDictionary) -> DictCardsController {
@@ -66,7 +64,7 @@ class PresentationAssembly: IPresentationAssembly {
     }
     
     func testAndLearnViewController() -> TestAndLearnViewController {
-        return TestAndLearnViewController(datasource: TestAndLearnDictionaryDataSource(viewModel: self.serviceAssembly.testAndLearnDictControllerDataProvider(), presAssembly: self))
+        return TestAndLearnViewController(datasource: TestAndLearnDictionaryDataSource(viewModel: self.serviceAssembly.testAndLearnDictControllerDataProvider(), presAssembly: self, recentTestsDataSource: self.serviceAssembly.recentTestsDataSource()))
     }
     
     func learnController(sourceDict: DbUserDictionary) -> LearnCollectionViewController {
@@ -86,10 +84,11 @@ class PresentationAssembly: IPresentationAssembly {
     func testController(sourceDict: DbUserDictionary) -> TestViewController {
         let cardsAmount = sourceDict.getCards().count
         var views: [ITestView] = []
-        let answers = AnswersStorage(answers: Array.init(repeating: [], count: cardsAmount))
         
+        let answers = AnswersStorage(answers: Array.init(repeating: [], count: cardsAmount))
+        let dataProvider = serviceAssembly.testViewControllerDataProvider(dictionary: sourceDict)
         for i in 0..<cardsAmount {
-            let testView = TestView(model: serviceAssembly.testViewControllerModel(state: TestControllerState(itemNumber: i, answers: answers), dictionary: sourceDict))
+            let testView = TestView(model: serviceAssembly.testViewControllerModel(state: TestControllerState(itemNumber: i, answers: answers), dictionary: sourceDict, dataProvider: dataProvider))
             views.append(testView)
         }
         
@@ -117,6 +116,18 @@ class PresentationAssembly: IPresentationAssembly {
     
     func testResultsController(sourceTest: DbUserTest) -> UIViewController {
         return TestResultsViewController(dataSource: self.serviceAssembly.testResultsControllerDataSource(sourceTest: sourceTest))
+    }
+    
+    func homeController() -> UIViewController {
+        return HomeViewController(dataProvider: self.serviceAssembly.homeControllerDataProvider(presAssembly: self))
+    }
+    
+    func loginFromHomeViewController() -> UIViewController {
+        return LoginFromHomeViewController(presAssembly: self, loginModel: LoginModel(loginService: serviceAssembly.loginService), registrationViewController: registerViewController())
+    }
+    
+    func addShareController() -> UIViewController {
+        return AddShareViewController(shareModel: self.serviceAssembly.addShareModel())
     }
     
     init(serviceAssembly: IServiceAssembly) {

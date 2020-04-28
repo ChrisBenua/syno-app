@@ -1,17 +1,12 @@
-//
-//  NewDictController.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 10.04.2020.
-//  Copyright © 2020 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// Controller for creating new dictionary
 class NewDictController: UIViewController {
+    /// Service responsible for inner logic in `NewDictController`
     private var model: INewDictControllerModel
     
+    /// Text Field for entering name of new dictionary
     lazy var nameTextField: UITextFieldWithLabel = {
         var tf = UITextFieldWithInsets(insets: UIEdgeInsets(top: 3, left: 7, bottom: 3, right: 7))
         tf.backgroundColor = .white
@@ -28,6 +23,7 @@ class NewDictController: UIViewController {
         return tfl
     }()
     
+    /// Text Field for entering language of new dictionary
     lazy var languageTextField: UITextFieldWithLabel = {
         var tf = UITextFieldWithInsets(insets: UIEdgeInsets(top: 3, left: 7, bottom: 3, right: 7))
         tf.backgroundColor = .white
@@ -44,6 +40,7 @@ class NewDictController: UIViewController {
         return tfl
     }()
     
+    /// Stack view with `nameTextField` and `languageTextField`
     lazy var stackView: UIView = {
         let sv = UIStackView(arrangedSubviews: [self.nameTextField, self.languageTextField])
         sv.axis = .vertical
@@ -52,7 +49,8 @@ class NewDictController: UIViewController {
         return sv
     }()
     
-    lazy var baseShadowView: UIView = {
+    /// Main view
+    lazy var baseShadowView: BaseShadowView = {
         let view = BaseShadowView()
         view.cornerRadius = 20
         view.shadowView.shadowOffset = CGSize(width: 0, height: 4)
@@ -77,6 +75,10 @@ class NewDictController: UIViewController {
         baseShadowView.anchor(top: self.view.topAnchor, left: self.view.leftAnchor, bottom: nil, right: self.view.rightAnchor, paddingTop: 100, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0)
     }
     
+    /**
+     Creates new `NewDictController`
+     - Parameter model: Service responsible for inner logic of `NewDictController`
+     */
     init(model: INewDictControllerModel) {
         self.model = model
         super.init(nibName: nil, bundle: nil)
@@ -86,6 +88,7 @@ class NewDictController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// Submit button click listener
     @objc func onSubmitButtonPressed() {
         model.createNewDict(newDict: NewDictControllerNewDictDto(name: self.nameTextField.getTextField().text ?? "", language: self.languageTextField.getTextField().text ?? "")) {
             DispatchQueue.main.async {

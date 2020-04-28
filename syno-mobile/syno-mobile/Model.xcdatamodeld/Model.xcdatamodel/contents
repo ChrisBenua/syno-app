@@ -8,7 +8,7 @@
     </entity>
     <entity name="DbTranslation" representedClassName="DbTranslation" syncable="YES" codeGenerationType="class">
         <attribute name="comment" optional="YES" attributeType="String"/>
-        <attribute name="isSynced" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="pin" optional="YES" attributeType="String"/>
         <attribute name="serverId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="timeCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="timeModified" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -18,7 +18,7 @@
         <relationship name="sourceCard" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DbUserCard" inverseName="translations" inverseEntity="DbUserCard"/>
     </entity>
     <entity name="DbUserCard" representedClassName="DbUserCard" syncable="YES" codeGenerationType="class">
-        <attribute name="isSynced" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="pin" optional="YES" attributeType="String"/>
         <attribute name="serverId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="timeCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="timeModified" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -28,14 +28,14 @@
         <relationship name="translations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DbTranslation" inverseName="sourceCard" inverseEntity="DbTranslation"/>
     </entity>
     <entity name="DbUserDictionary" representedClassName="DbUserDictionary" syncable="YES" codeGenerationType="class">
-        <attribute name="isSynced" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="language" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="pin" optional="YES" attributeType="String"/>
         <attribute name="serverId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="timeCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="timeModified" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DbAppUser" inverseName="dictionaries" inverseEntity="DbAppUser"/>
-        <relationship name="tests" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DbUserTest" inverseName="targetedDict" inverseEntity="DbUserTest"/>
+        <relationship name="tests" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DbUserTest" inverseName="targetedDict" inverseEntity="DbUserTest"/>
         <relationship name="userCards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DbUserCard" inverseName="sourceDictionary" inverseEntity="DbUserCard"/>
     </entity>
     <entity name="DbUserTest" representedClassName="DbUserTest" syncable="YES" codeGenerationType="class">

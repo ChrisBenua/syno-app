@@ -1,11 +1,3 @@
-//
-//  TestResultsViewController.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 11.04.2020.
-//  Copyright © 2020 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 

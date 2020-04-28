@@ -1,11 +1,3 @@
-//
-//  DbAppUserExt.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 30.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import CoreData
 
@@ -46,7 +38,7 @@ extension DbAppUser {
                         foundUser = user
                     }
                 } catch let err {
-                    print("Error in fetching \(err)")
+                    Logger.log("Error in fetching \(err)")
                 }
                 if foundUser == nil {
                     foundUser = DbAppUser.insertAppUser(into: context)

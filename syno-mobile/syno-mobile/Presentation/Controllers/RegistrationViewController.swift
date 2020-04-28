@@ -1,23 +1,16 @@
-//
-//  RegistrationViewController.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 29.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// View controller for registration
 class RegistrationViewController: UIViewController, IRegistrationReactor {
     func startedProcessingRegistration() {
-        print("Starter")
+        Logger.log("Started processing registration")
         self.layouter.submitButton().isEnabled = false
         self.processingSaveView.showSavingProcessView(sourceView: self)
     }
     
     func failed(error: String) {
-        print("Failed: \(error)")
+        Logger.log("Failed registration: \(error)")
         self.layouter.submitButton().isEnabled = true
         
         self.processingSaveView.dismissSavingProcessView()
@@ -26,7 +19,7 @@ class RegistrationViewController: UIViewController, IRegistrationReactor {
     }
     
     func success() {
-        print("Success")
+        Logger.log("Success in registration")
         self.layouter.submitButton().isEnabled = true
         
         self.processingSaveView.dismissSavingProcessView()
@@ -41,10 +34,13 @@ class RegistrationViewController: UIViewController, IRegistrationReactor {
         })
     }
     
+    /// Instance that performs layout
     private var layouter: IRegistrationLayouter = RegistrationLayouter()
         
+    /// Service responsible for inner logic
     private var model: IRegistrationModel
     
+    /// Process view
     lazy var processingSaveView: SavingProcessView = {
         let view = SavingProcessView()
         view.setText(text: "Signing in..")
@@ -52,10 +48,15 @@ class RegistrationViewController: UIViewController, IRegistrationReactor {
         return view
     }()
     
+    /// Login button click listener
     @objc func onLoginButtonClick() {
         self.dismiss(animated: true, completion: nil)
     }
     
+    /**
+     Creates new `RegistrationViewController`
+     - Parameter registerModel: Service that performs inner logic in `RegistrationViewController`
+     */
     init(registerModel: IRegistrationModel) {
         self.model = registerModel
         super.init(nibName: nil, bundle: nil)
@@ -100,6 +101,7 @@ class RegistrationViewController: UIViewController, IRegistrationReactor {
 
 
 extension RegistrationViewController {
+    /// Shifts main view up when keyboard is shown
     @objc func showKeyboard(notification: NSNotification) {
         if let keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height {
 
@@ -113,10 +115,12 @@ extension RegistrationViewController {
         }
     }
     
+    /// Shifts keyboard down main view when keyboard is hidden
     @objc func hideKeyboard(notification: NSNotification) {
         self.view.frame.origin.y = 0
     }
     
+    /// Ends editing in whole view
     @objc func clearKeyboard() {
         view.endEditing(true)
     }

@@ -1,53 +1,84 @@
-//
-//  ServiceAssembly.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 26.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 
+/// Protocol with all services dependencies
 protocol IServiceAssembly {
+    /// Service for performing authorization
     var loginService: ILoginService { get }
     
+    /// Service responsible for generating transcriptions
     var phonemesManager: IPhonemesManager { get }
     
+    /// Service responsible for performing registration
     var registerService: IRegisterService { get }
     
+    /// Service responsible for updating/creating `DbTranslation` instances
     var translationsFetchService: ITranslationFetchService { get }
     
+    /// Service responsible for updating/creating `DbUserCard` instances
     var cardsFetchService: IUserCardsFetchService { get }
     
+    /// Service responsible for updating/creating `DbUserDictionary` instances
     var dictsFetchService: IUserDictionaryFetchService { get }
     
+    /// Service responsible for validating user token
     var userAuthHelper: IUserAuthHelper { get }
     
+    /// Service responsible for delivering data to DictionaryController
     var dictionaryControllerDataProvider: IDictionaryControllerDataProvider { get }
     
+    /// Service responsible for inner logic inside NewDictionaryController
     var newDictControllerModel: INewDictControllerModel { get }
-        
+    
+    /// Service responsible for sharing dictionaries
+    var dictShareService: IDictShareService { get }
+     
+    /// Service responsible for inner logic in DictionaryController
     func dictControllerModel() -> DictControllerModel
     
+    /// Service responsible for delivering data to CardsController
     func cardsControllerDataProvider() -> ICardsControllerDataProvider
     
+    /// Service responsible for delivering data to TranslationsController
     func translationsControllerDataProvider() -> ITranslationControllerDataProvider
     
+    /// Service responsible for delivering data for DictionaryController
     func testAndLearnDictControllerDataProvider() -> IDictionaryControllerDataProvider
     
+    /// Service responsible for delivering data for LearnController
     func learnTranslationsControllerDataProvider(sourceDict: DbUserDictionary) -> ILearnControllerDataProvider
     
+    /// Service responsible for delivering data for TestController
     func testViewControllerDataProvider(dictionary: DbUserDictionary) -> ITestViewControllerDataProvider
     
-    func testViewControllerDatasource(state: ITestControllerState, dictionary: DbUserDictionary) -> ITestViewControllerDataSource
+    /// Service responsible for data formatting for TestController
+    func testViewControllerDatasource(state: ITestControllerState, dictionary: DbUserDictionary, dataProvider: ITestViewControllerDataProvider?) -> ITestViewControllerDataSource
     
-    func testViewControllerModel(state: ITestControllerState, dictionary: DbUserDictionary) -> ITestViewControllerModel
+    /// Service responsible for inner logic in TestController
+    func testViewControllerModel(state: ITestControllerState, dictionary: DbUserDictionary, dataProvider: ITestViewControllerDataProvider?) -> ITestViewControllerModel
     
+    /// Service responsible for delivering data to TestResultsController
     func testResultsControllerDataProvider(sourceTest: DbUserTest) -> ITestResultsControllerDataProvider
     
+    /// Service responsible for data formatting for TestResultsController
     func testResultsControllerDataSource(sourceTest: DbUserTest) -> ITestResultsControllerDataSource
+    
+    /// Service responsible for delivering data to RecentTestsView
+    func recentTestsDataProvider() -> IRecentTestsDataProvider
+    
+    /// Service responsible for data formatting for RecentTestsView
+    func recentTestsDataSource() -> IRecentTestsDataSource
+    
+    /// Service responsible for inner logic in HomeController
+    func homeControllerDataProvider(presAssembly: IPresentationAssembly) -> IHomeControllerMenuDataProvider
+    
+    /// Service  responsible for inner logic in AddShareController
+    func addShareModel() -> IAddShareModel
+    
+    /// Service responsible for creating copy on server
+    var updateRequestService: IUpdateRequestService { get }
 }
 
+/// Provides all services realizations
 class ServiceAssembly: IServiceAssembly {
     var newDictControllerModel: INewDictControllerModel
     
@@ -58,6 +89,8 @@ class ServiceAssembly: IServiceAssembly {
             coreAssembly.phonemesManager
         }
     }
+    
+    var updateRequestService: IUpdateRequestService
     
     var loginService: ILoginService
     
@@ -73,7 +106,13 @@ class ServiceAssembly: IServiceAssembly {
     
     var dictionaryControllerDataProvider: IDictionaryControllerDataProvider
     
-    var innerBatchUpdatesQueue: DispatchQueue = DispatchQueue(label: "innerCoreDataDispatchQueue")
+    var dictShareService: IDictShareService
+    
+    var innerBatchUpdatesQueue: DispatchQueue = DispatchQueue(label: "innerCoreDataDispatchQueue", attributes: .concurrent)
+    
+    var innerBatchUpdatesQueue1: DispatchQueue = DispatchQueue(label: "innerCoreDataDispatchQueue1", attributes: .concurrent)
+    
+    var innerBatchUpdatesQueue2: DispatchQueue = DispatchQueue(label: "innerCoreDataDispatchQueue2", attributes: .concurrent)
     
     
     init(coreAssembly: ICoreAssembly) {
@@ -81,11 +120,13 @@ class ServiceAssembly: IServiceAssembly {
         self.loginService = LoginService(storageManager: self.coreAssembly.storageManager, requestSender: coreAssembly.requestSender, userDefaultsManager: coreAssembly.userDefaultsManager)
         self.registerService = RegisterService(requestSender: coreAssembly.requestSender)
         self.translationsFetchService = DbTranslationFetchService(innerQueue: innerBatchUpdatesQueue,storageManager: coreAssembly.storageManager)
-        self.cardsFetchService = UserCardsFetchService(innerQueue: innerBatchUpdatesQueue,storageManager: coreAssembly.storageManager, translationsFetchService: self.translationsFetchService)
-        self.dictsFetchService = UserDictsFetchService(innerQueue: innerBatchUpdatesQueue,storageManager: coreAssembly.storageManager, cardsFetchService: self.cardsFetchService)
+        self.cardsFetchService = UserCardsFetchService(innerQueue: innerBatchUpdatesQueue1,storageManager: coreAssembly.storageManager, translationsFetchService: self.translationsFetchService)
+        self.dictsFetchService = UserDictsFetchService(innerQueue: innerBatchUpdatesQueue2,storageManager: coreAssembly.storageManager, cardsFetchService: self.cardsFetchService)
         self.dictionaryControllerDataProvider = DictionaryControllerDataProvider(appUserManager: self.coreAssembly.storageManager)
         self.userAuthHelper = UserAuthHelper(userDefManager: coreAssembly.userDefaultsManager)
         self.newDictControllerModel = NewDictControllerModel(storageManager: coreAssembly.storageManager)
+        self.updateRequestService = UpdateRequestService(storageManager: self.coreAssembly.storageManager, sender: self.coreAssembly.requestSender, userDefaultsManager: self.coreAssembly.userDefaultsManager)
+        self.dictShareService = DictShareService(userDefManager: self.coreAssembly.userDefaultsManager, requestSender: self.coreAssembly.requestSender, storageManager: self.coreAssembly.storageManager, dictsFetchService: self.dictsFetchService)
     }
     
     func dictControllerModel() -> DictControllerModel {
@@ -112,12 +153,12 @@ class ServiceAssembly: IServiceAssembly {
         return TestViewControllerDataProvider(sourceDictionary: dictionary, storageManager: self.coreAssembly.storageManager)
     }
     
-    func testViewControllerDatasource(state: ITestControllerState, dictionary: DbUserDictionary) -> ITestViewControllerDataSource {
-        return TestViewControllerDataSource(state: state, dataProvider: testViewControllerDataProvider(dictionary: dictionary))
+    func testViewControllerDatasource(state: ITestControllerState, dictionary: DbUserDictionary, dataProvider: ITestViewControllerDataProvider? = nil) -> ITestViewControllerDataSource {
+        return TestViewControllerDataSource(state: state, dataProvider: dataProvider ?? testViewControllerDataProvider(dictionary: dictionary))
     }
     
-    func testViewControllerModel(state: ITestControllerState, dictionary: DbUserDictionary) -> ITestViewControllerModel {
-        return TestViewControllerModel(dataSource: testViewControllerDatasource(state: state, dictionary: dictionary))
+    func testViewControllerModel(state: ITestControllerState, dictionary: DbUserDictionary, dataProvider: ITestViewControllerDataProvider?) -> ITestViewControllerModel {
+        return TestViewControllerModel(dataSource: testViewControllerDatasource(state: state, dictionary: dictionary, dataProvider: dataProvider))
     }
     
     func testResultsControllerDataProvider(sourceTest: DbUserTest) -> ITestResultsControllerDataProvider {
@@ -127,5 +168,21 @@ class ServiceAssembly: IServiceAssembly {
     func testResultsControllerDataSource(sourceTest: DbUserTest) -> ITestResultsControllerDataSource {
         let dataProvider = testResultsControllerDataProvider(sourceTest: sourceTest)
         return TestResultsControllerDataSource(dataProvider: dataProvider, state: TestResultsControllerState(withDefaultSize: dataProvider.totalCards()))
+    }
+    
+    func recentTestsDataProvider() -> IRecentTestsDataProvider {
+        return RecentTestsDataProvider(storageManager: self.coreAssembly.storageManager)
+    }
+    
+    func recentTestsDataSource() -> IRecentTestsDataSource {
+        return RecentTestsDataSource(viewModel: self.recentTestsDataProvider())
+    }
+    
+    func addShareModel() -> IAddShareModel {
+        return AddShareModel(shareService: self.dictShareService)
+    }
+    
+    func homeControllerDataProvider(presAssembly: IPresentationAssembly) -> IHomeControllerMenuDataProvider {
+        return HomeControllerMenuDataProvider(presAssembly: presAssembly, dictControllerModel: self.dictControllerModel(), currentUserManager: self.coreAssembly.storageManager, updateService: self.updateRequestService)
     }
 }
