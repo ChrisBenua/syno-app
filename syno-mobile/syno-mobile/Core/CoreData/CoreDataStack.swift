@@ -1,20 +1,26 @@
 import Foundation
 import CoreData
 
+/// Service protocol for configuring `CoreData`
 protocol ICoreDataStack {
-    
+    /// `URL` for database
     var storeURL: URL { get }
-    
+    /// Stores object model
     var managedObjectModel: NSManagedObjectModel { get set }
-    
+    /// Main `NSPersistentStoreCoordinator` for `managedObjectModel`
     var persistantStoreCoordinator: NSPersistentStoreCoordinator { get set }
-    
+    /// `NSManagedObjectContext` for UI thread
     var mainContext: NSManagedObjectContext { get set }
-   
+    /// `NSManagedObjectContext` for saving in background thread and commiting to `persistantStoreCoordinator`
     var masterContext: NSManagedObjectContext { get set }
-    
+    /// `NSManagedObjectContext` for saving in bacground thread
     var saveContext: NSManagedObjectContext { get set }
 
+    /**
+     Perfomes save in given context and its parents
+     - Parameter context: Context which should be saved
+     - Parameter completion: Saving process completion callback
+     */
     func performSave(with context: NSManagedObjectContext, completion: (() -> Void)?)
 }
 
@@ -24,9 +30,9 @@ class CoreDataStack: ICoreDataStack {
         Logger.log("storeURL: \(documentsURL.absoluteString)")
         return documentsURL.appendingPathComponent("Mystore12.sqlite")
     }
-    
+    /// Name of `xcdatamodeld` file
     let dataModelName = "Model"
-    
+    /// Default extension of `xcdatamodeld` file
     let dataModelExtension = "momd"
     
     lazy var managedObjectModel: NSManagedObjectModel = {
@@ -89,9 +95,6 @@ class CoreDataStack: ICoreDataStack {
             } else {
                 completion?()
             }
-            
         }
-    
     }
-
 }

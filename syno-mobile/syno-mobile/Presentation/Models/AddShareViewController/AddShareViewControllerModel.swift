@@ -1,21 +1,32 @@
 import Foundation
 
+/// Service protocol for getting share
 protocol IAddShareModel {
+    /**
+     Gets share with given id
+     - Parameter text: share id
+     */
     func addShare(text: String)
     
+    /// Delegate for event handling
     var delegate: IAddShareModelDelegate? { get set }
 }
 
+/// Protocol for `IAddShareModel` event handling
 protocol IAddShareModelDelegate: class {
+    /// Notifies when model started processing request
     func showProcessView()
     
+    /// Notifies when model ended processing request
     func showCompletionView(title: String, text: String)
 }
 
+/// Service responsible for adding shares logic
 class AddShareModel: IAddShareModel {
-    
+    /// Service for fetching shares
     private let shareService: IDictShareService
     
+    /// event handler
     weak var delegate: IAddShareModelDelegate?
     
     func addShare(text: String) {
@@ -32,6 +43,10 @@ class AddShareModel: IAddShareModel {
         }
     }
     
+    /**
+     Creates new `AddShareModel`
+     - Parameter shareService: service responsible for getting and creating shares
+     */
     init(shareService: IDictShareService) {
         self.shareService = shareService
     }

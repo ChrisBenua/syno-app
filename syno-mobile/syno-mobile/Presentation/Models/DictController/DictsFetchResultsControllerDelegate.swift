@@ -2,13 +2,19 @@ import Foundation
 import UIKit
 import CoreData
 
+/// Protocol for default `NSFetchedResultsControllerDelegat`e for `UICollectionView`
 protocol IDefaultCollectionViewFetchResultControllerDelegate: NSFetchedResultsControllerDelegate {
+    /// Source collection view
     var collectionView: UICollectionView { get set }
 }
 
 class DictsControllerCollectionViewFRCDelegate: NSObject, IDefaultCollectionViewFetchResultControllerDelegate {
     var collectionView: UICollectionView
     
+    /**
+     Creates new `DictsControllerCollectionViewFRCDelegate`
+     - Parameter collectionView: collectionView where to perform actions
+     */
     init(collectionView: UICollectionView) {
         self.collectionView = collectionView
     }

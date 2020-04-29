@@ -1,17 +1,23 @@
 import Foundation
 import UIKit
 
+/// Extension for `ILoginLayouter` protocol with new field
 protocol IRegistrationLayouter: ILoginLayouter {
+    /// Gets TextField with password confirmation
     func passwordConfirmationTextField() -> UITextField
 }
 
 class RegistrationLayouter: LoginRegistrationLayouter, IRegistrationLayouter {
+    /// TextField for entering password confirmation
     private var _passwordConfirmationTextField: UITextField?
     
+    /// Stack view with all views
     private var _allStackView: UIStackView?
     
+    /// Button for registration
     private var _loginButtonView: UIView?
     
+    /// Button for switching to Login
     private var _alternateAuthButton: UIView?
     
     override func alternateAuthButton() -> UIView {

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Protocol for `IRegistrationModel` event handling
 protocol IRegistrationReactor: class {
     /// Called when model started performing registration request
     func startedProcessingRegistration()
@@ -11,11 +12,14 @@ protocol IRegistrationReactor: class {
     func success()
 }
 
+/// Protocol for perfomring registration
 protocol IRegistrationModel {
+    /// Performs registration
     func register()
-    
+    /// Stores current form state
     var state: IRegisterState { get }
     
+    /// Event handler
     var reactor: IRegistrationReactor? { get set }
 }
 
@@ -40,8 +44,13 @@ class RegistrationModel: IRegistrationModel {
     
     weak var reactor: IRegistrationReactor?
     
+    /// Service for performing registration request to server
     private var registerService: IRegisterService
     
+    /**
+     Creates new `RegistrationModel`
+     - Parameter registerService: Service for performing registration request to server
+     */
     init(registerService: IRegisterService) {
         self.state = RegisterState()
         self.registerService = registerService

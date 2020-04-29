@@ -3,6 +3,7 @@ import UIKit
 
 /// Protocol for `GetDictShareView` event handling
 protocol IGetDictShareDelegate: class {
+    /// Notifies when submit button was clicked
     func didSubmitText(text: String)
 }
 

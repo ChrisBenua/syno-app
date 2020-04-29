@@ -1,7 +1,10 @@
 import Foundation
 
+/// Class for configuring `UploadDicts` request
 class UpdateDictRequest: IRequest {
+    /// DTO to put inside request body
     private let updateRequestDto: UpdateRequestDto
+    /// Service for fetching user's access token
     private var userDefaultManager: IUserDefaultsManager
     
     var url: URLRequest? {

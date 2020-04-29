@@ -44,7 +44,7 @@ class UserDictsFetchService: IUserDictionaryFetchService {
                     if let updateDictDto = updateDictDto {
                         updatedPins.insert(dict.pin!)
                         
-                        dict.setName(name: updateDictDto.name)
+                        dict.name = updateDictDto.name
                         dict.language = updateDictDto.language
                         //dispatchGroup.wait()
                         //updateCards

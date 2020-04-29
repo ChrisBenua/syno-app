@@ -1,42 +1,65 @@
 import Foundation
 import UIKit
 
+/// Assembly protocol for creating ViewController with all needed dependencies
 protocol IPresentationAssembly {
+    /// Creates `LoginViewController`
     func loginViewController() -> LoginViewController
     
+    /// Creates `RegistrationViewController`
     func registerViewController() -> RegistrationViewController
     
+    /// Creates `DictsViewController`
     func dictsViewController() -> DictsViewController
     
+    /// Creates `CommonTabBarController`
     func mainTabBarController() -> CommonTabBarController
     
+    /// Creates `DictCardsController`
+    /// - Parameter sourceDict: dictionary which cards to display
     func cardsViewController(sourceDict: DbUserDictionary) -> DictCardsController
     
+    /// Creates `TranslationsCollectionViewController`
+    /// - Parameter sourceCard: Card which translations to display
     func translationsViewController(sourceCard: DbUserCard) -> TranslationsCollectionViewController
     
+    /// Creates `TestAndLearnViewController`
     func testAndLearnViewController() -> TestAndLearnViewController
     
+    /// Creates `LearnCollectionViewController`
+    /// - Parameter sourceDict: Dictionary which cards will be displayed
     func learnController(sourceDict: DbUserDictionary) -> LearnCollectionViewController
     
+    /// Creates `TestViewController`
+    /// - Parameter sourceDict: to `sourceDict` new test will be attached
     func testController(sourceDict: DbUserDictionary) -> TestViewController
     
+    /// Gets controller that user will see first: `LoginViewController` or `DictsViewController`
     func startController() -> UIViewController
     
+    /// Creates `NewOrEditCardController`
+    /// - Parameter tempSourceCard: temporary source card that will be filled and saved or discarded
     func newCardController(tempSourceCard: DbUserCard) -> NewOrEditCardController
     
+    /// Creates `NewDictController`
     func newDictController() -> UIViewController
     
+    /// Creates `TestResultsViewController`
+    /// - Parameter sourceTest: test which results to present
     func testResultsController(sourceTest: DbUserTest) -> UIViewController
     
+    /// Creates `HomeViewController`
     func homeController() -> UIViewController
     
+    /// Creates `LoginFromHomeViewController`
     func loginFromHomeViewController() -> UIViewController
     
+    /// Creates `AddShareViewController`
     func addShareController() -> UIViewController
 }
 
 class PresentationAssembly: IPresentationAssembly {
-    
+    /// Assembly for creating/getting services
     private let serviceAssembly: IServiceAssembly
     
     func loginViewController() -> LoginViewController {
@@ -130,6 +153,10 @@ class PresentationAssembly: IPresentationAssembly {
         return AddShareViewController(shareModel: self.serviceAssembly.addShareModel())
     }
     
+    /**
+     Creates new `PresentationAssembly`
+     - Parameter serviceAssembly: Assembly for creating/getting services
+     */
     init(serviceAssembly: IServiceAssembly) {
         self.serviceAssembly = serviceAssembly
     }

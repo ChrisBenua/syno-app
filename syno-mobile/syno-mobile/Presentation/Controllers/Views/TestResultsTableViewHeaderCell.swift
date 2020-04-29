@@ -56,6 +56,7 @@ protocol IConfigurableTestResultsHeader {
 
 /// Protocol for handling `TestResultsTableViewHeaderView` events
 protocol ITestResultsHeaderViewDelegate: class {
+    /// Notifies when user collapses or expands section
     func didChangeExpandStateAt(section: Int)
 }
 

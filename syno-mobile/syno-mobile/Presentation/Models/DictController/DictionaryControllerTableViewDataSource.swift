@@ -2,25 +2,36 @@ import Foundation
 import CoreData
 import UIKit
 
+/// Service for inner inner `CoreData` logic for `ICommonDictionaryControllerDataSource`
 protocol IDictionaryControllerDataProvider {
+    /// Generates new `NSFetchedResultsController`
     func generateDictControllerFRC() -> NSFetchedResultsController<DbUserDictionary>
     
+    /// Undos deletion
     func undoLastChanges()
     
+    /// Commits unsaved changes to `CoreData`
     func commitChanges()
     
+    /// Temporary deletes object from `CoreData`
     func delete(object: NSManagedObject)
     
+    /// Checks if user is authorized
     func isAuthorized() -> Bool
-    
 }
 
 class DictionaryControllerDataProvider: IDictionaryControllerDataProvider {
-    
+    /// Service for perfroming actions with CoreData
     private var appUserManager: IStorageCoordinator
+    /// Undo Manager for main context
     private var undoManager: UndoManager?
+    /// Unsaved deleted objects
     private var deletedObjects: [NSManagedObjectID] = []
     
+    /**
+     Creates new `DictionaryControllerDataProvider`
+     - Parameter appUserManager: Service for perfroming actions with CoreData
+     */
     init(appUserManager: IStorageCoordinator) {
         self.appUserManager = appUserManager
     }
@@ -52,6 +63,7 @@ class DictionaryControllerDataProvider: IDictionaryControllerDataProvider {
         self.appUserManager.stack.performSave(with: self.appUserManager.stack.saveContext, completion: nil)
     }
     
+    /// Saves unsaved changes in CoreData
     func commitSaveContextChanges() {
         if deletedObjects.count > 0 {
             self.appUserManager.stack.saveContext.performAndWait {
@@ -76,40 +88,58 @@ class DictionaryControllerDataProvider: IDictionaryControllerDataProvider {
     }
 }
 
+/// Service for common logic for deliverting `DbUserDictionary` objects
 protocol ICommonDictionaryControllerDataSource {
+    /// Current user dictionaries `NSFetchedResultsController`
     var fetchedResultsController: NSFetchedResultsController<DbUserDictionary> { get set }
     
+    /// Service for delivering data
     var viewModel: IDictionaryControllerDataProvider { get set }
     
+    /// Performs fetch from `CoreData`
     func performFetch()
 }
 
+/// Service for inner logic of `DictsController` and its Collection view renderer
 protocol IDictionaryControllerTableViewDataSource: ICommonDictionaryControllerDataSource, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    /// CollectionView Event handler
     var delegate: IDictionaryControllerReactor? { get set}
     
+    /// Gets NewDictController
     func getNewDictController() -> UIViewController
     
+    /// Gets AddShareViewController
     func addShareController() -> UIViewController
     
+    /// Undos last deletion
     func undoLastDeletion()
    
+    /// Commits all unsaved changes
     func commitChanges()
    
+    /// Temporary deletes given object
     func delete(object: NSManagedObject)
     
+    
+    /// Checks if user is authorized
     func isAuthorized() -> Bool
     
+    /// Creates share for given dictionary
     func createShare(dict: DbUserDictionary)
-
 }
 
+/// `IDictionaryControllerTableViewDataSource` event handler
 protocol IDictionaryControllerReactor: class {
+    /// Shows given controller
     func showCardsController(controller: UIViewController)
     
+    /// Notifies on item deletion
     func onItemDeleted()
     
+    /// Show processView
     func showSharingProcessView()
     
+    /// Show share's result AlertController
     func showSharingResultView(text: String, title: String)
 }
 
@@ -156,10 +186,13 @@ class DictionaryControllerTableViewDataSource: NSObject, IDictionaryControllerTa
     
     var viewModel: IDictionaryControllerDataProvider
     
+    /// Service for sharing dictionaries
     var shareService: IDictShareService
     
+    /// Assembly for creating ViewControllers
     private var presAssembly: IPresentationAssembly
     
+    /// Event handler
     weak var delegate: IDictionaryControllerReactor?
     
     func performFetch() {
@@ -193,6 +226,12 @@ class DictionaryControllerTableViewDataSource: NSObject, IDictionaryControllerTa
         }
     }
     
+    /**
+     Creates new `DictionaryControllerTableViewDataSource`
+     - Parameter viewModel: service for data delivery
+     - Parameter shareService: service for sharing dictionaries
+     - Parameter presAssembly: service for creating ViewController
+     */
     init(viewModel: IDictionaryControllerDataProvider, shareService: IDictShareService, presAssembly: IPresentationAssembly) {
         self.viewModel = viewModel
         self.fetchedResultsController = self.viewModel.generateDictControllerFRC()

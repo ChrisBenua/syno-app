@@ -1,9 +1,8 @@
 import Foundation
 import Alamofire
 
+/// Default implementation for sending web requests
 class DefaultRequestSender: IRequestSender {
-
-
     private let session: URLSession = URLSession.shared
 
     func send<Parser>(requestConfig: RequestConfig<Parser>, completionHandler: @escaping (Result<Parser.Model>) -> Void) {

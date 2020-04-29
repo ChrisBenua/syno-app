@@ -1,36 +1,48 @@
 import Foundation
 import UIKit
 
+/// Protocol for helper class with layout logic
 protocol ILoginLayouter {
+    /// Gets TextField for password
     func passwordTextField() -> UITextField
     
+    /// Gets TextField for email
     func emailTextField() -> UITextField
     
+    /// Gets submit button
     func submitButton() -> UIButton
     
+    /// Gets registration button
     func alternateAuthButton() -> UIView
     
+    /// Gets stack view with all views
     func allStackView() -> UIStackView
     
+    /// Gets skip registration button
     func skipRegistrationButton() -> UIView
 }
 
 
-
 class LoginRegistrationLayouter: ILoginLayouter {
-    
+    /// TextField for entering password
     private var _passwordTextField: UITextField?
     
+    /// TextField for entering email
     private var _emailTextField: UITextField?
     
+    /// Button for submitiing credentials
     private var _submitButton: UIButton?
     
+    /// stack view with all views
     private var _allStackView: UIStackView?
     
+    /// Wrapper view for Registration button
     private var _alternateAuthButtonContainerView: UIView?
     
+    /// Registration Button
     private var _alternateAuthButton: UIView?
     
+    /// Skip registration button
     private var _skipRegistrationButton: UIView?
     
     func passwordTextField() -> UITextField {
@@ -79,6 +91,7 @@ class LoginRegistrationLayouter: ILoginLayouter {
         return _submitButton!
     }
 
+    /// Generates  stack view with `emailTextField`, `passwordTextField` and `submitButton` inside
     func generateInnerStackView() -> UIStackView {
         let sepView1 = UIView(); sepView1.translatesAutoresizingMaskIntoConstraints = false
         let sepView2 = UIView(); sepView2.translatesAutoresizingMaskIntoConstraints = false
@@ -123,6 +136,7 @@ class LoginRegistrationLayouter: ILoginLayouter {
         return containerView
     }
 
+    /// Stack view with logo, `generateInnerStackView`, `alternateAuthButtonContainerView`
     private lazy var allLoginStackView: UIStackView = {
         let synoTitleLoginSepView = UIView(); synoTitleLoginSepView.translatesAutoresizingMaskIntoConstraints = false
         let loginButtonRegistrationSepView = UIView(); loginButtonRegistrationSepView.translatesAutoresizingMaskIntoConstraints = false
@@ -142,6 +156,7 @@ class LoginRegistrationLayouter: ILoginLayouter {
         return sv
     }()
 
+    /// Form's background view
     lazy var formBackgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(red: 36.0/255, green: 48.0/255, blue: 63.0/255, alpha: 1)
@@ -200,5 +215,4 @@ class LoginRegistrationLayouter: ILoginLayouter {
         _skipRegistrationButton = label
         return _skipRegistrationButton!
     }
-    
 }

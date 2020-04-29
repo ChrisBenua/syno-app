@@ -1,18 +1,24 @@
 import Foundation
 
+/// Service Protocol generating transcriptions
 protocol IPhonemesManager {
+    /// Asks for initialization
     func initialize()
     
+    /// Gets transcription for given `word`
     func getPhoneme(for word: String) -> String?
 }
 
 class PhonemesManager: IPhonemesManager {
+    /// Checks if `initialize` was called
     private var isInitialized: Bool {
         get {
             dict.count > 0
         }
     }
+    /// Stores transcriptions
     private var dict: [String: String] = [:]
+    /// Synchronization trick not to access not fully initialized dictionary
     private var dispatchGroup = DispatchGroup()
     
     func initialize() {

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Class for configuring `AllDicts` request
 class AllDictsRequest: IRequest {
     var url: URLRequest? {
         get {
@@ -15,6 +16,7 @@ class AllDictsRequest: IRequest {
         }
     }
     
+    /// Service for fetching  access token
     private var userDefaultManager: IUserDefaultsManager
     
     init(manager: IUserDefaultsManager) {

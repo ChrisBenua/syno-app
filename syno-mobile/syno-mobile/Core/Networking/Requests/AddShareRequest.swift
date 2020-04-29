@@ -1,5 +1,6 @@
 import Foundation
 
+/// Class for configuring `AddShare` request
 class AddShareRequest: IRequest {
     var url: URLRequest? {
         get {
@@ -25,7 +26,9 @@ class AddShareRequest: IRequest {
         }
     }
     
+    /// Service for fetching user's access token
     private var userDefaultManager: IUserDefaultsManager
+    /// DTO to put inside request body
     private var newDictShareDto: NewDictShare
     
     init(dto: NewDictShare, userDefManager: IUserDefaultsManager) {

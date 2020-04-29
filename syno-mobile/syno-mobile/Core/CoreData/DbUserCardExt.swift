@@ -2,12 +2,12 @@ import Foundation
 import CoreData
 
 extension DbUserCard {
-    
+    /// Gets `DbUserCard` translations array
     func getTranslations() -> [DbTranslation] {
         return (self.translations?.allObjects ?? []) as! [DbTranslation]
     }
     
-    
+    /// Converts `DbUserCard` to `ICardCellConfiguration`
     func toCellConfiguration() -> ICardCellConfiguration {
         return CardCellConfiguration(translatedWord: self.translatedWord, translations: (self.translations?.allObjects ?? []).map({ (translation) -> String? in
             (translation as! DbTranslation).translation
@@ -18,6 +18,7 @@ extension DbUserCard {
         }))
     }
     
+    /// Creates new empty `DbUserCard` and inserts it in given `context`
     static func insertUserCard(into context: NSManagedObjectContext) -> DbUserCard? {
         var userCard: DbUserCard? = nil
         context.performAndWait {
@@ -27,6 +28,7 @@ extension DbUserCard {
         return userCard
     }
     
+    /// Creates `NSFetchRequest` for fetching cards from given `sourceDict` sorted by translated word
     static func requestCardsFrom(sourceDict: DbUserDictionary) -> NSFetchRequest<DbUserCard> {
         let request: NSFetchRequest = DbUserCard.fetchRequest()
         request.predicate = NSPredicate(format: "sourceDictionary == %@", sourceDict)
@@ -35,20 +37,7 @@ extension DbUserCard {
         return request
     }
     
-    static func requestCardWith(serverId: Int64) -> NSFetchRequest<DbUserCard> {
-        let request: NSFetchRequest = DbUserCard.fetchRequest()
-        request.predicate = NSPredicate(format: "serverId == %@", serverId)
-        
-        return request
-    }
-    
-    static func requestCardWithIds(ids: [Int64]) -> NSFetchRequest<DbUserCard> {
-        let request: NSFetchRequest<DbUserCard> = DbUserCard.fetchRequest()
-        request.predicate = NSPredicate(format: "serverId IN %@", ids)
-        
-        return request
-    }
-    
+    /// Gets `DbUserCard` with given `objectId` in given `context`
     static func getCardWith(objectId: NSManagedObjectID, context: NSManagedObjectContext) -> DbUserCard? {
         return context.object(with: objectId) as? DbUserCard
     }

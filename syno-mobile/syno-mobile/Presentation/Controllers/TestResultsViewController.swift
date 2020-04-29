@@ -1,10 +1,12 @@
 import Foundation
 import UIKit
 
+/// Controller for presenting user's test result
 class TestResultsViewController: UIViewController {
-    
+    /// Service responsible for inner table view logic in `TestResultsViewController`
     private var dataSource: ITestResultsControllerDataSource
     
+    /// Label for user's result
     lazy var resultTextLabel: UILabel = {
         let label = UILabel()
         label.text = "Результат"
@@ -14,6 +16,7 @@ class TestResultsViewController: UIViewController {
         return label
     }()
     
+    /// Label for user's result grade
     lazy var resultPercentageLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 26)
@@ -25,6 +28,7 @@ class TestResultsViewController: UIViewController {
         return label
     }()
     
+    /// Label for report
     lazy var reportTextLabel: UILabel = {
         let label = UILabel()
         label.text = "Отчёт"
@@ -34,6 +38,7 @@ class TestResultsViewController: UIViewController {
         return label
     }()
     
+    /// table view for presenting report
     lazy var tableView: UITableView = {
         let tableView = PlainTableView()
         tableView.backgroundColor = .clear
@@ -46,6 +51,7 @@ class TestResultsViewController: UIViewController {
         return tableView
     }()
     
+    /// Wrapper view for `resultTextLabel` and `resultPercentageLabel`
     lazy var headerView: UIView = {
         let view = UIView()
         let innerView = UIView()
@@ -69,6 +75,7 @@ class TestResultsViewController: UIViewController {
         return view
     }()
     
+    /// Wrapper view for `headerView` and `tableView`
     lazy var contentView: UIView = {
         let view = UIView()
         view.addSubview(self.headerView)
@@ -80,6 +87,7 @@ class TestResultsViewController: UIViewController {
         return view
     }()
     
+    /// Main scroll view
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.alwaysBounceVertical = true
@@ -105,10 +113,15 @@ class TestResultsViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Закончить", style: .done, target: self, action: #selector(goBackToTestAndLearnController))
     }
     
+    /// End button click listener
     @objc func goBackToTestAndLearnController() {
         self.navigationController?.popToRootViewController(animated: true)
     }
     
+    /**
+     Creates new `TestResultsViewController`
+     - Parameter dataSource: service responsible for table view logic
+     */
     init(dataSource: ITestResultsControllerDataSource) {
         self.dataSource = dataSource
         super.init(nibName: nil, bundle: nil)

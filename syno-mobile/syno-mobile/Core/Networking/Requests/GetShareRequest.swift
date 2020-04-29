@@ -1,6 +1,8 @@
 import Foundation
 
+/// DTO for sending `getShare` request
 class GetShareRequestConfig {
+    /// Share id
     let shareUUID: String
     
     init(shareUUID: String) {
@@ -8,6 +10,7 @@ class GetShareRequestConfig {
     }
 }
 
+/// Class for configuring `getShare` request
 class GetShareRequest: IRequest {
     var url: URLRequest? {
         get {
@@ -22,8 +25,9 @@ class GetShareRequest: IRequest {
             return nil
         }
     }
-    
+    /// Service for fetching access token
     private var userDefaultManager: IUserDefaultsManager
+    /// DTO to put inside request body
     private let getShareRequestConfig: GetShareRequestConfig
     
     init(manager: IUserDefaultsManager, getShareRequestConfig: GetShareRequestConfig) {

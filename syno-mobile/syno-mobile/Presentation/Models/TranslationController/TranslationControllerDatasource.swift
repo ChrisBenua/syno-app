@@ -2,31 +2,46 @@ import Foundation
 import CoreData
 import UIKit
 
-
+/// Protocol for delivering data to table view with translations
 protocol ITranslationControllerDataProvider {
+    /// Card which translations instance delivers
     var sourceCard: DbUserCard { get set }
+    /// Gets all translations from this card
     func getTranslations() -> [ITranslationCellConfiguration]
+    /// Updates translation at given position
     func updateAt(ind: Int, newTranslation: ITranslationCellConfiguration)
+    /// Adds new translation
     func add()
+    /// Deletes tranlation at given position
     func deleteAt(ind: Int)
+    /// Performes save
     func performSave(completionHandler: (() -> ())?)
+    /// Updates card's translated word
     func updateTranslatedWord(translatedWord: String?)
+    /// Deletes temporary card
     func deleteTempCard(completionHandler: (() -> Void)?)
 }
 
 protocol ITranslationControllerDataSource: UITableViewDataSource, UITableViewDelegate, ITranslationCellDidChangeDelegate {
-    
+    /// Service for data delivery
     var viewModel: ITranslationControllerDataProvider { get }
+    /// updates translation at given position
     func updateAt(ind: Int, newTranslation: ITranslationCellConfiguration)
+    /// Add new translation
     func add()
+    /// Deletes translation at given position
     func deleteAt(ind: Int)
+    /// Performes save
     func save(completionHandler: (() -> ())?)
+    /// Updates card's translated word
     func updateTranslatedWord(newTranslatedWord: String?)
+    
     //for new card controller
+    /// Deletes temporary card
     func deleteTempCard(completionHandler: (() -> Void)?)
 }
 
-
+/// `DbTranslation` dto
 class TranslationCellWrapper: ITranslationCellConfiguration {
     var translation: String? {
         get {
@@ -64,9 +79,16 @@ class TranslationCellWrapper: ITranslationCellConfiguration {
         }
     }
     
+    /// Inner instance of `ITranslationCellConfiguration`; `sample`, `comment`, `transcription` and `translation` properties are delegated to this
     var translationCellConfiguration: ITranslationCellConfiguration
+    /// `CoreData` object ID
     var transObjectID: NSManagedObjectID?
     
+    /**
+     Creates new `TranslationCellWrapper`
+     - Parameter translation: inner instance of `ITranslationCellConfiguration`
+     - Parameter objectId: `CoreData` translations object ID
+     */
     init(translation: ITranslationCellConfiguration, objectId: NSManagedObjectID?) {
         self.translationCellConfiguration = translation
         self.transObjectID = objectId
@@ -83,7 +105,9 @@ class TranslationControllerDataProvider: ITranslationControllerDataProvider {
         
         translations = res.map { (trans) -> TranslationCellWrapper in
             return TranslationCellWrapper(translation: trans.toTranslationCellConfig(), objectId: trans.objectID)
-        }
+        }.sorted(by: { (lhs, rhs) -> Bool in
+            return (lhs.translation ?? "") < (rhs.translation ?? "")
+        })
         
         return translations!
     }
@@ -163,12 +187,16 @@ class TranslationControllerDataProvider: ITranslationControllerDataProvider {
         newTranslatedWord = translatedWord
     }
     
+    /// Updated card's translated word
     private var newTranslatedWord: String?
     
+    /// Card;s translation DTOs
     private var translations: [TranslationCellWrapper]?
-        
+    
+    /// Source card
     private var _sourceCard: DbUserCard!
     
+    /// Translations object IDs which should be deleted
     private var shouldDeleteTransObjectIds: [NSManagedObjectID] = []
     
     public var sourceCard: DbUserCard {
@@ -178,29 +206,38 @@ class TranslationControllerDataProvider: ITranslationControllerDataProvider {
             _sourceCard = newValue
         }
     }
-    
+    /// Service for performing actions with CoreData
     private var storageCoordinator: IStorageCoordinator
 
-    
+    /**
+     Create new `TranslationControllerDataProvider`
+     - Parameter storageCoordinator: Service for performing actions with CoreData
+     */
     init(storageCoordinator: IStorageCoordinator) {
         self.storageCoordinator = storageCoordinator
     }
 }
 
+/// table view cell's event listener
 protocol ITranslationCellDidChangeDelegate: class {
+    /// Updates state in dataSource
     func update(caller: UITableViewCell, newConf: ITranslationCellConfiguration)
     
+    /// Generates transcription for given word
     func getTranscription(for word: String) -> String?
     
+    /// Sets last user's focused point
     func setLastFocusedPoint(point: CGPoint,sender: UIView)
     
+    /// Notifies when user ended editing card
     func didEndEditing()
     
+    /// Gets last focused point
     func getLastFocusedPoint() -> CGPoint?
 }
 
 class TranslationControllerDataSource: NSObject, ITranslationControllerDataSource {
-    
+    /// Stores real heights for cells
     var cellHeights: [IndexPath: CGFloat] = [:]
     
     func getTranscription(for word: String) -> String? {
@@ -274,14 +311,19 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
     
     var tableView: UITableView!
     
+    /// Bottom point of view that was focused by user
     private var lastFocusedPoint: CGPoint?
     
+    /// Service for generating transcriptions
     private var phonemesManager: IPhonemesManager
     
+    /// Updating scrolling position of controller
     weak var controllerDelegate: IScrollableToPoint?
     
+    /// If auto generating of transcription enabled
     private var isAutoPhonemesEnabled: Bool
     
+    /// Gets translations DTOs
     var items: [ITranslationCellConfiguration] {
         get {
             return viewModel.getTranslations()
@@ -308,12 +350,18 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
         self.controllerDelegate?.scrollToTop()
     }
     
+    /**
+     Creates new `TranslationControllerDataSource`
+     - Parameter viewModel: Service for data delivery
+     - Parameter sourceCard: Source card
+     - Parameter phonemesManager: Service for generating transcriptions
+     - Parameter isAutoPhonemesEnabled: Should generate transcriptions automatically
+     */
     init(viewModel: ITranslationControllerDataProvider, sourceCard: DbUserCard, phonemesManager: IPhonemesManager, isAutoPhonemesEnabled: Bool = true) {
         self.viewModel = viewModel
         self.viewModel.sourceCard = sourceCard
         self.phonemesManager = phonemesManager
         self.isAutoPhonemesEnabled = isAutoPhonemesEnabled
     }
-    
 }
 

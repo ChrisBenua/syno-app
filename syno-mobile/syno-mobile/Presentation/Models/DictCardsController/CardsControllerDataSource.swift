@@ -2,25 +2,38 @@ import Foundation
 import UIKit
 import CoreData
 
+/// Protocol for delivering data to Collection View with cards
 protocol ICardsControllerDataProvider {
+    /// Generates `NSFetchedResultsController` for given dictionary
     func generateCardsControllerFRC(sourceDict: DbUserDictionary) -> NSFetchedResultsController<DbUserCard>
     
+    /// Creates empty user card in given dict
     func createEmptyUserCard(sourceDict: DbUserDictionary, completionHandler: ((DbUserCard) -> Void)?)
     
+    /// Deletes card with given object id
     func deleteManagedObject(object: NSManagedObject)
     
+    /// Undos last deletion
     func undoLastDeletion()
     
+    /// Commits all unsaved changes
     func commitChanges()
 }
 
 class CardsControllerDataProvider: ICardsControllerDataProvider {
-    
+    /// Service for performing actions with `CoreData`
     private var storageCoordinator: IStorageCoordinator
+    /// Stores last deleted card's `CoreData` object id
     private var lastDeletedObject: NSManagedObject?
+    /// Undo manager for mainContext
     private var undoManager: UndoManager?
+    /// Stores uncommited deleted objects
     private var deletedObjects: [NSManagedObjectID] = []
     
+    /**
+     Creates new `CardsControllerDataProvider`
+     - Parameter sotrageCoordinator:Service for performing actions with `CoreData`
+     */
     init(storageCoordinator: IStorageCoordinator) {
         self.storageCoordinator = storageCoordinator
     }
@@ -44,6 +57,7 @@ class CardsControllerDataProvider: ICardsControllerDataProvider {
         return NSFetchedResultsController(fetchRequest: DbUserCard.requestCardsFrom(sourceDict: sourceDict), managedObjectContext: storageCoordinator.stack.mainContext, sectionNameKeyPath: nil, cacheName: nil)
     }
     
+    /// Commits all unsaved changes
     func commitSaveContextChanges() {
         if deletedObjects.count > 0 {
             self.storageCoordinator.stack.saveContext.performAndWait {
@@ -77,29 +91,37 @@ class CardsControllerDataProvider: ICardsControllerDataProvider {
         commitSaveContextChanges()
         deletedObjects = []
         self.storageCoordinator.stack.performSave(with: self.storageCoordinator.stack.saveContext, completion: nil)
-
     }
 }
 
+/// Service protocol for presenting `DbUserCard` for current dictionary in `UICollectionVIew`
 protocol ICardsControllerDataSource: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    /// `NSFetchedResultsController` for this dictionary cards
     var fetchedResultsController: NSFetchedResultsController<DbUserCard> { get set }
-    
+    /// Service for inner logic
     var viewModel: ICardsControllerDataProvider { get set }
-    
+    /// CollectionView selection event handler
     var delegate: ICardsDataSourceReactor? { get set }
     
+    /// Performs fetch for `NSFetchedResultsController`
     func performFetch()
     
+    /// Creates empty user card
     func createEmptyUserCard(completionHandler: ((DbUserCard) -> Void)?)
     
+    /// Undos last deleted card
     func undoLastDeletion()
     
+    /// Commits unsaved changes
     func commitChanges()
 }
 
+/// Protocol for UICollectionView selection handling
 protocol ICardsDataSourceReactor: class {
+    /// Notifies when cell with given `DbUserCard` was selected
     func onSelectedItem(item: DbUserCard)
     
+    /// Notifies when item was deleted
     func onItemDeleted()
 }
 
@@ -112,6 +134,7 @@ class CardsControllerDataSource: NSObject, ICardsControllerDataSource {
     
     weak var delegate: ICardsDataSourceReactor?
     
+    /// Dictionary which cards we are showing
     private var sourceDict: DbUserDictionary
     
     func performFetch() {
@@ -157,6 +180,11 @@ class CardsControllerDataSource: NSObject, ICardsControllerDataSource {
         self.viewModel.commitChanges()
     }
     
+    /**
+     Creates new `CardsControllerDataSource`
+     - Parameter viewModel: service for inner logic
+     - Parameter sourceDict: Dictionary which cards to show
+     */
     init(viewModel: ICardsControllerDataProvider, sourceDict: DbUserDictionary) {
         self.viewModel = viewModel
         self.sourceDict = sourceDict

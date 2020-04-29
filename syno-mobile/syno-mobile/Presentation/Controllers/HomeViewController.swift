@@ -1,6 +1,7 @@
 import Foundation
 import UIKit
 
+/// Controller for main actions: create copy on server, download copy from server, login as different user
 class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate, IHomeControllerUserHeaderDelegate {
     func showController(controller: UIViewController) {
         self.navigationController?.pushViewController(controller, animated: true)
@@ -19,6 +20,7 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
         processingSaveView.dismissSavingProcessView()
     }
     
+    /// Process view for downloading or uploading dictionaries to server
     lazy var processingSaveView: SavingProcessView = {
         let view = SavingProcessView()
         view.setText(text: "Logging in..")
@@ -26,8 +28,10 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
         return view
     }()
     
+    /// Service responsible for inner logic of `HomeViewController`
     private var dataProvider: IHomeControllerMenuDataProvider
     
+    /// View with login form info
     lazy var loginView: UIView = {
         let view = BaseShadowView()
         view.cornerRadius = 10
@@ -42,6 +46,7 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
         return view
     }()
     
+    /// Label for creating copy on server
     lazy var createCopyLabel: UILabel = {
         let label = UILabelWithInsets(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))
         label.isUserInteractionEnabled = true
@@ -55,10 +60,12 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
         return label
     }()
     
+    /// `createCopyLabel` click listener
     @objc func onCreateCopyLabelClick() {
         self.dataProvider.onUploadDataToServer()
     }
     
+    /// Label for downloading copy from server
     lazy var downloadCopyLabel: UILabel = {
         let label = UILabelWithInsets(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))
         label.isUserInteractionEnabled = true
@@ -73,10 +80,12 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
         return label
     }()
     
+    /// `downloadCopyLabel` click listener
     @objc func onDownloadCopyLabelClick() {
         self.dataProvider.onDownloadDataFromServer()
     }
     
+    /// Wrapper-view with `createCopyLabel` and `downloadCopyLabel`
     lazy var actionsView: UIView = {
        let view = BaseShadowView()
         
@@ -96,6 +105,7 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
         return view
     }()
     
+    /// Main view
     lazy var mainContainerView: UIView = {
         let view = BaseShadowView()
         view.cornerRadius = 20
@@ -126,6 +136,10 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
         return scrollView
     }()
     
+    /**
+     Creates new `HomeViewController`
+     - Parameter dataProvider: service responsiblee for inner logic in `HomeViewController`
+     */
     init(dataProvider: IHomeControllerMenuDataProvider) {
         self.dataProvider = dataProvider
         super.init(nibName: nil, bundle: nil)

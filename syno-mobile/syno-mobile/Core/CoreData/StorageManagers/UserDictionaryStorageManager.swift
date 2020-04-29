@@ -32,13 +32,13 @@ class UserDictionaryStorageManager: IUserDictionaryStorageManager {
                 completion?(userDict)
             }
     }
-    
+    /// `NSManagedObjectContext` for saving in background
     var saveContext: NSManagedObjectContext {
         get {
             return self.stack.saveContext
         }
     }
-    
+    /// `NSManagedObjectContext` for accessing object in UI thread
     var mainContext: NSManagedObjectContext {
         get {
             return self.stack.mainContext

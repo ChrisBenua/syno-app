@@ -1,48 +1,68 @@
 import Foundation
 import UIKit
 
+/// Dto for user input in `TestViewController`
 protocol ITestControllerAnswer {
+    /// User's answer
     var answer: String { get set }
 }
 
 class TestControllerAnswer: ITestControllerAnswer {
     var answer: String
     
+    /**
+     Creates new `TestControllerAnswer`
+     - Parameter answer: user's answer
+     */
     init(answer: String) {
         self.answer = answer
     }
 }
 
+/// Wrapper for storing all user's answers
 class AnswersStorage {
+    /// Actual user's answers
     var answers: [[ITestControllerAnswer]]
     
+    /// Gets `index` card answers
     subscript(index: Int) -> [ITestControllerAnswer] {
         return answers[index]
     }
     
+    /// Gets `index2` user's answer in `index1` card
     subscript(index1: Int, index2: Int) -> ITestControllerAnswer {
         return answers[index1][index2]
     }
     
+    /// Adds new answer
     func append(pos: Int, answer: ITestControllerAnswer) {
         self.answers[pos].append(answer)
     }
     
+    /// Removes answer
     func remove(pos1: Int, pos2: Int) {
         self.answers[pos1].remove(at: pos2)
     }
     
+    /// Updates answer for card at `pos1`
     func setAnswer(pos1: Int, pos2: Int, answer: String) {
         self.answers[pos1][pos2].answer = answer
     }
     
+    /**
+     Creates new `AnswersStorage`:
+     - Parameter answers: initial answers
+     */
     init(answers: [[ITestControllerAnswer]]) {
         self.answers = answers
     }
 }
 
+/// Protocol for storing `ITestViewControllerDataSource` state
 protocol ITestControllerState {
+    /// Current card number
     var itemNumber: Int { get set }
+    /// User's answers
     var answers: AnswersStorage { get set }
 }
 
@@ -51,26 +71,39 @@ class TestControllerState: ITestControllerState {
     
     var answers: AnswersStorage
     
+    /**
+     Creates new default `TestControllerState`
+     */
     init() {
         itemNumber = 0
         answers = AnswersStorage(answers: [])
     }
     
+    /**
+     Creates default `TestControllerState`
+     - Parameter itemNumber: current answering card
+     - Parameter answers: Current user's answers
+     */
     init(itemNumber: Int, answers: AnswersStorage) {
         self.itemNumber = itemNumber
         self.answers = answers
     }
 }
 
+/// Protocol for table view event handling
 protocol ITestViewControllerTableViewCellReactor: class {
+    /// Notifies when should add new answer
     func onAddLineForAnswer()
     
+    /// Notifies when answer's cell was deleted
     func onDeleteLineForAnswer(sender: UITableViewCell)
 }
 
-
+/// Protocol for `DbUserCard` dto
 protocol IUserCardForTestViewController {
+    /// Card's translated word
     var translatedWord: String? { get }
+    /// Amount of translations in this card
     var translationsCount: Int { get }
 }
 
@@ -78,27 +111,43 @@ class UserCardForTestViewController: IUserCardForTestViewController {
     var translatedWord: String?
     var translationsCount: Int
     
+    /**
+     Creates new `UserCardForTestViewController`
+     - Parameter translatedWord: Card's translated word
+     - Parameter translationsCount: Amount of translations in this card
+     */
     init(translatedWord: String?, translationsCount: Int) {
         self.translatedWord = translatedWord
         self.translationsCount = translationsCount
     }
     
+    /**
+     Creates `UserCardForTestViewController` from given card
+     */
     static func initFrom(card: DbUserCard) -> UserCardForTestViewController {
         return UserCardForTestViewController(translatedWord: card.translatedWord, translationsCount: card.getTranslations().count)
     }
 }
 
+/// Protocol for CoreData relative events handling
 protocol ITestViewControllerCoreDataHandler {
+    /// Creates tests
     func initializeCoreDataTest()
     
+    /// Cancels tests
     func cancelTest(completionBlock: (() -> ())?)
     
+    /// Saves test
     func saveCoreDataTest(answers: AnswersStorage,completionBlock: ((DbUserTest) -> ())?)
 }
 
+/// Protocol for delivering data to `ITestViewControllerDataSource`
 protocol ITestViewControllerDataProvider: ITestViewControllerCoreDataHandler {
+    /// Gets `UserCardForTestViewController` at given pos
     func getItem(cardPos: Int) -> UserCardForTestViewController
+    /// Total amount of card
     var count: Int { get }
+    /// Dictionary name
     var dictName: String? { get }
 }
 
@@ -122,6 +171,7 @@ class TestViewControllerDataProvider: ITestViewControllerDataProvider {
     
     private var storageManager: IStorageCoordinator
     
+    /// Synchronization trick not to save test bwfore it was created
     private var dispatchGroup = DispatchGroup()
     
     func initializeCoreDataTest() {
@@ -166,6 +216,11 @@ class TestViewControllerDataProvider: ITestViewControllerDataProvider {
         }
     }
     
+    /**
+     Creates new `TestViewControllerDataProvider`
+     - Parameter sourceDictionary: to create test for this dictionary
+     - Parameter storageManager: service for manipulating with CoreData
+     */
     init(sourceDictionary: DbUserDictionary, storageManager: IStorageCoordinator) {
         self.storageManager = storageManager
         self.sourceDict = sourceDictionary
@@ -179,24 +234,34 @@ class TestViewControllerDataProvider: ITestViewControllerDataProvider {
     }
 }
 
-
+/// Protocol for handling user's answers
 protocol ITestViewControllerDataSource: UITableViewDataSource, UITableViewDelegate, ITestViewControllerTableViewCellReactor, ITestControllerTranslationCellDelegate {
+    /// Current user's progress state
     var state: ITestControllerState { get }
+    /// Service for delivering additional info for `ITestViewControllerDataSource`
     var dataProvider: ITestViewControllerDataProvider { get }
+    /// Event handler
     var reactor: ITestViewControllerDataSourceReactor? { get set }
+    /// For handling last focused text field
     var onFocusedLabelDelegate: IScrollableToPoint? { get set }
 }
 
+/// `ITestViewControllerDataSource` event handler
 protocol ITestViewControllerDataSourceReactor: class {
+    /// Add rows in table view
     func addItems(indexPaths: [IndexPath])
+    /// Delete row from table view
     func deleteItems(indexPaths: [IndexPath])
     
     var tableView: UITableView { get }
 }
 
+/// Table View cell's event handler
 protocol ITextFieldTestControllerEditingDelegate: class {
+    /// Notifies when user begin editing in given cell
     func beginEditingInCell(cell: UITableViewCell)
     
+    /// Notifies when user end editing in given cell
     func endEditingInCell(cell: UITableViewCell)
 }
 
@@ -262,6 +327,11 @@ class TestViewControllerDataSource: NSObject, ITestViewControllerDataSource, ITe
         self.state.answers.setAnswer(pos1: self.state.itemNumber, pos2: indexPath.row, answer: text ?? "")
     }
     
+    /**
+     Creates new `TestViewControllerDataSource`
+     - Parameter state: current user's progress state
+     - Parameter dataProvider: service for delvering neccesarry data for `TestViewControllerDataSource`
+     */
     init(state: ITestControllerState, dataProvider: ITestViewControllerDataProvider) {
         self.state = state
         self.dataProvider = dataProvider
@@ -270,6 +340,9 @@ class TestViewControllerDataSource: NSObject, ITestViewControllerDataSource, ITe
         addAnswers()
     }
     
+    /**
+     Adds needed amount of answers so user shouldnt click on plus button multiple times
+     */
     func addAnswers() {
         for _ in 0..<self.dataProvider.getItem(cardPos: self.state.itemNumber).translationsCount {
             onAddLineForAnswer()
@@ -277,11 +350,13 @@ class TestViewControllerDataSource: NSObject, ITestViewControllerDataSource, ITe
     }
 }
 
+/// Service for handling all `TestController` inner logic
 protocol ITestViewControllerModel {
+    /// Service for handling user's answers and table view data
     var dataSource: ITestViewControllerDataSource { get }
-    
+    /// Ends test
     func endTest(completionBlock: ((DbUserTest) -> ())?)
-    
+    /// Cancels test
     func cancelTest(completionBlock: (() -> ())?)
 }
 
@@ -296,6 +371,10 @@ class TestViewControllerModel: ITestViewControllerModel {
         self.dataSource.dataProvider.cancelTest(completionBlock: completionBlock)
     }
     
+    /**
+     Creates new `TestViewControllerModel`
+     - Parameter dataSource: Service for handling user's answers and table view data
+     */
     init(dataSource: ITestViewControllerDataSource) {
         self.dataSource = dataSource
     }

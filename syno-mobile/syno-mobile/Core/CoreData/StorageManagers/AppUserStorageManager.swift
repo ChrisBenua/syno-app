@@ -11,19 +11,21 @@ class AppUserStorageManager: IAppUserStorageManager {
         return email
     }
     
-    
+    /// `NSManagedObjectContext` for saving in background
     var saveContext: NSManagedObjectContext {
         get {
             return self.stack.saveContext
         }
     }
     
+    /// `NSManagedObjectContext` for main UI thread
     var mainContext: NSManagedObjectContext {
         get {
             return self.stack.mainContext
         }
     }
     
+    /// stores CoreDataStack
     var stack: ICoreDataStack
     
     init(stack: ICoreDataStack) {

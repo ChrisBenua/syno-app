@@ -1,6 +1,7 @@
 import Foundation
 
 extension DateFormatter {
+    /// Converts date to and from server's format
     static let iso8601Full: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
@@ -15,12 +16,15 @@ enum DateError: String, Error {
     case invalidDate
 }
 
+/// Protocol for parsing server's response
 protocol IParser {
     associatedtype Model
-
+    
+    /// Converts given data to `Model` type
     func parse(data: Data) -> Model?
 }
 
+/// Default parser implementation for `Decodable` types
 class DefaultParser<T: Decodable>: IParser {
     typealias Model = T
 

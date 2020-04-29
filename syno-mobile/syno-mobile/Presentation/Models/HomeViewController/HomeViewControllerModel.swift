@@ -1,20 +1,24 @@
 import Foundation
 import UIKit
 
-protocol IHomeControllerMenuItem {
-    var icon: UIImage? { get }
-    var text: String? { get }
-}
-
+/// Protocol for `HomeControllerMenuDataProvider` event handling
 protocol IHomeControllerDataProviderDelegate: UIViewController {
+    /// pushes new view controller on navigation controller
     func showController(controller: UIViewController)
     
+    /// Shows process view with given text
     func showProcessView(text: String)
     
+    /// Dismisses process view
     func dismissProcessView()
 }
 
-protocol IExtendedHomeControllerMenuItem: IHomeControllerMenuItem {
+protocol IExtendedHomeControllerMenuItem {
+    /// Icon for action
+    var icon: UIImage? { get }
+    /// Text for action
+    var text: String? { get }
+    /// Action
     var handler: (() -> ())? { get }
 }
 
@@ -25,6 +29,12 @@ class ExtendedHomeControllerMenuItem: IExtendedHomeControllerMenuItem {
     
     var handler: (() -> ())?
     
+    /**
+     Create new `ExtendedHomeControllerMenuItem`
+     - Parameter icon: Icon for action
+     - Parameter text: Text for action
+     - Parameter handler: action
+     */
     init(icon: UIImage?, text: String?, handler: (() -> ())? = nil) {
         self.icon = icon
         self.text = text
@@ -32,6 +42,7 @@ class ExtendedHomeControllerMenuItem: IExtendedHomeControllerMenuItem {
     }
 }
 
+/// Defines needed functions for inner logic of `HomeViewController`
 protocol IHomeControllerMenuDataProvider {
     func onSignInAction()
     func onUploadDataToServer()
@@ -40,17 +51,29 @@ protocol IHomeControllerMenuDataProvider {
     func userEmail() -> String
 }
 
-class HomeControllerMenuDataProvider: NSObject, IHomeControllerMenuDataProvider {    
+class HomeControllerMenuDataProvider: NSObject, IHomeControllerMenuDataProvider {
+    /// Event handler
     weak var delegate: IHomeControllerDataProviderDelegate?
     
+    /// Assembly for creating controller
     private var presAssembly: IPresentationAssembly
     
+    /// Service responsible for fetching data from server
     private var dictControllerModel: IDictControllerModel
     
+    /// Service for accessing `DbAppUser` CoreData instances
     private var currentUserManager: IAppUserStorageManager
     
+    /// Service for creating copy on server
     private var updateService: IUpdateRequestService
         
+    /**
+     Creates new `HomeControllerMenuDataProvider`
+     - Parameter presAssembly:Assembly for creating controller
+     - Parameter dictControllerModel:Service responsible for fetching data from server
+     - Parameter currentUserManager: Service for accessing `DbAppUser` CoreData instances
+     - Parameter updateService: Service for creating copy on server
+     */
     init(presAssembly: IPresentationAssembly, dictControllerModel: IDictControllerModel, currentUserManager: IAppUserStorageManager, updateService: IUpdateRequestService) {
         self.presAssembly = presAssembly
         self.dictControllerModel = dictControllerModel
@@ -59,15 +82,18 @@ class HomeControllerMenuDataProvider: NSObject, IHomeControllerMenuDataProvider 
         super.init()
     }
     
+    /// Gets current user email
     func userEmail() -> String {
         return currentUserManager.getCurrentUserEmail()!
     }
     
+    /// Hanles sign in action
     func onSignInAction() {
         let controller = self.presAssembly.loginFromHomeViewController()
         self.delegate?.showController(controller: controller)
     }
     
+    /// Handler uploading dictionaries to server
     func onUploadDataToServer() {
         if currentUserManager.getCurrentUserEmail() == "Guest" {
             let alertController = UIAlertController.okAlertController(title: "Вы не зарегистрированы", message: "Войдите и попробуйте снова")
@@ -89,6 +115,7 @@ class HomeControllerMenuDataProvider: NSObject, IHomeControllerMenuDataProvider 
         }
     }
     
+    /// Handles downloading user's dictionaries from server
     func onDownloadDataFromServer() {
         if currentUserManager.getCurrentUserEmail() == "Guest" {
             let alertController = UIAlertController.okAlertController(title: "Вы не зарегистрированы", message: "Войдите и попробуйте снова")

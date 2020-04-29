@@ -2,21 +2,28 @@ import Foundation
 import UIKit
 import CoreData
 
+/// Enum for defining mode in `TestAndLearnController`
 enum TestAndLearnModes {
     case learnMode
     case testMode
 }
 
+/// Defines event handler for switching mode
 protocol ITestAndLearnStateReactor: class {
+    /// Notifies when mode was switched to `newState`
     func onStateChanged(newState: TestAndLearnModes)
 }
 
+/// `ITestAndLearnDictionaryDataSource` event handler
 protocol ITestAndLearnReactor: class {
+    /// Shows new view controller
     func showLearnController(controller: UIViewController)
     
+    /// Notifies when should change title
     func onChangeControllerTitle(newMode: TestAndLearnModes)
 }
 
+/// Protocol for storing `TestAndLearnController` state
 protocol ITestAndLearnDictionaryControllerState {
     var testAndLearnMode: TestAndLearnModes { get set }
 }
@@ -29,16 +36,21 @@ class TestAndLearnDictionaryControllerState: ITestAndLearnDictionaryControllerSt
     }
 }
 
-
+/// Protocol for delivering info about recent tests
 protocol IRecentTestsDataProvider {
+    /// Sets fetch limit
     func setLimit(limit: Int)
     
+    /// Gets fetch limit
     func getLimit() -> Int
     
+    /// Fetches data
     func fetch() -> [ExtendedRecentTestTableViewCellConfiguration]
     
+    /// Refreshes data
     func refresh()
     
+    /// Gets test for given position
     func getTestAt(pos: Int) -> DbUserTest
 }
 
@@ -49,6 +61,12 @@ class ExtendedRecentTestTableViewCellConfiguration: IRecentTestTableViewCellConf
     
     var objectId: NSManagedObjectID
     
+    /**
+     Creates new `ExtendedRecentTestTableViewCellConfiguration`
+     - Parameter dictName: Dictionary name
+     - Parameter grade: Test grade
+     - Parameter objectId: test's `NSManagedObjectID`
+     */
     init(dictName: String?, grade: String?, objectId: NSManagedObjectID) {
         self.dictName = dictName
         self.grade = grade
@@ -57,10 +75,13 @@ class ExtendedRecentTestTableViewCellConfiguration: IRecentTestTableViewCellConf
 }
 
 class RecentTestsDataProvider: IRecentTestsDataProvider {
+    /// Service for interacting with CoreData
     private var storageManager: IStorageCoordinator
     
+    /// Results for last performed fetch
     private var fetchResults: [ExtendedRecentTestTableViewCellConfiguration]?
     
+    /// Fetch limit
     private var limit = 5
     
     func setLimit(limit: Int) {
@@ -80,6 +101,7 @@ class RecentTestsDataProvider: IRecentTestsDataProvider {
         return self.fetchResults ?? []
     }
     
+    /// Fetches data from `CoreData`
     func refresh() {
         do {
             let result: [DbUserTest] = try storageManager.stack.mainContext.fetch(DbUserTest.requestLatestTests(limit: self.limit))
@@ -96,25 +118,35 @@ class RecentTestsDataProvider: IRecentTestsDataProvider {
         return test
     }
     
-    
+    /**
+     Creates new `RecentTestsDataProvider`
+     - Parameter storageManager: service for interacting with coredata
+     */
     init(storageManager: IStorageCoordinator) {
         self.storageManager = storageManager
     }
 }
 
-
+/// Protocol for rendering list of recent tests
 protocol IRecentTestsDataSource: UITableViewDataSource, UITableViewDelegate, IRecentTestsTitleViewDelegate {
+    /// Service for data delivery
     var viewModel: IRecentTestsDataProvider { get }
+    /// refreshes data in `viewModel`
     func refresh()
     
+    /// event handler
     var delegate: IRecentTestsDataSourceReactor? { get set }
     
+    /// If list expanded
     func isExpanded() -> Bool
 }
 
+/// `IRecentTestsDataSource` event handler
 protocol IRecentTestsDataSourceReactor: class {
+    /// Notifies when list was expanded or collapsed
     func didExpandOrCollapseTableView()
     
+    /// Opens TestResultsControlelr with given test
     func openTestResultsController(with test: DbUserTest)
 }
 
@@ -122,6 +154,7 @@ class RecentTestsDataSource: NSObject, IRecentTestsDataSource {
     weak var delegate: IRecentTestsDataSourceReactor?
     
     private var tableView: UITableView!
+    /// Is recent tests list expanded
     private var isExpanded_: Bool = false
     
     private var recentTestTitleView: RecentTestsTitleView?
@@ -199,14 +232,22 @@ class RecentTestsDataSource: NSObject, IRecentTestsDataSource {
         }
     }
     
+    /**
+     Creates new `RecentTestsDataSource`
+     - Parameter viewModel: Service for data delivery
+     */
     init(viewModel: IRecentTestsDataProvider) {
         self.viewModel = viewModel
     }
 }
 
+/// Protocol for Collection view data rendering
 protocol ITestAndLearnDictionaryDataSource: ICommonDictionaryControllerDataSource, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ITestAndLearnHeaderDelegate {
+    /// Current state
     var state: ITestAndLearnDictionaryControllerState { get }
+    /// Event handler
     var delegate: ITestAndLearnReactor? { get set }
+    /// Service for rendering recent tests list
     var recentTestsDataSource: IRecentTestsDataSource { get }
 }
 
@@ -246,10 +287,17 @@ class TestAndLearnDictionaryDataSource: NSObject, ITestAndLearnDictionaryDataSou
     
     var viewModel: IDictionaryControllerDataProvider
     
+    /// Assembly for creating view controllers
     private var presAssembly: IPresentationAssembly
     
     var header: TestAndLearnControllerHeader?
     
+    /**
+     Creates new `TestAndLearnDictionaryDataSource`
+     - Parameter viewModel: data delivery service
+     - Parameter presAssembly: assembly for creating view controllers
+     - Parameter recentTestsDataSource: data delivery service
+     */
     init(viewModel: IDictionaryControllerDataProvider, presAssembly: IPresentationAssembly, recentTestsDataSource: IRecentTestsDataSource) {
         self.viewModel = viewModel
         self.presAssembly = presAssembly
@@ -260,6 +308,7 @@ class TestAndLearnDictionaryDataSource: NSObject, ITestAndLearnDictionaryDataSou
         self.recentTestsDataSource.delegate = self
     }
         
+    /// Performs fetch in FetchedResultsController
     func performFetch() {
         do {
             try fetchedResultsController.performFetch()
@@ -269,6 +318,7 @@ class TestAndLearnDictionaryDataSource: NSObject, ITestAndLearnDictionaryDataSou
         }
     }
     
+    /// Updates collection view header if necessary
     private func updateHeader(header: TestAndLearnControllerHeader) {
         switch self.state.testAndLearnMode {
         case .learnMode:

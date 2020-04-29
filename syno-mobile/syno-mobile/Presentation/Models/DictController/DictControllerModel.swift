@@ -1,15 +1,29 @@
 import Foundation
 
+/// Service for fetching dicts from server
 protocol IDictControllerModel {
+    /// Fetches all user's dictionaries from server
+    /// - Parameter completion: completion callback
     func initialFetch(completion: ((Bool) -> ())?)
 }
 
 class DictControllerModel: IDictControllerModel {
+    /// Service for updating/creating/deleting dictionaries
     private let userDictsFetchService: IUserDictionaryFetchService
+    /// Service for sending requests
     private let requestSender: IRequestSender
+    /// Service for setting/getting data from `UserDefaults`
     private let userDefManager: IUserDefaultsManager
+    /// Service for fetching/updating information about current user
     private let appUserManager: IStorageCoordinator
     
+    /**
+     Creates new `DictControllerModel`
+     - Parameter userDictsFetchService: Service for updating/creating/deleting dictionaries
+     - Parameter sender:Service for sending requests
+     - Parameter userDefManager:Service for setting/getting data from `UserDefaults`
+     - Parameter appUserManager: Service for fetching/updating information about current user
+     */
     init(userDictsFetchService: IUserDictionaryFetchService, sender: IRequestSender, userDefManager: IUserDefaultsManager, appUserManager: IStorageCoordinator) {
         self.userDictsFetchService = userDictsFetchService
         self.requestSender = sender
