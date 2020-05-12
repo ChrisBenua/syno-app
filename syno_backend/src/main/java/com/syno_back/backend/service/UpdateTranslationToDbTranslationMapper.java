@@ -6,6 +6,9 @@ import lombok.NonNull;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
+/**
+ * Service for mapping <code>UpdateUserTranslationDto</code> to <code>DbTranslation</code>
+ */
 @Component
 public class UpdateTranslationToDbTranslationMapper implements IDtoMapper<UpdateUserTranslationDto, DbTranslation> {
     @Override

@@ -5,6 +5,9 @@ import com.syno_back.backend.model.DbTranslation;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
+/**
+ * Service for mapping <code>DbTranslation</code> to <code>Translation</code>
+ */
 @Component
 public class TranslationToDtoMapper implements IDtoMapper<DbTranslation, Translation> {
     @Override

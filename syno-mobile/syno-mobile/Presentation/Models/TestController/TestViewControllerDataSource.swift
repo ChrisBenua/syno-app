@@ -224,7 +224,7 @@ class TestViewControllerDataProvider: ITestViewControllerDataProvider {
     init(sourceDictionary: DbUserDictionary, storageManager: IStorageCoordinator) {
         self.storageManager = storageManager
         self.sourceDict = sourceDictionary
-        self.cards = sourceDictionary.getCards()
+        self.cards = sourceDictionary.getCards().shuffled()
         self.count = self.cards.count
         self.translatedWords = self.cards.map({ (card) -> UserCardForTestViewController in
             return UserCardForTestViewController.initFrom(card: card)

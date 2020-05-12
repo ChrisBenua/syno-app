@@ -47,10 +47,10 @@ extension DbUserTest {
     }
     
     /// Creates `NSFetchRequest` to get last `limit` completed tests
-    static func requestLatestTests(limit: Int = 5) -> NSFetchRequest<DbUserTest> {
+    static func requestLatestTests(limit: Int = 5, owner: String) -> NSFetchRequest<DbUserTest> {
         let request: NSFetchRequest<DbUserTest> = DbUserTest.fetchRequest()
         request.fetchLimit = limit
-        request.predicate = NSPredicate(format: "timePassed != NULL")
+        request.predicate = NSPredicate(format: "timePassed != NULL && targetedDict.owner.email = %@", owner)
         request.sortDescriptors = [NSSortDescriptor(key: "timeCreated", ascending: false)]
         
         return request

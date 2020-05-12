@@ -99,13 +99,16 @@ class TestViewController: UIViewController, IScrollableToPoint {
         Logger.log("Test ended")
         self.testViews[currCardNumber].model.endTest { (test) in
             DispatchQueue.main.async {
-                let okAction = UIAlertAction(title: "Ok", style: .default) { (_) in
-                    self.navigationController?.pushViewController(self.presAssembly
-                        .testResultsController(sourceTest: test), animated: true)
-                }
-                let alertController = UIAlertController(title: "Success", message: "Test ended!", preferredStyle: .alert)
-                alertController.addAction(okAction)
-                self.present(alertController, animated: true, completion: nil)
+                let alertController = UIAlertController(title: "Успех", message: "Тест окончен!", preferredStyle: .alert)
+                alertController.addAction(.okAction)
+                self.present(alertController, animated: true, completion: {
+                    Timer.scheduledTimer(withTimeInterval: 1.2, repeats: false, block: { (tm) in
+                        alertController.dismiss(animated: true, completion: {
+                            self.navigationController?.pushViewController(self.presAssembly
+                            .testResultsController(sourceTest: test), animated: true)
+                        })
+                    })
+                })
             }
         }
     }

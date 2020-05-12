@@ -5,11 +5,17 @@ import lombok.*;
 
 import java.io.Serializable;
 
+/**
+ * DTO for accepting new dictionary shares
+ */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class NewDictShare implements Serializable {
+    /**
+     * Unique share's id
+     */
     @NonNull
     @JsonProperty("share_dict_pin")
     private String shareDictPin;

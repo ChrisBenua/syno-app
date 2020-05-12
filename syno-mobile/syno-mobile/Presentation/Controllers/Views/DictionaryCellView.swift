@@ -66,8 +66,17 @@ class DictionaryCollectionViewCell: UICollectionViewCell, IConfigurableDictionar
     func updateUI() {
         self.nameLabel.text = self.dictName
         self.languageLabel.text = self.language
-        self.cardsAmountLabel.text = "\(cardsAmount) карточек"
-        self.translationsAmountLabel.text = "\(translationsAmount) переводов"
+        var cardsEnding = "карточек"
+        if (cardsAmount % 10 == 1 && ((cardsAmount) / 10) % 10 != 1) {
+            cardsEnding = "карточка"
+        }
+        if (cardsAmount % 10 >= 2 && cardsAmount % 10 < 5 && ((cardsAmount / 10) % 10 != 1)) {
+            cardsEnding = "карточки"
+        }
+        
+        let translationsEnding = NumbersEndingHelper.translations(translationsAmount: translationsAmount)
+        self.cardsAmountLabel.text = "\(cardsAmount) \(cardsEnding)"
+        self.translationsAmountLabel.text = "\(translationsAmount) \(translationsEnding)"
     }
     
     

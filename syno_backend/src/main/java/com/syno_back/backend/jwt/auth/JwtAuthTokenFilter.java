@@ -16,11 +16,20 @@ import java.io.IOException;
 
 import com.syno_back.backend.service.UserDetailServiceImpl;
 
+/**
+ * Adds authorization filtering
+ */
 public class JwtAuthTokenFilter extends OncePerRequestFilter {
 
+    /**
+     * Service for validating tokens
+     */
     @Autowired
     private JwtProvider tokenProvider;
 
+    /**
+     * Service for fetching info about users from DB
+     */
     @Autowired
     private UserDetailServiceImpl userDetailsService;
 
@@ -45,6 +54,11 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 
+    /**
+     * Gets authorization header from request
+     * @param request <code><HttpServletRequest/code> instance
+     * @return bearer token
+     */
     private String getJwt(HttpServletRequest request) {
         var authHeader = request.getHeader("Authorization");
 

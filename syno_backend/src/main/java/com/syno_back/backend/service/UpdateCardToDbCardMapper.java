@@ -11,8 +11,14 @@ import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+/**
+ * Service for mappint <code>UpdateUserCardDto</code> to <code>DbUserCard</code>
+ */
 @Component
 public class UpdateCardToDbCardMapper implements IDtoMapper<UpdateUserCardDto, DbUserCard> {
+    /**
+     * Service for mapping <code>UpdateUserTranslationDto</code> to <code>DbTranslation</code>
+     */
     private IDtoMapper<UpdateUserTranslationDto, DbTranslation> translationMapper;
 
     public UpdateCardToDbCardMapper(@Autowired IDtoMapper<UpdateUserTranslationDto, DbTranslation> translationMapper) {

@@ -7,6 +7,7 @@ import com.syno_back.backend.datasource.UserRepository;
 import com.syno_back.backend.dto.MessageResponse;
 import com.syno_back.backend.dto.NewDictShare;
 import com.syno_back.backend.dto.UserDictionary;
+import com.syno_back.backend.model.DbDictShare;
 import com.syno_back.backend.model.DbUserDictionary;
 import com.syno_back.backend.service.ICredentialProvider;
 import com.syno_back.backend.service.IDictShareService;
@@ -25,22 +26,45 @@ import javax.validation.Valid;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Controller for handling dictionary shares
+ */
 @RequestMapping("/api/dict_share")
 @RestController
 public class ShareDictController {
-
+    /**
+     * Repository for fetching <code>DbUserDictionary</code> from DB
+     */
     private DbUserDictionaryRepository dictionaryRepository;
 
+    /**
+     * Repository for fetching and updating <code>DbDictShare</code>
+     */
     private DbDictShareRepository shareRepository;
 
+    /**
+     * Service for checking that only owner can create share with given <code>DbUserDictionary</code>
+     */
     private ICredentialProvider<DbUserDictionary, Authentication> dictCredentialProvider;
 
+    /**
+     * Service for generating <code>DbDictShare</code>
+     */
     private IDictShareService dictShareService;
 
+    /**
+     * Service for cloning <code>DbUserDictionary</code>
+     */
     private IEntityCloner<DbUserDictionary> dictCloner;
 
+    /**
+     * Repository for fetching <code>DbUser</code> from DB
+     */
     private UserRepository userRepository;
 
+    /**
+     * Service for mapping <code>DbUserDictionary</code> DB instance to dto <code>UserDictionary</code>
+     */
     private IDtoMapper<DbUserDictionary, UserDictionary> mapper;
 
     public ShareDictController(@Autowired ICredentialProvider<DbUserDictionary, Authentication> provider,
@@ -57,6 +81,12 @@ public class ShareDictController {
         this.mapper = mapper;
     }
 
+    /**
+     * Processes creating new <code>DbDictShare</code>
+     * @param auth Current user info
+     * @param share DTO with sharing info
+     * @return <code>ResponseEntity&lt;MessageResponse&gt;</code> with success or failure message
+     */
     @PostMapping("/add_share")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity addShare(Authentication auth, @Valid @RequestBody NewDictShare share) {
@@ -76,11 +106,23 @@ public class ShareDictController {
         }
     }
 
+    /**
+     * Processes getting <code>DbDictShare</code>
+     * @param auth Current user info
+     * @param shareUuid UUID of wanted <code>DbDictShare</code>
+     * @return <code>ResponseEntity&lt;UserDictionary&gt;</code> with shared dictionary on success and <code>ResponseEntity&lt;MessageResponse&gt;</code>
+     */
     @GetMapping("/get_share/{share_id}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity cloneSharedShare(Authentication auth, @PathVariable(name = "share_id") String shareUuid) {
         String email = ((User)auth.getPrincipal()).getUsername();
-        var candidate = shareRepository.findByShareUUID(UUID.fromString(shareUuid));
+        Optional<DbDictShare> candidate = Optional.empty();
+
+        try {
+            candidate = shareRepository.findByShareUUID(UUID.fromString(shareUuid));
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>(MessageResponse.of("Wrong format for share's id"), HttpStatus.BAD_REQUEST);
+        }
 
         if (candidate.isPresent()) {
             var share = candidate.get();
@@ -93,11 +135,8 @@ public class ShareDictController {
                 }
 
                 var clonedDict = dictCloner.clone(dict);
-
                 var user = userRepository.findByEmail(email).orElseThrow();
-
                 clonedDict.setOwner(user);
-
                 clonedDict = dictionaryRepository.save(clonedDict);
 
                 return new ResponseEntity<>(mapper.convert(clonedDict,null), HttpStatus.OK);

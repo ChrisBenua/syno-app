@@ -13,11 +13,20 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Service for updating <code>DbTranslation</code>
+ */
 @Component
 public class TranslationsUpdateServiceImpl implements IUpdateTranslationsService {
 
+    /**
+     * Repository for CRUD operations with <code>DbTranslation</code>
+     */
     private DbTranslationRepository translationRepository;
 
+    /**
+     * Service for mapping <code>UpdateUserTranslationDto</code> to <code>DbTranslation</code>
+     */
     private IDtoMapper<UpdateUserTranslationDto, DbTranslation> mapper;
 
     public TranslationsUpdateServiceImpl(

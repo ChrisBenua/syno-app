@@ -45,10 +45,6 @@ class TranslationsCollectionViewController: UIViewController {
         return view
     }()
     
-    /// Customisable `UICollectionViewFlowLayout`
-    lazy var layout: UICollectionViewFlowLayout = {
-        return UICollectionViewFlowLayout()
-    }()
     
     /// View with actions buttons
     lazy var controlsView: UIView = {
@@ -187,7 +183,7 @@ class TranslationsCollectionViewController: UIViewController {
         self.addKeyboardObservers(showSelector: #selector(showKeyboard(notification:)), hideSelector: #selector(hideKeyboard(notification:)))
         
         self.view.addSubview(scrollView)
-        layout.estimatedItemSize = CGSize(width: UIScreen.main.bounds.width - 40, height: 100)
+//        layout.estimatedItemSize = CGSize(width: UIScreen.main.bounds.width - 40, height: 100)
         scrollView.anchor(top: self.view.topAnchor, left: self.view.leftAnchor, bottom: self.view.bottomAnchor, right: self.view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: UIScreen.main.bounds.width, height: 0)
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить", style: .plain, target: self, action: #selector(onSaveButtonPressed))

@@ -14,15 +14,23 @@ import java.util.Date;
 public class JwtProvider {
     private final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
 
-    @Autowired
-    private UserRepository userRepository;
-
+    /**
+     * JWT secret value
+     */
     @Value("${assm.app.jwtSecret}")
     private String jwtSecret;
 
+    /**
+     * JWT token expiration time
+     */
     @Value("${assm.app.jwtExpiration}")
     private Integer jwtExpiration = 0;
 
+    /**
+     * Generates jwt token
+     * @param email user's email
+     * @return JWT token
+     */
     public String generateJwtToken(String email) {
         return Jwts.builder()
                 .setSubject(email)
@@ -32,6 +40,11 @@ public class JwtProvider {
                 .compact();
     }
 
+    /**
+     * Validates JWT token
+     * @param authToken JWT token
+     * @return true if token is valid false otherwise
+     */
     public boolean validateJwtToken(String authToken) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
@@ -51,6 +64,11 @@ public class JwtProvider {
         return false;
     }
 
+    /**
+     * Gets email from JWT token
+     * @param token JWT token
+     * @return Subject's email
+     */
     public String getEmailFromJwtToken(String token) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }

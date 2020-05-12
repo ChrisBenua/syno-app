@@ -32,8 +32,7 @@ class DictControllerModel: IDictControllerModel {
     }
     
     func initialFetch(completion: ((Bool) -> ())? = nil) {
-        if userDefManager.getNetworkMode() {
-            self.requestSender.send(requestConfig: RequestFactory.BackendRequests.allDictsRequest(userDefaultsManager: self.userDefManager)) { (result) in
+        self.requestSender.send(requestConfig: RequestFactory.BackendRequests.allDictsRequest(userDefaultsManager: self.userDefManager)) { (result) in
                 switch result {
                 case .success(let dtos):
                     let user = self.appUserManager.getCurrentAppUser()!
@@ -46,8 +45,5 @@ class DictControllerModel: IDictControllerModel {
                     completion?(false)
                 }
             }
-        } else {
-            completion?(false)
-        }
     }
 }

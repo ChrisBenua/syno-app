@@ -6,9 +6,14 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
+/**
+ * Repository interface for CRUD operations with <code>DbUser</code> in DB
+ */
 public interface UserRepository extends JpaRepository<DbUser, Long> {
-
-    boolean existsByEmail(@Param("email") String email);
-
+    /**
+     * Finds user by given email
+     * @param email user's email
+     * @return Optional with <code>DbUser</code> inside if there is such user
+     */
     Optional<DbUser> findByEmail(@Param("email") String email);
 }

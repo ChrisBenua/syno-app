@@ -13,34 +13,6 @@ protocol IHomeControllerDataProviderDelegate: UIViewController {
     func dismissProcessView()
 }
 
-protocol IExtendedHomeControllerMenuItem {
-    /// Icon for action
-    var icon: UIImage? { get }
-    /// Text for action
-    var text: String? { get }
-    /// Action
-    var handler: (() -> ())? { get }
-}
-
-class ExtendedHomeControllerMenuItem: IExtendedHomeControllerMenuItem {
-    var icon: UIImage?
-    
-    var text: String?
-    
-    var handler: (() -> ())?
-    
-    /**
-     Create new `ExtendedHomeControllerMenuItem`
-     - Parameter icon: Icon for action
-     - Parameter text: Text for action
-     - Parameter handler: action
-     */
-    init(icon: UIImage?, text: String?, handler: (() -> ())? = nil) {
-        self.icon = icon
-        self.text = text
-        self.handler = handler
-    }
-}
 
 /// Defines needed functions for inner logic of `HomeViewController`
 protocol IHomeControllerMenuDataProvider {

@@ -104,7 +104,7 @@ class RecentTestsDataProvider: IRecentTestsDataProvider {
     /// Fetches data from `CoreData`
     func refresh() {
         do {
-            let result: [DbUserTest] = try storageManager.stack.mainContext.fetch(DbUserTest.requestLatestTests(limit: self.limit))
+            let result: [DbUserTest] = try storageManager.stack.mainContext.fetch(DbUserTest.requestLatestTests(limit: self.limit, owner: self.storageManager.getCurrentUserEmail() ?? "Guest"))
             self.fetchResults = result.map({ (el) -> ExtendedRecentTestTableViewCellConfiguration in
                 return ExtendedRecentTestTableViewCellConfiguration(dictName: el.targetedDict?.name, grade: "\(Int(el.gradePercentage))%", objectId: el.objectID)
             })

@@ -171,12 +171,16 @@ protocol ITestResultsControllerDataSource: UITableViewDelegate, UITableViewDataS
 /// Protocol for controlling `ITestResultsControllerDataSource` state
 protocol ITestResultsControllerState {
     var isSectionExpanded: [Bool] { get set }
+    
+    /// Last collapsed or expanded section
+    var lastToggle: Int? { get set }
 }
 
 
 class TestResultsControllerState: ITestResultsControllerState {
     var isSectionExpanded: [Bool]
     
+    var lastToggle: Int?
     /**
      Creates `TestResultsControllerState` with desired amount of sections
      */
@@ -201,9 +205,6 @@ class TestResultsControllerDataSource: NSObject, ITestResultsControllerDataSourc
     
     var tableView: UITableView!
     
-    /// Last collapsed or expanded section
-    var lastToggle: Int?
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         self.tableView = tableView
         return dataProvider.totalCards()
@@ -211,7 +212,7 @@ class TestResultsControllerDataSource: NSObject, ITestResultsControllerDataSourc
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let mycell = cell as! TestResultsTableViewCell
-        if (lastToggle == indexPath.section) {
+        if (state.lastToggle == indexPath.section) {
             mycell.baseShadowView.alpha = 0
             
             UIView.animate(withDuration: 0.3 * Double(indexPath.row + 1), animations: {
@@ -224,7 +225,7 @@ class TestResultsControllerDataSource: NSObject, ITestResultsControllerDataSourc
         let view = TestResultsTableViewHeaderView()
         view.delegate = self
         let card = self.dataProvider.getCardAt(pos: section)
-        view.configure(config: TestResultsHeaderConfiguration(translatedWord: card.translatedWord, rightAnswered: self.dataProvider.rightAnsweredAt(pos: section), allTranslations: card.translations.count, section: section, isExpanded: self.state.isSectionExpanded[section], shouldAnimate: self.lastToggle == section))
+        view.configure(config: TestResultsHeaderConfiguration(translatedWord: card.translatedWord, rightAnswered: self.dataProvider.rightAnsweredAt(pos: section), allTranslations: card.translations.count, section: section, isExpanded: self.state.isSectionExpanded[section], shouldAnimate: self.state.lastToggle == section))
         return view
     }
     
@@ -259,7 +260,7 @@ class TestResultsControllerDataSource: NSObject, ITestResultsControllerDataSourc
     }
     
     func didChangeExpandStateAt(section: Int) {
-        lastToggle = section
+        self.state.lastToggle = section
         self.state.isSectionExpanded[section].toggle()
         self.tableView.reloadData()
     }

@@ -10,12 +10,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Repository interface for CRUD operation with <code>DbUserCard</code> in DB
+ */
 public interface DbUserCardRepository extends JpaRepository<DbUserCard, Long> {
-    Optional<DbUserCard> findOneByPin(String pin);
-
-    List<DbUserCard> findByPinIn(Collection<String> pin);
-
-    List<DbUserCard> findByUserDictionary(DbUserDictionary userDictionary);
-
-    List<DbUserCard> findByUserDictionary_Id(Long id);
 }

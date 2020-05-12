@@ -32,8 +32,9 @@ class UserDictsFetchService: IUserDictionaryFetchService {
         let dispatchGroup = DispatchGroup()
         
         self.storageManager.stack.saveContext.performAndWait {
+            let ownerInSaveContext = self.storageManager.stack.saveContext.object(with: owner.objectID) as! DbAppUser
             var toRemove: [DbUserDictionary] = []
-            let allUserDicts: [DbUserDictionary] = (self.storageManager.stack.saveContext.object(with: owner.objectID) as! DbAppUser).dictionaries?.toArray() ?? []
+            let allUserDicts: [DbUserDictionary] = ownerInSaveContext.dictionaries?.toArray() ?? []
             for dict in allUserDicts {
                 if (!existingPins.contains(dict.pin!)) {
                     toRemove.append(dict)
@@ -60,7 +61,7 @@ class UserDictsFetchService: IUserDictionaryFetchService {
             
             if (shouldDelete) {
                 for el in toRemove {
-                    owner.removeFromDictionaries(el)
+                    ownerInSaveContext.removeFromDictionaries(el)
                     self.storageManager.stack.saveContext.delete(el)
                 }
             }
@@ -70,7 +71,7 @@ class UserDictsFetchService: IUserDictionaryFetchService {
                     self.innerQueue.async {
                     //dispatchGroup.wait()
                     dispatchGroup.enter()
-                        self.storageManager.createUserDictionary(owner: owner, name: updateDictDto.name, timeCreated: updateDictDto.timeCreated, timeModified: updateDictDto.timeModified, language: updateDictDto.language, serverId: updateDictDto.id, cards: nil, pin: updateDictDto.pin) { (newDict) in
+                        self.storageManager.createUserDictionary(owner: ownerInSaveContext, name: updateDictDto.name, timeCreated: updateDictDto.timeCreated, timeModified: updateDictDto.timeModified, language: updateDictDto.language, serverId: updateDictDto.id, cards: nil, pin: updateDictDto.pin) { (newDict) in
                             self.cardsFetchService.updateCards(cards: updateDictDto.userCards, doSave: true, sourceDict: newDict, completion: { () in
                                 dispatchGroup.leave()
                             })

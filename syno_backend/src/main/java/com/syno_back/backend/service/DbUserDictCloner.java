@@ -6,9 +6,15 @@ import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+/**
+ * Service for cloning <code>DbUserDictionary</code>
+ */
 @Component
 public class DbUserDictCloner implements IEntityCloner<DbUserDictionary> {
 
+    /**
+     * Service for cloning <code>DbUserCard</code>
+     */
     private IEntityCloner<DbUserCard> cardCloner;
 
     public DbUserDictCloner(IEntityCloner<DbUserCard> cardCloner) {

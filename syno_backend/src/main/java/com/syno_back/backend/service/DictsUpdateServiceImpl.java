@@ -1,7 +1,5 @@
 package com.syno_back.backend.service;
 
-import com.syno_back.backend.datasource.DbTranslationRepository;
-import com.syno_back.backend.datasource.DbUserCardRepository;
 import com.syno_back.backend.datasource.DbUserDictionaryRepository;
 import com.syno_back.backend.datasource.UserRepository;
 import com.syno_back.backend.dto.UpdateRequestDto;
@@ -18,14 +16,29 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Service for updating <code>DbUserDictionary</code>
+ */
 @Component
 public class DictsUpdateServiceImpl implements IDictsUpdateService {
+    /**
+     * Repository for CRUD operations with <code>DbUserDictionary</code>
+     */
     private DbUserDictionaryRepository dictionaryRepository;
 
+    /**
+     * Repository for CRUD operations with <code>DbUser</code>
+     */
     private UserRepository userRepository;
 
+    /**
+     * Service for mapping <code>UpdateUserCardDto</code> to <code>DbUserCard</code>
+     */
     private IDtoMapper<UpdateUserCardDto, DbUserCard> updateUserCardMapper;
 
+    /**
+     * Service for updating <code>DbUserCard</code>
+     */
     private ICardUpdateService cardUpdateService;
 
     public DictsUpdateServiceImpl(

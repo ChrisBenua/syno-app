@@ -8,12 +8,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository interface for CRUD operations with <code>DbTranslation</code> in DB
+ */
 public interface DbTranslationRepository extends JpaRepository<DbTranslation, Long> {
-    Optional<DbTranslation> findOneByPin(String pin);
-
-    List<DbTranslation> findByPinIn(Collection<String> pin);
-
-    List<DbTranslation> findBySourceCard(DbUserCard card);
-
-    List<DbTranslation> findBySourceCard_Id(Long id);
 }

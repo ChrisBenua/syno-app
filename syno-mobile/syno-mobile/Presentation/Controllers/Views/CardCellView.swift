@@ -79,7 +79,7 @@ class CardCollectionViewCell: UICollectionViewCell, IConfigurableCardCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20, weight: .light)
         
-        label.textAlignment = .center
+        label.textAlignment = .right
         return label
     }()
     

@@ -35,7 +35,8 @@ class TestView: UIView, ITestView {
     func setHeaderData() {
         self.cardNumberLabel.text = "\(model.dataSource.state.itemNumber + 1)/\(model.dataSource.dataProvider.count)"
         self.translatedWordView.translatedWordLabel.text = model.dataSource.dataProvider.getItem(cardPos: model.dataSource.state.itemNumber).translatedWord
-        self.translationsNumberLabel.text = "\(model.dataSource.dataProvider.getItem(cardPos: model.dataSource.state.itemNumber).translationsCount) переводов"
+        let translationsAmount = model.dataSource.dataProvider.getItem(cardPos: model.dataSource.state.itemNumber).translationsCount
+        self.translationsNumberLabel.text = "\(translationsAmount) \(NumbersEndingHelper.translations(translationsAmount: translationsAmount))"
     }
     
     /// Label for displaying index number of current card

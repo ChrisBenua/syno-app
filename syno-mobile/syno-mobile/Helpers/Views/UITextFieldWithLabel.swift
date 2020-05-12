@@ -49,22 +49,6 @@ class UITextFieldWithLabel: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    /**
-     Function for styling TextField
-     - Parameter styleFunc: callback for styling TextField
-     */
-    func styleTextField(styleFunc: (UITextField) -> ()) {
-        styleFunc(textField)
-    }
-    
-    /**
-     Function for styling Label
-    - Parameter styleFunc: callback for styling Label
-     */
-    func styleLabel(styleFunc: (UILabel) -> ()) {
-        styleFunc(label);
-    }
-    
     func getTextField() -> UITextField {
         return textField
     }

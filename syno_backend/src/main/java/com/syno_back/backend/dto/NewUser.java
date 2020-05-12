@@ -7,13 +7,22 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+/**
+ * DTO for accepting new user credentials
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class NewUser implements Serializable {
+    /**
+     * New user's email
+     */
     @JsonProperty("email")
     private String email;
 
+    /**
+     * New user's password
+     */
     @JsonProperty("password")
     private String password;
 

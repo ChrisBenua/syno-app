@@ -81,11 +81,12 @@ class LoginViewController: UIViewController, ILoginReactor {
         let alert = UIAlertController.okAlertController(title: "Welcome, \(email)!")
         self.present(alert, animated: true, completion: nil)
 
-        let when = DispatchTime.now() + 0.6
+        let when = DispatchTime.now() + 1.2
 
         DispatchQueue.main.asyncAfter(deadline: when, execute: {
-            alert.dismiss(animated: true)
-            self.afterSuccessfullLogin()
+            alert.dismiss(animated: true, completion: {
+                self.afterSuccessfullLogin()
+            })
         })
     }
     

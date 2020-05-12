@@ -77,10 +77,11 @@ class LearnControllerDataProvider: ILearnControllerDataProvider {
      */
     init(dbUserDict: DbUserDictionary) {
         self.dictName = dbUserDict.name
-        self.translatedWords = dbUserDict.getCards().map({ (card) -> String? in
+        let cards = dbUserDict.getCards().shuffled()
+        self.translatedWords = cards.map({ (card) -> String? in
             card.translatedWord
         })
-        self.itemsInCards = dbUserDict.getCards().map({ (card) -> [UserTranslationDtoForLearnController] in
+        self.itemsInCards = cards.map({ (card) -> [UserTranslationDtoForLearnController] in
             return card.getTranslations().map { (trans) -> UserTranslationDtoForLearnController in
                 return UserTranslationDtoForLearnController.initFrom(translation: trans)
             }

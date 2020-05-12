@@ -14,14 +14,32 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Service for updating <code>DbUserCard</code>
+ */
 @Component
 public class CardUpdateServiceImpl implements ICardUpdateService {
+    /**
+     * Repository for CRUD operation with <code>DbUserCard</code>
+     */
     private DbUserCardRepository userCardRepository;
 
+    /**
+     * Service for mapping <code>UpdateUserCardDto</code> to <code>DbUserCard</code>
+     */
     private IDtoMapper<UpdateUserCardDto, DbUserCard> mapper;
 
+    /**
+     * Service for updating <code>DbTranslations</code>
+     */
     private IUpdateTranslationsService translationsService;
 
+    /**
+     * Creates new <code>CardUpdateServiceImpl</code>
+     * @param userCardRepository Repository for CRUD operation with <code>DbUserCard</code>
+     * @param mapper Service for mapping <code>UpdateUserCardDto</code> to <code>DbUserCard</code>
+     * @param translationsService Service for updating <code>DbTranslations</code>
+     */
     public CardUpdateServiceImpl(
             @Autowired DbUserCardRepository userCardRepository,
             @Autowired IDtoMapper<UpdateUserCardDto, DbUserCard> mapper,
@@ -31,6 +49,7 @@ public class CardUpdateServiceImpl implements ICardUpdateService {
         this.mapper = mapper;
         this.translationsService = translationsService;
     }
+
 
     @Override
     public void performUpdates(DbUserDictionary dictionary, List<UpdateUserCardDto> cards) {

@@ -30,7 +30,7 @@ class BaseShadowView: UIView {
     
     ///Configure layer of mainCellView
     func layerSetUp() {
-        shadowView.shadowRadius = 2
+        shadowView.shadowRadius = shadowRadius ?? 2
         containerView.layer.cornerRadius = cornerRadius ?? 8
         containerView.backgroundColor = self.containerViewBackgroundColor ?? .gray
         shadowView.cornerRadius = self.cornerRadius

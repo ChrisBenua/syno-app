@@ -130,7 +130,7 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     
     /// Text field for displaying and editing `translation`
     lazy var translationTextField: UITextField = {
-        let tf = CommonUIElements.defaultTextField(backgroundColor: .white, edgeInsets: UIEdgeInsets(top: 3, left: 15, bottom: 3, right: 0))
+        let tf = CommonUIElements.defaultTextField(backgroundColor: .white, edgeInsets: UIEdgeInsets(top: 3, left: 7, bottom: 3, right: 0))
         tf.layer.borderWidth = 0
         tf.placeholder = "Перевод"
         tf.delegate = self
@@ -151,7 +151,7 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     
     /// Text field for displaying and editing `comment`
     lazy var commentTextField: UITextField = {
-        let tf = CommonUIElements.defaultTextField(backgroundColor: .white, edgeInsets: UIEdgeInsets(top: 3, left: 15, bottom: 3, right: 0))
+        let tf = CommonUIElements.defaultTextField(backgroundColor: .white, edgeInsets: UIEdgeInsets(top: 3, left: 7, bottom: 3, right: 0))
         tf.placeholder = "Комментарий"
         tf.layer.borderWidth = 0
         tf.font = UIFont.systemFont(ofSize: 18)
@@ -166,7 +166,7 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     
     ///Text field for displaying and editing `transcription`
     lazy var transcriptionTextField: UITextField = {
-        let tf = CommonUIElements.defaultTextField(backgroundColor: .white, edgeInsets: UIEdgeInsets(top: 3, left: 15, bottom: 3, right: 0))
+        let tf = CommonUIElements.defaultTextField(backgroundColor: .white, edgeInsets: UIEdgeInsets(top: 3, left: 7, bottom: 3, right: 0))
         tf.layer.borderWidth = 0
         tf.placeholder = "Транскрипция"
         tf.font = UIFont.systemFont(ofSize: 18)
@@ -181,7 +181,7 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     
     /// Text field for displaying and editing `sample`
     lazy var sampleTextField: UITextField = {
-        let tf = CommonUIElements.defaultTextField(backgroundColor: .white, edgeInsets: UIEdgeInsets(top: 3, left: 15, bottom: 3, right: 0))
+        let tf = CommonUIElements.defaultTextField(backgroundColor: .white, edgeInsets: UIEdgeInsets(top: 3, left: 7, bottom: 3, right: 0))
         tf.layer.borderWidth = 0
         tf.delegate = self
         tf.placeholder = "Пример"

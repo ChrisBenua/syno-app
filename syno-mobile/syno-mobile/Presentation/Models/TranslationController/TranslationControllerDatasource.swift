@@ -257,7 +257,9 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
     
     func add() {
         self.viewModel.add()
-        self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+        UIView.performWithoutAnimation {
+            self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+        }
     }
     
     func deleteAt(ind: Int) {

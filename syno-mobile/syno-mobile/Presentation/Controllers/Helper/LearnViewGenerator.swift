@@ -14,7 +14,8 @@ class LearnView: UIView, ILearnView {
     /// Updates card number, number of translations and translated word
     func setHeaderData() {
         cardNumberLabel.text = "\(self.dataSource.state.itemNumber + 1)/\(self.dataSource.viewModel.count)"
-        translationsNumberLabel.text = "\(self.dataSource.viewModel.getItems(currCardPos: self.dataSource.state.itemNumber).count) переводов"
+        let translationsAmount = self.dataSource.viewModel.getItems(currCardPos: self.dataSource.state.itemNumber).count
+        translationsNumberLabel.text = "\(translationsAmount) \(NumbersEndingHelper.translations(translationsAmount: translationsAmount))"
         translatedWordView.translatedWordLabel.text = self.dataSource.viewModel.getTranslatedWord(cardPos: self.dataSource.state.itemNumber)
     }
     

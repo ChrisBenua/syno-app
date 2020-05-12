@@ -30,7 +30,6 @@
 		AA268FB32440ED98005AE946 /* BottomNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA268FB22440ED98005AE946 /* BottomNotificationView.swift */; };
 		AA2B9DFB23AC922800A6D45F /* TranslationDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B9DFA23AC922800A6D45F /* TranslationDto.swift */; };
 		AA2B9DFD23AC923400A6D45F /* CardDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B9DFC23AC923400A6D45F /* CardDto.swift */; };
-		AA2B9DFF23AC924F00A6D45F /* DictionaryDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B9DFE23AC924F00A6D45F /* DictionaryDto.swift */; };
 		AA2FFD9223A4D48700889BAB /* TranslatedWordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2FFD9123A4D48700889BAB /* TranslatedWordView.swift */; };
 		AA3686792444C228003599D0 /* phonemes.txt in Resources */ = {isa = PBXBuildFile; fileRef = AA3686782444C228003599D0 /* phonemes.txt */; };
 		AA36867B2444D92A003599D0 /* PhonemesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA36867A2444D92A003599D0 /* PhonemesManager.swift */; };
@@ -101,6 +100,7 @@
 		AAA5F2CC23A2923800661811 /* DictCardsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA5F2CB23A2923800661811 /* DictCardsController.swift */; };
 		AAA5F2CF23A2958600661811 /* CardsControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA5F2CE23A2958600661811 /* CardsControllerDataSource.swift */; };
 		AAA5F2D123A298B800661811 /* CardCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA5F2D023A298B800661811 /* CardCellView.swift */; };
+		AAB31060245B0C7B0029FC66 /* NumbersEndingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB3105F245B0C7B0029FC66 /* NumbersEndingHelper.swift */; };
 		AAB6CEB92392E3FD00AAAF0E /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB6CEB82392E3FD00AAAF0E /* StorageManager.swift */; };
 		AAB6CEBB2392E40600AAAF0E /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB6CEBA2392E40600AAAF0E /* CoreDataStack.swift */; };
 		AAB6CEBD2392E48C00AAAF0E /* DbAppUserExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB6CEBC2392E48C00AAAF0E /* DbAppUserExt.swift */; };
@@ -171,7 +171,6 @@
 		AA268FB22440ED98005AE946 /* BottomNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomNotificationView.swift; sourceTree = "<group>"; };
 		AA2B9DFA23AC922800A6D45F /* TranslationDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationDto.swift; sourceTree = "<group>"; };
 		AA2B9DFC23AC923400A6D45F /* CardDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDto.swift; sourceTree = "<group>"; };
-		AA2B9DFE23AC924F00A6D45F /* DictionaryDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryDto.swift; sourceTree = "<group>"; };
 		AA2FFD9123A4D48700889BAB /* TranslatedWordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslatedWordView.swift; sourceTree = "<group>"; };
 		AA3686782444C228003599D0 /* phonemes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = phonemes.txt; sourceTree = "<group>"; };
 		AA36867A2444D92A003599D0 /* PhonemesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhonemesManager.swift; sourceTree = "<group>"; };
@@ -246,6 +245,7 @@
 		AAA5F2CB23A2923800661811 /* DictCardsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictCardsController.swift; sourceTree = "<group>"; };
 		AAA5F2CE23A2958600661811 /* CardsControllerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsControllerDataSource.swift; sourceTree = "<group>"; };
 		AAA5F2D023A298B800661811 /* CardCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCellView.swift; sourceTree = "<group>"; };
+		AAB3105F245B0C7B0029FC66 /* NumbersEndingHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersEndingHelper.swift; sourceTree = "<group>"; };
 		AAB6CEB82392E3FD00AAAF0E /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		AAB6CEBA2392E40600AAAF0E /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		AAB6CEBC2392E48C00AAAF0E /* DbAppUserExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DbAppUserExt.swift; sourceTree = "<group>"; };
@@ -401,7 +401,8 @@
 			children = (
 				AA1B8754238D9B9700D26FCF /* ServiceAssembly.swift */,
 			);
-			path = Assembly;
+			name = Assembly;
+			path = Assembly/Assembly;
 			sourceTree = "<group>";
 		};
 		AA1B8751238D9AA800D26FCF /* Services */ = {
@@ -433,7 +434,6 @@
 			children = (
 				AA2B9DFA23AC922800A6D45F /* TranslationDto.swift */,
 				AA2B9DFC23AC923400A6D45F /* CardDto.swift */,
-				AA2B9DFE23AC924F00A6D45F /* DictionaryDto.swift */,
 			);
 			path = LearnController;
 			sourceTree = "<group>";
@@ -551,7 +551,8 @@
 		AA8C0E05238917E8000CBB73 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				AA8C0E0E2389187B000CBB73 /* Assembly */,
+				AA1B8750238D9A9800D26FCF /* Assembly */,
+				AA1B8751238D9AA800D26FCF /* Services */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -567,6 +568,7 @@
 				49A16AE33CDCA131F1447FDA /* UIAlertController.swift */,
 				AAD4A2ED23ABE1E200394693 /* NSSetExt.swift */,
 				AA88C7D824421255002E3549 /* GradeToStringAndColor.swift */,
+				AAB3105F245B0C7B0029FC66 /* NumbersEndingHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -666,15 +668,6 @@
 				AA76427E2451EE7800E388A1 /* AddShareViewController.swift */,
 			);
 			path = Controllers;
-			sourceTree = "<group>";
-		};
-		AA8C0E0E2389187B000CBB73 /* Assembly */ = {
-			isa = PBXGroup;
-			children = (
-				AA1B8751238D9AA800D26FCF /* Services */,
-				AA1B8750238D9A9800D26FCF /* Assembly */,
-			);
-			path = Assembly;
 			sourceTree = "<group>";
 		};
 		AA8C0E1923892A00000CBB73 /* Views */ = {
@@ -982,7 +975,6 @@
 				AA38AD75244C5D44007C2069 /* HomeViewController.swift in Sources */,
 				AA8C0E18238921EC000CBB73 /* Anchor.swift in Sources */,
 				AA6A03BC23AC9CE400902FBE /* LearnControllerTableViewDataSource.swift in Sources */,
-				AA2B9DFF23AC924F00A6D45F /* DictionaryDto.swift in Sources */,
 				AAB6CECD2393C87B00AAAF0E /* UserTranslationStorageManager.swift in Sources */,
 				AA8C0E1B23892A0F000CBB73 /* UILabelWithInsets.swift in Sources */,
 				AAC605752390E5EC00120B77 /* SavingProcessView.swift in Sources */,
@@ -1048,6 +1040,7 @@
 				AA8700D1239900F800C97E18 /* UserCardsFetchService.swift in Sources */,
 				AA8700CD23981DF600C97E18 /* RegisterState.swift in Sources */,
 				AA6A03BE23ACA26A00902FBE /* TranslationReadonlyTableViewCell.swift in Sources */,
+				AAB31060245B0C7B0029FC66 /* NumbersEndingHelper.swift in Sources */,
 				49A1669737ADB0F82BF2FAEB /* RequestFactory.swift in Sources */,
 				AA2B9DFB23AC922800A6D45F /* TranslationDto.swift in Sources */,
 				49A160132C5591D9CC06BA27 /* IRequestSender.swift in Sources */,

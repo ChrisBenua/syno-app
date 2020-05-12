@@ -20,15 +20,10 @@ public class CredentialTests {
 
     private UserDictionaryCredentialProvider dictionaryCredentialProvider;
 
-    private UserCardCredentialProvider cardCredentialProvider;
-
-    private TranslationCredentialProvider translationCredentialProvider;
 
     @BeforeEach
     void setUp() {
         dictionaryCredentialProvider = new UserDictionaryCredentialProvider();
-        cardCredentialProvider = new UserCardCredentialProvider();
-        translationCredentialProvider = new TranslationCredentialProvider();
     }
 
     @Test
@@ -41,27 +36,5 @@ public class CredentialTests {
         assertTrue(dictionaryCredentialProvider.check(dict, auth));
         Authentication falseAuth = new UsernamePasswordAuthenticationToken(new User("falseemail", "123", new ArrayList<GrantedAuthority>()), null);
         assertFalse(dictionaryCredentialProvider.check(dict, falseAuth));
-    }
-
-    @Test
-    void testCardCredentialProvider() {
-        DbUser user = DbUser.builder().email("email").password("123").id(1L).build();
-        DbUserDictionary dict = DbUserDictionary.builder().name("name").owner(user).id(2L).build();
-        DbUserDictionary fakeDict = DbUserDictionary.builder().name("name").owner(user).id(4L).build();
-        DbUserCard card = DbUserCard.builder().translatedWord("word").id(3L).userDictionary(dict).build();
-
-        assertTrue(cardCredentialProvider.check(card, dict));
-        assertFalse(cardCredentialProvider.check(card, fakeDict));
-    }
-
-    @Test
-    void testTranslationCredentialProvider() {
-        DbUserCard card = DbUserCard.builder().translatedWord("word").id(3L).build();
-        DbUserCard fakeCard = DbUserCard.builder().translatedWord("word").id(4L).build();
-
-        DbTranslation translation = DbTranslation.builder().usageSample("sample").comment("comment").transcription("trans").sourceCard(card).build();
-
-        assertTrue(translationCredentialProvider.check(translation, card));
-        assertFalse(translationCredentialProvider.check(translation, fakeCard));
     }
 }
