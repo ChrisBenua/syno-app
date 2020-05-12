@@ -1,24 +1,75 @@
-//
-//  TranslationsCollectionViewController.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 13.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// Controller for displaying translations in edit mode
 class TranslationsCollectionViewController: UIViewController {
+    /// Scroll view to position where it was before keyboard was shown
+    func scrollToTop() {
+        scrollToTop(self.scrollView, animated: true)
+    }
+    /// Position, where view was before keyboard was shown
+    var prevOffset: CGPoint?
+    /// Flag for indicating if keyboard is shown
+    var isKeyboardShown: Bool = false
     
-    private var dataSource: ITranslationControllerDataSource
+    /**
+     Scroll view to its previous position before showing keyboard
+     - Parameter scrollView: scrollView to return to previous position
+     - Parameter animated: should animate scrolling
+     */
+    func scrollToTop(_ scrollView: UIScrollView, animated: Bool = true) {
+        self.scrollView.contentInset.bottom = 0
+        if let prevOffset = prevOffset {
+            scrollView.setContentOffset(prevOffset, animated: true)
+        } else {
+            if #available(iOS 11.0, *) {
+                let expandedBar = (navigationController?.navigationBar.frame.height ?? 64.0 > 44.0)
+                let largeTitles = (navigationController?.navigationBar.prefersLargeTitles) ?? false
+                let offset: CGFloat = (largeTitles && !expandedBar) ? 52: 0
+                Logger.log("Setting content offsest")
+                scrollView.setContentOffset(CGPoint(x: 0, y: -(scrollView.adjustedContentInset.top + offset)), animated: animated)
+            } else {
+                scrollView.setContentOffset(CGPoint(x: 0, y: -scrollView.contentInset.top), animated: animated)
+            }
+        }
+    }
     
-    lazy var layout: UICollectionViewFlowLayout = {
-        return UICollectionViewFlowLayout()
+    /// Service responsible for formatting data for table view
+    var dataSource: ITranslationControllerDataSource
+    
+    /// Process view to show when saving changes
+    lazy var processingSaveView: SavingProcessView = {
+        let view = SavingProcessView()
+        view.setText(text: "Saving")
+        
+        return view
     }()
     
-    lazy var tableView: UITableView = {
+    
+    /// View with actions buttons
+    lazy var controlsView: UIView = {
+        let addButton = UIButton(type: .custom)
+        addButton.setBackgroundImage(#imageLiteral(resourceName: "Component 4"), for: .normal)
         
+        addButton.addTarget(self, action: #selector(onAddAnswerButton), for: .touchUpInside)
+        
+        let view = UIView()
+        view.addSubview(addButton)
+
+        addButton.anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 25, width: 0, height: 0)
+        addButton.heightAnchor.constraint(equalTo: addButton.widthAnchor, multiplier: 1).isActive = true
+        addButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        return view
+    }()
+    
+    /// `addButton` click listener
+    @objc func onAddAnswerButton() {
+        self.dataSource.add()
+    }
+    
+    /// table view for CRUD operations with Translations
+    lazy var tableView: UITableView = {
         let tableView = PlainTableView()
         
         tableView.estimatedRowHeight = 100
@@ -41,6 +92,7 @@ class TranslationsCollectionViewController: UIViewController {
         return tableView
     }()
     
+    /// Wrapper-view for `tableView` and `controlsView`
     lazy var collectionContainerView: UIView = {
         let view = BaseShadowView()
         view.shadowView.shadowOffset = CGSize(width: 0, height: 4)
@@ -51,14 +103,18 @@ class TranslationsCollectionViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(self.tableView)
+        view.addSubview(self.controlsView)
         
-        self.tableView.anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
+        self.controlsView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        
+        self.tableView.anchor(top: self.controlsView.bottomAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
         self.tableView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -30).isActive = true
         self.tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         return view
     }()
     
+    /// Header label
     lazy var collectionViewHeader: UIView = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 24, weight: .regular)
@@ -68,13 +124,21 @@ class TranslationsCollectionViewController: UIViewController {
         return label
     }()
     
+    /// View for translated word
     lazy var translatedWordHeader: UIView = {
         let header = TranslatedWordView()
         header.translatedWordLabel.text = self.dataSource.viewModel.sourceCard.translatedWord
+        header.translatedWordLabel.addTarget(self, action: #selector(onTranslatedWordChanded(_:)), for: .editingChanged)
         
         return header
     }()
     
+    /// `translatedWordHeader` editing listener
+    @objc func onTranslatedWordChanded(_ textField: UITextField) {
+        self.dataSource.updateTranslatedWord(newTranslatedWord: textField.text)
+    }
+    
+    /// scrollView that contains all views
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.alwaysBounceVertical = true
@@ -86,7 +150,7 @@ class TranslationsCollectionViewController: UIViewController {
         scrollView.addSubview(self.collectionViewHeader)
         scrollView.addSubview(self.translatedWordHeader)
         
-        self.translatedWordHeader.anchor(top: scrollView.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        self.translatedWordHeader.anchor(top: scrollView.contentLayoutGuide.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         self.translatedWordHeader.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
         self.translatedWordHeader.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 1, constant: -30).isActive = true
         
@@ -97,6 +161,10 @@ class TranslationsCollectionViewController: UIViewController {
         return scrollView
     }()
 
+    /**
+     Creates new `TranslationsCollectionViewController`
+     - Parameter dataSource: service responsible for deliviring data for `tableView`
+     */
     init(dataSource: ITranslationControllerDataSource) {
         self.dataSource = dataSource
         super.init(nibName: nil, bundle: nil)
@@ -104,18 +172,39 @@ class TranslationsCollectionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "Новая карточка"
+        self.navigationItem.title = "Карточки"
         self.view.backgroundColor = .white
         
-        self.view.addSubview(scrollView)
-        layout.estimatedItemSize = CGSize(width: UIScreen.main.bounds.width - 40, height: 100)
-        scrollView.anchor(top: self.view.topAnchor, left: self.view.leftAnchor, bottom: self.view.bottomAnchor, right: self.view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: UIScreen.main.bounds.width, height: 0)
-        //scrollView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 1).isActive = true
+        let allViewTapGestureReco = UITapGestureRecognizer(target: self, action: #selector(clearKeyboard(_:)))
+        view.addGestureRecognizer(allViewTapGestureReco)
+        allViewTapGestureReco.cancelsTouchesInView = false
+        allViewTapGestureReco.delegate = self
         
+        self.addKeyboardObservers(showSelector: #selector(showKeyboard(notification:)), hideSelector: #selector(hideKeyboard(notification:)))
+        
+        self.view.addSubview(scrollView)
+//        layout.estimatedItemSize = CGSize(width: UIScreen.main.bounds.width - 40, height: 100)
+        scrollView.anchor(top: self.view.topAnchor, left: self.view.leftAnchor, bottom: self.view.bottomAnchor, right: self.view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: UIScreen.main.bounds.width, height: 0)
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить", style: .plain, target: self, action: #selector(onSaveButtonPressed))
         
         self.collectionContainerView.anchor(top: self.collectionViewHeader.bottomAnchor, left: nil, bottom: scrollView.bottomAnchor, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 20, paddingRight: 0, width: 0, height: 0)
        self.collectionContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
        self.collectionContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -30).isActive = true
+    }
+    
+    /// Save button click listener
+    @objc func onSaveButtonPressed() {
+        self.processingSaveView.showSavingProcessView(sourceView: self)
+        self.dataSource.save {
+            DispatchQueue.main.async {
+                let timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { (timer) in
+                    self.processingSaveView.dismissSavingProcessView()
+                    self.navigationController?.popViewController(animated: true)
+                }
+                
+            }
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -126,6 +215,57 @@ class TranslationsCollectionViewController: UIViewController {
 extension TranslationsCollectionViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollView.contentOffset.x = 0
+    }
+}
+
+extension TranslationsCollectionViewController {
+    /**
+     Keyboard showing listener
+     - Parameter notification: contains inner data about notification
+     */
+    @objc func showKeyboard(notification: NSNotification) {
+        isKeyboardShown = true
+        if let keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height {
+            Logger.log("keyboard height:\(keyboardHeight)")
+            prevOffset = self.scrollView.contentOffset
+            if let lastFocusedPoint = self.dataSource.getLastFocusedPoint() {
+                Logger.log("Last Focused Point: \(lastFocusedPoint)")
+                let point = self.tableView.convert(lastFocusedPoint, to: self.view)
+                Logger.log("Converted Point: \(point)")
+                let neededShift = UIScreen.main.bounds.height - point.y - keyboardHeight - 40
+                Logger.log("Needed shift: \(neededShift)")
+                if (neededShift < 0) {
+                    Logger.log(scrollView.contentOffset.debugDescription)
+                    self.scrollView.contentInset.bottom = -neededShift + scrollView.contentOffset.y + 20
+                    self.scrollView.setContentOffset(CGPoint(x: 0, y: -neededShift + scrollView.contentOffset.y), animated: true)
+                }
+            }
+        }
+    }
+    
+    /**
+    Keyboard hiding listener
+    - Parameter notification: contains inner data about notification
+    */
+    @objc func hideKeyboard(notification: Notification) {
+        Logger.log("Hide")
+        isKeyboardShown = false
+    }
+    
+    /// Ends editing in whole view
+    @objc func clearKeyboard(_ sender: UITapGestureRecognizer) {
+        Logger.log(sender.location(in: self.view).debugDescription)
+        let wasKeyboardShow = self.isKeyboardShown
+        view.endEditing(true)
+        if wasKeyboardShow {
+            self.scrollToTop()
+        }
+    }
+}
+
+extension TranslationsCollectionViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
     }
 }
 

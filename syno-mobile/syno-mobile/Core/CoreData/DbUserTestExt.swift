@@ -1,20 +1,13 @@
-//
-//  DbUserTest.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 19.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import CoreData
 
 extension DbUserTest {
-    
+    /// Checks if `DbUserTest` was completed by user
     func isEnded() -> Bool {
         return self.timePassed != nil
     }
     
+    /// Ends tests and calculates results
     func endTest() {
         self.timePassed = Date()
         let allCnt = (self.targetedDict?.getCards() ?? []).map({ (card) -> Int in
@@ -31,6 +24,7 @@ extension DbUserTest {
         self.gradePercentage = Double(passed) * 100 / Double(allCnt)
     }
     
+    /// Creates new `DbUserTest` and inserts it in given `context`
     static func insertUserTest(context: NSManagedObjectContext) -> DbUserTest? {
         guard let userTest = NSEntityDescription.insertNewObject(forEntityName: "DbUserTest", into: context) as? DbUserTest else {
             return nil
@@ -40,6 +34,8 @@ extension DbUserTest {
         return userTest
     }
     
+    /// Creates new `DbUserTest` with given parameters and inserts it in given `context`
+    /// - Parameter dict: dict for which should create `DbUserTest`
     static func createUserTestFor(context: NSManagedObjectContext, dict: DbUserDictionary) -> DbUserTest {
         guard let userTest = insertUserTest(context: context) else {
             fatalError("Cant insert DbUserTest")
@@ -50,9 +46,11 @@ extension DbUserTest {
         return userTest
     }
     
-    static func requestLatestTests() -> NSFetchRequest<DbUserTest> {
+    /// Creates `NSFetchRequest` to get last `limit` completed tests
+    static func requestLatestTests(limit: Int = 5, owner: String) -> NSFetchRequest<DbUserTest> {
         let request: NSFetchRequest<DbUserTest> = DbUserTest.fetchRequest()
-        request.fetchLimit = 5
+        request.fetchLimit = limit
+        request.predicate = NSPredicate(format: "timePassed != NULL && targetedDict.owner.email = %@", owner)
         request.sortDescriptors = [NSSortDescriptor(key: "timeCreated", ascending: false)]
         
         return request

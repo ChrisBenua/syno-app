@@ -1,14 +1,8 @@
-//
-// Created by Ирина Улитина on 25.11.2019.
-// Copyright (c) 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import Alamofire
 
+/// Default implementation for sending web requests
 class DefaultRequestSender: IRequestSender {
-
-
     private let session: URLSession = URLSession.shared
 
     func send<Parser>(requestConfig: RequestConfig<Parser>, completionHandler: @escaping (Result<Parser.Model>) -> Void) {

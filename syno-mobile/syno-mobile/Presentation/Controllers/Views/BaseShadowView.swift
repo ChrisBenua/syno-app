@@ -1,14 +1,7 @@
-//
-//  BaseShadowView.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 13.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// Default view with shadow view behind main view
 class BaseShadowView: UIView {
     
     override var bounds: CGRect {
@@ -37,7 +30,7 @@ class BaseShadowView: UIView {
     
     ///Configure layer of mainCellView
     func layerSetUp() {
-        shadowView.shadowRadius = 2
+        shadowView.shadowRadius = shadowRadius ?? 2
         containerView.layer.cornerRadius = cornerRadius ?? 8
         containerView.backgroundColor = self.containerViewBackgroundColor ?? .gray
         shadowView.cornerRadius = self.cornerRadius

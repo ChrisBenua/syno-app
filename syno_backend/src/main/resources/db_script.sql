@@ -2,6 +2,8 @@ CREATE TABLE public.users(
     id serial not null,
     email character varying,
     password character varying,
+    time_created timestamp,
+    time_modified timestamp,
     PRIMARY KEY (id)
 );
 
@@ -35,14 +37,13 @@ ALTER TABLE public.users_roles
 
 INSERT INTO roles (name) VALUES ('ROLE_USER'), ('ROLE_ADMIN');
 
-Alter table public.users add time_created timestamp;
-alter table public.users add time_modified timestamp;
-
 
 CREATE TABLE public.user_dictionaries
 (
     id serial not null,
     name character varying,
+    pin character varying,
+    language character varying,
     time_created timestamp,
     time_modified timestamp,
     owner_id integer,
@@ -59,7 +60,7 @@ CREATE TABLE public.user_cards
 (
     id serial not null,
     translated_word character varying,
-    language character varying,
+    pin character varying,
     time_created timestamp,
     time_modified timestamp,
     source_dictionary_id integer,
@@ -75,6 +76,7 @@ ALTER TABLE public.user_cards
 CREATE TABLE public.translations
 (
     id serial not null,
+    pin character varying,
     translation character varying,
     comment character varying,
     transcription character varying,
@@ -97,6 +99,7 @@ CREATE TABLE public.dict_shares
     share_uuid uuid not null,
     time_created timestamp,
     time_modified timestamp,
+    activation_time timestamp,
     owner_id integer,
     dict_id integer,
     PRIMARY KEY (id)
@@ -109,6 +112,3 @@ ALTER TABLE public.dict_shares
 ALTER TABLE public.dict_shares
     ADD CONSTRAINT dict_share_dict_fkey FOREIGN KEY (dict_id)
     REFERENCES public.user_dictionaries (id) MATCH SIMPLE;
-
-ALTER TABLE public.dict_shares
-    ADD COLUMN activation_time timestamp;

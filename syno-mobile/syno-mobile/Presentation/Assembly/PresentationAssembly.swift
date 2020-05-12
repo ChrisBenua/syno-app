@@ -1,38 +1,65 @@
-//
-//  PresentationAssembly.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 23.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// Assembly protocol for creating ViewController with all needed dependencies
 protocol IPresentationAssembly {
+    /// Creates `LoginViewController`
     func loginViewController() -> LoginViewController
     
+    /// Creates `RegistrationViewController`
     func registerViewController() -> RegistrationViewController
     
+    /// Creates `DictsViewController`
     func dictsViewController() -> DictsViewController
     
+    /// Creates `CommonTabBarController`
     func mainTabBarController() -> CommonTabBarController
     
+    /// Creates `DictCardsController`
+    /// - Parameter sourceDict: dictionary which cards to display
     func cardsViewController(sourceDict: DbUserDictionary) -> DictCardsController
     
+    /// Creates `TranslationsCollectionViewController`
+    /// - Parameter sourceCard: Card which translations to display
     func translationsViewController(sourceCard: DbUserCard) -> TranslationsCollectionViewController
     
+    /// Creates `TestAndLearnViewController`
     func testAndLearnViewController() -> TestAndLearnViewController
     
+    /// Creates `LearnCollectionViewController`
+    /// - Parameter sourceDict: Dictionary which cards will be displayed
     func learnController(sourceDict: DbUserDictionary) -> LearnCollectionViewController
     
+    /// Creates `TestViewController`
+    /// - Parameter sourceDict: to `sourceDict` new test will be attached
     func testController(sourceDict: DbUserDictionary) -> TestViewController
     
+    /// Gets controller that user will see first: `LoginViewController` or `DictsViewController`
     func startController() -> UIViewController
+    
+    /// Creates `NewOrEditCardController`
+    /// - Parameter tempSourceCard: temporary source card that will be filled and saved or discarded
+    func newCardController(tempSourceCard: DbUserCard) -> NewOrEditCardController
+    
+    /// Creates `NewDictController`
+    func newDictController() -> UIViewController
+    
+    /// Creates `TestResultsViewController`
+    /// - Parameter sourceTest: test which results to present
+    func testResultsController(sourceTest: DbUserTest) -> UIViewController
+    
+    /// Creates `HomeViewController`
+    func homeController() -> UIViewController
+    
+    /// Creates `LoginFromHomeViewController`
+    func loginFromHomeViewController() -> UIViewController
+    
+    /// Creates `AddShareViewController`
+    func addShareController() -> UIViewController
 }
 
 class PresentationAssembly: IPresentationAssembly {
-    
+    /// Assembly for creating/getting services
     private let serviceAssembly: IServiceAssembly
     
     func loginViewController() -> LoginViewController {
@@ -44,7 +71,7 @@ class PresentationAssembly: IPresentationAssembly {
     }
     
     func dictsViewController() -> DictsViewController {
-        return DictsViewController(datasource: DictionaryControllerTableViewDataSource(viewModel: self.serviceAssembly.dictionaryControllerDataProvider, presAssembly: self), model: serviceAssembly.dictControllerModel())
+        return DictsViewController(datasource: DictionaryControllerTableViewDataSource(viewModel: self.serviceAssembly.dictionaryControllerDataProvider, shareService: self.serviceAssembly.dictShareService, presAssembly: self), model: serviceAssembly.dictControllerModel())
     }
     
     func cardsViewController(sourceDict: DbUserDictionary) -> DictCardsController {
@@ -52,7 +79,7 @@ class PresentationAssembly: IPresentationAssembly {
     }
     
     func translationsViewController(sourceCard: DbUserCard) -> TranslationsCollectionViewController {
-        return TranslationsCollectionViewController(dataSource: TranslationControllerDataSource(viewModel: self.serviceAssembly.translationsControllerDataProvider(), sourceCard: sourceCard))
+        return TranslationsCollectionViewController(dataSource: TranslationControllerDataSource(viewModel: self.serviceAssembly.translationsControllerDataProvider(), sourceCard: sourceCard, phonemesManager: self.serviceAssembly.phonemesManager, isAutoPhonemesEnabled: true))
     }
     
     func mainTabBarController() -> CommonTabBarController {
@@ -60,7 +87,7 @@ class PresentationAssembly: IPresentationAssembly {
     }
     
     func testAndLearnViewController() -> TestAndLearnViewController {
-        return TestAndLearnViewController(datasource: TestAndLearnDictionaryDataSource(viewModel: self.serviceAssembly.testAndLearnDictControllerDataProvider(), presAssembly: self))
+        return TestAndLearnViewController(datasource: TestAndLearnDictionaryDataSource(viewModel: self.serviceAssembly.testAndLearnDictControllerDataProvider(), presAssembly: self, recentTestsDataSource: self.serviceAssembly.recentTestsDataSource()))
     }
     
     func learnController(sourceDict: DbUserDictionary) -> LearnCollectionViewController {
@@ -80,15 +107,16 @@ class PresentationAssembly: IPresentationAssembly {
     func testController(sourceDict: DbUserDictionary) -> TestViewController {
         let cardsAmount = sourceDict.getCards().count
         var views: [ITestView] = []
-        let answers = AnswersStorage(answers: Array.init(repeating: [], count: cardsAmount))
         
+        let answers = AnswersStorage(answers: Array.init(repeating: [], count: cardsAmount))
+        let dataProvider = serviceAssembly.testViewControllerDataProvider(dictionary: sourceDict)
         for i in 0..<cardsAmount {
-            let testView = TestView(model: serviceAssembly.testViewControllerModel(state: TestControllerState(itemNumber: i, answers: answers), dictionary: sourceDict))
+            let testView = TestView(model: serviceAssembly.testViewControllerModel(state: TestControllerState(itemNumber: i, answers: answers), dictionary: sourceDict, dataProvider: dataProvider))
             views.append(testView)
         }
         
         
-        return TestViewController(testViews: views, dictName: sourceDict.name ?? "")
+        return TestViewController(testViews: views, dictName: sourceDict.name ?? "", presAssembly: self)
     }
     
     func startController() -> UIViewController {
@@ -101,6 +129,34 @@ class PresentationAssembly: IPresentationAssembly {
         }
     }
     
+    func newCardController(tempSourceCard: DbUserCard) -> NewOrEditCardController {
+        return NewOrEditCardController(dataSource: TranslationControllerDataSource(viewModel: self.serviceAssembly.translationsControllerDataProvider(), sourceCard: tempSourceCard, phonemesManager: self.serviceAssembly.phonemesManager, isAutoPhonemesEnabled: true))
+    }
+    
+    func newDictController() -> UIViewController {
+        return NewDictController(model: self.serviceAssembly.newDictControllerModel)
+    }
+    
+    func testResultsController(sourceTest: DbUserTest) -> UIViewController {
+        return TestResultsViewController(dataSource: self.serviceAssembly.testResultsControllerDataSource(sourceTest: sourceTest))
+    }
+    
+    func homeController() -> UIViewController {
+        return HomeViewController(dataProvider: self.serviceAssembly.homeControllerDataProvider(presAssembly: self))
+    }
+    
+    func loginFromHomeViewController() -> UIViewController {
+        return LoginFromHomeViewController(presAssembly: self, loginModel: LoginModel(loginService: serviceAssembly.loginService), registrationViewController: registerViewController())
+    }
+    
+    func addShareController() -> UIViewController {
+        return AddShareViewController(shareModel: self.serviceAssembly.addShareModel())
+    }
+    
+    /**
+     Creates new `PresentationAssembly`
+     - Parameter serviceAssembly: Assembly for creating/getting services
+     */
     init(serviceAssembly: IServiceAssembly) {
         self.serviceAssembly = serviceAssembly
     }

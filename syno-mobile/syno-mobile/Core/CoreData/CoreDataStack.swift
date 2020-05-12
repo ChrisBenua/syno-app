@@ -1,42 +1,38 @@
-//
-//  CoreDataStack.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 30.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import CoreData
 
+/// Service protocol for configuring `CoreData`
 protocol ICoreDataStack {
-    
+    /// `URL` for database
     var storeURL: URL { get }
-    
+    /// Stores object model
     var managedObjectModel: NSManagedObjectModel { get set }
-    
+    /// Main `NSPersistentStoreCoordinator` for `managedObjectModel`
     var persistantStoreCoordinator: NSPersistentStoreCoordinator { get set }
-    
+    /// `NSManagedObjectContext` for UI thread
     var mainContext: NSManagedObjectContext { get set }
-   
+    /// `NSManagedObjectContext` for saving in background thread and commiting to `persistantStoreCoordinator`
     var masterContext: NSManagedObjectContext { get set }
-    
+    /// `NSManagedObjectContext` for saving in bacground thread
     var saveContext: NSManagedObjectContext { get set }
 
+    /**
+     Perfomes save in given context and its parents
+     - Parameter context: Context which should be saved
+     - Parameter completion: Saving process completion callback
+     */
     func performSave(with context: NSManagedObjectContext, completion: (() -> Void)?)
 }
 
 class CoreDataStack: ICoreDataStack {
-    //public static var shared: CoreDataStack = CoreDataStack()
-    
     var storeURL: URL {
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        print("storeURL: \(documentsURL.absoluteString)")
+        Logger.log("storeURL: \(documentsURL.absoluteString)")
         return documentsURL.appendingPathComponent("Mystore12.sqlite")
     }
-    
+    /// Name of `xcdatamodeld` file
     let dataModelName = "Model"
-    
+    /// Default extension of `xcdatamodeld` file
     let dataModelExtension = "momd"
     
     lazy var managedObjectModel: NSManagedObjectModel = {
@@ -91,19 +87,14 @@ class CoreDataStack: ICoreDataStack {
             do {
                 try context.save()
             } catch let err {
-                print("Save error \(err)")
+                Logger.log("Save error \(err)")
             }
             
             if let parentContext = context.parent {
                 self.performSave(with: parentContext, completion: completion)
             } else {
-                //DispatchQueue.main.async {
-                    completion?()
-                //}
+                completion?()
             }
-            
         }
-    
     }
-
 }

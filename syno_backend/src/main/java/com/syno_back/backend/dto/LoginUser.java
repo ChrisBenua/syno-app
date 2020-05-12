@@ -8,19 +8,36 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.util.Optional;
 
+/**
+ * DTO for storing user's login credentials
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginUser implements Serializable {
+    /**
+     * User's email
+     */
     @JsonProperty("email")
     private String email;
 
+    /**
+     * User's password
+     */
     @JsonProperty("password")
     private String password;
 
+    /**
+     * Gets user email
+     * @return user's email
+     */
     public Optional<String> getEmail() {
         return Optional.ofNullable(email);
     }
 
+    /**
+     * Gets user password
+     * @return user's password
+     */
     public Optional<String> getPassword() {
         return Optional.ofNullable(password);
     }

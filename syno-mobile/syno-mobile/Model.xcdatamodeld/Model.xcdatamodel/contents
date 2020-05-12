@@ -8,7 +8,7 @@
     </entity>
     <entity name="DbTranslation" representedClassName="DbTranslation" syncable="YES" codeGenerationType="class">
         <attribute name="comment" optional="YES" attributeType="String"/>
-        <attribute name="isSynced" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="pin" optional="YES" attributeType="String"/>
         <attribute name="serverId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="timeCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="timeModified" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -18,8 +18,7 @@
         <relationship name="sourceCard" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DbUserCard" inverseName="translations" inverseEntity="DbUserCard"/>
     </entity>
     <entity name="DbUserCard" representedClassName="DbUserCard" syncable="YES" codeGenerationType="class">
-        <attribute name="isSynced" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
-        <attribute name="language" optional="YES" attributeType="String"/>
+        <attribute name="pin" optional="YES" attributeType="String"/>
         <attribute name="serverId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="timeCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="timeModified" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -29,13 +28,14 @@
         <relationship name="translations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DbTranslation" inverseName="sourceCard" inverseEntity="DbTranslation"/>
     </entity>
     <entity name="DbUserDictionary" representedClassName="DbUserDictionary" syncable="YES" codeGenerationType="class">
-        <attribute name="isSynced" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="language" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="pin" optional="YES" attributeType="String"/>
         <attribute name="serverId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="timeCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="timeModified" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DbAppUser" inverseName="dictionaries" inverseEntity="DbAppUser"/>
-        <relationship name="tests" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DbUserTest" inverseName="targetedDict" inverseEntity="DbUserTest"/>
+        <relationship name="tests" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DbUserTest" inverseName="targetedDict" inverseEntity="DbUserTest"/>
         <relationship name="userCards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DbUserCard" inverseName="sourceDictionary" inverseEntity="DbUserCard"/>
     </entity>
     <entity name="DbUserTest" representedClassName="DbUserTest" syncable="YES" codeGenerationType="class">
@@ -69,14 +69,14 @@
         <relationship name="sourceTestCard" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DbUserTestCard" inverseName="translations" inverseEntity="DbUserTestCard"/>
     </entity>
     <elements>
-        <element name="DbAppUser" positionX="95.1640625" positionY="-88.75" width="128" height="103"/>
-        <element name="DbTranslation" positionX="-123.796875" positionY="-253.60546875" width="128" height="178"/>
-        <element name="DbUserCard" positionX="-311.15625" positionY="54.140625" width="128" height="178"/>
-        <element name="DbUserDictionary" positionX="-318.921875" positionY="-152.9296875" width="128" height="163"/>
-        <element name="DbUserTest" positionX="-95.828125" positionY="114.1796875" width="128" height="118"/>
-        <element name="DbUserTestAnswer" positionX="252.65625" positionY="46.64453125" width="128" height="73"/>
-        <element name="DbUserTestCard" positionX="-179.30078125" positionY="308.40625" width="128" height="148"/>
-        <element name="DbUserTestDict" positionX="133.79296875" positionY="323.40625" width="128" height="88"/>
-        <element name="DbUserTestTranslation" positionX="107.40234375" positionY="43.98828125" width="128" height="88"/>
+        <element name="DbAppUser" positionX="-397.75390625" positionY="-244.33203125" width="128" height="58"/>
+        <element name="DbTranslation" positionX="-27.65625" positionY="-24.08984375" width="128" height="43"/>
+        <element name="DbUserCard" positionX="-36.62890625" positionY="-164.203125" width="128" height="88"/>
+        <element name="DbUserDictionary" positionX="-212.55078125" positionY="-223.0859375" width="128" height="88"/>
+        <element name="DbUserTest" positionX="-448.88671875" positionY="-149.23046875" width="128" height="118"/>
+        <element name="DbUserTestAnswer" positionX="-213.88671875" positionY="176.20703125" width="128" height="58"/>
+        <element name="DbUserTestCard" positionX="-388.578125" positionY="65.109375" width="128" height="103"/>
+        <element name="DbUserTestDict" positionX="-387.31640625" positionY="-33.6640625" width="128" height="73"/>
+        <element name="DbUserTestTranslation" positionX="-419.48828125" positionY="211.64453125" width="128" height="43"/>
     </elements>
 </model>

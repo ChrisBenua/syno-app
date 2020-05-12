@@ -1,30 +1,32 @@
-//
-//  RegisterState.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 04.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// Protocol for checking state of registration form
 @objc protocol IIsOkStateDelegate: class {
+    /// Notifies when correctness of registration form changed
     func didOkStateChanged(isOk: Bool)
 }
 
 @objc protocol IRegisterState {
+    /// User email
     var email: String { get }
+    /// User's password
     var password: String { get }
+    /// User's password confirmation
     var passwordConfirmation: String { get }
+    /// Event handler
     var delegate: IIsOkStateDelegate? { get set }
     
+    /// Checks if registration form is correct
     func isOk() -> Bool
     
+    /// Used to notify when email text field changes
     func emailTFDidChange(sender: UITextField)
     
+    /// Used to notify when password text field changes
     func passwordTFDidChange(sender: UITextField)
     
+    /// Used to notify when password confirmation text field changes
     func passwordConfTFDidChange(sender: UITextField)
 }
 
@@ -55,12 +57,21 @@ class RegisterState: IRegisterState {
     
     private var wasOk: Bool = false
     
+    /**
+     Creates new empty `RegisterState`
+     */
     init() {
         self.email = ""
         self.password = ""
         self.passwordConfirmation = ""
     }
     
+    /**
+    Creates new  `RegisterState`
+     - Parameter email: Current entered email
+     - Parameter password: Current entered password
+     - Parameter passwordConfirmation: Current entered password confirmation
+    */
     init(email: String, password: String, passwordConfirmation: String) {
         self.email = email
         self.password = password
@@ -78,7 +89,4 @@ class RegisterState: IRegisterState {
         
         return _isOk
     }
-    
-    
-
 }

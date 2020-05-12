@@ -1,26 +1,25 @@
-//
-//  RegistrationModel.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 05.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 
+/// Protocol for `IRegistrationModel` event handling
 protocol IRegistrationReactor: class {
+    /// Called when model started performing registration request
     func startedProcessingRegistration()
     
+    /// Called when model failed to perform registration request
     func failed(error: String)
     
+    /// Called when model performed registration successfully
     func success()
 }
 
+/// Protocol for perfomring registration
 protocol IRegistrationModel {
+    /// Performs registration
     func register()
-    
+    /// Stores current form state
     var state: IRegisterState { get }
     
+    /// Event handler
     var reactor: IRegistrationReactor? { get set }
 }
 
@@ -45,8 +44,13 @@ class RegistrationModel: IRegistrationModel {
     
     weak var reactor: IRegistrationReactor?
     
+    /// Service for performing registration request to server
     private var registerService: IRegisterService
     
+    /**
+     Creates new `RegistrationModel`
+     - Parameter registerService: Service for performing registration request to server
+     */
     init(registerService: IRegisterService) {
         self.state = RegisterState()
         self.registerService = registerService

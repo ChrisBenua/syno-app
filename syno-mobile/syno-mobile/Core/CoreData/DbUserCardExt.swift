@@ -1,21 +1,13 @@
-//
-//  DbUserCardExt.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 30.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import CoreData
 
 extension DbUserCard {
-    
+    /// Gets `DbUserCard` translations array
     func getTranslations() -> [DbTranslation] {
         return (self.translations?.allObjects ?? []) as! [DbTranslation]
     }
     
-    
+    /// Converts `DbUserCard` to `ICardCellConfiguration`
     func toCellConfiguration() -> ICardCellConfiguration {
         return CardCellConfiguration(translatedWord: self.translatedWord, translations: (self.translations?.allObjects ?? []).map({ (translation) -> String? in
             (translation as! DbTranslation).translation
@@ -26,40 +18,17 @@ extension DbUserCard {
         }))
     }
     
-    public func setTranslatedWord(word: String?) {
-        if self.translatedWord != word  {
-            self.isSynced = false
-            self.translatedWord = word
-        }
-    }
-
-    public func setLanguage(language: String?) {
-        if self.language != language {
-            self.isSynced = false
-            self.language = language
-        }
-    }
-    
-    public func addToTranslationsUpdateSync(translation: DbTranslation) {
-        self.isSynced = false
-        self.addToTranslations(translation)
-    }
-    
-    public func addToTranslationsUpdateSync(translations: [DbTranslation]) {
-        if translations.count > 0 {
-            self.addToTranslations(NSSet(array: translations))
-            self.isSynced = false
-        }
-    }
-    
+    /// Creates new empty `DbUserCard` and inserts it in given `context`
     static func insertUserCard(into context: NSManagedObjectContext) -> DbUserCard? {
-        guard let userCard = NSEntityDescription.insertNewObject(forEntityName: "DbUserCard", into: context) as? DbUserCard else {
-            return nil
+        var userCard: DbUserCard? = nil
+        context.performAndWait {
+            userCard = NSEntityDescription.insertNewObject(forEntityName: "DbUserCard", into: context) as? DbUserCard
+            userCard?.pin = PinGenerator.generatePin()
         }
-        
         return userCard
     }
     
+    /// Creates `NSFetchRequest` for fetching cards from given `sourceDict` sorted by translated word
     static func requestCardsFrom(sourceDict: DbUserDictionary) -> NSFetchRequest<DbUserCard> {
         let request: NSFetchRequest = DbUserCard.fetchRequest()
         request.predicate = NSPredicate(format: "sourceDictionary == %@", sourceDict)
@@ -68,20 +37,7 @@ extension DbUserCard {
         return request
     }
     
-    static func requestCardWith(serverId: Int64) -> NSFetchRequest<DbUserCard> {
-        let request: NSFetchRequest = DbUserCard.fetchRequest()
-        request.predicate = NSPredicate(format: "serverId == %@", serverId)
-        
-        return request
-    }
-    
-    static func requestCardWithIds(ids: [Int64]) -> NSFetchRequest<DbUserCard> {
-        let request: NSFetchRequest<DbUserCard> = DbUserCard.fetchRequest()
-        request.predicate = NSPredicate(format: "serverId IN %@", ids)
-        
-        return request
-    }
-    
+    /// Gets `DbUserCard` with given `objectId` in given `context`
     static func getCardWith(objectId: NSManagedObjectID, context: NSManagedObjectContext) -> DbUserCard? {
         return context.object(with: objectId) as? DbUserCard
     }

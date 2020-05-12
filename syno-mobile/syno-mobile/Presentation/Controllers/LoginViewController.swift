@@ -1,32 +1,38 @@
-//
-//  ViewController.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 22.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import UIKit
 import AVFoundation
 
+/// Protocol for `LoginModel` event handling
 protocol ILoginReactor {
+    /// Notify view that we send lign request
     func onStartedProcessingLogin()
 
+    /// Notify view on successfull login
     func onSuccessfulLogin(email: String)
 
+    /// Notify view on failure login attempt
     func onFailedLogin()
 }
 
+/// Controller for performing Login
 class LoginViewController: UIViewController, ILoginReactor {
-
+    /// instance with inner logic connected with `LoginViewController`
     private var loginModel: ILoginModel
     
+    /// Layouts elements on view
     private var layouter: ILoginLayouter = LoginRegistrationLayouter()
     
+    /// Registration Controller
     private var registrationViewController: UIViewController
     
+    /// Instance for creating other Controllers
     private var presAssembly: IPresentationAssembly
 
+    /**
+     Create new `LoginViewController` with
+     - Parameter presAssembly: `IPresentationAssembly` for creating other Controllers
+     - Parameter loginModel: `ILoginModel` for handling inner logic
+     - Parameter registrationViewController: `UIViewController` to present on button click
+     */
     init(presAssembly: IPresentationAssembly, loginModel: ILoginModel, registrationViewController: UIViewController) {
         self.presAssembly = presAssembly
         self.loginModel = loginModel
@@ -39,6 +45,7 @@ class LoginViewController: UIViewController, ILoginReactor {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// Processing view to show while performing login
     lazy var processingSaveView: SavingProcessView = {
         let view = SavingProcessView()
         view.setText(text: "Logging in..")
@@ -46,20 +53,17 @@ class LoginViewController: UIViewController, ILoginReactor {
         return view
     }()
 
-
+    /// `registrationLabel` click listener
     @objc func registrationLabelClicked() {
-        print("OBAMA")
         self.present(registrationViewController, animated: true, completion: nil)
     }
-
-    @objc func submitLoginCredentials() {
-        print("Submit")
-        
-        //AVSpeechSynthesizer().speak(AVSpeechUtterance(string: emailTextField.text!))
-        //TODO
+    
+    ///  `submitButton` click listener
+    @objc func submitLoginCredentials() {        
         self.loginModel.login(loginState: LoginState(email: layouter.emailTextField().text ?? "", password: layouter.passwordTextField().text ?? ""))
     }
-
+    
+    /// Called when model started processing login request, presents `processingSaveView`
     func onStartedProcessingLogin() {
         Logger.log(#function)
         self.layouter.submitButton().isEnabled = false
@@ -67,6 +71,7 @@ class LoginViewController: UIViewController, ILoginReactor {
         self.processingSaveView.showSavingProcessView(sourceView: self)
     }
 
+    /// Called when model performed login request successfully, dismisses `processingSaveView`
     func onSuccessfulLogin(email: String) {
         Logger.log(#function)
         self.layouter.submitButton().isEnabled = true
@@ -76,16 +81,22 @@ class LoginViewController: UIViewController, ILoginReactor {
         let alert = UIAlertController.okAlertController(title: "Welcome, \(email)!")
         self.present(alert, animated: true, completion: nil)
 
-        let when = DispatchTime.now() + 0.6
+        let when = DispatchTime.now() + 1.2
 
         DispatchQueue.main.asyncAfter(deadline: when, execute: {
-            alert.dismiss(animated: true)
+            alert.dismiss(animated: true, completion: {
+                self.afterSuccessfullLogin()
+            })
         })
-        
+    }
+    
+    /// Dismisses current controller and replaces main window controller with `mainTabBarController`
+    func afterSuccessfullLogin() {
         let appdelegate = UIApplication.shared.delegate as! AppDelegate
         appdelegate.window!.rootViewController = presAssembly.mainTabBarController()
     }
 
+    /// Called when model failed to login user, dismisses `processingSaveView` and present `alertController` with error
     func onFailedLogin() {
         Logger.log(#function)
         
@@ -97,11 +108,13 @@ class LoginViewController: UIViewController, ILoginReactor {
         self.layouter.passwordTextField().text = ""
     }
 
+    /// Skip Registration button onclick listener
     @objc func skipRegistration() {
         self.loginModel.skippedRegistration()
     }
     
     override func viewDidLoad() {
+        self.tabBarController?.tabBar.isHidden = true
         let allViewTapGestureReco = UITapGestureRecognizer(target: self, action: #selector(clearKeyboard))
         view.addGestureRecognizer(allViewTapGestureReco)
         allViewTapGestureReco.cancelsTouchesInView = false
@@ -111,9 +124,6 @@ class LoginViewController: UIViewController, ILoginReactor {
         layouter.submitButton().addTarget(self, action: #selector(submitLoginCredentials), for: .touchUpInside)
         layouter.alternateAuthButton().addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(registrationLabelClicked)))
         layouter.skipRegistrationButton().addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(skipRegistration)))
-        
-        
-        
     
         self.view.backgroundColor = .white;
         
@@ -139,7 +149,7 @@ class LoginViewController: UIViewController, ILoginReactor {
 
 extension LoginViewController {
 
-    
+    /// Shifts view up when keyboard is shown
     @objc func showKeyboard(notification: NSNotification) {
         if let keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height {
 
@@ -153,11 +163,13 @@ extension LoginViewController {
         }
     }
     
+    /// Shifts view back when keyboard is hidden
     @objc func hideKeyboard(notification: NSNotification) {
         Logger.log("Hide")
         self.view.frame.origin.y = 0
     }
     
+    /// Ends editing all view inside root view
     @objc func clearKeyboard() {
         view.endEditing(true)
     }

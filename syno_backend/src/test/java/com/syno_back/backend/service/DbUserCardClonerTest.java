@@ -22,7 +22,6 @@ class DbUserCardClonerTest {
         DbUserDictionary dict = DbUserDictionary.builder().name("n").id(1L).build();
         DbUserCard card = DbUserCard.builder().id(2L)
                 .translatedWord("word")
-                .language("lan")
                 .userDictionary(dict).build();
         dict.addUserCard(card);
         DbTranslation trans = DbTranslation.builder().id(3L)
@@ -37,7 +36,6 @@ class DbUserCardClonerTest {
         result.setId(5L);
 
         assertEquals(result.getTranslatedWord(), card.getTranslatedWord());
-        assertEquals(result.getLanguage(), card.getLanguage());
         assertNull(result.getUserDictionary());
         assertEquals(result.getTranslations().size(), card.getTranslations().size());
 

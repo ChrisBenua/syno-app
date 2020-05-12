@@ -1,22 +1,17 @@
-//
-//  CardDto.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 20.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 
+/// DTO for passing copy of `DbUserCard` to `LearnViewController`
 class UserCardDtoForLearnController {
     let translatedWord: String?
     let cards: [UserTranslationDtoForLearnController]
     
+    /// Creates new `UserCardDtoForLearnController`
     init(translatedWord: String?, cards: [UserTranslationDtoForLearnController]) {
         self.translatedWord = translatedWord
         self.cards = cards
     }
     
+    /// Creates new `UserCardDtoForLearnController` from given `DbUserCard`
     static func initFrom(userCard: DbUserCard) -> UserCardDtoForLearnController {
         let translations = userCard.translations!.toArray()!.map({ (translation: DbTranslation) -> UserTranslationDtoForLearnController in
             return UserTranslationDtoForLearnController.initFrom(translation: translation)

@@ -1,44 +1,128 @@
-//
-//  CardsControllerDataSource.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 12.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 import CoreData
 
+/// Protocol for delivering data to Collection View with cards
 protocol ICardsControllerDataProvider {
+    /// Generates `NSFetchedResultsController` for given dictionary
     func generateCardsControllerFRC(sourceDict: DbUserDictionary) -> NSFetchedResultsController<DbUserCard>
+    
+    /// Creates empty user card in given dict
+    func createEmptyUserCard(sourceDict: DbUserDictionary, completionHandler: ((DbUserCard) -> Void)?)
+    
+    /// Deletes card with given object id
+    func deleteManagedObject(object: NSManagedObject)
+    
+    /// Undos last deletion
+    func undoLastDeletion()
+    
+    /// Commits all unsaved changes
+    func commitChanges()
 }
 
 class CardsControllerDataProvider: ICardsControllerDataProvider {
-    
+    /// Service for performing actions with `CoreData`
     private var storageCoordinator: IStorageCoordinator
+    /// Stores last deleted card's `CoreData` object id
+    private var lastDeletedObject: NSManagedObject?
+    /// Undo manager for mainContext
+    private var undoManager: UndoManager?
+    /// Stores uncommited deleted objects
+    private var deletedObjects: [NSManagedObjectID] = []
     
+    /**
+     Creates new `CardsControllerDataProvider`
+     - Parameter sotrageCoordinator:Service for performing actions with `CoreData`
+     */
     init(storageCoordinator: IStorageCoordinator) {
         self.storageCoordinator = storageCoordinator
+    }
+    
+    func createEmptyUserCard(sourceDict: DbUserDictionary, completionHandler: ((DbUserCard) -> Void)?) {
+        self.storageCoordinator.stack.saveContext.performAndWait {
+            let card = DbUserCard.insertUserCard(into: self.storageCoordinator.stack.saveContext)!
+            card.sourceDictionary = self.storageCoordinator.stack.saveContext.object(with: sourceDict.objectID) as! DbUserDictionary
+            card.timeCreated = Date()
+            
+            self.storageCoordinator.stack.performSave(with: self.storageCoordinator.stack.saveContext) {
+                let objectId = card.objectID
+                DispatchQueue.main.async {
+                    completionHandler?(self.storageCoordinator.stack.mainContext.object(with: objectId) as! DbUserCard)
+                }
+            }
+        }
     }
     
     func generateCardsControllerFRC(sourceDict: DbUserDictionary) -> NSFetchedResultsController<DbUserCard> {
         return NSFetchedResultsController(fetchRequest: DbUserCard.requestCardsFrom(sourceDict: sourceDict), managedObjectContext: storageCoordinator.stack.mainContext, sectionNameKeyPath: nil, cacheName: nil)
     }
+    
+    /// Commits all unsaved changes
+    func commitSaveContextChanges() {
+        if deletedObjects.count > 0 {
+            self.storageCoordinator.stack.saveContext.performAndWait {
+                for el in deletedObjects {
+                    self.storageCoordinator.stack.saveContext.delete( self.storageCoordinator.stack.saveContext.object(with: el))
+                }
+                deletedObjects = []
+            }
+        }
+    }
+    
+    func deleteManagedObject(object: NSManagedObject) {
+        self.storageCoordinator.stack.mainContext.undoManager = UndoManager()
+        self.undoManager = self.storageCoordinator.stack.mainContext.undoManager
+        self.undoManager?.beginUndoGrouping()
+        self.storageCoordinator.stack.mainContext.delete(object)
+        let objectId = object.objectID
+        
+        self.commitSaveContextChanges()
+        
+        self.deletedObjects.append(objectId)
+    }
+    
+    func undoLastDeletion() {
+        self.undoManager?.endUndoGrouping()
+        self.undoManager?.undo()
+        self.deletedObjects = []
+    }
+    
+    func commitChanges() {
+        commitSaveContextChanges()
+        deletedObjects = []
+        self.storageCoordinator.stack.performSave(with: self.storageCoordinator.stack.saveContext, completion: nil)
+    }
 }
 
+/// Service protocol for presenting `DbUserCard` for current dictionary in `UICollectionVIew`
 protocol ICardsControllerDataSource: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    /// `NSFetchedResultsController` for this dictionary cards
     var fetchedResultsController: NSFetchedResultsController<DbUserCard> { get set }
-    
+    /// Service for inner logic
     var viewModel: ICardsControllerDataProvider { get set }
-    
+    /// CollectionView selection event handler
     var delegate: ICardsDataSourceReactor? { get set }
     
+    /// Performs fetch for `NSFetchedResultsController`
     func performFetch()
+    
+    /// Creates empty user card
+    func createEmptyUserCard(completionHandler: ((DbUserCard) -> Void)?)
+    
+    /// Undos last deleted card
+    func undoLastDeletion()
+    
+    /// Commits unsaved changes
+    func commitChanges()
 }
 
+/// Protocol for UICollectionView selection handling
 protocol ICardsDataSourceReactor: class {
+    /// Notifies when cell with given `DbUserCard` was selected
     func onSelectedItem(item: DbUserCard)
+    
+    /// Notifies when item was deleted
+    func onItemDeleted()
 }
 
 class CardsControllerDataSource: NSObject, ICardsControllerDataSource {
@@ -50,6 +134,7 @@ class CardsControllerDataSource: NSObject, ICardsControllerDataSource {
     
     weak var delegate: ICardsDataSourceReactor?
     
+    /// Dictionary which cards we are showing
     private var sourceDict: DbUserDictionary
     
     func performFetch() {
@@ -83,6 +168,23 @@ class CardsControllerDataSource: NSObject, ICardsControllerDataSource {
         return cell
     }
     
+    func createEmptyUserCard(completionHandler: ((DbUserCard) -> Void)?) {
+        self.viewModel.createEmptyUserCard(sourceDict: self.sourceDict, completionHandler: completionHandler)
+    }
+    
+    func undoLastDeletion() {
+        self.viewModel.undoLastDeletion()
+    }
+    
+    func commitChanges() {
+        self.viewModel.commitChanges()
+    }
+    
+    /**
+     Creates new `CardsControllerDataSource`
+     - Parameter viewModel: service for inner logic
+     - Parameter sourceDict: Dictionary which cards to show
+     */
     init(viewModel: ICardsControllerDataProvider, sourceDict: DbUserDictionary) {
         self.viewModel = viewModel
         self.sourceDict = sourceDict
@@ -104,5 +206,20 @@ extension CardsControllerDataSource {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.delegate?.onSelectedItem(item: self.fetchedResultsController.object(at: indexPath))
+    }
+    
+    @available(iOS 13.0, *)
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (_) -> UIMenu? in
+            let menu = UIMenu(title: "Actions", children: [
+                UIAction(title: "Delete", image: UIImage.init(systemName: "trash.fill"), attributes: .destructive, handler: { (action) in
+                    Timer.scheduledTimer(withTimeInterval: 0.9, repeats: false) { (_) in
+                        self.viewModel.deleteManagedObject(object: self.fetchedResultsController.object(at: indexPath))
+                        self.delegate?.onItemDeleted()
+                    }
+                })
+            ])
+            return menu
+        }
     }
 }

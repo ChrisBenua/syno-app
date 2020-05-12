@@ -5,6 +5,7 @@ import com.syno_back.backend.datasource.DbUserDictionaryRepository;
 import com.syno_back.backend.datasource.UserRepository;
 import com.syno_back.backend.model.*;
 import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -65,23 +66,21 @@ class ShareDictControllerTest {
                 .build();
     }
 
+
     void commonPart() {
-        user = DbUser.builder().id(1L).email("email").password("1").build();
-        cloningUser = DbUser.builder().id(3L).email("fakeemail").password("1").build();
-        dictionary = DbUserDictionary.builder().id(2L).name("name").build();
+        user = userRepository.saveAndFlush(DbUser.builder().email("email").password("1").build());
+        cloningUser = userRepository.saveAndFlush(DbUser.builder().email("fakeemail").password("1").build());
+        dictionary = dictionaryRepository.saveAndFlush(DbUserDictionary.builder().name("name").pin("pin").owner(user).build());
         user.addUserDictionary(dictionary);
 
-        user = userRepository.save(user);
-        cloningUser = userRepository.save(cloningUser);
-
-        card = DbUserCard.builder().id(4L).language("lan").translatedWord("word").build();
+        card = DbUserCard.builder().translatedWord("word").build();
         dictionary.addUserCard(card);
 
         trans = DbTranslation.builder().id(5L).usageSample("sample").transcription("transcr").translation("tr")
                 .comment("comment").build();
         card.addTranslation(trans);
 
-        dictionary = dictionaryRepository.save(dictionary);
+        dictionary = dictionaryRepository.saveAndFlush(dictionary);
     }
 
     @Test
@@ -91,7 +90,7 @@ class ShareDictControllerTest {
 
         mockMvc.perform(post("/api/dict_share/add_share").with(user("email").roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(String.format("{\"share_dict_id\":%d}", dictionary.getId()))
+                .content(String.format("{\"share_dict_pin\": \"%s\"}", dictionary.getPin()))
                 .characterEncoding("UTF-8"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk());
@@ -123,7 +122,6 @@ class ShareDictControllerTest {
         var clonedCard = clonedDict.getUserCards().get(0);
         assertEquals(clonedCard.getTranslatedWord(), card.getTranslatedWord());
         assertEquals(clonedCard.getUserDictionary(), clonedDict);
-        assertEquals(clonedCard.getLanguage(), card.getLanguage());
         assertEquals(clonedCard.getTranslations().size(), 1);
 
         var clonedTrans = clonedCard.getTranslations().get(0);

@@ -7,9 +7,15 @@ import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+/**
+ * Service for cloning <code>DbUserCard</code>
+ */
 @Component
 public class DbUserCardCloner implements IEntityCloner<DbUserCard> {
 
+    /**
+     * Service for cloning <code>DbTranslation</code>
+     */
     private IEntityCloner<DbTranslation> translationCloner;
 
     public DbUserCardCloner(IEntityCloner<DbTranslation> translationCloner) {
@@ -18,7 +24,7 @@ public class DbUserCardCloner implements IEntityCloner<DbUserCard> {
 
     @Override
     public DbUserCard clone(DbUserCard cloneable) {
-        var clonedCard = DbUserCard.builder().language(cloneable.getLanguage())
+        var clonedCard = DbUserCard.builder()
                 .translatedWord(cloneable.getTranslatedWord())
                 .build();
         var clonedTranslations = cloneable.getTranslations().stream().map(trans -> translationCloner.clone(trans)).collect(Collectors.toList());

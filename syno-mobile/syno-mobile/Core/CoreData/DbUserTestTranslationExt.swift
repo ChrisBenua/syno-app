@@ -1,15 +1,8 @@
-//
-//  DbUserTestTranslationExt.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 19.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import CoreData
 
 extension DbUserTestTranslation {
+    /// Creates new empty `DbUserTestTranslation` and inserts it in given `context`
     static func insertUserTestTranslation(into context: NSManagedObjectContext) -> DbUserTestTranslation? {
         guard let testTranslation = NSEntityDescription.insertNewObject(forEntityName: "DbUserTestTranslation", into: context) as? DbUserTestTranslation else {
             return nil
@@ -18,6 +11,9 @@ extension DbUserTestTranslation {
         return testTranslation
     }
     
+    /// Creates new `DbUserTestTranslation` with given parameters and inserts it in given `context`
+    /// - Parameter translation: actual translation
+    /// - Parameter sourceTestCard: `DbUserTestCard` where to add new `DbUserTestTranslation`
     static func fromDbTranslation(context: NSManagedObjectContext, translation: String?, sourceTestCard: DbUserTestCard?) -> DbUserTestTranslation {
         guard let testTranslation = insertUserTestTranslation(into: context) else {
             fatalError("Cant insert UserTestTranslation")
@@ -27,12 +23,5 @@ extension DbUserTestTranslation {
         sourceTestCard?.addToTranslations(testTranslation)
         
         return testTranslation
-    }
-    
-    static func requestFromTestCard(testCard: DbUserTestCard) -> NSFetchRequest<DbUserTestTranslation> {
-        let request: NSFetchRequest<DbUserTestTranslation> = DbUserTestTranslation.fetchRequest()
-        request.predicate = NSPredicate(format: "sourceTestCard == %@", testCard)
-        
-        return request
     }
 }

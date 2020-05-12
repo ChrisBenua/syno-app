@@ -1,20 +1,16 @@
-//
-//  TestViewGenerator.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 05.01.2020.
-//  Copyright © 2020 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// Defines actions with view to move view up and down depending on keyboard position
 protocol IScrollableToPoint: class {
+    /// Gives info about last focused view's position on screen
     func scrollToPoint(point: CGPoint)
     
+    /// Notifies when all input view are not focused
     func scrollToTop()
 }
 
+/// Defines protocol for interacting with `TestView`
 protocol ITestView: UIView, ITestViewControllerDataSourceReactor, IScrollableToPoint {
     var tableView: UITableView { get }
     var parentController: IScrollableToPoint? { get set }
@@ -22,6 +18,7 @@ protocol ITestView: UIView, ITestViewControllerDataSourceReactor, IScrollableToP
     var model: ITestViewControllerModel { get }
 }
 
+/// View for TestController with only 1 card
 class TestView: UIView, ITestView {
     func scrollToTop() {
         parentController?.scrollToTop()
@@ -34,12 +31,15 @@ class TestView: UIView, ITestView {
     weak var parentController: IScrollableToPoint?
     var model: ITestViewControllerModel
     
+    /// Updates card number, translated word and index translation number
     func setHeaderData() {
         self.cardNumberLabel.text = "\(model.dataSource.state.itemNumber + 1)/\(model.dataSource.dataProvider.count)"
         self.translatedWordView.translatedWordLabel.text = model.dataSource.dataProvider.getItem(cardPos: model.dataSource.state.itemNumber).translatedWord
-        self.translationsNumberLabel.text = "\(model.dataSource.dataProvider.getItem(cardPos: model.dataSource.state.itemNumber).translationsCount) переводов"
+        let translationsAmount = model.dataSource.dataProvider.getItem(cardPos: model.dataSource.state.itemNumber).translationsCount
+        self.translationsNumberLabel.text = "\(translationsAmount) \(NumbersEndingHelper.translations(translationsAmount: translationsAmount))"
     }
     
+    /// Label for displaying index number of current card
     lazy var cardNumberLabel: UILabel = {
         let cardNumberLabel = UILabel(); cardNumberLabel.translatesAutoresizingMaskIntoConstraints = false
         cardNumberLabel.font = UIFont.systemFont(ofSize: 20)
@@ -48,6 +48,7 @@ class TestView: UIView, ITestView {
         return cardNumberLabel
     }()
     
+    /// View for displaying current translated word
     lazy var translatedWordView: TranslatedWordView = {
         let wordView = TranslatedWordView()
         wordView.translatedWordLabel.isUserInteractionEnabled = false
@@ -55,6 +56,7 @@ class TestView: UIView, ITestView {
         return wordView
     }()
     
+    /// View for displaying amount of translations in current card
     lazy var translationsNumberLabel: UILabel = {
         var label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -63,6 +65,7 @@ class TestView: UIView, ITestView {
         return label
     }()
     
+    /// Wrapper-view for `translationsNumberLabel`, `translatedWordView` and `cardNumberLabel`
     lazy var headerView: UIView = {
         let view = UIView()
         
@@ -84,8 +87,10 @@ class TestView: UIView, ITestView {
         return view
     }()
     
+    /// Wrapper view for actions buttons
     lazy var controlsView: UIView = {
-        let addButton = CommonUIElements.defaultSubmitButton(text: "+", backgroundColor: UIColor.init(red: 96.0/255, green: 157.0/255, blue: 248.0/255, alpha: 1.0))
+        let addButton = UIButton()
+        addButton.setImage(#imageLiteral(resourceName: "Component 4"), for: .normal)
         
         addButton.addTarget(self, action: #selector(onAddAnswerButton), for: .touchUpInside)
         
@@ -93,17 +98,20 @@ class TestView: UIView, ITestView {
         view.addSubview(addButton)
 
         addButton.anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 10, paddingRight: 20, width: 0, height: 0)
-        addButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.12).isActive = true
+        addButton.widthAnchor.constraint(equalToConstant: 27).isActive = true
+        addButton.heightAnchor.constraint(equalToConstant: 27).isActive = true
         
         return view
     }()
     
+    /// Add answer button click listener
     @objc func onAddAnswerButton() {
         if (self.model.dataSource.dataProvider.getItem(cardPos: self.model.dataSource.state.itemNumber).translationsCount > tableView.numberOfRows(inSection: 0)) {
             self.model.dataSource.onAddLineForAnswer()
         }
     }
     
+    /// Table view with user's answers
     lazy var tableView: UITableView = {
         let tv = PlainTableView()
         tv.dataSource = self.model.dataSource
@@ -120,6 +128,7 @@ class TestView: UIView, ITestView {
         return tv
     }()
     
+    /// Wrapper-view for `controlsView` and `tableView`
     lazy var collectionContainerView: UIView = {
         let view = BaseShadowView()
         view.shadowView.shadowOffset = CGSize(width: 0, height: 4)
@@ -141,6 +150,7 @@ class TestView: UIView, ITestView {
         return view
     }()
     
+    /// Wrapper-view for all views on screen
     lazy var contentView: UIView = {
         let view = UIView()
         view.addSubview(self.headerView)
@@ -157,6 +167,10 @@ class TestView: UIView, ITestView {
         return view
     }()
     
+    /**
+     Creates new `TestView`
+     - Parameter model: instance for handling inner logic of `TestView`
+     */
     init(model: ITestViewControllerModel) {
         self.model = model
         super.init(frame: .zero)
@@ -169,6 +183,7 @@ class TestView: UIView, ITestView {
         setHeaderData()
     }
     
+    /// Forbidden to create view from Storyboard
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -183,6 +198,7 @@ class TestView: UIView, ITestView {
 }
 
 class TestViewGenerator {
+    /// Generates new `TestView` with given instance for handling inner logic
     func generate(model: ITestViewControllerModel) -> ITestView {
         return TestView(model: model)
     }

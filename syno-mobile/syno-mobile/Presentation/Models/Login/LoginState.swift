@@ -1,15 +1,10 @@
-//
-//  LoginState.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 23.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 
+/// Protocol for storing Login form state
 protocol ILoginState {
+    /// Entered email
     var email: String {get}
+    /// Entered password
     var password: String {get}
 }
 

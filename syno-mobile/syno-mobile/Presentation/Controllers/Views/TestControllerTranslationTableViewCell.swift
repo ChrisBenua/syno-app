@@ -1,51 +1,60 @@
-//
-//  TestControllerTranslationTableViewCell.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 05.01.2020.
-//  Copyright © 2020 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// Protocol for defining data for `TestControllerTranslationTableViewCell`
 protocol ITestControllerTranslationCellConfiguration {
+    /// User's answer
     var translation: String? { get set }
 }
 
 class TestControllerTranslationCellConfiguration: ITestControllerTranslationCellConfiguration {
     var translation: String?
     
+    /**
+     Creates new TestControllerTranslationCellConfiguration
+     - Parameter translation: user's answer
+     */
     init(translation: String?) {
         self.translation = translation
     }
 }
 
+/// Protocol for updating `TestControllerTranslationTableViewCell`
 protocol IConfigurableTestControllerTranslationCell {
+    /// updates `TestControllerTranslationTableViewCell` with given config
     func setup(config: ITestControllerTranslationCellConfiguration)
 }
 
+/// `TestControllerTranslationTableViewCell` on user answers change listener
 protocol ITestControllerTranslationCellDelegate: class {
+    /// User's answer change handler
     func textDidChange(sender: UITableViewCell, text: String?)
 }
 
 class TestControllerTranslationTableViewCell: UITableViewCell, IConfigurableTestControllerTranslationCell, UITextFieldDelegate {
+    /// Cell's reuse identifier
     static let cellId = "TestControllerTranslationTableViewCellId"
     
+    /// User's answer change listener
     weak var delegate: ITestControllerTranslationCellDelegate?
     
+    /// TextField editing listener
     weak var editingDelegate: ITextFieldTestControllerEditingDelegate?
-        
+    
+    /// Current user answer
     var translation: String?
     
+    /// On textField begin editing event listener
     func textFieldDidBeginEditing(_ textField: UITextField) {
         editingDelegate?.beginEditingInCell(cell: self)
     }
     
+    /// On textField end editing event listener
     func textFieldDidEndEditing(_ textField: UITextField) {
         editingDelegate?.endEditingInCell(cell: self)
     }
     
+    /// Updates `translationTextField`
     func updateUI() {
         self.translationTextField.text = translation
     }
@@ -56,6 +65,7 @@ class TestControllerTranslationTableViewCell: UITableViewCell, IConfigurableTest
         updateUI()
     }
     
+    /// TextField for displaying and editing answer
     lazy var translationTextField: UITextField = {
         let tf = UITextFieldWithInsets(insets: UIEdgeInsets(top: 2, left: 10, bottom: 2, right: 10))
         tf.backgroundColor = .white
@@ -68,6 +78,7 @@ class TestControllerTranslationTableViewCell: UITableViewCell, IConfigurableTest
         return tf
     }()
     
+    /// TextField text change listener
     @objc func onTranslationTextChanged(_ textField: UITextField) {
         delegate?.textDidChange(sender: self, text: textField.text)
     }
@@ -83,10 +94,6 @@ class TestControllerTranslationTableViewCell: UITableViewCell, IConfigurableTest
         translationTextField.delegate = self
         
         translationTextField.anchor(top: self.contentView.topAnchor, left: self.contentView.leftAnchor, bottom: self.contentView.bottomAnchor, right: self.contentView.rightAnchor, paddingTop: 10, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 0)
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
     }
     
     required init?(coder: NSCoder) {

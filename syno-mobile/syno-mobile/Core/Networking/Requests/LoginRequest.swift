@@ -1,15 +1,10 @@
-//
-//  LoginRequest.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 26.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 
+/// DTO for sending login request
 struct LoginDto: Encodable {
+    /// User's email
     let email: String
+    /// User's password
     let password: String
 
     init(email: String, password: String) {
@@ -18,6 +13,7 @@ struct LoginDto: Encodable {
     }
 }
 
+/// Class for configuring Login backend request
 class LoginRequest: IRequest {
     typealias Model = LoginRequest
 
@@ -40,7 +36,7 @@ class LoginRequest: IRequest {
             }
         }
     }
-
+    /// Login credentials to put inside request body
     let loginDto: LoginDto
 
     init(loginDto: LoginDto) {

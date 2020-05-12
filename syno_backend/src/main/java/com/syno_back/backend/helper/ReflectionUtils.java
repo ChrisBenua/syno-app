@@ -7,6 +7,11 @@ import java.lang.reflect.InvocationTargetException;
 
 @Log4j2
 public class ReflectionUtils {
+    /**
+     * Calls given methods with one given parameter
+     * @param builder object which functions to call
+     * @param additionalFields List of Pairs where first is function name and second is that function parameter
+     */
     public static void setFields(Object builder, Iterable<Pair<String, ?>> additionalFields) {
         try {
             if (additionalFields != null) {

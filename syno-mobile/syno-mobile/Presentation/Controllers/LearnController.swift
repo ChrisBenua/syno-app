@@ -1,16 +1,11 @@
-//
-//  LearnController.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 20.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// Protocol for data passed to `LearnCollectionViewController` table view
 protocol ILearnViewControllerData {
+    /// Number of cards in dictionary
     var cardsAmount: Int { get }
+    /// Name of dictionary
     var dictName: String? { get }
 }
 
@@ -19,6 +14,11 @@ class LearnViewControllerData: ILearnViewControllerData {
     
     var dictName: String?
     
+    /**
+     Creates new `LearnViewControllerData`
+     - Parameter cardsAmount: Number of cards in dictionary
+     - Parameter dictName: Name of dictionary
+     */
     init(cardsAmount: Int, dictName: String?) {
         self.cardsAmount = cardsAmount
         self.dictName = dictName
@@ -26,23 +26,29 @@ class LearnViewControllerData: ILearnViewControllerData {
 }
 
 class LearnCollectionViewController: UIViewController {
-    
+    /// Data for learn view controller header
     private var data: ILearnViewControllerData
     
+    /// Learn view for each card
     private var learnViews: [ILearnView]
     
+    /// Gesture recognizer for right swiping
     private var rightSwipeGestureRecognizer: UISwipeGestureRecognizer!
     
+    /// Gesture recognizer for left swiping
     private var leftSwipeGestureRecognizer: UISwipeGestureRecognizer!
     
+    /// Current card number
     private var currCardNumber: Int = 0
         
+    /// LearnView for `currCardNumber`
     var contentView: ILearnView {
         get {
             return learnViews[currCardNumber]
         }
     }
     
+    /// Main scroll view with all view inside
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.alwaysBounceVertical = true
@@ -59,17 +65,19 @@ class LearnCollectionViewController: UIViewController {
         return scrollView
     }()
     
+    /// End button click listener
     @objc func endLearn() {
         self.navigationController?.popViewController(animated: true)
     }
     
+    /// SwipeGestureRecognizer handler
     @objc func handleSwipes(_ sender: UISwipeGestureRecognizer) {
         var nextView: ILearnView?
         var success: Bool = false
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
             switch sender.direction {
             case .left:
-                print("Left Swipe")
+                Logger.log("Left Swipe")
                 if self.currCardNumber < self.data.cardsAmount - 1 {
                     success = true
                     self.contentView.transform = CGAffineTransform(translationX: -self.view.frame.width, y: 0)
@@ -87,7 +95,7 @@ class LearnCollectionViewController: UIViewController {
                     nextView?.transform = CGAffineTransform(translationX: 0, y: 0)
                 }
             case .right:
-                print("Right Swipe")
+                Logger.log("Right Swipe")
                 if self.currCardNumber > 0 {
                     success = true
                     self.contentView.transform = CGAffineTransform(translationX: self.view.frame.width, y: 0)
@@ -106,7 +114,6 @@ class LearnCollectionViewController: UIViewController {
                     nextView?.transform = CGAffineTransform(translationX: 0, y: 0)
                 }
             default:
-                print("break")
                 break
             }
         }) { (_) in
@@ -156,6 +163,11 @@ class LearnCollectionViewController: UIViewController {
         self.navigationItem.setHidesBackButton(true, animated:true)
     }
     
+    /**
+     Creates new `LearnCollectionViewController`
+     - Parameter data: data for controller to check actions
+     - Parameter learnViews: LearnView for each card in dictionary
+     */
     init(data: ILearnViewControllerData, learnViews: [ILearnView]) {
         self.data = data
         self.learnViews = learnViews

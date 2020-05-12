@@ -24,7 +24,7 @@ class UserDictionaryToDtoMapperTest {
     void convert() {
         DbUserDictionary dict = DbUserDictionary.builder().id(1L).name("nm").timeCreated(LocalDateTime.now())
                 .timeModified(LocalDateTime.now())
-                .userCards(List.of(DbUserCard.builder().language("lan").translatedWord("w").build()))
+                .userCards(List.of(DbUserCard.builder().translatedWord("w").build()))
                 .build();
         var result = mapper.convert(dict, null);
 

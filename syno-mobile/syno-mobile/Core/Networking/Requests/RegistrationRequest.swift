@@ -1,20 +1,16 @@
-//
-//  RegistrationRequest.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 04.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 
+/// DTO for sending registration request
 struct RegisterDto: Encodable {
+    /// user's email
     let email: String
+    /// user's password
     let password: String
 }
 
-
+/// Class for configuring `RegisterEndPoint` request
 class RegisterRequest: IRequest {
+    /// User's credentials ti put in request body
     private let registerDto: RegisterDto
     
     var url: URLRequest? {

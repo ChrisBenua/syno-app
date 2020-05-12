@@ -1,30 +1,28 @@
-//
-//  SavingProcessView.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 29.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// Wrapper-view for process indicating
 class SavingProcessView: UIView {
-    
+    /// removes view
     func dismissSavingProcessView() {
         self.activityIndicator.stopAnimating()
         self.removeFromSuperview()
     }
     
+    /**
+     Shows this view in the center of `sourceView`
+     - Parameter sourceView: In which controller view should be shown
+     */
     func showSavingProcessView(sourceView: UIViewController) {
         sourceView.view.addSubview(self)
         self.activityIndicator.startAnimating()
         self.centerYAnchor.constraint(equalTo: sourceView.view.centerYAnchor).isActive = true
         self.centerXAnchor.constraint(equalTo: sourceView.view.centerXAnchor).isActive = true
-        self.heightAnchor.constraint(equalTo: sourceView.view.heightAnchor, multiplier: 0.13).isActive = true
+        self.heightAnchor.constraint(equalToConstant: 100).isActive = true
         self.widthAnchor.constraint(equalTo: self.heightAnchor, multiplier: 1).isActive = true
     }
     
+    /// Label with text above activity indicator
     let savingLabel: UILabel = {
         let label = UILabel()
         label.text = "Saving..."
@@ -33,10 +31,15 @@ class SavingProcessView: UIView {
         return label
     }()
     
+    /**
+     Sets test of `savingLabel`
+     - Parameter text: text to be placed in `savingLabel`
+     */
     func setText(text: String) {
         savingLabel.text = text
     }
     
+    /// Animated activity indicator
     lazy var activityIndicator = UIActivityIndicatorView(style: .gray)
 
     override init(frame: CGRect) {
@@ -49,12 +52,9 @@ class SavingProcessView: UIView {
         self.addSubview(activityIndicator)
         self.addSubview(savingLabel)
         
-        
         savingLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         savingLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 4).isActive = true
-        
-        //label.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-        
+                
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         self.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true

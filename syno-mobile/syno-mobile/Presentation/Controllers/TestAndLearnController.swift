@@ -1,15 +1,8 @@
-//
-//  TestAndLearnController.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 16.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
 extension UISegmentedControl {
+    /// Sets tint color for selected index
     func updateColors(selectedColor: UIColor) {
         for (index, subview) in self.subviews.enumerated() {
             if index == self.selectedSegmentIndex {
@@ -23,12 +16,13 @@ extension UISegmentedControl {
 }
 
 class TestAndLearnViewController: UIViewController {
-    
+    /// FetchResultsController delegate
     var frcDelegate: IDefaultCollectionViewFetchResultControllerDelegate?
     
+    /// Service responsible for delivering data to collection view
     var dataSource: ITestAndLearnDictionaryDataSource
     
-    
+    /// Collection view for displaying dictionaries data
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let colView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -48,12 +42,12 @@ class TestAndLearnViewController: UIViewController {
         super.viewDidAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
         self.collectionView.reloadData()
+        self.dataSource.recentTestsDataSource.refresh()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        print("testAndLearnViewController")
         self.navigationItem.title = "Обучение"
         
         self.dataSource.performFetch()
@@ -63,6 +57,10 @@ class TestAndLearnViewController: UIViewController {
         collectionView.reloadData()
     }
     
+    /**
+     Creates new `TestAndLearnViewController`
+     - Parameter datasource: Service responsible for delivering data to collection view
+     */
     init(datasource: ITestAndLearnDictionaryDataSource) {
         self.dataSource = datasource
         super.init(nibName: nil, bundle: nil)

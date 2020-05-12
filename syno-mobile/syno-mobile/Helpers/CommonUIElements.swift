@@ -1,17 +1,16 @@
-//
-//  CommonUIElements.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 23.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
-
+/// Class for creating common UIElements
 class CommonUIElements {
     
+    /**
+     Setups view's layer
+     - Parameter view: View which layer will be modified
+     - Parameter borderWidth: width of border around view
+     - Parameter cornerRadius: Radius of corners of view
+     - Parameter borderColor: border color
+     */
     private static func layerSetup(view: UIView, borderWidth: CGFloat = 0.5, cornerRadius: CGFloat = 10,
                                    borderColor: CGColor = UIColor.gray.cgColor) {
         
@@ -22,6 +21,7 @@ class CommonUIElements {
         view.layer.borderColor = UIColor.gray.cgColor
     }
     
+    /// Generates TextField with given parameters(default for default TextField)
     static func defaultTextField(borderWidth: CGFloat = 0.5, cornerRadius: CGFloat = 10,
                                  backgroundColor: UIColor = .textFieldsMainColor,
                                  borderColor: CGColor = UIColor.gray.cgColor,
@@ -33,6 +33,7 @@ class CommonUIElements {
         return textField
     }
     
+    /// Generates UIButton with given parameters(default for default button)
     static func defaultSubmitButton(text: String, cornerRadius: CGFloat = 15,
                                     backgroundColor: UIColor = .submitButtonMainColor,
                                     borderColor: CGColor = UIColor.gray.cgColor,

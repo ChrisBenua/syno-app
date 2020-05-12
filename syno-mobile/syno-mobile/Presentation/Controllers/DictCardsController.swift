@@ -1,23 +1,18 @@
-//
-//  DictCardsController.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 12.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
-
+/// Controller for editing dictionary cards
 class DictCardsController: UIViewController {
-    
-    private let rowHeight: CGFloat = 80
-    
+    /// FetchResultsController delegate for collection view
     var frcDelegate: IDefaultCollectionViewFetchResultControllerDelegate?
     
+    /// Service responsible for formatting data for Collection view
     var dataSource: ICardsControllerDataSource
     
+    /// NotificationView for cancelling deletion
+    var notifView: BottomNotificationView?
+    
+    /// Collection view for displaying dictionary cards
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let colView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -32,8 +27,14 @@ class DictCardsController: UIViewController {
         return colView
     }()
     
+    /// Assembly for creating controllers
     let assembly: IPresentationAssembly
     
+    /**
+     Creates new `DictCardsController`
+     - Parameter dataSource: service responsible for data formatting in collection view
+     - Parameter presAssembly: Assembly for creating controllers
+     */
     init(dataSource: ICardsControllerDataSource, presAssembly: IPresentationAssembly) {
         self.dataSource = dataSource
         self.assembly = presAssembly
@@ -44,6 +45,12 @@ class DictCardsController: UIViewController {
         self.collectionView.dataSource = self.dataSource
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.notifView?.removeFromSuperview()
+        self.dataSource.commitChanges()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -52,8 +59,22 @@ class DictCardsController: UIViewController {
         self.dataSource.performFetch()
         self.view.addSubview(self.collectionView)
         
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addCard))
+        self.navigationItem.rightBarButtonItem?.tintColor = .headerMainColor
+        
         collectionView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         collectionView.reloadData()
+    }
+    
+    /// Plus bar button click listener
+    @objc func addCard() {
+        self.dataSource.createEmptyUserCard { (tempCard) in
+            DispatchQueue.main.async {
+                let controller = self.assembly.newCardController(tempSourceCard: tempCard)
+                self.navigationController?.pushViewController(controller, animated: true)
+            }
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -66,5 +87,29 @@ extension DictCardsController: ICardsDataSourceReactor {
     func onSelectedItem(item: DbUserCard) {
         let controller = self.assembly.translationsViewController(sourceCard: item)
         self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func onItemDeleted() {
+        let notifView = BottomNotificationView()
+        notifView.cancelButtonLabel.text = "Отмена"
+        notifView.messageLabel.text = "Карточка будет удалена"
+        notifView.timerLabel.text = "5"
+        notifView.delegate = self
+        self.view.addSubview(notifView)
+        self.view.bringSubviewToFront(notifView)
+        notifView.anchor(top: nil, left: self.view.safeAreaLayoutGuide.leftAnchor, bottom: self.view.safeAreaLayoutGuide.bottomAnchor, right: self.view.safeAreaLayoutGuide.rightAnchor, paddingTop: 0, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0)
+        self.notifView = notifView
+    }
+}
+
+extension DictCardsController: IBottomNotificationViewDelegate {
+    func onCancelButtonPressed() {
+        Logger.log("Canceled deletion")
+        self.dataSource.undoLastDeletion()
+    }
+    
+    func onTimerDone() {
+        Logger.log("Timer in undo deletion done")
+        self.dataSource.commitChanges()
     }
 }

@@ -1,17 +1,8 @@
-//
-//  UserDictionaryStorageManager.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 01.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import CoreData
 
 class UserDictionaryStorageManager: IUserDictionaryStorageManager {
-    func createUserDictionary(owner: DbAppUser, name: String, timeCreated: Date?, timeModified: Date?, serverId: Int64?, cards: [DbUserCard]?, completion: ((DbUserDictionary?) -> Void)?) {
-        //DispatchQueue.global(qos: .background).async {
+    func createUserDictionary(owner: DbAppUser, name: String, timeCreated: Date?, timeModified: Date?, language: String?, serverId: Int64?, cards: [DbUserCard]?, pin: String?, completion: ((DbUserDictionary?) -> Void)?) {
             let ownerObjectId = owner.objectID
             
             let userDict = DbUserDictionary.insertUserDict(into: self.saveContext)
@@ -20,11 +11,16 @@ class UserDictionaryStorageManager: IUserDictionaryStorageManager {
                 let ownerInSaveContext = self.saveContext.object(with: ownerObjectId) as? DbAppUser
                 
                 userDict?.name = name
+                userDict?.language = language
                 userDict?.timeCreated = timeCreated
                 userDict?.timeModified = timeModified
                 
                 if let servId = serverId {
                     userDict?.serverId = servId
+                }
+                
+                if let pin = pin {
+                    userDict?.pin = pin
                 }
                 
                 if let cards = cards {
@@ -35,15 +31,14 @@ class UserDictionaryStorageManager: IUserDictionaryStorageManager {
                 
                 completion?(userDict)
             }
-        //}
     }
-    
+    /// `NSManagedObjectContext` for saving in background
     var saveContext: NSManagedObjectContext {
         get {
             return self.stack.saveContext
         }
     }
-    
+    /// `NSManagedObjectContext` for accessing object in UI thread
     var mainContext: NSManagedObjectContext {
         get {
             return self.stack.mainContext

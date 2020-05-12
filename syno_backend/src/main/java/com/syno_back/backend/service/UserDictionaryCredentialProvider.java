@@ -5,6 +5,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+/**
+ * Service for checking that User owns <code>DbUserDictionary</code>
+ */
 @Component
 public class UserDictionaryCredentialProvider implements ICredentialProvider<DbUserDictionary, Authentication> {
     @Override

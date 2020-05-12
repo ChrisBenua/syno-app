@@ -1,33 +1,36 @@
-//
-//  LoginModel.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 26.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 
+/// Service protocol for handling inner logic of `LoginController`
 protocol ILoginModel {
+    /// Performs login
+    /// - Parameter loginState: user's credentials
     func login(loginState: ILoginState)
     
+    /// Notifies if user skipped registration
     func skippedRegistration()
 
+    /// Event handler
     var controller: ILoginReactor? { get set }
 }
 
 class LoginModel: ILoginModel {
     var controller: ILoginReactor?
 
+    /// Service for performing login request
     private let loginService: ILoginService
 
+    /// Create new `LoginModel`
+    /// - Parameter loginService: Service for performing login request
     init(loginService: ILoginService) {
         self.loginService = loginService
     }
 
     func skippedRegistration() {
-        loginService.setNetworkNode(isActive: false)
-        self.controller?.onSuccessfulLogin(email: "Guest")
+        let didCreateGuestUser = loginService.createGuestUser()
+        if (didCreateGuestUser) {
+            loginService.setNetworkMode(isActive: false)
+        }
+        self.controller?.onSuccessfulLogin(email: self.loginService.currentUserEmail())
     }
     
     func login(loginState: ILoginState) {

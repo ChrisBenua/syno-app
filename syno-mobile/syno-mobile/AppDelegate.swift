@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 22.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import UIKit
 
 @UIApplicationMain
@@ -16,7 +8,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
+        let appearance = UINavigationBar.appearance()
+        appearance.tintColor = .headerMainColor
         window = UIWindow()
         window?.makeKeyAndVisible()
         
@@ -26,10 +19,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
-
-    // MARK: UISceneSession Lifecycle
-
-    
-
 }
 

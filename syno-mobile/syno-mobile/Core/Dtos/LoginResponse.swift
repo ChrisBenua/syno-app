@@ -1,11 +1,9 @@
-//
-// Created by Ирина Улитина on 26.11.2019.
-// Copyright (c) 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 
+/// DTO for parsing login server response
 struct LoginResponseDto: Decodable {
+    /// Auth token
     let accessToken: String
+    /// User's email
     let email: String
 }

@@ -11,6 +11,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Class for filtering unauthorized request for request that need authorization
+ */
 @Component
 public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
     @Override

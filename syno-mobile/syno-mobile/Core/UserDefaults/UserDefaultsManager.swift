@@ -1,40 +1,46 @@
-//
-//  UserDefaultsManager.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 27.11.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 
+/// Service protocol for saving data to `UserDefaults`
 protocol IUserDefaultsManager {
+    /// Saves user's auth token
     func saveToken(token: String)
     
+    /// Saves user's email after login
     func saveEmail(email: String)
     
+    /// Saves timestamp when token was received
     func saveTokenTimestamp(date: Date)
 
+    /// clears token from `UserDefaults`
     func clearToken()
 
+    /// Clears email from `UserDefaults`
     func clearEmail()
     
+    /// Gets user's auth token
     func getToken() -> String?
     
+    /// Gets user's email
     func getEmail() -> String?
     
+    /// Sets current session network mode
     func setNetworkMode(isActive: Bool)
     
+    /// Gets current session network mode
     func getNetworkMode() -> Bool
     
+    /// Gets token timestamp
     func getTokenTimestamp() -> Int
 }
 
 class UserDefaultsManager: IUserDefaultsManager {
-    
+    /// Key for storing acces token
     private static let accessTokenKey: String = "accessTokenKey"
+    /// Key for storing user's email
     private static let userEmailKey: String = "userEmailKey"
+    /// Key for storing network mode
     private static let networkModeKey: String = "networkModeKey"
+    /// Key for storing token timestamp
     private static let accessTokenTimestampKey: String = "accessTokenTimestampKey"
 
     func saveToken(token: String) {

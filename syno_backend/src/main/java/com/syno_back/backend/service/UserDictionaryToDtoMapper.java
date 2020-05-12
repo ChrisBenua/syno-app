@@ -11,9 +11,15 @@ import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+/**
+ * Service for mapping <code>DbUserDictionary</code> to <code>UserDictionary</code>
+ */
 @Component
 public class UserDictionaryToDtoMapper implements IDtoMapper<DbUserDictionary, UserDictionary> {
 
+    /**
+     * Service for mapping <code>DbUserCard</code> to <code>UserCard</code>
+     */
     private IDtoMapper<DbUserCard, UserCard> cardMapper;
 
     public UserDictionaryToDtoMapper(@Autowired IDtoMapper<DbUserCard, UserCard> cardMapper) {
@@ -22,8 +28,8 @@ public class UserDictionaryToDtoMapper implements IDtoMapper<DbUserDictionary, U
 
     @Override
     public UserDictionary convert(@NonNull DbUserDictionary dto, Iterable<Pair<String, ?>> additionalFields) {
-        return UserDictionary.builder().id(dto.getId()).name(dto.getName()).timeCreated(dto.getTimeCreated())
-                .timeModified(dto.getTimeModified()).userCards(dto.getUserCards().stream().map((card) -> cardMapper.convert(card, null)).collect(Collectors.toList()))
+        return UserDictionary.builder().id(dto.getId()).pin(dto.getPin()).name(dto.getName()).timeCreated(dto.getTimeCreated())
+                .timeModified(dto.getTimeModified()).language(dto.getLanguage()).userCards(dto.getUserCards().stream().map((card) -> cardMapper.convert(card, null)).collect(Collectors.toList()))
                 .build();
     }
 }

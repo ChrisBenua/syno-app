@@ -1,20 +1,13 @@
-//
-//  DbUserTestDictExt.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 19.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import CoreData
 
 extension DbUserTestDict {
-    
+    /// Gets `DbUserTestDict` cards array
     func getCards() -> [DbUserTestCard] {
         return (self.cards?.allObjects ?? []) as! [DbUserTestCard]
     }
     
+    /// Creates new `DbUserTestDict` and inserts it in given `context`
     static func insertUserTestDict(into context: NSManagedObjectContext) -> DbUserTestDict? {
         guard let testDict = NSEntityDescription.insertNewObject(forEntityName: "DbUserTestDict", into: context) as? DbUserTestDict else {
             return nil
@@ -23,6 +16,11 @@ extension DbUserTestDict {
         return testDict
     }
 
+    /**
+     Creates new `DbUserTestDict` with given parameters and inserts it in given `context`
+     - Parameter dict: `DbUserDictionary` where to add new `DbUserTestDict`
+     - Parameter sourceTest: `DbUserTest` where to add new `DbUserTestDict`
+     */
     static func fromDbUserDict(context: NSManagedObjectContext, dict: DbUserDictionary?, sourceTest: DbUserTest?) -> DbUserTestDict {
         guard let testDict = insertUserTestDict(into: context) else {
             fatalError("Cant create dbUserTestDict")

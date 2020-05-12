@@ -12,9 +12,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Service for retrieving user's info from DB
+ */
 @Service
 public class UserDetailServiceImpl implements UserDetailsService {
 
+    /**
+     * Service for CRUD operations with <code>DbUser</code>
+     */
     @Autowired
     UserRepository userRepository;
 

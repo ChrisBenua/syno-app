@@ -1,16 +1,11 @@
-//
-//  CardCellView.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 12.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// Protocol defining data needed for `CardCollectionViewCell`
 protocol ICardCellConfiguration {
+    /// Card's translated word
     var translatedWord: String? { get set }
+    /// Card's translations
     var translations: [String]? { get set }
 }
 
@@ -19,26 +14,39 @@ class CardCellConfiguration: ICardCellConfiguration {
     
     var translations: [String]?
     
+    /**
+     Creates new `CardCellConfiguration`
+     - Parameter translatedWord: Card's translated word
+     - Parameter translations: Card's translations
+     */
     init(translatedWord: String?, translations: [String]?) {
         self.translatedWord = translatedWord
         self.translations = translations
     }
 }
 
+/// Protocol for setting data for `CardCollectionViewCell`
 protocol IConfigurableCardCell {
+    /// Fills data inside cell
     func setup(configuration: ICardCellConfiguration)
 }
 
+/// Collection view cell for displaying card in edit mode
 class CardCollectionViewCell: UICollectionViewCell, IConfigurableCardCell {
     public static let cellId = "CardCellID"
 
     var translatedWord: String?
     var translations: [String]?
     
+    /// Updates `translatedWordLabel` and `translationsLabel`
     func updateUI() {
         self.translatedWordLabel.text = translatedWord
         var translationsText = (translations ?? []).reduce("", { (res, curr) -> String in
-            return res + "," + curr
+            if curr.hasSuffix("?") {
+                return res + " " + curr
+            } else {
+                return res + ", " + curr
+            }
         })
         
         if translationsText.count > 0 {
@@ -56,6 +64,7 @@ class CardCollectionViewCell: UICollectionViewCell, IConfigurableCardCell {
         updateUI()
     }
     
+    /// Label for displaying card's translated word
     let translatedWordLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
@@ -65,6 +74,7 @@ class CardCollectionViewCell: UICollectionViewCell, IConfigurableCardCell {
         return label
     }()
     
+    /// Label for displaying card's translations
     let translationsLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20, weight: .light)
@@ -88,6 +98,7 @@ class CardCollectionViewCell: UICollectionViewCell, IConfigurableCardCell {
         
     }
     
+    /// Forbidden to create from Storyboard
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

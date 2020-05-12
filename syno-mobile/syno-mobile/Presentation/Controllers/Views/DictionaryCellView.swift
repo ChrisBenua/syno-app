@@ -1,18 +1,15 @@
-//
-//  DictionaryCellView.swift
-//  syno-mobile
-//
-//  Created by Ирина Улитина on 05.12.2019.
-//  Copyright © 2019 Christian Benua. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
+/// Protocol with needed data for `DictionaryCollectionViewCell`
 protocol IDictionaryCellConfiguration: class {
+    /// Name of dictionary
     var dictName: String? { get set }
+    /// Language of dictionary
     var language: String? { get set }
+    /// Cards count in dictionary
     var cardsAmount: Int { get set }
+    /// Translations count in dictionary
     var translationsAmount: Int { get set }
 }
 
@@ -25,6 +22,13 @@ class DictionaryCellConfiguration: IDictionaryCellConfiguration {
     
     var translationsAmount: Int
     
+    /**
+     Creates new `DictionaryCellConfiguration`
+     - Parameter dictName: Name of dictionary
+     - Parameter language:Language of dictionary
+     - Parameter cardsAmount:Cards count in dictionary
+     - Parameter translationsAmount:Translations count in dictionary
+     */
     init(dictName: String?, language: String?, cardsAmount: Int, translationsAmount: Int) {
         self.dictName = dictName
         self.language = language
@@ -33,11 +37,15 @@ class DictionaryCellConfiguration: IDictionaryCellConfiguration {
     }
 }
 
+/// Protocol with needed actions with `DictionaryCollectionViewCell`
 protocol IConfigurableDictionaryCell: IDictionaryCellConfiguration {
+    /// Fills data in this `DictionaryCollectionViewCell`
     func setup(dictName: String, language: String, cardsAmount: Int, translationsAmount: Int)
+    /// Fills data in this `DictionaryCollectionViewCell`
     func setup(config: IDictionaryCellConfiguration)
 }
 
+/// Collection view cell for displaying `DbUserDictionary` data
 class DictionaryCollectionViewCell: UICollectionViewCell, IConfigurableDictionaryCell {
     public static let cellId = "DictCellID"
     
@@ -54,18 +62,28 @@ class DictionaryCollectionViewCell: UICollectionViewCell, IConfigurableDictionar
         setup(dictName: config.dictName ?? "", language: config.language ?? "", cardsAmount: config.cardsAmount, translationsAmount: config.translationsAmount)
     }
     
+    /// updates `nameLabel`, `languageLabel`, `cardsAmountLabel` and `translationsAmountLabel`
     func updateUI() {
         self.nameLabel.text = self.dictName
         self.languageLabel.text = self.language
-        self.cardsAmountLabel.text = "\(cardsAmount) cards"
-        self.translationsAmountLabel.text = "\(translationsAmount) translations"
+        var cardsEnding = "карточек"
+        if (cardsAmount % 10 == 1 && ((cardsAmount) / 10) % 10 != 1) {
+            cardsEnding = "карточка"
+        }
+        if (cardsAmount % 10 >= 2 && cardsAmount % 10 < 5 && ((cardsAmount / 10) % 10 != 1)) {
+            cardsEnding = "карточки"
+        }
+        
+        let translationsEnding = NumbersEndingHelper.translations(translationsAmount: translationsAmount)
+        self.cardsAmountLabel.text = "\(cardsAmount) \(cardsEnding)"
+        self.translationsAmountLabel.text = "\(translationsAmount) \(translationsEnding)"
     }
     
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         self.backgroundView = UIImageView(image: #imageLiteral(resourceName: "DictCellBackgroung"))
-        //self.backgroundColor = UIColor.init(red: 239.0/255, green: 239.0/255, blue: 239.0/255, alpha: 1.0)
         
         let transAndLangStackView = UIStackView(arrangedSubviews: [translationsAmountLabel, languageLabel])
         transAndLangStackView.axis = .horizontal;transAndLangStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -79,22 +97,24 @@ class DictionaryCollectionViewCell: UICollectionViewCell, IConfigurableDictionar
         transAndLangStackView.heightAnchor.constraint(equalTo: cardsAmountLabel.heightAnchor, multiplier: 1).isActive = true
         
         self.contentView.addSubview(mainSV)
-        mainSV.spacing = 10
-        mainSV.anchor(top: self.contentView.topAnchor, left: self.contentView.leftAnchor, bottom: self.contentView.bottomAnchor, right: self.contentView.rightAnchor, paddingTop: 5, paddingLeft: 15, paddingBottom: 23, paddingRight: 15, width: 0, height: 0)
+        mainSV.spacing = 8
+        mainSV.anchor(top: self.contentView.topAnchor, left: self.contentView.leftAnchor, bottom: self.contentView.bottomAnchor, right: self.contentView.rightAnchor, paddingTop: 0, paddingLeft: 15, paddingBottom: 20, paddingRight: 15, width: 0, height: 0)
     }
     
+    /// Forbidden to create from storyboard
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+    /// Name of dictionary
     var dictName: String?
-    
+    /// Language of dictionary
     var language: String?
-    
+    /// Cards count in dictionary
     var cardsAmount: Int = -1
-    
+    /// Translations count in dictionary
     var translationsAmount: Int = -1
     
+    /// Label for dictionary name
     let nameLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .regular)
@@ -105,6 +125,7 @@ class DictionaryCollectionViewCell: UICollectionViewCell, IConfigurableDictionar
         return label
     }()
     
+    /// Label for dictionary language
     let languageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -114,6 +135,7 @@ class DictionaryCollectionViewCell: UICollectionViewCell, IConfigurableDictionar
         return label
     }()
     
+    /// Label for cards amount in dictionary
     let cardsAmountLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -123,6 +145,7 @@ class DictionaryCollectionViewCell: UICollectionViewCell, IConfigurableDictionar
         return label
     }()
     
+    /// Label for translations amount in dictionary
     let translationsAmountLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -131,5 +154,4 @@ class DictionaryCollectionViewCell: UICollectionViewCell, IConfigurableDictionar
         
         return label
     }()
-    
 }

@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * Class for mapping DB role to java object
+ */
 @Entity
 @Getter
 @Builder
@@ -16,10 +19,16 @@ import javax.persistence.*;
 @Table(name="roles")
 public class DbRole {
 
+    /**
+     * DB role's id
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    /**
+     * Role's name
+     */
     @Column(name="name")
     private String name;
 

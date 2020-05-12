@@ -25,18 +25,43 @@
 		AA1B8755238D9B9700D26FCF /* ServiceAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B8754238D9B9700D26FCF /* ServiceAssembly.swift */; };
 		AA1B8757238D9C1800D26FCF /* CoreAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B8756238D9C1800D26FCF /* CoreAssembly.swift */; };
 		AA1B8759238D9CE100D26FCF /* RootAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B8758238D9CE100D26FCF /* RootAssembly.swift */; };
+		AA268FAE244092C9005AE946 /* NewDictController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA268FAD244092C9005AE946 /* NewDictController.swift */; };
+		AA268FB1244092FD005AE946 /* NewDictControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA268FB0244092FD005AE946 /* NewDictControllerModel.swift */; };
+		AA268FB32440ED98005AE946 /* BottomNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA268FB22440ED98005AE946 /* BottomNotificationView.swift */; };
 		AA2B9DFB23AC922800A6D45F /* TranslationDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B9DFA23AC922800A6D45F /* TranslationDto.swift */; };
 		AA2B9DFD23AC923400A6D45F /* CardDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B9DFC23AC923400A6D45F /* CardDto.swift */; };
-		AA2B9DFF23AC924F00A6D45F /* DictionaryDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B9DFE23AC924F00A6D45F /* DictionaryDto.swift */; };
 		AA2FFD9223A4D48700889BAB /* TranslatedWordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2FFD9123A4D48700889BAB /* TranslatedWordView.swift */; };
+		AA3686792444C228003599D0 /* phonemes.txt in Resources */ = {isa = PBXBuildFile; fileRef = AA3686782444C228003599D0 /* phonemes.txt */; };
+		AA36867B2444D92A003599D0 /* PhonemesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA36867A2444D92A003599D0 /* PhonemesManager.swift */; };
+		AA38AD71244B0DB5007C2069 /* RecentTestsTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA38AD70244B0DB5007C2069 /* RecentTestsTitleView.swift */; };
+		AA38AD73244B11FE007C2069 /* RecentTestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA38AD72244B11FE007C2069 /* RecentTestTableViewCell.swift */; };
+		AA38AD75244C5D44007C2069 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA38AD74244C5D44007C2069 /* HomeViewController.swift */; };
+		AA38AD78244C5E60007C2069 /* HomeViewControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA38AD77244C5E60007C2069 /* HomeViewControllerModel.swift */; };
+		AA38AD7A244C6C88007C2069 /* PinGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA38AD79244C6C88007C2069 /* PinGenerator.swift */; };
+		AA38AD7C244CB8A5007C2069 /* HomeControllerUserHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA38AD7B244CB8A5007C2069 /* HomeControllerUserHeader.swift */; };
 		AA4B780723C136E9005A9CC9 /* TestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4B780623C136E9005A9CC9 /* TestController.swift */; };
 		AA4B780A23C138D4005A9CC9 /* TestViewControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4B780923C138D4005A9CC9 /* TestViewControllerDataSource.swift */; };
 		AA4B780C23C1BF29005A9CC9 /* TestControllerTranslationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4B780B23C1BF29005A9CC9 /* TestControllerTranslationTableViewCell.swift */; };
 		AA4B780E23C1CB70005A9CC9 /* TestViewGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4B780D23C1CB70005A9CC9 /* TestViewGenerator.swift */; };
+		AA59DF32244E4F41005E6FC0 /* UpdateRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59DF31244E4F41005E6FC0 /* UpdateRequestDto.swift */; };
+		AA59DF34244E4F76005E6FC0 /* UpdateUserDictionaryDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59DF33244E4F76005E6FC0 /* UpdateUserDictionaryDto.swift */; };
+		AA59DF36244E501D005E6FC0 /* UpdateUserCardDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59DF35244E501D005E6FC0 /* UpdateUserCardDto.swift */; };
+		AA59DF38244E5051005E6FC0 /* UpdateUserTranslationDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59DF37244E5051005E6FC0 /* UpdateUserTranslationDto.swift */; };
+		AA59DF3D244E5693005E6FC0 /* UpdateDictsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59DF3C244E5693005E6FC0 /* UpdateDictsRequest.swift */; };
+		AA59DF3F244E5884005E6FC0 /* UpdateRequestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59DF3E244E5884005E6FC0 /* UpdateRequestService.swift */; };
+		AA627D982455F4FC000B7265 /* UserAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA627D972455F4FB000B7265 /* UserAuthHelper.swift */; };
 		AA6A03B923AC9C7500902FBE /* LearnController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6A03B823AC9C7500902FBE /* LearnController.swift */; };
 		AA6A03BC23AC9CE400902FBE /* LearnControllerTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6A03BB23AC9CE400902FBE /* LearnControllerTableViewDataSource.swift */; };
 		AA6A03BE23ACA26A00902FBE /* TranslationReadonlyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6A03BD23ACA26A00902FBE /* TranslationReadonlyTableViewCell.swift */; };
 		AA75298423A7B016004120A0 /* TestAndLearnController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA75298323A7B016004120A0 /* TestAndLearnController.swift */; };
+		AA7642752451B4FD00E388A1 /* LoginFromHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7642742451B4FD00E388A1 /* LoginFromHomeViewController.swift */; };
+		AA7642772451BD3100E388A1 /* AddShareRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7642762451BD3100E388A1 /* AddShareRequest.swift */; };
+		AA7642792451BD6E00E388A1 /* NewDictShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7642782451BD6E00E388A1 /* NewDictShare.swift */; };
+		AA76427B2451BE5800E388A1 /* GetShareRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA76427A2451BE5800E388A1 /* GetShareRequest.swift */; };
+		AA76427D2451CFE100E388A1 /* DictShareService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA76427C2451CFE100E388A1 /* DictShareService.swift */; };
+		AA76427F2451EE7800E388A1 /* AddShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA76427E2451EE7800E388A1 /* AddShareViewController.swift */; };
+		AA7642822451EEAC00E388A1 /* AddShareViewControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7642812451EEAC00E388A1 /* AddShareViewControllerModel.swift */; };
+		AA7642842451F08200E388A1 /* GetDictShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7642832451F08200E388A1 /* GetDictShareView.swift */; };
 		AA82AFD3238E91A000A75D92 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA82AFD2238E91A000A75D92 /* UserDefaultsManager.swift */; };
 		AA8700C7239791D000C97E18 /* RegistrationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8700C6239791D000C97E18 /* RegistrationRequest.swift */; };
 		AA8700C9239792B000C97E18 /* RegisterControllerServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8700C8239792B000C97E18 /* RegisterControllerServices.swift */; };
@@ -52,6 +77,11 @@
 		AA8700DF23993F9900C97E18 /* CommonTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8700DE23993F9900C97E18 /* CommonTabBarController.swift */; };
 		AA8700E1239942FF00C97E18 /* DictsFetchResultsControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8700E0239942FF00C97E18 /* DictsFetchResultsControllerDelegate.swift */; };
 		AA8700E623994ACE00C97E18 /* DictControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8700E523994ACE00C97E18 /* DictControllerModel.swift */; };
+		AA88C7D524420DB9002E3549 /* TestResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA88C7D424420DB9002E3549 /* TestResultsViewController.swift */; };
+		AA88C7D724420F2B002E3549 /* TestResultsTableViewHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA88C7D624420F2B002E3549 /* TestResultsTableViewHeaderCell.swift */; };
+		AA88C7D924421255002E3549 /* GradeToStringAndColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA88C7D824421255002E3549 /* GradeToStringAndColor.swift */; };
+		AA88C7DC24421D13002E3549 /* TestResultsControllerDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA88C7DB24421D13002E3549 /* TestResultsControllerDatasource.swift */; };
+		AA88C7DE2442242D002E3549 /* TestResultsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA88C7DD2442242D002E3549 /* TestResultsTableViewCell.swift */; };
 		AA8C0E10238918FA000CBB73 /* PresentationAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8C0E0F238918FA000CBB73 /* PresentationAssembly.swift */; };
 		AA8C0E1223891BBC000CBB73 /* LoginState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8C0E1123891BBC000CBB73 /* LoginState.swift */; };
 		AA8C0E1423891DE6000CBB73 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8C0E1323891DE6000CBB73 /* Colors.swift */; };
@@ -64,11 +94,13 @@
 		AA94BC29238841FD00B2F16F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA94BC27238841FD00B2F16F /* LaunchScreen.storyboard */; };
 		AA94BC34238841FD00B2F16F /* syno_mobileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA94BC33238841FD00B2F16F /* syno_mobileTests.swift */; };
 		AAA2998B243CCD51007327DB /* UITextFieldWithLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA2998A243CCD51007327DB /* UITextFieldWithLabel.swift */; };
-		AAA2998D243CD5D2007327DB /* UserAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA2998C243CD5D2007327DB /* UserAuthHelper.swift */; };
+		AAA29991243E26E6007327DB /* NewOrEditCardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA29990243E26E6007327DB /* NewOrEditCardController.swift */; };
+		AAA29993243E27FB007327DB /* UITextViewWithLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA29992243E27FB007327DB /* UITextViewWithLabel.swift */; };
 		AAA5F2CA23A2798800661811 /* ControllerKeyboardExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA5F2C923A2798800661811 /* ControllerKeyboardExt.swift */; };
 		AAA5F2CC23A2923800661811 /* DictCardsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA5F2CB23A2923800661811 /* DictCardsController.swift */; };
 		AAA5F2CF23A2958600661811 /* CardsControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA5F2CE23A2958600661811 /* CardsControllerDataSource.swift */; };
 		AAA5F2D123A298B800661811 /* CardCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA5F2D023A298B800661811 /* CardCellView.swift */; };
+		AAB31060245B0C7B0029FC66 /* NumbersEndingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB3105F245B0C7B0029FC66 /* NumbersEndingHelper.swift */; };
 		AAB6CEB92392E3FD00AAAF0E /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB6CEB82392E3FD00AAAF0E /* StorageManager.swift */; };
 		AAB6CEBB2392E40600AAAF0E /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB6CEBA2392E40600AAAF0E /* CoreDataStack.swift */; };
 		AAB6CEBD2392E48C00AAAF0E /* DbAppUserExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB6CEBC2392E48C00AAAF0E /* DbAppUserExt.swift */; };
@@ -134,18 +166,43 @@
 		AA1B8754238D9B9700D26FCF /* ServiceAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAssembly.swift; sourceTree = "<group>"; };
 		AA1B8756238D9C1800D26FCF /* CoreAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreAssembly.swift; sourceTree = "<group>"; };
 		AA1B8758238D9CE100D26FCF /* RootAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootAssembly.swift; sourceTree = "<group>"; };
+		AA268FAD244092C9005AE946 /* NewDictController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDictController.swift; sourceTree = "<group>"; };
+		AA268FB0244092FD005AE946 /* NewDictControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDictControllerModel.swift; sourceTree = "<group>"; };
+		AA268FB22440ED98005AE946 /* BottomNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomNotificationView.swift; sourceTree = "<group>"; };
 		AA2B9DFA23AC922800A6D45F /* TranslationDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationDto.swift; sourceTree = "<group>"; };
 		AA2B9DFC23AC923400A6D45F /* CardDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDto.swift; sourceTree = "<group>"; };
-		AA2B9DFE23AC924F00A6D45F /* DictionaryDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryDto.swift; sourceTree = "<group>"; };
 		AA2FFD9123A4D48700889BAB /* TranslatedWordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslatedWordView.swift; sourceTree = "<group>"; };
+		AA3686782444C228003599D0 /* phonemes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = phonemes.txt; sourceTree = "<group>"; };
+		AA36867A2444D92A003599D0 /* PhonemesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhonemesManager.swift; sourceTree = "<group>"; };
+		AA38AD70244B0DB5007C2069 /* RecentTestsTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentTestsTitleView.swift; sourceTree = "<group>"; };
+		AA38AD72244B11FE007C2069 /* RecentTestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentTestTableViewCell.swift; sourceTree = "<group>"; };
+		AA38AD74244C5D44007C2069 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		AA38AD77244C5E60007C2069 /* HomeViewControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewControllerModel.swift; sourceTree = "<group>"; };
+		AA38AD79244C6C88007C2069 /* PinGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinGenerator.swift; sourceTree = "<group>"; };
+		AA38AD7B244CB8A5007C2069 /* HomeControllerUserHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeControllerUserHeader.swift; sourceTree = "<group>"; };
 		AA4B780623C136E9005A9CC9 /* TestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestController.swift; sourceTree = "<group>"; };
 		AA4B780923C138D4005A9CC9 /* TestViewControllerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewControllerDataSource.swift; sourceTree = "<group>"; };
 		AA4B780B23C1BF29005A9CC9 /* TestControllerTranslationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestControllerTranslationTableViewCell.swift; sourceTree = "<group>"; };
 		AA4B780D23C1CB70005A9CC9 /* TestViewGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewGenerator.swift; sourceTree = "<group>"; };
+		AA59DF31244E4F41005E6FC0 /* UpdateRequestDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateRequestDto.swift; sourceTree = "<group>"; };
+		AA59DF33244E4F76005E6FC0 /* UpdateUserDictionaryDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUserDictionaryDto.swift; sourceTree = "<group>"; };
+		AA59DF35244E501D005E6FC0 /* UpdateUserCardDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUserCardDto.swift; sourceTree = "<group>"; };
+		AA59DF37244E5051005E6FC0 /* UpdateUserTranslationDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUserTranslationDto.swift; sourceTree = "<group>"; };
+		AA59DF3C244E5693005E6FC0 /* UpdateDictsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateDictsRequest.swift; sourceTree = "<group>"; };
+		AA59DF3E244E5884005E6FC0 /* UpdateRequestService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateRequestService.swift; sourceTree = "<group>"; };
+		AA627D972455F4FB000B7265 /* UserAuthHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAuthHelper.swift; sourceTree = "<group>"; };
 		AA6A03B823AC9C7500902FBE /* LearnController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnController.swift; sourceTree = "<group>"; };
 		AA6A03BB23AC9CE400902FBE /* LearnControllerTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnControllerTableViewDataSource.swift; sourceTree = "<group>"; };
 		AA6A03BD23ACA26A00902FBE /* TranslationReadonlyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationReadonlyTableViewCell.swift; sourceTree = "<group>"; };
 		AA75298323A7B016004120A0 /* TestAndLearnController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAndLearnController.swift; sourceTree = "<group>"; };
+		AA7642742451B4FD00E388A1 /* LoginFromHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFromHomeViewController.swift; sourceTree = "<group>"; };
+		AA7642762451BD3100E388A1 /* AddShareRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddShareRequest.swift; sourceTree = "<group>"; };
+		AA7642782451BD6E00E388A1 /* NewDictShare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDictShare.swift; sourceTree = "<group>"; };
+		AA76427A2451BE5800E388A1 /* GetShareRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetShareRequest.swift; sourceTree = "<group>"; };
+		AA76427C2451CFE100E388A1 /* DictShareService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictShareService.swift; sourceTree = "<group>"; };
+		AA76427E2451EE7800E388A1 /* AddShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddShareViewController.swift; sourceTree = "<group>"; };
+		AA7642812451EEAC00E388A1 /* AddShareViewControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddShareViewControllerModel.swift; sourceTree = "<group>"; };
+		AA7642832451F08200E388A1 /* GetDictShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetDictShareView.swift; sourceTree = "<group>"; };
 		AA82AFD2238E91A000A75D92 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		AA8700C6239791D000C97E18 /* RegistrationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationRequest.swift; sourceTree = "<group>"; };
 		AA8700C8239792B000C97E18 /* RegisterControllerServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterControllerServices.swift; sourceTree = "<group>"; };
@@ -161,6 +218,11 @@
 		AA8700DE23993F9900C97E18 /* CommonTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonTabBarController.swift; sourceTree = "<group>"; };
 		AA8700E0239942FF00C97E18 /* DictsFetchResultsControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictsFetchResultsControllerDelegate.swift; sourceTree = "<group>"; };
 		AA8700E523994ACE00C97E18 /* DictControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictControllerModel.swift; sourceTree = "<group>"; };
+		AA88C7D424420DB9002E3549 /* TestResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResultsViewController.swift; sourceTree = "<group>"; };
+		AA88C7D624420F2B002E3549 /* TestResultsTableViewHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResultsTableViewHeaderCell.swift; sourceTree = "<group>"; };
+		AA88C7D824421255002E3549 /* GradeToStringAndColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradeToStringAndColor.swift; sourceTree = "<group>"; };
+		AA88C7DB24421D13002E3549 /* TestResultsControllerDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResultsControllerDatasource.swift; sourceTree = "<group>"; };
+		AA88C7DD2442242D002E3549 /* TestResultsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResultsTableViewCell.swift; sourceTree = "<group>"; };
 		AA8C0E0F238918FA000CBB73 /* PresentationAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationAssembly.swift; sourceTree = "<group>"; };
 		AA8C0E1123891BBC000CBB73 /* LoginState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginState.swift; sourceTree = "<group>"; };
 		AA8C0E1323891DE6000CBB73 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -177,11 +239,13 @@
 		AA94BC33238841FD00B2F16F /* syno_mobileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = syno_mobileTests.swift; sourceTree = "<group>"; };
 		AA94BC35238841FD00B2F16F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AAA2998A243CCD51007327DB /* UITextFieldWithLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldWithLabel.swift; sourceTree = "<group>"; };
-		AAA2998C243CD5D2007327DB /* UserAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuthHelper.swift; sourceTree = "<group>"; };
+		AAA29990243E26E6007327DB /* NewOrEditCardController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOrEditCardController.swift; sourceTree = "<group>"; };
+		AAA29992243E27FB007327DB /* UITextViewWithLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextViewWithLabel.swift; sourceTree = "<group>"; };
 		AAA5F2C923A2798800661811 /* ControllerKeyboardExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerKeyboardExt.swift; sourceTree = "<group>"; };
 		AAA5F2CB23A2923800661811 /* DictCardsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictCardsController.swift; sourceTree = "<group>"; };
 		AAA5F2CE23A2958600661811 /* CardsControllerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsControllerDataSource.swift; sourceTree = "<group>"; };
 		AAA5F2D023A298B800661811 /* CardCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCellView.swift; sourceTree = "<group>"; };
+		AAB3105F245B0C7B0029FC66 /* NumbersEndingHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersEndingHelper.swift; sourceTree = "<group>"; };
 		AAB6CEB82392E3FD00AAAF0E /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		AAB6CEBA2392E40600AAAF0E /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		AAB6CEBC2392E48C00AAAF0E /* DbAppUserExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DbAppUserExt.swift; sourceTree = "<group>"; };
@@ -283,6 +347,9 @@
 				AA1B8749238D29F300D26FCF /* LoginRequest.swift */,
 				AAC6057C2391232A00120B77 /* AllDictsRequest.swift */,
 				AA8700C6239791D000C97E18 /* RegistrationRequest.swift */,
+				AA59DF3C244E5693005E6FC0 /* UpdateDictsRequest.swift */,
+				AA7642762451BD3100E388A1 /* AddShareRequest.swift */,
+				AA76427A2451BE5800E388A1 /* GetShareRequest.swift */,
 			);
 			path = Requests;
 			sourceTree = "<group>";
@@ -294,6 +361,11 @@
 				49A16C1BD0A167FAFC9866DE /* LoginResponse.swift */,
 				AAC6057E2391237B00120B77 /* DictionaryResponse.swift */,
 				AA8700CA239793A300C97E18 /* MessageResponse.swift */,
+				AA59DF31244E4F41005E6FC0 /* UpdateRequestDto.swift */,
+				AA59DF33244E4F76005E6FC0 /* UpdateUserDictionaryDto.swift */,
+				AA59DF35244E501D005E6FC0 /* UpdateUserCardDto.swift */,
+				AA59DF37244E5051005E6FC0 /* UpdateUserTranslationDto.swift */,
+				AA7642782451BD6E00E388A1 /* NewDictShare.swift */,
 			);
 			path = Dtos;
 			sourceTree = "<group>";
@@ -329,20 +401,32 @@
 			children = (
 				AA1B8754238D9B9700D26FCF /* ServiceAssembly.swift */,
 			);
-			path = Assembly;
+			name = Assembly;
+			path = Assembly/Assembly;
 			sourceTree = "<group>";
 		};
 		AA1B8751238D9AA800D26FCF /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				AA627D972455F4FB000B7265 /* UserAuthHelper.swift */,
 				AA1B8752238D9ABC00D26FCF /* LoginControllerServices.swift */,
 				AA8700C8239792B000C97E18 /* RegisterControllerServices.swift */,
 				AA8700CE2398270C00C97E18 /* TranslationFetchService.swift */,
 				AA8700D0239900F800C97E18 /* UserCardsFetchService.swift */,
 				AA8700D223990F5400C97E18 /* UserDictsFetchService.swift */,
-				AAA2998C243CD5D2007327DB /* UserAuthHelper.swift */,
+				AA38AD79244C6C88007C2069 /* PinGenerator.swift */,
+				AA59DF3E244E5884005E6FC0 /* UpdateRequestService.swift */,
+				AA76427C2451CFE100E388A1 /* DictShareService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		AA268FAF244092EC005AE946 /* NewDictController */ = {
+			isa = PBXGroup;
+			children = (
+				AA268FB0244092FD005AE946 /* NewDictControllerModel.swift */,
+			);
+			path = NewDictController;
 			sourceTree = "<group>";
 		};
 		AA2B9DF923AC91F500A6D45F /* LearnController */ = {
@@ -350,9 +434,25 @@
 			children = (
 				AA2B9DFA23AC922800A6D45F /* TranslationDto.swift */,
 				AA2B9DFC23AC923400A6D45F /* CardDto.swift */,
-				AA2B9DFE23AC924F00A6D45F /* DictionaryDto.swift */,
 			);
 			path = LearnController;
+			sourceTree = "<group>";
+		};
+		AA3686772444C204003599D0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				AA3686782444C228003599D0 /* phonemes.txt */,
+				AA36867A2444D92A003599D0 /* PhonemesManager.swift */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		AA38AD76244C5E47007C2069 /* HomeViewController */ = {
+			isa = PBXGroup;
+			children = (
+				AA38AD77244C5E60007C2069 /* HomeViewControllerModel.swift */,
+			);
+			path = HomeViewController;
 			sourceTree = "<group>";
 		};
 		AA4B780823C13885005A9CC9 /* TestController */ = {
@@ -369,6 +469,14 @@
 				AA6A03BB23AC9CE400902FBE /* LearnControllerTableViewDataSource.swift */,
 			);
 			path = LearnController;
+			sourceTree = "<group>";
+		};
+		AA7642802451EE9000E388A1 /* AddShareViewController */ = {
+			isa = PBXGroup;
+			children = (
+				AA7642812451EEAC00E388A1 /* AddShareViewControllerModel.swift */,
+			);
+			path = AddShareViewController;
 			sourceTree = "<group>";
 		};
 		AA8700E2239949D500C97E18 /* Login */ = {
@@ -401,6 +509,14 @@
 			path = DictController;
 			sourceTree = "<group>";
 		};
+		AA88C7DA24421CFA002E3549 /* TestResultsController */ = {
+			isa = PBXGroup;
+			children = (
+				AA88C7DB24421D13002E3549 /* TestResultsControllerDatasource.swift */,
+			);
+			path = TestResultsController;
+			sourceTree = "<group>";
+		};
 		AA8C0E022389179A000CBB73 /* Assembly */ = {
 			isa = PBXGroup;
 			children = (
@@ -412,6 +528,7 @@
 		AA8C0E03238917CB000CBB73 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				AA3686772444C204003599D0 /* Resources */,
 				AA8C0E0A2389184D000CBB73 /* UserDefaults */,
 				AA8C0E092389183C000CBB73 /* CoreData */,
 				AA8C0E082389182C000CBB73 /* Networking */,
@@ -434,7 +551,8 @@
 		AA8C0E05238917E8000CBB73 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				AA8C0E0E2389187B000CBB73 /* Assembly */,
+				AA1B8750238D9A9800D26FCF /* Assembly */,
+				AA1B8751238D9AA800D26FCF /* Services */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -449,6 +567,8 @@
 				49A16D95769370F236C3331C /* Debug.swift */,
 				49A16AE33CDCA131F1447FDA /* UIAlertController.swift */,
 				AAD4A2ED23ABE1E200394693 /* NSSetExt.swift */,
+				AA88C7D824421255002E3549 /* GradeToStringAndColor.swift */,
+				AAB3105F245B0C7B0029FC66 /* NumbersEndingHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -510,6 +630,10 @@
 		AA8C0E0C23891862000CBB73 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				AA7642802451EE9000E388A1 /* AddShareViewController */,
+				AA38AD76244C5E47007C2069 /* HomeViewController */,
+				AA88C7DA24421CFA002E3549 /* TestResultsController */,
+				AA268FAF244092EC005AE946 /* NewDictController */,
 				AA4B780823C13885005A9CC9 /* TestController */,
 				AA6A03BA23AC9CC500902FBE /* LearnController */,
 				AAD4A2E823ABD1E100394693 /* TestAndLearnController */,
@@ -536,17 +660,14 @@
 				AA75298323A7B016004120A0 /* TestAndLearnController.swift */,
 				AA6A03B823AC9C7500902FBE /* LearnController.swift */,
 				AA4B780623C136E9005A9CC9 /* TestController.swift */,
+				AAA29990243E26E6007327DB /* NewOrEditCardController.swift */,
+				AA268FAD244092C9005AE946 /* NewDictController.swift */,
+				AA88C7D424420DB9002E3549 /* TestResultsViewController.swift */,
+				AA38AD74244C5D44007C2069 /* HomeViewController.swift */,
+				AA7642742451B4FD00E388A1 /* LoginFromHomeViewController.swift */,
+				AA76427E2451EE7800E388A1 /* AddShareViewController.swift */,
 			);
 			path = Controllers;
-			sourceTree = "<group>";
-		};
-		AA8C0E0E2389187B000CBB73 /* Assembly */ = {
-			isa = PBXGroup;
-			children = (
-				AA1B8751238D9AA800D26FCF /* Services */,
-				AA1B8750238D9A9800D26FCF /* Assembly */,
-			);
-			path = Assembly;
 			sourceTree = "<group>";
 		};
 		AA8C0E1923892A00000CBB73 /* Views */ = {
@@ -555,6 +676,7 @@
 				AA8C0E1A23892A0F000CBB73 /* UILabelWithInsets.swift */,
 				49A16C3F31A1006430FFAF12 /* UITextFieldWithInsets.swift */,
 				AAA2998A243CCD51007327DB /* UITextFieldWithLabel.swift */,
+				AAA29992243E27FB007327DB /* UITextViewWithLabel.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -629,6 +751,13 @@
 				AAD4A2F023ABE74E00394693 /* TestAndLearnControllerHeader.swift */,
 				AA6A03BD23ACA26A00902FBE /* TranslationReadonlyTableViewCell.swift */,
 				AA4B780B23C1BF29005A9CC9 /* TestControllerTranslationTableViewCell.swift */,
+				AA268FB22440ED98005AE946 /* BottomNotificationView.swift */,
+				AA88C7D624420F2B002E3549 /* TestResultsTableViewHeaderCell.swift */,
+				AA88C7DD2442242D002E3549 /* TestResultsTableViewCell.swift */,
+				AA38AD70244B0DB5007C2069 /* RecentTestsTitleView.swift */,
+				AA38AD72244B11FE007C2069 /* RecentTestTableViewCell.swift */,
+				AA38AD7B244CB8A5007C2069 /* HomeControllerUserHeader.swift */,
+				AA7642832451F08200E388A1 /* GetDictShareView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -746,6 +875,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA94BC29238841FD00B2F16F /* LaunchScreen.storyboard in Resources */,
+				AA3686792444C228003599D0 /* phonemes.txt in Resources */,
 				AA94BC26238841FD00B2F16F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -830,6 +960,7 @@
 			files = (
 				AAD4A2F123ABE74E00394693 /* TestAndLearnControllerHeader.swift in Sources */,
 				AA8700CF2398270C00C97E18 /* TranslationFetchService.swift in Sources */,
+				AA59DF34244E4F76005E6FC0 /* UpdateUserDictionaryDto.swift in Sources */,
 				AA8700C9239792B000C97E18 /* RegisterControllerServices.swift in Sources */,
 				AA8C0E10238918FA000CBB73 /* PresentationAssembly.swift in Sources */,
 				AA1B8759238D9CE100D26FCF /* RootAssembly.swift in Sources */,
@@ -837,20 +968,28 @@
 				AA8700D52399170B00C97E18 /* RegistrationModel.swift in Sources */,
 				AA1B874D238D2A2400D26FCF /* RequestsSettings.swift in Sources */,
 				AAEBE74E23A39E7B00F48684 /* TranslationControllerDatasource.swift in Sources */,
+				AA59DF38244E5051005E6FC0 /* UpdateUserTranslationDto.swift in Sources */,
+				AA7642772451BD3100E388A1 /* AddShareRequest.swift in Sources */,
 				AAD4A2EC23ABD4B300394693 /* TestAndLearnCollectionViewCell.swift in Sources */,
-				AAA2998D243CD5D2007327DB /* UserAuthHelper.swift in Sources */,
+				AA38AD7A244C6C88007C2069 /* PinGenerator.swift in Sources */,
+				AA38AD75244C5D44007C2069 /* HomeViewController.swift in Sources */,
 				AA8C0E18238921EC000CBB73 /* Anchor.swift in Sources */,
 				AA6A03BC23AC9CE400902FBE /* LearnControllerTableViewDataSource.swift in Sources */,
-				AA2B9DFF23AC924F00A6D45F /* DictionaryDto.swift in Sources */,
 				AAB6CECD2393C87B00AAAF0E /* UserTranslationStorageManager.swift in Sources */,
 				AA8C0E1B23892A0F000CBB73 /* UILabelWithInsets.swift in Sources */,
 				AAC605752390E5EC00120B77 /* SavingProcessView.swift in Sources */,
+				AA88C7DC24421D13002E3549 /* TestResultsControllerDatasource.swift in Sources */,
 				AAA2998B243CCD51007327DB /* UITextFieldWithLabel.swift in Sources */,
 				AA8C0E1423891DE6000CBB73 /* Colors.swift in Sources */,
 				AA8700DD2399356700C97E18 /* DictionaryCellView.swift in Sources */,
 				AA1B874F238D9A8900D26FCF /* LoginModel.swift in Sources */,
 				AA8C0E1223891BBC000CBB73 /* LoginState.swift in Sources */,
+				AAA29991243E26E6007327DB /* NewOrEditCardController.swift in Sources */,
+				AA76427F2451EE7800E388A1 /* AddShareViewController.swift in Sources */,
+				AA88C7D924421255002E3549 /* GradeToStringAndColor.swift in Sources */,
+				AA76427B2451BE5800E388A1 /* GetShareRequest.swift in Sources */,
 				AAD4A2E323ABA81D00394693 /* DbUserTestAnswerExt.swift in Sources */,
+				AA38AD78244C5E60007C2069 /* HomeViewControllerModel.swift in Sources */,
 				AAC605792390F04700120B77 /* LoginRegistrationLayouter.swift in Sources */,
 				AA1B8755238D9B9700D26FCF /* ServiceAssembly.swift in Sources */,
 				AA8C0E1623892051000CBB73 /* CommonUIElements.swift in Sources */,
@@ -864,11 +1003,18 @@
 				AA75298423A7B016004120A0 /* TestAndLearnController.swift in Sources */,
 				AA94BC21238841F300B2F16F /* LoginViewController.swift in Sources */,
 				AAB6CEC32392EC2000AAAF0E /* DbUserCardExt.swift in Sources */,
+				AA268FAE244092C9005AE946 /* NewDictController.swift in Sources */,
 				AAB6CEBD2392E48C00AAAF0E /* DbAppUserExt.swift in Sources */,
+				AA59DF36244E501D005E6FC0 /* UpdateUserCardDto.swift in Sources */,
+				AA59DF32244E4F41005E6FC0 /* UpdateRequestDto.swift in Sources */,
 				AA94BC1D238841F300B2F16F /* AppDelegate.swift in Sources */,
 				49A166086AEF7785B19E1514 /* UITextFieldWithInsets.swift in Sources */,
 				AAA5F2CA23A2798800661811 /* ControllerKeyboardExt.swift in Sources */,
+				AA76427D2451CFE100E388A1 /* DictShareService.swift in Sources */,
 				49A16189873B6C801FB1EFFC /* IParser.swift in Sources */,
+				AA88C7D524420DB9002E3549 /* TestResultsViewController.swift in Sources */,
+				AA38AD71244B0DB5007C2069 /* RecentTestsTitleView.swift in Sources */,
+				AAA29993243E27FB007327DB /* UITextViewWithLabel.swift in Sources */,
 				AA12FECA23AFB59100CC8D3B /* LearnViewGenerator.swift in Sources */,
 				AAD4A2E723ABB15400394693 /* DbUserTestExt.swift in Sources */,
 				AA8700D72399225900C97E18 /* DictsController.swift in Sources */,
@@ -877,24 +1023,32 @@
 				AA6A03B923AC9C7500902FBE /* LearnController.swift in Sources */,
 				49A16D5B5C7461F5D99EAB36 /* Debug.swift in Sources */,
 				AAA5F2CF23A2958600661811 /* CardsControllerDataSource.swift in Sources */,
+				AA38AD7C244CB8A5007C2069 /* HomeControllerUserHeader.swift in Sources */,
 				AA4B780A23C138D4005A9CC9 /* TestViewControllerDataSource.swift in Sources */,
 				AA1B8757238D9C1800D26FCF /* CoreAssembly.swift in Sources */,
+				AA36867B2444D92A003599D0 /* PhonemesManager.swift in Sources */,
 				AA82AFD3238E91A000A75D92 /* UserDefaultsManager.swift in Sources */,
 				AA8700D323990F5400C97E18 /* UserDictsFetchService.swift in Sources */,
+				AA7642842451F08200E388A1 /* GetDictShareView.swift in Sources */,
 				AAEBE75423A4139B00F48684 /* BaseShadowView.swift in Sources */,
 				AAC605772390EA0100120B77 /* RegistrationViewController.swift in Sources */,
 				AA8700E1239942FF00C97E18 /* DictsFetchResultsControllerDelegate.swift in Sources */,
 				AA4B780C23C1BF29005A9CC9 /* TestControllerTranslationTableViewCell.swift in Sources */,
 				49A16EAD0C4E81E88AF1AD63 /* IRequest.swift in Sources */,
+				AA627D982455F4FC000B7265 /* UserAuthHelper.swift in Sources */,
 				AAEBE75023A3F49F00F48684 /* PlainTableView.swift in Sources */,
 				AA8700D1239900F800C97E18 /* UserCardsFetchService.swift in Sources */,
 				AA8700CD23981DF600C97E18 /* RegisterState.swift in Sources */,
 				AA6A03BE23ACA26A00902FBE /* TranslationReadonlyTableViewCell.swift in Sources */,
+				AAB31060245B0C7B0029FC66 /* NumbersEndingHelper.swift in Sources */,
 				49A1669737ADB0F82BF2FAEB /* RequestFactory.swift in Sources */,
 				AA2B9DFB23AC922800A6D45F /* TranslationDto.swift in Sources */,
 				49A160132C5591D9CC06BA27 /* IRequestSender.swift in Sources */,
+				AA268FB32440ED98005AE946 /* BottomNotificationView.swift in Sources */,
 				49A16167918E9B1E70F2E147 /* DefaultRequestSender.swift in Sources */,
 				AAEBE74923A37FDE00F48684 /* TranslationCollectionViewCell.swift in Sources */,
+				AA268FB1244092FD005AE946 /* NewDictControllerModel.swift in Sources */,
+				AA88C7D724420F2B002E3549 /* TestResultsTableViewHeaderCell.swift in Sources */,
 				AAD4A2DF23AB684F00394693 /* DbUserTestTranslationExt.swift in Sources */,
 				AAEBE75223A4132200F48684 /* ShadowView.swift in Sources */,
 				AAB6CEB92392E3FD00AAAF0E /* StorageManager.swift in Sources */,
@@ -909,14 +1063,21 @@
 				AAB6CEC92393C4D700AAAF0E /* UserDictionaryStorageManager.swift in Sources */,
 				AAB6CEBB2392E40600AAAF0E /* CoreDataStack.swift in Sources */,
 				AA1B8753238D9ABC00D26FCF /* LoginControllerServices.swift in Sources */,
+				AA7642822451EEAC00E388A1 /* AddShareViewControllerModel.swift in Sources */,
 				AA8700CB239793A300C97E18 /* MessageResponse.swift in Sources */,
+				AA59DF3F244E5884005E6FC0 /* UpdateRequestService.swift in Sources */,
 				AA2FFD9223A4D48700889BAB /* TranslatedWordView.swift in Sources */,
+				AA7642752451B4FD00E388A1 /* LoginFromHomeViewController.swift in Sources */,
+				AA59DF3D244E5693005E6FC0 /* UpdateDictsRequest.swift in Sources */,
 				AAD4A2EA23ABD1F800394693 /* TestAndLearnControllerDatasource.swift in Sources */,
 				AAC6057D2391232A00120B77 /* AllDictsRequest.swift in Sources */,
 				AA4B780723C136E9005A9CC9 /* TestController.swift in Sources */,
 				AA8700C7239791D000C97E18 /* RegistrationRequest.swift in Sources */,
+				AA7642792451BD6E00E388A1 /* NewDictShare.swift in Sources */,
 				49A160CBD53E96CBBA9E3354 /* LoginResponse.swift in Sources */,
 				49A1646F9BDD6D3757510F85 /* UIAlertController.swift in Sources */,
+				AA38AD73244B11FE007C2069 /* RecentTestTableViewCell.swift in Sources */,
+				AA88C7DE2442242D002E3549 /* TestResultsTableViewCell.swift in Sources */,
 				AAD4A2EE23ABE1E200394693 /* NSSetExt.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
