@@ -109,6 +109,8 @@ protocol ICardsControllerDataSource: UICollectionViewDataSource, UICollectionVie
     /// Creates empty user card
     func createEmptyUserCard(completionHandler: ((DbUserCard) -> Void)?)
     
+    func handleDeletion(indexPath: IndexPath)
+    
     /// Undos last deleted card
     func undoLastDeletion()
     
@@ -126,6 +128,11 @@ protocol ICardsDataSourceReactor: class {
 }
 
 class CardsControllerDataSource: NSObject, ICardsControllerDataSource {
+    func handleDeletion(indexPath: IndexPath) {
+        self.viewModel.deleteManagedObject(object: self.fetchedResultsController.object(at: indexPath))
+        self.delegate?.onItemDeleted()
+    }
+    
     lazy var fetchedResultsController: NSFetchedResultsController<DbUserCard> = {
         return self.viewModel.generateCardsControllerFRC(sourceDict: self.sourceDict)
     }()
@@ -214,8 +221,7 @@ extension CardsControllerDataSource {
             let menu = UIMenu(title: "Actions", children: [
                 UIAction(title: "Delete", image: UIImage.init(systemName: "trash.fill"), attributes: .destructive, handler: { (action) in
                     Timer.scheduledTimer(withTimeInterval: 0.9, repeats: false) { (_) in
-                        self.viewModel.deleteManagedObject(object: self.fetchedResultsController.object(at: indexPath))
-                        self.delegate?.onItemDeleted()
+                        self.handleDeletion(indexPath: indexPath)
                     }
                 })
             ])

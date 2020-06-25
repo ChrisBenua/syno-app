@@ -98,11 +98,47 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(onAddNewDictionary))
         self.navigationItem.rightBarButtonItem?.tintColor = .headerMainColor
         
+        if #available(iOS 13.0, *) {} else {
+            let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressOnCollectionView(gesture:)))
+            longPress.delaysTouchesBegan = true
+            self.collectionView.addGestureRecognizer(longPress)
+        }
 
         collectionView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         collectionView.reloadData()
+        collectionView.layoutIfNeeded()
         
         askForFetch()
+    }
+    
+    @objc func handleLongPressOnCollectionView(gesture: UILongPressGestureRecognizer) {
+//        if gesture.state != .ended {
+//            return
+//        }
+        let p = gesture.location(in: self.collectionView)
+
+        if let indexPath = self.collectionView.indexPathForItem(at: p) {
+            let alert = UIAlertController(title: "Действия", message: nil, preferredStyle: .actionSheet)
+            let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { (_) in
+                self.dataSource.handleDeletion(indexPath: indexPath)
+            }
+            
+            let shareAction = UIAlertAction(title: "Поделиться", style: .default) { (_) in
+                self.dataSource.handleShare(indexPath: indexPath)
+            }
+            
+            let cancelAction = UIAlertAction(title: "Отмена", style: .cancel) { (_) in
+                alert.dismiss(animated: true, completion: nil)
+            }
+            
+            alert.addAction(shareAction)
+            alert.addAction(deleteAction)
+            alert.addAction(cancelAction)
+            
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            print("couldn't find index path")
+        }
     }
     
     /// On TabBar plus button click handler
