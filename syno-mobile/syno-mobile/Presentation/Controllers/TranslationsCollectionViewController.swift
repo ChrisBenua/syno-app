@@ -182,8 +182,13 @@ class TranslationsCollectionViewController: UIViewController {
         
         self.addKeyboardObservers(showSelector: #selector(showKeyboard(notification:)), hideSelector: #selector(hideKeyboard(notification:)))
         
+        if #available(iOS 13, *) {} else {
+            let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressOnCollectionView(gesture:)))
+            longPress.delaysTouchesBegan = true
+            self.tableView.addGestureRecognizer(longPress)
+        }
+        
         self.view.addSubview(scrollView)
-//        layout.estimatedItemSize = CGSize(width: UIScreen.main.bounds.width - 40, height: 100)
         scrollView.anchor(top: self.view.topAnchor, left: self.view.leftAnchor, bottom: self.view.bottomAnchor, right: self.view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: UIScreen.main.bounds.width, height: 0)
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить", style: .plain, target: self, action: #selector(onSaveButtonPressed))
@@ -191,6 +196,28 @@ class TranslationsCollectionViewController: UIViewController {
         self.collectionContainerView.anchor(top: self.collectionViewHeader.bottomAnchor, left: nil, bottom: scrollView.bottomAnchor, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 20, paddingRight: 0, width: 0, height: 0)
        self.collectionContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
        self.collectionContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -30).isActive = true
+    }
+    
+    @objc func handleLongPressOnCollectionView(gesture: UILongPressGestureRecognizer) {
+        let p = gesture.location(in: self.tableView)
+
+        if let indexPath = self.tableView.indexPathForRow(at: p) {
+            let alert = UIAlertController(title: "Действия", message: nil, preferredStyle: .actionSheet)
+            let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { (_) in
+                self.dataSource.deleteAt(ind: indexPath.row)
+            }
+            
+            let cancelAction = UIAlertAction(title: "Отмена", style: .cancel) { (_) in
+                alert.dismiss(animated: true, completion: nil)
+            }
+            
+            alert.addAction(deleteAction)
+            alert.addAction(cancelAction)
+            
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            print("couldn't find index path")
+        }
     }
     
     /// Save button click listener

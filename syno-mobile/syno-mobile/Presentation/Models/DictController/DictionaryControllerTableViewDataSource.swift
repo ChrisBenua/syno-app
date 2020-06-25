@@ -120,6 +120,11 @@ protocol IDictionaryControllerTableViewDataSource: ICommonDictionaryControllerDa
     /// Temporary deletes given object
     func delete(object: NSManagedObject)
     
+    func delete(indexPath: IndexPath)
+    
+    func handleShare(indexPath: IndexPath)
+    
+    func handleDeletion(indexPath: IndexPath)
     
     /// Checks if user is authorized
     func isAuthorized() -> Bool
@@ -144,6 +149,15 @@ protocol IDictionaryControllerReactor: class {
 }
 
 class DictionaryControllerTableViewDataSource: NSObject, IDictionaryControllerTableViewDataSource {
+    func handleShare(indexPath: IndexPath) {
+        self.createShare(dict: self.fetchedResultsController.object(at: indexPath))
+    }
+    
+    func handleDeletion(indexPath: IndexPath) {
+        self.delegate?.onItemDeleted()
+        self.delete(object: self.fetchedResultsController.object(at: indexPath))
+    }
+    
     func undoLastDeletion() {
         self.viewModel.undoLastChanges()
     }
@@ -154,6 +168,10 @@ class DictionaryControllerTableViewDataSource: NSObject, IDictionaryControllerTa
     
     func delete(object: NSManagedObject) {
         self.viewModel.delete(object: object)
+    }
+    
+    func delete(indexPath: IndexPath) {
+        self.viewModel.delete(object: self.fetchedResultsController.object(at: indexPath))
     }
     
     func isAuthorized() -> Bool {
@@ -171,6 +189,7 @@ class DictionaryControllerTableViewDataSource: NSObject, IDictionaryControllerTa
         guard let sections = self.fetchedResultsController.sections else {
             fatalError("No sections in FRC")
         }
+        Logger.log("items in section : \(sections[section].numberOfObjects)")
         return sections[section].numberOfObjects
     }
     
@@ -266,12 +285,11 @@ extension DictionaryControllerTableViewDataSource {
             let menu = UIMenu(title: "Actions", children: [
                 UIAction(title: "Удалить", image: UIImage.init(systemName: "trash.fill"), attributes: .destructive, handler: { (action) in
                 Timer.scheduledTimer(withTimeInterval: 0.7, repeats: false) { (_) in
-                        self.delegate?.onItemDeleted()
-                        self.delete(object: self.fetchedResultsController.object(at: indexPath))
+                    self.handleDeletion(indexPath: indexPath)
                     }
                 }),
                 UIAction(title: "Поделиться", image: UIImage.init(systemName: "square.and.arrow.up"), handler: { (action) in
-                    self.createShare(dict: self.fetchedResultsController.object(at: indexPath))
+                    self.handleShare(indexPath: indexPath)
                 })
             ])
             return menu

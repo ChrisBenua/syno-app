@@ -63,8 +63,37 @@ class DictCardsController: UIViewController {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addCard))
         self.navigationItem.rightBarButtonItem?.tintColor = .headerMainColor
         
+        if #available(iOS 13, *) {} else {
+            let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressOnCollectionView(gesture:)))
+            longPress.delaysTouchesBegan = true
+            self.collectionView.addGestureRecognizer(longPress)
+        }
+        
         collectionView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         collectionView.reloadData()
+        collectionView.layoutIfNeeded()
+    }
+    
+    @objc func handleLongPressOnCollectionView(gesture: UILongPressGestureRecognizer) {
+        let p = gesture.location(in: self.collectionView)
+
+        if let indexPath = self.collectionView.indexPathForItem(at: p) {
+            let alert = UIAlertController(title: "Действия", message: nil, preferredStyle: .actionSheet)
+            let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { (_) in
+                self.dataSource.handleDeletion(indexPath: indexPath)
+            }
+            
+            let cancelAction = UIAlertAction(title: "Отмена", style: .cancel) { (_) in
+                alert.dismiss(animated: true, completion: nil)
+            }
+            
+            alert.addAction(deleteAction)
+            alert.addAction(cancelAction)
+            
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            print("couldn't find index path")
+        }
     }
     
     /// Plus bar button click listener

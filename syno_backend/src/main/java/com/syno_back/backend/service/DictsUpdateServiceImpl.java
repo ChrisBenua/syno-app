@@ -1,5 +1,6 @@
 package com.syno_back.backend.service;
 
+import com.syno_back.backend.datasource.DbDictShareRepository;
 import com.syno_back.backend.datasource.DbUserDictionaryRepository;
 import com.syno_back.backend.datasource.UserRepository;
 import com.syno_back.backend.dto.UpdateRequestDto;
@@ -41,16 +42,20 @@ public class DictsUpdateServiceImpl implements IDictsUpdateService {
      */
     private ICardUpdateService cardUpdateService;
 
+    private DbDictShareRepository shareRepository;
+
     public DictsUpdateServiceImpl(
             @Autowired DbUserDictionaryRepository dictionaryRepository,
             @Autowired IDtoMapper<UpdateUserCardDto, DbUserCard> updateUserCardMapper,
             @Autowired ICardUpdateService cardUpdateService,
-            @Autowired UserRepository userRepository
+            @Autowired UserRepository userRepository,
+            @Autowired DbDictShareRepository shareRepository
     ) {
         this.dictionaryRepository = dictionaryRepository;
         this.updateUserCardMapper = updateUserCardMapper;
         this.cardUpdateService = cardUpdateService;
         this.userRepository = userRepository;
+        this.shareRepository = shareRepository;
     }
 
     @Override
@@ -79,6 +84,8 @@ public class DictsUpdateServiceImpl implements IDictsUpdateService {
 
         for (var dict : toRemove) {
             user.removeDictionary(dict);
+            var share = shareRepository.findBySharedDictionary_Id(dict.getId());
+            share.ifPresent(dbDictShare -> shareRepository.delete(dbDictShare));
             dictionaryRepository.delete(dict);
         }
 
