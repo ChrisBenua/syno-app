@@ -28,6 +28,9 @@
 		AA268FAE244092C9005AE946 /* NewDictController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA268FAD244092C9005AE946 /* NewDictController.swift */; };
 		AA268FB1244092FD005AE946 /* NewDictControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA268FB0244092FD005AE946 /* NewDictControllerModel.swift */; };
 		AA268FB32440ED98005AE946 /* BottomNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA268FB22440ED98005AE946 /* BottomNotificationView.swift */; };
+		AA2B772024A623AF0081660C /* AccountConfirmationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B771F24A623AF0081660C /* AccountConfirmationModel.swift */; };
+		AA2B772224A6298B0081660C /* ConfirmAccountRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B772124A6298B0081660C /* ConfirmAccountRequest.swift */; };
+		AA2B772424A690670081660C /* UIViewControllerExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B772324A690670081660C /* UIViewControllerExt.swift */; };
 		AA2B9DFB23AC922800A6D45F /* TranslationDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B9DFA23AC922800A6D45F /* TranslationDto.swift */; };
 		AA2B9DFD23AC923400A6D45F /* CardDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B9DFC23AC923400A6D45F /* CardDto.swift */; };
 		AA2FFD9223A4D48700889BAB /* TranslatedWordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2FFD9123A4D48700889BAB /* TranslatedWordView.swift */; };
@@ -100,6 +103,7 @@
 		AAA5F2CC23A2923800661811 /* DictCardsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA5F2CB23A2923800661811 /* DictCardsController.swift */; };
 		AAA5F2CF23A2958600661811 /* CardsControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA5F2CE23A2958600661811 /* CardsControllerDataSource.swift */; };
 		AAA5F2D123A298B800661811 /* CardCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA5F2D023A298B800661811 /* CardCellView.swift */; };
+		AAADCD6F24A51A23001AB623 /* AccountConfirmation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAADCD6E24A51A23001AB623 /* AccountConfirmation.swift */; };
 		AAB31060245B0C7B0029FC66 /* NumbersEndingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB3105F245B0C7B0029FC66 /* NumbersEndingHelper.swift */; };
 		AAB6CEB92392E3FD00AAAF0E /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB6CEB82392E3FD00AAAF0E /* StorageManager.swift */; };
 		AAB6CEBB2392E40600AAAF0E /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB6CEBA2392E40600AAAF0E /* CoreDataStack.swift */; };
@@ -169,6 +173,9 @@
 		AA268FAD244092C9005AE946 /* NewDictController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDictController.swift; sourceTree = "<group>"; };
 		AA268FB0244092FD005AE946 /* NewDictControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDictControllerModel.swift; sourceTree = "<group>"; };
 		AA268FB22440ED98005AE946 /* BottomNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomNotificationView.swift; sourceTree = "<group>"; };
+		AA2B771F24A623AF0081660C /* AccountConfirmationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountConfirmationModel.swift; sourceTree = "<group>"; };
+		AA2B772124A6298B0081660C /* ConfirmAccountRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmAccountRequest.swift; sourceTree = "<group>"; };
+		AA2B772324A690670081660C /* UIViewControllerExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExt.swift; sourceTree = "<group>"; };
 		AA2B9DFA23AC922800A6D45F /* TranslationDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationDto.swift; sourceTree = "<group>"; };
 		AA2B9DFC23AC923400A6D45F /* CardDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDto.swift; sourceTree = "<group>"; };
 		AA2FFD9123A4D48700889BAB /* TranslatedWordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslatedWordView.swift; sourceTree = "<group>"; };
@@ -245,6 +252,7 @@
 		AAA5F2CB23A2923800661811 /* DictCardsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictCardsController.swift; sourceTree = "<group>"; };
 		AAA5F2CE23A2958600661811 /* CardsControllerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsControllerDataSource.swift; sourceTree = "<group>"; };
 		AAA5F2D023A298B800661811 /* CardCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCellView.swift; sourceTree = "<group>"; };
+		AAADCD6E24A51A23001AB623 /* AccountConfirmation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountConfirmation.swift; sourceTree = "<group>"; };
 		AAB3105F245B0C7B0029FC66 /* NumbersEndingHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersEndingHelper.swift; sourceTree = "<group>"; };
 		AAB6CEB82392E3FD00AAAF0E /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		AAB6CEBA2392E40600AAAF0E /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
@@ -350,6 +358,7 @@
 				AA59DF3C244E5693005E6FC0 /* UpdateDictsRequest.swift */,
 				AA7642762451BD3100E388A1 /* AddShareRequest.swift */,
 				AA76427A2451BE5800E388A1 /* GetShareRequest.swift */,
+				AA2B772124A6298B0081660C /* ConfirmAccountRequest.swift */,
 			);
 			path = Requests;
 			sourceTree = "<group>";
@@ -427,6 +436,14 @@
 				AA268FB0244092FD005AE946 /* NewDictControllerModel.swift */,
 			);
 			path = NewDictController;
+			sourceTree = "<group>";
+		};
+		AA2B771E24A623900081660C /* AccountConfirmationController */ = {
+			isa = PBXGroup;
+			children = (
+				AA2B771F24A623AF0081660C /* AccountConfirmationModel.swift */,
+			);
+			path = AccountConfirmationController;
 			sourceTree = "<group>";
 		};
 		AA2B9DF923AC91F500A6D45F /* LearnController */ = {
@@ -569,6 +586,7 @@
 				AAD4A2ED23ABE1E200394693 /* NSSetExt.swift */,
 				AA88C7D824421255002E3549 /* GradeToStringAndColor.swift */,
 				AAB3105F245B0C7B0029FC66 /* NumbersEndingHelper.swift */,
+				AA2B772324A690670081660C /* UIViewControllerExt.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -630,6 +648,7 @@
 		AA8C0E0C23891862000CBB73 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				AA2B771E24A623900081660C /* AccountConfirmationController */,
 				AA7642802451EE9000E388A1 /* AddShareViewController */,
 				AA38AD76244C5E47007C2069 /* HomeViewController */,
 				AA88C7DA24421CFA002E3549 /* TestResultsController */,
@@ -666,6 +685,7 @@
 				AA38AD74244C5D44007C2069 /* HomeViewController.swift */,
 				AA7642742451B4FD00E388A1 /* LoginFromHomeViewController.swift */,
 				AA76427E2451EE7800E388A1 /* AddShareViewController.swift */,
+				AAADCD6E24A51A23001AB623 /* AccountConfirmation.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -963,11 +983,14 @@
 				AA59DF34244E4F76005E6FC0 /* UpdateUserDictionaryDto.swift in Sources */,
 				AA8700C9239792B000C97E18 /* RegisterControllerServices.swift in Sources */,
 				AA8C0E10238918FA000CBB73 /* PresentationAssembly.swift in Sources */,
+				AA2B772424A690670081660C /* UIViewControllerExt.swift in Sources */,
 				AA1B8759238D9CE100D26FCF /* RootAssembly.swift in Sources */,
 				AAD4A2E523ABAB3100394693 /* DbUserTestDictExt.swift in Sources */,
 				AA8700D52399170B00C97E18 /* RegistrationModel.swift in Sources */,
 				AA1B874D238D2A2400D26FCF /* RequestsSettings.swift in Sources */,
 				AAEBE74E23A39E7B00F48684 /* TranslationControllerDatasource.swift in Sources */,
+				AA2B772224A6298B0081660C /* ConfirmAccountRequest.swift in Sources */,
+				AAADCD6F24A51A23001AB623 /* AccountConfirmation.swift in Sources */,
 				AA59DF38244E5051005E6FC0 /* UpdateUserTranslationDto.swift in Sources */,
 				AA7642772451BD3100E388A1 /* AddShareRequest.swift in Sources */,
 				AAD4A2EC23ABD4B300394693 /* TestAndLearnCollectionViewCell.swift in Sources */,
@@ -1021,6 +1044,7 @@
 				AAB6CEC72393C1D200AAAF0E /* AppUserStorageManager.swift in Sources */,
 				AA8700DF23993F9900C97E18 /* CommonTabBarController.swift in Sources */,
 				AA6A03B923AC9C7500902FBE /* LearnController.swift in Sources */,
+				AA2B772024A623AF0081660C /* AccountConfirmationModel.swift in Sources */,
 				49A16D5B5C7461F5D99EAB36 /* Debug.swift in Sources */,
 				AAA5F2CF23A2958600661811 /* CardsControllerDataSource.swift in Sources */,
 				AA38AD7C244CB8A5007C2069 /* HomeControllerUserHeader.swift in Sources */,

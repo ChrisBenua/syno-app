@@ -296,3 +296,23 @@ extension TranslationsCollectionViewController: UIGestureRecognizerDelegate {
     }
 }
 
+extension TranslationsCollectionViewController {
+    override func navigationShouldPopOnBack(completion: @escaping (Bool) -> ()) {
+        if self.dataSource.didChange {
+            let ok = UIAlertAction(title: "Да", style: .default) { _ in
+                completion(true)
+            }
+            let cancel = UIAlertAction(title: "Отмена", style: .cancel) { _ in
+                completion(false)
+            }
+            let alertController = UIAlertController(title: "Предупреждение", message: "Изменения не сохранены, продолжить?", preferredStyle: .alert)
+            alertController.addAction(cancel)
+            alertController.addAction(ok)
+
+            self.present(alertController, animated: true);
+        } else {
+            completion(true)
+        }
+    }
+}
+

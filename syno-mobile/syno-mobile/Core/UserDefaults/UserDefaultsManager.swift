@@ -2,6 +2,10 @@ import Foundation
 
 /// Service protocol for saving data to `UserDefaults`
 protocol IUserDefaultsManager {
+    func saveRegisterEmail(email: String)
+    
+    func getRegisterEmail() -> String?
+    
     /// Saves user's auth token
     func saveToken(token: String)
     
@@ -42,6 +46,8 @@ class UserDefaultsManager: IUserDefaultsManager {
     private static let networkModeKey: String = "networkModeKey"
     /// Key for storing token timestamp
     private static let accessTokenTimestampKey: String = "accessTokenTimestampKey"
+    
+    private static let registerEmailKey: String = "registerEmailTokenKey"
 
     func saveToken(token: String) {
         UserDefaults.standard.set(token, forKey: UserDefaultsManager.accessTokenKey)
@@ -82,5 +88,13 @@ class UserDefaultsManager: IUserDefaultsManager {
     
     func getNetworkMode() -> Bool {
         return (UserDefaults.standard.object(forKey: UserDefaultsManager.networkModeKey) as? Bool) ?? true
+    }
+    
+    func saveRegisterEmail(email: String) {
+        UserDefaults.standard.set(email, forKey: UserDefaultsManager.registerEmailKey)
+    }
+    
+    func getRegisterEmail() -> String? {
+        return UserDefaults.standard.string(forKey: UserDefaultsManager.registerEmailKey)
     }
 }

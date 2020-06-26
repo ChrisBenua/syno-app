@@ -31,11 +31,14 @@ class RegistrationViewController: UIViewController, IRegistrationReactor {
 
         DispatchQueue.main.asyncAfter(deadline: when, execute: {
             alert.dismiss(animated: true)
+            self.present(self.assembly.accountConfirmationController(), animated: true, completion: nil)
         })
     }
     
     /// Instance that performs layout
     private var layouter: IRegistrationLayouter = RegistrationLayouter()
+    
+    private var assembly: IPresentationAssembly
         
     /// Service responsible for inner logic
     private var model: IRegistrationModel
@@ -57,8 +60,9 @@ class RegistrationViewController: UIViewController, IRegistrationReactor {
      Creates new `RegistrationViewController`
      - Parameter registerModel: Service that performs inner logic in `RegistrationViewController`
      */
-    init(registerModel: IRegistrationModel) {
+    init(registerModel: IRegistrationModel, assembly: IPresentationAssembly) {
         self.model = registerModel
+        self.assembly = assembly
         super.init(nibName: nil, bundle: nil)
         self.model.reactor = self
     }

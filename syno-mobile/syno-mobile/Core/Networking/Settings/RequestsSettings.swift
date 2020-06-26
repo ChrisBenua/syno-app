@@ -14,6 +14,8 @@ class RequestSettings {
     public static let UploadDicts = URLPrefix + "/api/dicts/update"
     /// Server's end point for creating share
     public static let AddShare = URLPrefix + "/api/dict_share/add_share"
+    
+    public static let confirmAccount = URLPrefix + "/api/auth/verify"
     /// Server's end point for getting share
     public static func getShare(shareUUID: String) -> String {
         return URLPrefix + "/api/dict_share/get_share/\(shareUUID)"

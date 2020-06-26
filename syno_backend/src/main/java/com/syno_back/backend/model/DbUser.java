@@ -64,6 +64,16 @@ public class DbUser {
     @Column(name="time_modified")
     private LocalDateTime timeModified;
 
+    @Getter
+    @Setter
+    @Column(name="is_verified")
+    private boolean isVerified;
+
+    @Getter
+    @Setter
+    @Column(name="verification_code")
+    private String verificationCode;
+
     /**
      * User's roles
      */

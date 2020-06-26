@@ -234,11 +234,15 @@ protocol ITranslationCellDidChangeDelegate: class {
     
     /// Gets last focused point
     func getLastFocusedPoint() -> CGPoint?
+    
+    var didChange: Bool { get }
 }
 
 class TranslationControllerDataSource: NSObject, ITranslationControllerDataSource {
     /// Stores real heights for cells
     var cellHeights: [IndexPath: CGFloat] = [:]
+    
+    var didChange = false
     
     func getTranscription(for word: String) -> String? {
         if (isAutoPhonemesEnabled) {
@@ -252,10 +256,12 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
     }
     
     func updateAt(ind: Int, newTranslation: ITranslationCellConfiguration) {
+        didChange = true
         self.viewModel.updateAt(ind: ind, newTranslation: newTranslation)
     }
     
     func add() {
+        didChange = true
         self.viewModel.add()
         UIView.performWithoutAnimation {
             self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
@@ -263,6 +269,7 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
     }
     
     func deleteAt(ind: Int) {
+        didChange = true
         self.viewModel.deleteAt(ind: ind)
         UIView.performWithoutAnimation {
             self.tableView.reloadData()
