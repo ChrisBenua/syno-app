@@ -21,22 +21,18 @@ class LoginViewController: UIViewController, ILoginReactor {
     /// Layouts elements on view
     private var layouter: ILoginLayouter = LoginRegistrationLayouter()
     
-    /// Registration Controller
-    private var registrationViewController: UIViewController
-    
     /// Instance for creating other Controllers
     private var presAssembly: IPresentationAssembly
-
+    
     /**
      Create new `LoginViewController` with
      - Parameter presAssembly: `IPresentationAssembly` for creating other Controllers
      - Parameter loginModel: `ILoginModel` for handling inner logic
      - Parameter registrationViewController: `UIViewController` to present on button click
      */
-    init(presAssembly: IPresentationAssembly, loginModel: ILoginModel, registrationViewController: UIViewController) {
+    init(presAssembly: IPresentationAssembly, loginModel: ILoginModel) {
         self.presAssembly = presAssembly
         self.loginModel = loginModel
-        self.registrationViewController = registrationViewController
         super.init(nibName: nil, bundle: nil)
         self.loginModel.controller = self
     }
@@ -48,18 +44,22 @@ class LoginViewController: UIViewController, ILoginReactor {
     /// Processing view to show while performing login
     lazy var processingSaveView: SavingProcessView = {
         let view = SavingProcessView()
-        view.setText(text: "Logging in..")
+        view.setText(text: "Вход..")
         
         return view
     }()
 
     /// `registrationLabel` click listener
     @objc func registrationLabelClicked() {
-        self.present(registrationViewController, animated: true, completion: nil)
+        (self.layouter.alternateAuthButton() as? UILabel)?.flash(duration: 0.3)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.35) {
+            self.present(self.presAssembly.registerViewController(), animated: true, completion: nil)
+        }
     }
     
     ///  `submitButton` click listener
-    @objc func submitLoginCredentials() {        
+    @objc func submitLoginCredentials() {
+        self.layouter.submitButton().flash(toValue: 0.4, duration: 0.25)
         self.loginModel.login(loginState: LoginState(email: layouter.emailTextField().text ?? "", password: layouter.passwordTextField().text ?? ""))
     }
     
@@ -78,7 +78,7 @@ class LoginViewController: UIViewController, ILoginReactor {
         
         self.processingSaveView.dismissSavingProcessView()
 
-        let alert = UIAlertController.okAlertController(title: "Welcome, \(email)!")
+        let alert = UIAlertController.okAlertController(title: "Добро пожаловать, \(email)!")
         self.present(alert, animated: true, completion: nil)
 
         let when = DispatchTime.now() + 1.2
@@ -102,7 +102,7 @@ class LoginViewController: UIViewController, ILoginReactor {
         
         self.processingSaveView.dismissSavingProcessView()
         
-        self.present(UIAlertController.okAlertController(title: "Login Failed"), animated: true, completion: nil)
+        self.present(UIAlertController.okAlertController(title: "Ошибка", message: "Вход не удался"), animated: true, completion: nil)
 
         self.layouter.submitButton().isEnabled = true
         self.layouter.passwordTextField().text = ""
@@ -110,6 +110,7 @@ class LoginViewController: UIViewController, ILoginReactor {
 
     /// Skip Registration button onclick listener
     @objc func skipRegistration() {
+        (self.layouter.skipRegistrationButton() as? UILabel)?.flash(duration: 0.3)
         self.loginModel.skippedRegistration()
     }
     
@@ -124,6 +125,10 @@ class LoginViewController: UIViewController, ILoginReactor {
         layouter.submitButton().addTarget(self, action: #selector(submitLoginCredentials), for: .touchUpInside)
         layouter.alternateAuthButton().addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(registrationLabelClicked)))
         layouter.skipRegistrationButton().addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(skipRegistration)))
+        
+        let resendGR = UITapGestureRecognizer(target: self, action: #selector(handleResendEmail))
+        self.layouter.resendConfirmationView().isUserInteractionEnabled = true
+        self.layouter.resendConfirmationView().addGestureRecognizer(resendGR)
     
         self.view.backgroundColor = .white;
         
@@ -137,6 +142,10 @@ class LoginViewController: UIViewController, ILoginReactor {
         allScreenStackView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 1).isActive = true
 
         super.viewDidLoad()
+    }
+    
+    @objc func handleResendEmail() {
+        self.present(presAssembly.emailForConfirmationController(), animated: true)
     }
     
     override func viewDidDisappear(_ animated: Bool) {

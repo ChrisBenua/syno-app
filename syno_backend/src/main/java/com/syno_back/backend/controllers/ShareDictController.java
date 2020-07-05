@@ -13,6 +13,8 @@ import com.syno_back.backend.service.ICredentialProvider;
 import com.syno_back.backend.service.IDictShareService;
 import com.syno_back.backend.service.IDtoMapper;
 import com.syno_back.backend.service.IEntityCloner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,6 +35,7 @@ import java.util.UUID;
 @RequestMapping("/api/dict_share")
 @RestController
 public class ShareDictController {
+    private static final Logger logger = LoggerFactory.getLogger(ShareDictController.class);
     /**
      * Repository for fetching <code>DbUserDictionary</code> from DB
      */
@@ -90,18 +94,23 @@ public class ShareDictController {
     @PostMapping("/add_share")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity addShare(Authentication auth, @Valid @RequestBody NewDictShare share) {
+        logger.info("POST: /api/dict_share/add_share by user: {} {}", ((User)auth.getPrincipal()).getUsername(), share.toString());
         Optional<DbUserDictionary> dictCandidate = this.dictionaryRepository.findByPin(share.getShareDictPin());
         if (dictCandidate.isPresent()) {
             var dict = dictCandidate.get();
             if (dictCredentialProvider.check(dict, auth)) {
                 String uuidString = dictShareService.getDictShareCode(dict);
+
+                logger.info("Shared successfully!");
                 return new ResponseEntity<>(MessageResponse.of(uuidString), HttpStatus.OK);
             } else {
                 String userEmail = ((User)auth.getPrincipal()).getUsername();
+                logger.info("Shared failed, user {} doesnt own dict with pin {}", userEmail, share.getShareDictPin());
                 return new ResponseEntity<>(MessageResponse.of(String.format("Dict with pin = %s doesnt belong to user with email = %s",
                         share.getShareDictPin(), userEmail)), HttpStatus.FORBIDDEN);
             }
         } else {
+            logger.info("Dictionary with pin: {} doesnt exist", share.getShareDictPin());
             return new ResponseEntity<>(MessageResponse.of(String.format("Dict with id = %s doesnt exist", share.getShareDictPin())), HttpStatus.NOT_FOUND);
         }
     }
@@ -116,11 +125,14 @@ public class ShareDictController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity cloneSharedShare(Authentication auth, @PathVariable(name = "share_id") String shareUuid) {
         String email = ((User)auth.getPrincipal()).getUsername();
+        logger.info("GET: /api/dict_share/get_share/{} for user {}", shareUuid, email);
+
         Optional<DbDictShare> candidate = Optional.empty();
 
         try {
             candidate = shareRepository.findByShareUUID(UUID.fromString(shareUuid));
         } catch (IllegalArgumentException ex) {
+            logger.info("Pin {} doesnt look like UUID", shareUuid);
             return new ResponseEntity<>(MessageResponse.of("Wrong format for share's id"), HttpStatus.BAD_REQUEST);
         }
 
@@ -139,12 +151,15 @@ public class ShareDictController {
                 clonedDict.setOwner(user);
                 clonedDict = dictionaryRepository.save(clonedDict);
 
+                logger.info("Cloned dict: {} for user: {} successfully", shareUuid, email);
+
                 return new ResponseEntity<>(mapper.convert(clonedDict,null), HttpStatus.OK);
             } else {
+                logger.info("User {} tries to clone its own dict", email);
                 return new ResponseEntity<>(MessageResponse.of(String.format("User with email %s tries to clone its own dict", email)), HttpStatus.BAD_REQUEST);
             }
-
         } else {
+            logger.info("Share with uuid: {} not found", shareUuid);
             return new ResponseEntity<>(MessageResponse.of(String.format("No share with uuid: %s", shareUuid)), HttpStatus.NOT_FOUND);
         }
     }

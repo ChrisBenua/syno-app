@@ -203,7 +203,6 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     
     /// On ended editing in textFields event listener
     @objc func didEndEditingTextField(_ textField: UITextField) {
-        
         if textField == self.translationTextField && self.translationTextField.isUserInteractionEnabled {
             if (self.transcriptionTextField.text ?? "").count == 0 {
                 let res = self.delegate?.getTranscription(for: textField.text ?? "")
@@ -227,6 +226,9 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     
     /// On text changed in textField event listener
     @objc private func textFieldDidChange(_ textField: UITextField) {
+        if ((textField.text?.count ?? 0) > 100) {
+            textField.text = String(textField.text![..<textField.text!.index(textField.text!.startIndex, offsetBy: 100)])
+        }
         delegate?.update(caller: self, newConf: generateCellConf())
     }
     

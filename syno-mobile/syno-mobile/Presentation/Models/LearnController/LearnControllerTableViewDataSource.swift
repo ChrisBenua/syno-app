@@ -121,6 +121,19 @@ class LearnControllerTableViewDataSource: NSObject, ILearnControllerTableViewDat
     
     var state: ILearnControllerState
     
+    var didAddNew: Bool = false
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == 0 && didAddNew {
+            let myCell = cell as! TranslationReadonlyTableViewCell
+            didAddNew = false
+            myCell.baseShadowView.alpha = 0
+            UIView.animate(withDuration: 0.5) {
+                myCell.baseShadowView.alpha = 1
+            }
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return state.translationsShown
     }
@@ -158,6 +171,7 @@ class LearnControllerTableViewDataSource: NSObject, ILearnControllerTableViewDat
     func onPlusOne() {
         if (self.state.translationsShown < self.viewModel.getItems(currCardPos: self.state.itemNumber).count) {
             self.state.translationsShown += 1
+            didAddNew = true
             self.delegate?.addItems(indexPaths: [IndexPath(row: 0, section: 0)])
         }
     }
@@ -166,7 +180,7 @@ class LearnControllerTableViewDataSource: NSObject, ILearnControllerTableViewDat
         let items = (0..<self.viewModel.getItems(currCardPos: self.state.itemNumber).count - self.state.translationsShown).map { (row) -> IndexPath in
             return IndexPath(row: row, section: 0)
         }
-        
+        didAddNew = true
         self.state.translationsShown = self.viewModel.getItems(currCardPos: self.state.itemNumber).count
         delegate?.addItems(indexPaths: items)
     }

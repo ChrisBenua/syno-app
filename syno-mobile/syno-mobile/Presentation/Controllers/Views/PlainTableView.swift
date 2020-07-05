@@ -31,6 +31,12 @@ class PlainTableView: UITableView {
         super.deleteRows(at: indexPaths, with: animation)
         self.invalidateIntrinsicContentSize()
     }
+    
+    override func insertRows(at indexPaths: [IndexPath], with animation: UITableView.RowAnimation) {
+        super.insertRows(at: indexPaths, with: animation)
+        self.invalidateIntrinsicContentSize()
+    }
+    
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
         self.isScrollEnabled = false

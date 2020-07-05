@@ -8,6 +8,8 @@ import com.syno_back.backend.dto.UserDictionary;
 import com.syno_back.backend.model.DbUserDictionary;
 import com.syno_back.backend.service.IDictsUpdateService;
 import com.syno_back.backend.service.IDtoMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
@@ -30,7 +32,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/dicts")
 public class UserDictionaryController {
-
+    private static final Logger logger = LoggerFactory.getLogger(UserDictionaryController.class);
     /**
      * Repository for fetching  <code>DbUserDictionary</code>
      */
@@ -65,6 +67,7 @@ public class UserDictionaryController {
     @GetMapping(value = "/my_all", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<UserDictionary>> getUserDictionaries(Authentication auth) {
+        logger.info("GET: /api/dicts/my_all for user {}", ((User)auth.getPrincipal()).getUsername());
         var dtoResp = userDictionaryRepository.findByOwner_Email(((User)auth.getPrincipal()).getUsername()).stream().
                         map((dict) -> fromDtoMapper.convert(dict, null)).collect(Collectors.toList());
         return ResponseEntity.ok(dtoResp);
@@ -79,6 +82,8 @@ public class UserDictionaryController {
     @PostMapping(value = "/update")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity updateUserDicts(Authentication auth, @Valid @RequestBody UpdateRequestDto requestDto) {
+        logger.info("POST: api/dicts/update for user {}", ((User)auth.getPrincipal()).getUsername());
+
         String userEmail = ((User)auth.getPrincipal()).getUsername();
         var owner = userRepository.findByEmail(userEmail);
 

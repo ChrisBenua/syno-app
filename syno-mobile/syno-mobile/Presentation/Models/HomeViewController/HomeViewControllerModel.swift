@@ -11,6 +11,10 @@ protocol IHomeControllerDataProviderDelegate: UIViewController {
     
     /// Dismisses process view
     func dismissProcessView()
+    
+    func onSuccessGuestCopy()
+    
+    func onFailedGuestCopy()
 }
 
 
@@ -21,6 +25,8 @@ protocol IHomeControllerMenuDataProvider {
     func onDownloadDataFromServer()
     var delegate: IHomeControllerDataProviderDelegate? { get set }
     func userEmail() -> String
+    func copyGuestDicts()
+    func isGuest() -> Bool
 }
 
 class HomeControllerMenuDataProvider: NSObject, IHomeControllerMenuDataProvider {
@@ -38,7 +44,9 @@ class HomeControllerMenuDataProvider: NSObject, IHomeControllerMenuDataProvider 
     
     /// Service for creating copy on server
     private var updateService: IUpdateRequestService
-        
+    
+    private var transferService: ITransferGuestDictsToNewAccount
+    
     /**
      Creates new `HomeControllerMenuDataProvider`
      - Parameter presAssembly:Assembly for creating controller
@@ -46,12 +54,18 @@ class HomeControllerMenuDataProvider: NSObject, IHomeControllerMenuDataProvider 
      - Parameter currentUserManager: Service for accessing `DbAppUser` CoreData instances
      - Parameter updateService: Service for creating copy on server
      */
-    init(presAssembly: IPresentationAssembly, dictControllerModel: IDictControllerModel, currentUserManager: IAppUserStorageManager, updateService: IUpdateRequestService) {
+    init(presAssembly: IPresentationAssembly, dictControllerModel: IDictControllerModel, currentUserManager: IAppUserStorageManager, updateService: IUpdateRequestService, transferService: ITransferGuestDictsToNewAccount) {
         self.presAssembly = presAssembly
         self.dictControllerModel = dictControllerModel
         self.currentUserManager = currentUserManager
         self.updateService = updateService
+        self.transferService = transferService
         super.init()
+        self.transferService.delegate = self
+    }
+    
+    func copyGuestDicts() {
+        return self.transferService.transferToUser(newUserEmail: currentUserManager.getCurrentUserEmail()!)
     }
     
     /// Gets current user email
@@ -106,5 +120,19 @@ class HomeControllerMenuDataProvider: NSObject, IHomeControllerMenuDataProvider 
                 }
             })
         }
+    }
+    
+    func isGuest() -> Bool {
+        return userEmail() == "Guest"
+    }
+}
+
+extension HomeControllerMenuDataProvider: ITransferGuestDictsToNewAccountDelegate {
+    func onSuccess() {
+        self.delegate?.onSuccessGuestCopy()
+    }
+    
+    func onFailure(err: String) {
+        self.delegate?.onFailedGuestCopy()
     }
 }

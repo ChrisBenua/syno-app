@@ -13,9 +13,11 @@ class AccountConfirmationController: UIViewController {
     
     var model: IAccountConfirmationModel
     
+    weak var controllerToPop: UIViewController?
+    
     lazy var processingSaveView: SavingProcessView = {
         let view = SavingProcessView()
-        view.setText(text: "Confirming...")
+        view.setText(text: "Подтверждаем")
         
         return view
     }()
@@ -139,7 +141,9 @@ extension AccountConfirmationController: IAccountConfirmationModelDelegate {
 
         DispatchQueue.main.asyncAfter(deadline: when, execute: {
             alert.dismiss(animated: true, completion: {
-                self.dismiss(animated: true, completion: nil)
+                self.dismiss(animated: true, completion: {
+                    self.controllerToPop?.dismiss(animated: true, completion: nil)
+                })
             })
         })
     }

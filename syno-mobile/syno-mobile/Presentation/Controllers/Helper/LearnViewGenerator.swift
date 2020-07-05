@@ -10,6 +10,8 @@ class LearnView: UIView, ILearnView {
     var dataSource: ILearnControllerTableViewDataSource
     weak var actionsDelegate: ILearnControllerActionsDelegate?
     weak var scrollViewDelegate: UIScrollViewDelegate?
+    var plusOneButton: UIButton!
+    var showAllButton: UIButton!
     
     /// Updates card number, number of translations and translated word
     func setHeaderData() {
@@ -90,10 +92,10 @@ class LearnView: UIView, ILearnView {
     
     /// View with action buttons
     lazy var controlsView: UIView = {
-        let plusOneButton = CommonUIElements.defaultSubmitButton(text: "+1", backgroundColor: UIColor.init(red: 73.0/255, green: 116.0/255, blue: 171.0/255, alpha: 0.65))
+        plusOneButton = CommonUIElements.defaultSubmitButton(text: "+1", backgroundColor: UIColor.init(red: 73.0/255, green: 116.0/255, blue: 171.0/255, alpha: 0.65))
         plusOneButton.addTarget(self, action: #selector(onPlusOneClick), for: .touchUpInside)
         
-        let showAllButton = CommonUIElements.defaultSubmitButton(text: "Все", backgroundColor: UIColor.init(red: 73.0/255, green: 116.0/255, blue: 171.0/255, alpha: 0.65))
+        showAllButton = CommonUIElements.defaultSubmitButton(text: "Все", backgroundColor: UIColor.init(red: 73.0/255, green: 116.0/255, blue: 171.0/255, alpha: 0.65))
         showAllButton.addTarget(self, action: #selector(onShowAllClick), for: .touchUpInside)
         
         let view = UIView()
@@ -151,12 +153,18 @@ class LearnView: UIView, ILearnView {
     
     /// +1 button click listener
     @objc func onPlusOneClick() {
-        self.actionsDelegate?.onPlusOne()
+        self.plusOneButton.flash(toValue: 0.5, duration: 0.3)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
+            self.actionsDelegate?.onPlusOne()
+        }
     }
         
     /// All button click listener
     @objc func onShowAllClick() {
-        self.actionsDelegate?.onShowAll()
+        self.showAllButton.flash(toValue: 0.5, duration: 0.3)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
+            self.actionsDelegate?.onShowAll()
+        }
     }
     
     /// Wrapper-view for all views on screen
@@ -196,9 +204,9 @@ class LearnView: UIView, ILearnView {
 
 extension LearnView: ILearnControllerDataSourceReactor {
     func addItems(indexPaths: [IndexPath]) {
-        UIView.performWithoutAnimation {
-            self.tableView.insertRows(at: indexPaths, with: .none)
-        }
+        //UIView.performWithoutAnimation {
+            self.tableView.reloadData()
+        //}
     }
 }
 

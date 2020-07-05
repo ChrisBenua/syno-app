@@ -15,7 +15,7 @@ class RegistrationViewController: UIViewController, IRegistrationReactor {
         
         self.processingSaveView.dismissSavingProcessView()
         
-        self.present(UIAlertController.okAlertController(title: "Registration Failed: \(error)"), animated: true, completion: nil)
+        self.present(UIAlertController.okAlertController(title: "Ошибка", message: "Регистрация не удалась: \(error)"), animated: true, completion: nil)
     }
     
     func success() {
@@ -24,7 +24,7 @@ class RegistrationViewController: UIViewController, IRegistrationReactor {
         
         self.processingSaveView.dismissSavingProcessView()
 
-        let alert = UIAlertController.okAlertController(title: "You registered successfully")
+        let alert = UIAlertController.okAlertController(title: "Регистрация прошла успешно")
         self.present(alert, animated: true, completion: nil)
 
         let when = DispatchTime.now() + 0.6
@@ -46,14 +46,17 @@ class RegistrationViewController: UIViewController, IRegistrationReactor {
     /// Process view
     lazy var processingSaveView: SavingProcessView = {
         let view = SavingProcessView()
-        view.setText(text: "Signing in..")
+        view.setText(text: "Регистрация")
         
         return view
     }()
     
     /// Login button click listener
     @objc func onLoginButtonClick() {
-        self.dismiss(animated: true, completion: nil)
+        (self.layouter.alternateAuthButton() as? UILabel)?.flash(duration: 0.3)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.35) {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     /**
@@ -99,6 +102,7 @@ class RegistrationViewController: UIViewController, IRegistrationReactor {
     }
     
     @objc func onSubmitButtonClick() {
+        self.layouter.submitButton().flash(toValue: 0.4, duration: 0.25)
         self.model.register()
     }
 }

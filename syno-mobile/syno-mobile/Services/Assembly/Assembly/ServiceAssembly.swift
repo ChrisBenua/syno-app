@@ -34,6 +34,10 @@ protocol IServiceAssembly {
     
     var registerModel: IRegistrationModel { get }
     
+    var emailConfirmationModel: IEmailConfirmationModel { get }
+    
+    var updateRequestDataPreparator: IUpdateRequestDataPreprator { get }
+    
     var confirmationModel: IAccountConfirmationModel { get }
      
     /// Service responsible for inner logic in DictionaryController
@@ -80,6 +84,8 @@ protocol IServiceAssembly {
     
     /// Service responsible for creating copy on server
     var updateRequestService: IUpdateRequestService { get }
+    
+    var transferService: ITransferGuestDictsToNewAccount { get }
 }
 
 /// Provides all services realizations
@@ -104,7 +110,13 @@ class ServiceAssembly: IServiceAssembly {
     
     var confirmationModel: IAccountConfirmationModel
     
+    var emailConfirmationModel: IEmailConfirmationModel
+    
+    var updateRequestDataPreparator: IUpdateRequestDataPreprator
+    
     var translationsFetchService: ITranslationFetchService
+    
+    var transferService: ITransferGuestDictsToNewAccount
     
     var cardsFetchService: IUserCardsFetchService
     
@@ -133,14 +145,17 @@ class ServiceAssembly: IServiceAssembly {
         self.dictionaryControllerDataProvider = DictionaryControllerDataProvider(appUserManager: self.coreAssembly.storageManager)
         self.userAuthHelper = UserAuthHelper(userDefManager: coreAssembly.userDefaultsManager)
         self.newDictControllerModel = NewDictControllerModel(storageManager: coreAssembly.storageManager)
-        self.updateRequestService = UpdateRequestService(storageManager: self.coreAssembly.storageManager, sender: self.coreAssembly.requestSender, userDefaultsManager: self.coreAssembly.userDefaultsManager)
+        self.updateRequestDataPreparator = UpdateRequestDataPreprator(storageManager: self.coreAssembly.storageManager)
+        self.updateRequestService = UpdateRequestService(dataPreparator: updateRequestDataPreparator, sender: self.coreAssembly.requestSender, userDefaultsManager: self.coreAssembly.userDefaultsManager)
         self.dictShareService = DictShareService(userDefManager: self.coreAssembly.userDefaultsManager, requestSender: self.coreAssembly.requestSender, storageManager: self.coreAssembly.storageManager, dictsFetchService: self.dictsFetchService)
         self.registerModel =  RegistrationModel(registerService: self.registerService, userDefaultsManager: self.coreAssembly.userDefaultsManager)
         self.confirmationModel = AccountConfirmationModel(userDefaultsManager: self.coreAssembly.userDefaultsManager, requestSender: self.coreAssembly.requestSender)
+        self.emailConfirmationModel = EmailConfirmationModel(requestSender: self.coreAssembly.requestSender, userDefaultsManager: self.coreAssembly.userDefaultsManager)
+        self.transferService = TransferGuestDictsToNewAccount(storageManager: self.coreAssembly.storageManager, dictionaryFetchService: self.dictsFetchService)
     }
     
     func dictControllerModel() -> DictControllerModel {
-        return DictControllerModel(userDictsFetchService: dictsFetchService, sender: self.coreAssembly.requestSender, userDefManager: self.coreAssembly.userDefaultsManager, appUserManager: self.coreAssembly.storageManager)
+        return DictControllerModel(userDictsFetchService: dictsFetchService, sender: self.coreAssembly.requestSender, userDefManager: self.coreAssembly.userDefaultsManager, appUserManager: self.coreAssembly.storageManager, transferService: self.transferService)
     }
     
     func cardsControllerDataProvider() -> ICardsControllerDataProvider {
@@ -193,6 +208,6 @@ class ServiceAssembly: IServiceAssembly {
     }
     
     func homeControllerDataProvider(presAssembly: IPresentationAssembly) -> IHomeControllerMenuDataProvider {
-        return HomeControllerMenuDataProvider(presAssembly: presAssembly, dictControllerModel: self.dictControllerModel(), currentUserManager: self.coreAssembly.storageManager, updateService: self.updateRequestService)
+        return HomeControllerMenuDataProvider(presAssembly: presAssembly, dictControllerModel: self.dictControllerModel(), currentUserManager: self.coreAssembly.storageManager, updateService: self.updateRequestService, transferService: self.transferService)
     }
 }

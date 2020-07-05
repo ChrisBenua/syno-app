@@ -10,7 +10,7 @@ class AddShareViewController: UIViewController, IAddShareModelDelegate, IGetDict
     /// Process view for indicating sharing process
     lazy var processingSaveView: SavingProcessView = {
         let view = SavingProcessView()
-        view.setText(text: "Sharing...")
+        view.setText(text: "Делимся..")
         
         return view
     }()

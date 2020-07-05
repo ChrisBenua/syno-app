@@ -14,6 +14,8 @@ protocol IPresentationAssembly {
     
     func accountConfirmationController() -> AccountConfirmationController
     
+    func emailForConfirmationController() -> EmailForConfirmationController
+    
     /// Creates `CommonTabBarController`
     func mainTabBarController() -> CommonTabBarController
     
@@ -61,6 +63,10 @@ protocol IPresentationAssembly {
 }
 
 class PresentationAssembly: IPresentationAssembly {
+    func emailForConfirmationController() -> EmailForConfirmationController {
+        return EmailForConfirmationController(model: self.serviceAssembly.emailConfirmationModel, presentationAssembly: self)
+    }
+    
     func accountConfirmationController() -> AccountConfirmationController {
         return AccountConfirmationController(model: self.serviceAssembly.confirmationModel)
     }
@@ -69,7 +75,7 @@ class PresentationAssembly: IPresentationAssembly {
     private let serviceAssembly: IServiceAssembly
     
     func loginViewController() -> LoginViewController {
-        return LoginViewController(presAssembly: self, loginModel: LoginModel(loginService: serviceAssembly.loginService), registrationViewController: registerViewController())
+        return LoginViewController(presAssembly: self, loginModel: LoginModel(loginService: serviceAssembly.loginService))
     }
     
     func registerViewController() -> RegistrationViewController {
@@ -154,7 +160,7 @@ class PresentationAssembly: IPresentationAssembly {
     }
     
     func loginFromHomeViewController() -> UIViewController {
-        return LoginFromHomeViewController(presAssembly: self, loginModel: LoginModel(loginService: serviceAssembly.loginService), registrationViewController: registerViewController())
+        return LoginFromHomeViewController(presAssembly: self, loginModel: LoginModel(loginService: serviceAssembly.loginService))
     }
     
     func addShareController() -> UIViewController {

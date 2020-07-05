@@ -5,6 +5,8 @@ import UIKit
 protocol IRegistrationLayouter: ILoginLayouter {
     /// Gets TextField with password confirmation
     func passwordConfirmationTextField() -> UITextField
+    
+    //func 
 }
 
 class RegistrationLayouter: LoginRegistrationLayouter, IRegistrationLayouter {

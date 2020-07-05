@@ -11,6 +11,8 @@ import com.syno_back.backend.jwt.auth.JwtProvider;
 import com.syno_back.backend.model.DbUser;
 import com.syno_back.backend.service.IEmailService;
 import com.syno_back.backend.service.IVerificationCodeGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -35,6 +37,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     /**
      * Service for authenticating users
      */
@@ -81,6 +84,7 @@ public class AuthController {
      */
     @PostMapping("/signin")
     public ResponseEntity authenticateUser(@Valid @RequestBody LoginUser loginUser) {
+        logger.info("POST: /api/auth/signin {}", loginUser.toString());
         var candidate = userRepository.findByEmail(loginUser.getEmail().orElseThrow());
 
         if (candidate.isPresent()) {
@@ -95,29 +99,66 @@ public class AuthController {
                         .map(role -> new SimpleGrantedAuthority(role.getName()))
                         .collect(Collectors.toList());
 
+                logger.info("User {} sign in successfully", loginUser.getEmail());
                 return ResponseEntity.ok(new JwtResponse(jwt, user.getEmail(), authorities));
             } else {
+                logger.info("User {} sign in failed: account is not verified", loginUser.getEmail());
+
                 return new ResponseEntity<>(new MessageResponse("Your account is not verified"), HttpStatus.BAD_REQUEST);
             }
         } else {
+            logger.info("User {} not found", loginUser.getEmail());
             return new ResponseEntity<>(new MessageResponse("User not found "), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/resend_conf_email/{email}")
+    public ResponseEntity<?> resendConfirmationEmail(@PathVariable String email) {
+        logger.info("GET: /api/auth/resend_conf_email/{}", email);
+
+        var candidate = userRepository.findByEmail(email);
+
+        if (candidate.isPresent()) {
+            var user = candidate.get();
+            if (!candidate.get().isVerified()) {
+                String code = verificationCodeGenerator.generate(email);
+                user.setVerificationCode(code);
+                try {
+                    emailService.sendVerificationEmail(email, code);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return new ResponseEntity<>(new MessageResponse("Error, check your email"), HttpStatus.BAD_REQUEST);
+                }
+                userRepository.save(user);
+                logger.info("Resend confirmation email for User {} success!", email);
+                return ResponseEntity.ok(new MessageResponse("Confirmation code was sent you by email"));
+            } else {
+                logger.info("Resend confirmation email for User {} failed! Account is already verified", email);
+                return new ResponseEntity<>(new MessageResponse("Account is already verified"), HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            logger.info("User with email {} not found", email);
+            return new ResponseEntity<>(new MessageResponse("User with such email doesnt exists"), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/verify")
     public ResponseEntity verifyUser(@Valid @RequestBody VerificationRequestDto dto) {
         var candidate = userRepository.findByEmail(dto.getEmail());
-
+        logger.info("POST: /api/auth/verify {}", dto.toString());
         if (candidate.isPresent()) {
             var user = candidate.get();
             if (user.getVerificationCode().equals(dto.getCode())) {
                 user.setVerified(true);
                 userRepository.save(user);
+                logger.info("Account for user {} is successfully verified", dto.getEmail());
                 return ResponseEntity.ok(new MessageResponse("Account is verified!"));
             } else {
+                logger.info("Verification for user {} failed, wrong verification code", dto.getEmail());
                 return new ResponseEntity(new MessageResponse("Wrong verification code"), HttpStatus.BAD_REQUEST);
             }
         } else {
+            logger.info("User with email: {} not found", dto.getEmail());
             return new ResponseEntity(new MessageResponse("There is no user with such email"), HttpStatus.BAD_REQUEST);
         }
     }
@@ -129,6 +170,7 @@ public class AuthController {
      */
     @PostMapping("/signup")
     public ResponseEntity registerUser(@Valid @RequestBody NewUser newUser) {
+        logger.info("POST: /api/auth/signup : {}", newUser.toString());
         var candidate = userRepository.findByEmail(newUser.getEmail());
         if (candidate.isEmpty()) {
             //additional checking
@@ -150,8 +192,11 @@ public class AuthController {
             }
             userRepository.save(user);
 
+            logger.info("User {} is registered now!", newUser.getEmail());
+
             return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
         } else {
+            logger.info("User with email: {} already exists", newUser.getEmail());
             return new ResponseEntity<>(new MessageResponse("User already exists!"), HttpStatus.BAD_REQUEST);
         }
     }

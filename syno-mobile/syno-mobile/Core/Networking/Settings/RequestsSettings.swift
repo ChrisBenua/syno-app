@@ -20,4 +20,8 @@ class RequestSettings {
     public static func getShare(shareUUID: String) -> String {
         return URLPrefix + "/api/dict_share/get_share/\(shareUUID)"
     }
+    
+    public static func resendConfirmationEmail(email: String) -> String {
+        return URLPrefix + "/api/auth/resend_conf_email/\(email)"
+    }
 }

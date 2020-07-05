@@ -33,5 +33,9 @@ struct RequestFactory {
         static func confirmAccount(dto: AccountConfirmationDto, userDefManager: IUserDefaultsManager) -> RequestConfig<DefaultParser<MessageResponseDto>> {
             return RequestConfig<DefaultParser<MessageResponseDto>>(request: ConfirmAccountRequest(userDefaultsManager: userDefManager, dto: dto), parser: DefaultParser())
         }
+        
+        static func resendConfirmationEmail(userDefManager: IUserDefaultsManager) -> RequestConfig<DefaultParser<MessageResponseDto>> {
+            return RequestConfig<DefaultParser<MessageResponseDto>>(request: ResendConfirmationEmailRequest(userDefaultsManager: userDefManager), parser: DefaultParser())
+        }
     }
 }

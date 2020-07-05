@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -13,16 +15,19 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@ToString
 public class NewUser implements Serializable {
     /**
      * New user's email
      */
+    @Size(max=100)
     @JsonProperty("email")
     private String email;
 
     /**
      * New user's password
      */
+    @Size(max=100)
     @JsonProperty("password")
     private String password;
 

@@ -6,7 +6,9 @@ import com.syno_back.backend.model.DbUserCard;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @Getter
+@ToString
 public class UserCard implements Serializable {
     /**
      * Server instance id
@@ -34,6 +37,7 @@ public class UserCard implements Serializable {
     /**
      * Actual translated word
      */
+    @Size(max=100)
     @JsonProperty("translated_word")
     private String translatedWord;
 

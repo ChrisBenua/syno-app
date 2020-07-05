@@ -53,6 +53,7 @@ public class DbUser {
      */
     @Getter
     @CreationTimestamp
+    @Setter
     @Column(name="time_created")
     private LocalDateTime timeCreated;
 
