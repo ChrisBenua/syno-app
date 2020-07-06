@@ -20,6 +20,8 @@ protocol ILoginLayouter {
     
     /// Gets skip registration button
     func skipRegistrationButton() -> UIView
+    
+    func resendConfirmationView() -> UIView
 }
 
 
@@ -44,6 +46,72 @@ class LoginRegistrationLayouter: ILoginLayouter {
     
     /// Skip registration button
     private var _skipRegistrationButton: UIView?
+    
+    private var _questionView: UIView?
+    
+    private var _resendConfirmationView: UIView?
+    
+    private var _widthConstraint: NSLayoutConstraint?
+    
+    func resendConfirmationView() -> UIView {
+        if let resendConfirmation = _resendConfirmationView {
+            return resendConfirmation
+        }
+        
+        let view = UILabel()
+        view.text = "Выслать код подтверждения повторно"
+        view.numberOfLines = 2
+        view.lineBreakMode = .byWordWrapping
+        view.textColor = UIColor(red: 8 / 255.0, green: 40 / 255.0, blue: 12 * 8 / 255.0, alpha: 1)
+        
+        _resendConfirmationView = view
+        
+        return view
+    }
+    
+    func questionView() -> UIView {
+        if let view = _questionView {
+            return view
+        }
+        let view = UIView(); view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 25
+        view.layer.borderColor = UIColor.lightGray.cgColor
+        view.layer.borderWidth = 0.5
+    
+        let questionLabel = UILabelWithInsets(padding: UIEdgeInsets(top: 8, left: 8, bottom: 7, right: 10))
+        questionLabel.textColor = .darkGray
+        questionLabel.isUserInteractionEnabled = true
+        questionLabel.text = "?"
+        questionLabel.font = .systemFont(ofSize: 32)
+        
+        let tapGR = UITapGestureRecognizer(target: self, action: #selector(handleQuestionTap))
+        
+        view.addSubview(questionLabel)
+        questionLabel.addGestureRecognizer(tapGR)
+        view.addSubview(resendConfirmationView())
+        
+        questionLabel.anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 7, width: 0, height: 0)
+        
+        resendConfirmationView().anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: questionLabel.leftAnchor, paddingTop: 5, paddingLeft: 10, paddingBottom: 5, paddingRight: 0, width: 0, height: 0)
+        //resendConfirmationView().isHidden = true
+        
+        _widthConstraint = resendConfirmationView().widthAnchor.constraint(equalToConstant: 0)
+        _widthConstraint?.isActive = true
+        
+        _questionView = view
+        
+        return view
+    }
+    
+    @objc func handleQuestionTap() {
+        print("TAP")
+        _widthConstraint?.isActive.toggle()
+        //self.resendConfirmationView().isHidden.toggle()
+        
+        UIView.animate(withDuration: 0.5) {
+            self._allStackView!.layoutIfNeeded()
+        }
+    }
     
     func passwordTextField() -> UITextField {
         if let passwordTf = _passwordTextField {
@@ -198,6 +266,12 @@ class LoginRegistrationLayouter: ILoginLayouter {
         topSepView.heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.6).isActive = true
 
         _allStackView = sv
+        
+        sv.addSubview(questionView())
+        
+        questionView().anchor(top: _allStackView?.topAnchor, left: nil, bottom: nil, right: _allStackView?.rightAnchor, paddingTop: 40, paddingLeft: 0, paddingBottom: 0, paddingRight: 20, width: 0, height: 0)
+        questionView().widthAnchor.constraint(lessThanOrEqualTo: _allStackView!.widthAnchor, multiplier: 1, constant: -40).isActive = true
+        
         return sv
     }
     

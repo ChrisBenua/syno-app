@@ -28,9 +28,13 @@
 		AA268FAE244092C9005AE946 /* NewDictController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA268FAD244092C9005AE946 /* NewDictController.swift */; };
 		AA268FB1244092FD005AE946 /* NewDictControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA268FB0244092FD005AE946 /* NewDictControllerModel.swift */; };
 		AA268FB32440ED98005AE946 /* BottomNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA268FB22440ED98005AE946 /* BottomNotificationView.swift */; };
+		AA2B772024A623AF0081660C /* AccountConfirmationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B771F24A623AF0081660C /* AccountConfirmationModel.swift */; };
+		AA2B772224A6298B0081660C /* ConfirmAccountRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B772124A6298B0081660C /* ConfirmAccountRequest.swift */; };
+		AA2B772424A690670081660C /* UIViewControllerExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B772324A690670081660C /* UIViewControllerExt.swift */; };
 		AA2B9DFB23AC922800A6D45F /* TranslationDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B9DFA23AC922800A6D45F /* TranslationDto.swift */; };
 		AA2B9DFD23AC923400A6D45F /* CardDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B9DFC23AC923400A6D45F /* CardDto.swift */; };
 		AA2FFD9223A4D48700889BAB /* TranslatedWordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2FFD9123A4D48700889BAB /* TranslatedWordView.swift */; };
+		AA33108624AA147100EF5665 /* TransferGuestDictsToNewAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA33108524AA147100EF5665 /* TransferGuestDictsToNewAccount.swift */; };
 		AA3686792444C228003599D0 /* phonemes.txt in Resources */ = {isa = PBXBuildFile; fileRef = AA3686782444C228003599D0 /* phonemes.txt */; };
 		AA36867B2444D92A003599D0 /* PhonemesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA36867A2444D92A003599D0 /* PhonemesManager.swift */; };
 		AA38AD71244B0DB5007C2069 /* RecentTestsTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA38AD70244B0DB5007C2069 /* RecentTestsTitleView.swift */; };
@@ -43,6 +47,8 @@
 		AA4B780A23C138D4005A9CC9 /* TestViewControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4B780923C138D4005A9CC9 /* TestViewControllerDataSource.swift */; };
 		AA4B780C23C1BF29005A9CC9 /* TestControllerTranslationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4B780B23C1BF29005A9CC9 /* TestControllerTranslationTableViewCell.swift */; };
 		AA4B780E23C1CB70005A9CC9 /* TestViewGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4B780D23C1CB70005A9CC9 /* TestViewGenerator.swift */; };
+		AA55CEC924A7E547008CF330 /* EmailForConfirmationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA55CEC824A7E547008CF330 /* EmailForConfirmationModel.swift */; };
+		AA55CECB24A7E688008CF330 /* ResendConfirmationEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA55CECA24A7E688008CF330 /* ResendConfirmationEmailRequest.swift */; };
 		AA59DF32244E4F41005E6FC0 /* UpdateRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59DF31244E4F41005E6FC0 /* UpdateRequestDto.swift */; };
 		AA59DF34244E4F76005E6FC0 /* UpdateUserDictionaryDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59DF33244E4F76005E6FC0 /* UpdateUserDictionaryDto.swift */; };
 		AA59DF36244E501D005E6FC0 /* UpdateUserCardDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59DF35244E501D005E6FC0 /* UpdateUserCardDto.swift */; };
@@ -62,6 +68,7 @@
 		AA76427F2451EE7800E388A1 /* AddShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA76427E2451EE7800E388A1 /* AddShareViewController.swift */; };
 		AA7642822451EEAC00E388A1 /* AddShareViewControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7642812451EEAC00E388A1 /* AddShareViewControllerModel.swift */; };
 		AA7642842451F08200E388A1 /* GetDictShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7642832451F08200E388A1 /* GetDictShareView.swift */; };
+		AA7CCAE624A7823200544E68 /* EmailForConfirmationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7CCAE524A7823200544E68 /* EmailForConfirmationController.swift */; };
 		AA82AFD3238E91A000A75D92 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA82AFD2238E91A000A75D92 /* UserDefaultsManager.swift */; };
 		AA8700C7239791D000C97E18 /* RegistrationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8700C6239791D000C97E18 /* RegistrationRequest.swift */; };
 		AA8700C9239792B000C97E18 /* RegisterControllerServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8700C8239792B000C97E18 /* RegisterControllerServices.swift */; };
@@ -100,6 +107,7 @@
 		AAA5F2CC23A2923800661811 /* DictCardsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA5F2CB23A2923800661811 /* DictCardsController.swift */; };
 		AAA5F2CF23A2958600661811 /* CardsControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA5F2CE23A2958600661811 /* CardsControllerDataSource.swift */; };
 		AAA5F2D123A298B800661811 /* CardCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA5F2D023A298B800661811 /* CardCellView.swift */; };
+		AAADCD6F24A51A23001AB623 /* AccountConfirmation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAADCD6E24A51A23001AB623 /* AccountConfirmation.swift */; };
 		AAB31060245B0C7B0029FC66 /* NumbersEndingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB3105F245B0C7B0029FC66 /* NumbersEndingHelper.swift */; };
 		AAB6CEB92392E3FD00AAAF0E /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB6CEB82392E3FD00AAAF0E /* StorageManager.swift */; };
 		AAB6CEBB2392E40600AAAF0E /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB6CEBA2392E40600AAAF0E /* CoreDataStack.swift */; };
@@ -133,6 +141,8 @@
 		AAEBE75023A3F49F00F48684 /* PlainTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE74F23A3F49E00F48684 /* PlainTableView.swift */; };
 		AAEBE75223A4132200F48684 /* ShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE75123A4132200F48684 /* ShadowView.swift */; };
 		AAEBE75423A4139B00F48684 /* BaseShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE75323A4139B00F48684 /* BaseShadowView.swift */; };
+		AAF3FE6F24AB868D003DBBB2 /* UIButtonExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF3FE6E24AB868D003DBBB2 /* UIButtonExt.swift */; };
+		AAF3FE7124AB8851003DBBB2 /* UILabelExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF3FE7024AB8851003DBBB2 /* UILabelExt.swift */; };
 		EBC4E2FE5B509D55C5BEC2A5 /* Pods_syno_mobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7F0E228B93E70E1965BAEE8 /* Pods_syno_mobile.framework */; };
 /* End PBXBuildFile section */
 
@@ -169,9 +179,13 @@
 		AA268FAD244092C9005AE946 /* NewDictController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDictController.swift; sourceTree = "<group>"; };
 		AA268FB0244092FD005AE946 /* NewDictControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDictControllerModel.swift; sourceTree = "<group>"; };
 		AA268FB22440ED98005AE946 /* BottomNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomNotificationView.swift; sourceTree = "<group>"; };
+		AA2B771F24A623AF0081660C /* AccountConfirmationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountConfirmationModel.swift; sourceTree = "<group>"; };
+		AA2B772124A6298B0081660C /* ConfirmAccountRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmAccountRequest.swift; sourceTree = "<group>"; };
+		AA2B772324A690670081660C /* UIViewControllerExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExt.swift; sourceTree = "<group>"; };
 		AA2B9DFA23AC922800A6D45F /* TranslationDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationDto.swift; sourceTree = "<group>"; };
 		AA2B9DFC23AC923400A6D45F /* CardDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDto.swift; sourceTree = "<group>"; };
 		AA2FFD9123A4D48700889BAB /* TranslatedWordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslatedWordView.swift; sourceTree = "<group>"; };
+		AA33108524AA147100EF5665 /* TransferGuestDictsToNewAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferGuestDictsToNewAccount.swift; sourceTree = "<group>"; };
 		AA3686782444C228003599D0 /* phonemes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = phonemes.txt; sourceTree = "<group>"; };
 		AA36867A2444D92A003599D0 /* PhonemesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhonemesManager.swift; sourceTree = "<group>"; };
 		AA38AD70244B0DB5007C2069 /* RecentTestsTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentTestsTitleView.swift; sourceTree = "<group>"; };
@@ -184,6 +198,8 @@
 		AA4B780923C138D4005A9CC9 /* TestViewControllerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewControllerDataSource.swift; sourceTree = "<group>"; };
 		AA4B780B23C1BF29005A9CC9 /* TestControllerTranslationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestControllerTranslationTableViewCell.swift; sourceTree = "<group>"; };
 		AA4B780D23C1CB70005A9CC9 /* TestViewGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewGenerator.swift; sourceTree = "<group>"; };
+		AA55CEC824A7E547008CF330 /* EmailForConfirmationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailForConfirmationModel.swift; sourceTree = "<group>"; };
+		AA55CECA24A7E688008CF330 /* ResendConfirmationEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResendConfirmationEmailRequest.swift; sourceTree = "<group>"; };
 		AA59DF31244E4F41005E6FC0 /* UpdateRequestDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateRequestDto.swift; sourceTree = "<group>"; };
 		AA59DF33244E4F76005E6FC0 /* UpdateUserDictionaryDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUserDictionaryDto.swift; sourceTree = "<group>"; };
 		AA59DF35244E501D005E6FC0 /* UpdateUserCardDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUserCardDto.swift; sourceTree = "<group>"; };
@@ -203,6 +219,7 @@
 		AA76427E2451EE7800E388A1 /* AddShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddShareViewController.swift; sourceTree = "<group>"; };
 		AA7642812451EEAC00E388A1 /* AddShareViewControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddShareViewControllerModel.swift; sourceTree = "<group>"; };
 		AA7642832451F08200E388A1 /* GetDictShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetDictShareView.swift; sourceTree = "<group>"; };
+		AA7CCAE524A7823200544E68 /* EmailForConfirmationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailForConfirmationController.swift; sourceTree = "<group>"; };
 		AA82AFD2238E91A000A75D92 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		AA8700C6239791D000C97E18 /* RegistrationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationRequest.swift; sourceTree = "<group>"; };
 		AA8700C8239792B000C97E18 /* RegisterControllerServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterControllerServices.swift; sourceTree = "<group>"; };
@@ -245,6 +262,7 @@
 		AAA5F2CB23A2923800661811 /* DictCardsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictCardsController.swift; sourceTree = "<group>"; };
 		AAA5F2CE23A2958600661811 /* CardsControllerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsControllerDataSource.swift; sourceTree = "<group>"; };
 		AAA5F2D023A298B800661811 /* CardCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCellView.swift; sourceTree = "<group>"; };
+		AAADCD6E24A51A23001AB623 /* AccountConfirmation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountConfirmation.swift; sourceTree = "<group>"; };
 		AAB3105F245B0C7B0029FC66 /* NumbersEndingHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersEndingHelper.swift; sourceTree = "<group>"; };
 		AAB6CEB82392E3FD00AAAF0E /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		AAB6CEBA2392E40600AAAF0E /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
@@ -278,6 +296,8 @@
 		AAEBE74F23A3F49E00F48684 /* PlainTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainTableView.swift; sourceTree = "<group>"; };
 		AAEBE75123A4132200F48684 /* ShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowView.swift; sourceTree = "<group>"; };
 		AAEBE75323A4139B00F48684 /* BaseShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseShadowView.swift; sourceTree = "<group>"; };
+		AAF3FE6E24AB868D003DBBB2 /* UIButtonExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExt.swift; sourceTree = "<group>"; };
+		AAF3FE7024AB8851003DBBB2 /* UILabelExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExt.swift; sourceTree = "<group>"; };
 		B169F42F7A6B5AFCF835DEC5 /* Pods-syno-mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-syno-mobile.release.xcconfig"; path = "Target Support Files/Pods-syno-mobile/Pods-syno-mobile.release.xcconfig"; sourceTree = "<group>"; };
 		B7F0E228B93E70E1965BAEE8 /* Pods_syno_mobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_syno_mobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D54B6875ADE8ED7DA9C38847 /* Pods-syno-mobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-syno-mobileTests.debug.xcconfig"; path = "Target Support Files/Pods-syno-mobileTests/Pods-syno-mobileTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -350,6 +370,8 @@
 				AA59DF3C244E5693005E6FC0 /* UpdateDictsRequest.swift */,
 				AA7642762451BD3100E388A1 /* AddShareRequest.swift */,
 				AA76427A2451BE5800E388A1 /* GetShareRequest.swift */,
+				AA2B772124A6298B0081660C /* ConfirmAccountRequest.swift */,
+				AA55CECA24A7E688008CF330 /* ResendConfirmationEmailRequest.swift */,
 			);
 			path = Requests;
 			sourceTree = "<group>";
@@ -417,6 +439,7 @@
 				AA38AD79244C6C88007C2069 /* PinGenerator.swift */,
 				AA59DF3E244E5884005E6FC0 /* UpdateRequestService.swift */,
 				AA76427C2451CFE100E388A1 /* DictShareService.swift */,
+				AA33108524AA147100EF5665 /* TransferGuestDictsToNewAccount.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -427,6 +450,14 @@
 				AA268FB0244092FD005AE946 /* NewDictControllerModel.swift */,
 			);
 			path = NewDictController;
+			sourceTree = "<group>";
+		};
+		AA2B771E24A623900081660C /* AccountConfirmationController */ = {
+			isa = PBXGroup;
+			children = (
+				AA2B771F24A623AF0081660C /* AccountConfirmationModel.swift */,
+			);
+			path = AccountConfirmationController;
 			sourceTree = "<group>";
 		};
 		AA2B9DF923AC91F500A6D45F /* LearnController */ = {
@@ -461,6 +492,14 @@
 				AA4B780923C138D4005A9CC9 /* TestViewControllerDataSource.swift */,
 			);
 			path = TestController;
+			sourceTree = "<group>";
+		};
+		AA55CEC724A7E52D008CF330 /* EmailForConfirmationController */ = {
+			isa = PBXGroup;
+			children = (
+				AA55CEC824A7E547008CF330 /* EmailForConfirmationModel.swift */,
+			);
+			path = EmailForConfirmationController;
 			sourceTree = "<group>";
 		};
 		AA6A03BA23AC9CC500902FBE /* LearnController */ = {
@@ -569,6 +608,9 @@
 				AAD4A2ED23ABE1E200394693 /* NSSetExt.swift */,
 				AA88C7D824421255002E3549 /* GradeToStringAndColor.swift */,
 				AAB3105F245B0C7B0029FC66 /* NumbersEndingHelper.swift */,
+				AA2B772324A690670081660C /* UIViewControllerExt.swift */,
+				AAF3FE6E24AB868D003DBBB2 /* UIButtonExt.swift */,
+				AAF3FE7024AB8851003DBBB2 /* UILabelExt.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -630,6 +672,8 @@
 		AA8C0E0C23891862000CBB73 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				AA55CEC724A7E52D008CF330 /* EmailForConfirmationController */,
+				AA2B771E24A623900081660C /* AccountConfirmationController */,
 				AA7642802451EE9000E388A1 /* AddShareViewController */,
 				AA38AD76244C5E47007C2069 /* HomeViewController */,
 				AA88C7DA24421CFA002E3549 /* TestResultsController */,
@@ -666,6 +710,8 @@
 				AA38AD74244C5D44007C2069 /* HomeViewController.swift */,
 				AA7642742451B4FD00E388A1 /* LoginFromHomeViewController.swift */,
 				AA76427E2451EE7800E388A1 /* AddShareViewController.swift */,
+				AAADCD6E24A51A23001AB623 /* AccountConfirmation.swift */,
+				AA7CCAE524A7823200544E68 /* EmailForConfirmationController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -958,16 +1004,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA33108624AA147100EF5665 /* TransferGuestDictsToNewAccount.swift in Sources */,
 				AAD4A2F123ABE74E00394693 /* TestAndLearnControllerHeader.swift in Sources */,
 				AA8700CF2398270C00C97E18 /* TranslationFetchService.swift in Sources */,
 				AA59DF34244E4F76005E6FC0 /* UpdateUserDictionaryDto.swift in Sources */,
 				AA8700C9239792B000C97E18 /* RegisterControllerServices.swift in Sources */,
 				AA8C0E10238918FA000CBB73 /* PresentationAssembly.swift in Sources */,
+				AA2B772424A690670081660C /* UIViewControllerExt.swift in Sources */,
 				AA1B8759238D9CE100D26FCF /* RootAssembly.swift in Sources */,
 				AAD4A2E523ABAB3100394693 /* DbUserTestDictExt.swift in Sources */,
 				AA8700D52399170B00C97E18 /* RegistrationModel.swift in Sources */,
 				AA1B874D238D2A2400D26FCF /* RequestsSettings.swift in Sources */,
 				AAEBE74E23A39E7B00F48684 /* TranslationControllerDatasource.swift in Sources */,
+				AA2B772224A6298B0081660C /* ConfirmAccountRequest.swift in Sources */,
+				AAADCD6F24A51A23001AB623 /* AccountConfirmation.swift in Sources */,
 				AA59DF38244E5051005E6FC0 /* UpdateUserTranslationDto.swift in Sources */,
 				AA7642772451BD3100E388A1 /* AddShareRequest.swift in Sources */,
 				AAD4A2EC23ABD4B300394693 /* TestAndLearnCollectionViewCell.swift in Sources */,
@@ -1013,7 +1063,9 @@
 				AA76427D2451CFE100E388A1 /* DictShareService.swift in Sources */,
 				49A16189873B6C801FB1EFFC /* IParser.swift in Sources */,
 				AA88C7D524420DB9002E3549 /* TestResultsViewController.swift in Sources */,
+				AA55CECB24A7E688008CF330 /* ResendConfirmationEmailRequest.swift in Sources */,
 				AA38AD71244B0DB5007C2069 /* RecentTestsTitleView.swift in Sources */,
+				AA7CCAE624A7823200544E68 /* EmailForConfirmationController.swift in Sources */,
 				AAA29993243E27FB007327DB /* UITextViewWithLabel.swift in Sources */,
 				AA12FECA23AFB59100CC8D3B /* LearnViewGenerator.swift in Sources */,
 				AAD4A2E723ABB15400394693 /* DbUserTestExt.swift in Sources */,
@@ -1021,7 +1073,9 @@
 				AAB6CEC72393C1D200AAAF0E /* AppUserStorageManager.swift in Sources */,
 				AA8700DF23993F9900C97E18 /* CommonTabBarController.swift in Sources */,
 				AA6A03B923AC9C7500902FBE /* LearnController.swift in Sources */,
+				AA2B772024A623AF0081660C /* AccountConfirmationModel.swift in Sources */,
 				49A16D5B5C7461F5D99EAB36 /* Debug.swift in Sources */,
+				AAF3FE6F24AB868D003DBBB2 /* UIButtonExt.swift in Sources */,
 				AAA5F2CF23A2958600661811 /* CardsControllerDataSource.swift in Sources */,
 				AA38AD7C244CB8A5007C2069 /* HomeControllerUserHeader.swift in Sources */,
 				AA4B780A23C138D4005A9CC9 /* TestViewControllerDataSource.swift in Sources */,
@@ -1055,6 +1109,7 @@
 				AA4B780E23C1CB70005A9CC9 /* TestViewGenerator.swift in Sources */,
 				AAC6057F2391237B00120B77 /* DictionaryResponse.swift in Sources */,
 				AA1B874A238D29F300D26FCF /* LoginRequest.swift in Sources */,
+				AAF3FE7124AB8851003DBBB2 /* UILabelExt.swift in Sources */,
 				AAC6057B2390F86700120B77 /* RegistrationLayouter.swift in Sources */,
 				AA8700E623994ACE00C97E18 /* DictControllerModel.swift in Sources */,
 				AAD4A2E123ABA59900394693 /* DbUserTestCardExt.swift in Sources */,
@@ -1075,6 +1130,7 @@
 				AA8700C7239791D000C97E18 /* RegistrationRequest.swift in Sources */,
 				AA7642792451BD6E00E388A1 /* NewDictShare.swift in Sources */,
 				49A160CBD53E96CBBA9E3354 /* LoginResponse.swift in Sources */,
+				AA55CEC924A7E547008CF330 /* EmailForConfirmationModel.swift in Sources */,
 				49A1646F9BDD6D3757510F85 /* UIAlertController.swift in Sources */,
 				AA38AD73244B11FE007C2069 /* RecentTestTableViewCell.swift in Sources */,
 				AA88C7DE2442242D002E3549 /* TestResultsTableViewCell.swift in Sources */,

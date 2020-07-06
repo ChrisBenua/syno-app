@@ -1,33 +1,12 @@
 import Foundation
 
-/// Protocol for creating copy on server
-protocol IUpdateRequestService {
-    /// Updates user's dictionaries on server
-    func sendRequest(completion: ((Result<String>) -> ())?)
+protocol IUpdateRequestDataPreprator {
+    func prepareData() -> UpdateRequestDto
 }
 
-/// Class responsible for creating copy on server
-class UpdateRequestService: IUpdateRequestService {
-    private var storageManager: IStorageCoordinator
-    private var sender: IRequestSender
-    private var userDefManager: IUserDefaultsManager
+class UpdateRequestDataPreprator: IUpdateRequestDataPreprator {
     
-    func sendRequest(completion: ((Result<String>) -> ())?) {
-        DispatchQueue.global(qos: .background).async {
-            let dto = self.prepareData()
-            let request = RequestFactory.BackendRequests.updateDictsRequest(updateDictsDto: dto, userDefManager: self.userDefManager)
-            
-            self.sender.send(requestConfig: request) { (result) in
-                switch result {
-                case .success(let messageResponse):
-                    completion?(.success(messageResponse.message))
-                case .error(let error):
-                    completion?(.error(error))
-                }
-            }
-        }
-        
-    }
+    private let storageManager: IStorageCoordinator
     
     func prepareData() -> UpdateRequestDto {
         let user = storageManager.getCurrentAppUser()
@@ -51,14 +30,47 @@ class UpdateRequestService: IUpdateRequestService {
         return dto
     }
     
+    init(storageManager: IStorageCoordinator) {
+        self.storageManager = storageManager
+    }
+}
+
+/// Protocol for creating copy on server
+protocol IUpdateRequestService {
+    /// Updates user's dictionaries on server
+    func sendRequest(completion: ((Result<String>) -> ())?)
+}
+
+/// Class responsible for creating copy on server
+class UpdateRequestService: IUpdateRequestService {
+    private var dataPreparator: IUpdateRequestDataPreprator
+    private var sender: IRequestSender
+    private var userDefManager: IUserDefaultsManager
+    
+    func sendRequest(completion: ((Result<String>) -> ())?) {
+        DispatchQueue.global(qos: .background).async {
+            let dto = self.dataPreparator.prepareData()
+            let request = RequestFactory.BackendRequests.updateDictsRequest(updateDictsDto: dto, userDefManager: self.userDefManager)
+            
+            self.sender.send(requestConfig: request) { (result) in
+                switch result {
+                case .success(let messageResponse):
+                    completion?(.success(messageResponse.message))
+                case .error(let error):
+                    completion?(.error(error))
+                }
+            }
+        }
+        
+    }
+    
     /**
      Creates new `UpdateRequestService`
-     - Parameter storageManager: instance responsible for operations with DbAppUser instances
      - Parameter sender: instance resposible for sending requests
      - Parameter userDefaultsManager: instance responsible for saving/getting items from User Defaults
      */
-    init(storageManager: IStorageCoordinator, sender: IRequestSender, userDefaultsManager: IUserDefaultsManager) {
-        self.storageManager = storageManager
+    init(dataPreparator: IUpdateRequestDataPreprator, sender: IRequestSender, userDefaultsManager: IUserDefaultsManager) {
+        self.dataPreparator = dataPreparator
         self.sender = sender
         self.userDefManager = userDefaultsManager
     }

@@ -53,6 +53,7 @@ public class DbUser {
      */
     @Getter
     @CreationTimestamp
+    @Setter
     @Column(name="time_created")
     private LocalDateTime timeCreated;
 
@@ -63,6 +64,16 @@ public class DbUser {
     @UpdateTimestamp
     @Column(name="time_modified")
     private LocalDateTime timeModified;
+
+    @Getter
+    @Setter
+    @Column(name="is_verified")
+    private boolean isVerified;
+
+    @Getter
+    @Setter
+    @Column(name="verification_code")
+    private String verificationCode;
 
     /**
      * User's roles

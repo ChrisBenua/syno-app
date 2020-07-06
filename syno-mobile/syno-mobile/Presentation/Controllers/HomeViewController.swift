@@ -3,6 +3,30 @@ import UIKit
 
 /// Controller for main actions: create copy on server, download copy from server, login as different user
 class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate, IHomeControllerUserHeaderDelegate {
+    func onSuccessGuestCopy() {
+        let alert = UIAlertController.okAlertController(title: "Успех!")
+        self.present(alert, animated: true, completion: nil)
+
+        let when = DispatchTime.now() + 1.2
+
+        DispatchQueue.main.asyncAfter(deadline: when, execute: {
+            alert.dismiss(animated: true, completion: {
+            })
+        })
+    }
+    
+    func onFailedGuestCopy() {
+        let alert = UIAlertController.okAlertController(title: "Ошибка")
+        self.present(alert, animated: true, completion: nil)
+
+        let when = DispatchTime.now() + 1.2
+
+        DispatchQueue.main.asyncAfter(deadline: when, execute: {
+            alert.dismiss(animated: true, completion: {
+            })
+        })
+    }
+    
     func showController(controller: UIViewController) {
         self.navigationController?.pushViewController(controller, animated: true)
     }
@@ -23,7 +47,7 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
     /// Process view for downloading or uploading dictionaries to server
     lazy var processingSaveView: SavingProcessView = {
         let view = SavingProcessView()
-        view.setText(text: "Logging in..")
+        view.setText(text: "Загрузка..")
         
         return view
     }()
@@ -60,6 +84,25 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
         return label
     }()
     
+    lazy var copyFromGuestLabel: UILabel = {
+        let label = UILabelWithInsets(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))
+        label.isUserInteractionEnabled = true
+        label.clipsToBounds = true
+        label.layer.cornerRadius = 10
+        label.text = "Копировать Словари анонимного пользователя"
+        label.numberOfLines = 2
+        label.lineBreakMode = .byWordWrapping
+        label.backgroundColor = .white
+        
+        label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onCopyFromGuestLabelClick)))
+        
+        return label
+    }()
+    
+    @objc func onCopyFromGuestLabelClick() {
+        self.dataProvider.copyGuestDicts()
+    }
+    
     /// `createCopyLabel` click listener
     @objc func onCreateCopyLabelClick() {
         self.dataProvider.onUploadDataToServer()
@@ -92,10 +135,13 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
         view.cornerRadius = 12
         view.shadowView.shadowOffset = CGSize(width: 0, height: 4)
         view.containerViewBackgroundColor = UIColor(red: 240.0/255, green: 240.0/255, blue: 240.0/255, alpha: 1)
-        
-        let sv = UIStackView(arrangedSubviews: [self.createCopyLabel, self.downloadCopyLabel])
+        var views = [self.createCopyLabel, self.downloadCopyLabel]
+        if (!self.dataProvider.isGuest()) {
+            views.append(self.copyFromGuestLabel)
+        }
+        let sv = UIStackView(arrangedSubviews: views)
         sv.axis = .vertical
-        sv.distribution = .fillEqually
+        sv.distribution = .fill
         sv.spacing = 13
         
         view.addSubview(sv)

@@ -1,11 +1,9 @@
 package com.syno_back.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 /**
@@ -15,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Builder
+@ToString
 public class UpdateUserTranslationDto {
     /**
      * Unique <code>DbTranslation</code> id
@@ -25,24 +24,28 @@ public class UpdateUserTranslationDto {
     /**
      * Actual translation
      */
+    @Size(max=100)
     @JsonProperty("translation")
     private String translation;
 
     /**
      * User's comment
      */
+    @Size(max=100)
     @JsonProperty("comment")
     private String comment;
 
     /**
      * Translation's transcription
      */
+    @Size(max=100)
     @JsonProperty("transcription")
     private String transcription;
 
     /**
      * Usage sample
      */
+    @Size(max=100)
     @JsonProperty("usage_sample")
     private String usageSample;
 

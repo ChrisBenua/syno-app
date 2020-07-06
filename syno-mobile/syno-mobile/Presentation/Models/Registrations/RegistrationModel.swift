@@ -32,6 +32,7 @@ class RegistrationModel: IRegistrationModel {
             DispatchQueue.main.async {
                 switch result {
                 case .success:
+                    self.userDefaultsManager.saveRegisterEmail(email: self.state.email.trimmingCharacters(in: .whitespacesAndNewlines))
                     self.reactor?.success()
                 case .error(let str):
                     self.reactor?.failed(error: str)
@@ -42,6 +43,8 @@ class RegistrationModel: IRegistrationModel {
     
     var state: IRegisterState
     
+    let userDefaultsManager: IUserDefaultsManager
+    
     weak var reactor: IRegistrationReactor?
     
     /// Service for performing registration request to server
@@ -51,8 +54,9 @@ class RegistrationModel: IRegistrationModel {
      Creates new `RegistrationModel`
      - Parameter registerService: Service for performing registration request to server
      */
-    init(registerService: IRegisterService) {
+    init(registerService: IRegisterService, userDefaultsManager: IUserDefaultsManager) {
         self.state = RegisterState()
+        self.userDefaultsManager = userDefaultsManager
         self.registerService = registerService
     }
 }

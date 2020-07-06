@@ -12,6 +12,8 @@ class TranslationsCollectionViewController: UIViewController {
     /// Flag for indicating if keyboard is shown
     var isKeyboardShown: Bool = false
     
+    var addButton: UIButton!
+    
     /**
      Scroll view to its previous position before showing keyboard
      - Parameter scrollView: scrollView to return to previous position
@@ -40,7 +42,7 @@ class TranslationsCollectionViewController: UIViewController {
     /// Process view to show when saving changes
     lazy var processingSaveView: SavingProcessView = {
         let view = SavingProcessView()
-        view.setText(text: "Saving")
+        view.setText(text: "Сохранение")
         
         return view
     }()
@@ -48,7 +50,7 @@ class TranslationsCollectionViewController: UIViewController {
     
     /// View with actions buttons
     lazy var controlsView: UIView = {
-        let addButton = UIButton(type: .custom)
+        addButton = UIButton(type: .custom)
         addButton.setBackgroundImage(#imageLiteral(resourceName: "Component 4"), for: .normal)
         
         addButton.addTarget(self, action: #selector(onAddAnswerButton), for: .touchUpInside)
@@ -65,6 +67,7 @@ class TranslationsCollectionViewController: UIViewController {
     
     /// `addButton` click listener
     @objc func onAddAnswerButton() {
+        addButton.flash(toValue: 0.6, duration: 0.2)
         self.dataSource.add()
     }
     
@@ -72,7 +75,6 @@ class TranslationsCollectionViewController: UIViewController {
     lazy var tableView: UITableView = {
         let tableView = PlainTableView()
         
-        tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableView.automaticDimension
         
         tableView.alwaysBounceVertical = false
@@ -172,7 +174,7 @@ class TranslationsCollectionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "Карточки"
+        self.navigationItem.title = "Карточка"
         self.view.backgroundColor = .white
         
         let allViewTapGestureReco = UITapGestureRecognizer(target: self, action: #selector(clearKeyboard(_:)))
@@ -293,6 +295,26 @@ extension TranslationsCollectionViewController {
 extension TranslationsCollectionViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return false
+    }
+}
+
+extension TranslationsCollectionViewController {
+    override func navigationShouldPopOnBack(completion: @escaping (Bool) -> ()) {
+        if self.dataSource.didChange {
+            let ok = UIAlertAction(title: "Да", style: .default) { _ in
+                completion(true)
+            }
+            let cancel = UIAlertAction(title: "Отмена", style: .cancel) { _ in
+                completion(false)
+            }
+            let alertController = UIAlertController(title: "Предупреждение", message: "Изменения не сохранены, продолжить?", preferredStyle: .alert)
+            alertController.addAction(cancel)
+            alertController.addAction(ok)
+
+            self.present(alertController, animated: true);
+        } else {
+            completion(true)
+        }
     }
 }
 

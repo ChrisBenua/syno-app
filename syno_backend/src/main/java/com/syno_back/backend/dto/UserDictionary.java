@@ -5,7 +5,9 @@ import com.syno_back.backend.model.DbUserDictionary;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @Getter
+@ToString
 public class UserDictionary implements Serializable {
     /**
      * Server's DB id
@@ -33,12 +36,14 @@ public class UserDictionary implements Serializable {
     /**
      * Dictionary name
      */
+    @Size(max=100)
     @JsonProperty("name")
     private String name;
 
     /**
      * Dictionary language
      */
+    @Size(max=100)
     @JsonProperty("language")
     private String language;
 

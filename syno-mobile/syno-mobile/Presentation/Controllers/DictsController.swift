@@ -6,7 +6,7 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
     /// Process view for sharing process
     lazy var processingSaveView: SavingProcessView = {
         let view = SavingProcessView()
-        view.setText(text: "Sharing...")
+        view.setText(text: "Делимся..")
         
         return view
     }()
@@ -52,6 +52,7 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
         self.dataSource = datasource
         self.model = model
         super.init(nibName: nil, bundle: nil)
+        self.model.delegate = self
         frcDelegate = DictsControllerCollectionViewFRCDelegate(collectionView: self.collectionView)
         self.dataSource.fetchedResultsController.delegate = frcDelegate
         self.collectionView.dataSource = self.dataSource
@@ -78,6 +79,7 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        self.onTimerDone()
         self.notifView?.removeFromSuperview()
     }
     
@@ -163,10 +165,19 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
             let alertController = UIAlertController(title: "Загрузка", message: "Загрузить копию?", preferredStyle: .alert)
             let okAction = UIAlertAction(title: "Ok", style: .default) { (_) in
                 self.model.initialFetch(completion: { (_) in
+                    DispatchQueue.main.async {
+                        if self.model.shouldAskToCopyGuestDicts() {
+                            self.askForCopyGuestDicts()
+                        }
+                    }
                 })
             }
             let cancelAction = UIAlertAction(title: "Отмена", style: .cancel) { (_) in
-                alertController.dismiss(animated: true, completion: nil)
+                alertController.dismiss(animated: true, completion: {
+                    if self.model.shouldAskToCopyGuestDicts() {
+                        self.askForCopyGuestDicts()
+                    }
+                })
             }
             
             alertController.addAction(okAction)
@@ -174,6 +185,21 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
             
             self.present(alertController, animated: true, completion: nil)
         }
+    }
+    
+    func askForCopyGuestDicts() {
+        let alertController = UIAlertController(title: "Cловари", message: "Перенести Словари анонимного пользователя данному пользователю?", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default) { (_) in
+            self.model.copyGuestDictsToCurrentUser()
+        }
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel) { (_) in
+            alertController.dismiss(animated: true, completion: nil)
+        }
+        
+        alertController.addAction(okAction)
+        alertController.addAction(cancelAction)
+        
+        self.present(alertController, animated: true, completion: nil)
     }
     
     /// Called when dictionary was deleted and presents `notifView` to cancel action
@@ -199,4 +225,32 @@ extension DictsViewController: IBottomNotificationViewDelegate {
     func onTimerDone() {
         self.dataSource.commitChanges()
     }
+}
+
+extension DictsViewController: ITransferGuestDictsToNewAccountDelegate {
+    func onSuccess() {
+        let alert = UIAlertController.okAlertController(title: "Успех")
+        self.present(alert, animated: true, completion: nil)
+
+        let when = DispatchTime.now() + 1.2
+
+        DispatchQueue.main.asyncAfter(deadline: when, execute: {
+            alert.dismiss(animated: true, completion: {
+            })
+        })
+    }
+    
+    func onFailure(err: String) {
+        let alert = UIAlertController.okAlertController(title: err)
+        self.present(alert, animated: true, completion: nil)
+
+        let when = DispatchTime.now() + 1.2
+
+        DispatchQueue.main.asyncAfter(deadline: when, execute: {
+            alert.dismiss(animated: true, completion: {
+            })
+        })
+    }
+    
+    
 }

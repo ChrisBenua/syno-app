@@ -30,6 +30,7 @@ class TestView: UIView, ITestView {
     
     weak var parentController: IScrollableToPoint?
     var model: ITestViewControllerModel
+    var addButton: UIButton!
     
     /// Updates card number, translated word and index translation number
     func setHeaderData() {
@@ -89,7 +90,7 @@ class TestView: UIView, ITestView {
     
     /// Wrapper view for actions buttons
     lazy var controlsView: UIView = {
-        let addButton = UIButton()
+        addButton = UIButton()
         addButton.setImage(#imageLiteral(resourceName: "Component 4"), for: .normal)
         
         addButton.addTarget(self, action: #selector(onAddAnswerButton), for: .touchUpInside)
@@ -107,6 +108,7 @@ class TestView: UIView, ITestView {
     /// Add answer button click listener
     @objc func onAddAnswerButton() {
         if (self.model.dataSource.dataProvider.getItem(cardPos: self.model.dataSource.state.itemNumber).translationsCount > tableView.numberOfRows(inSection: 0)) {
+            self.addButton.flash(toValue: 0.6, duration: 0.2)
             self.model.dataSource.onAddLineForAnswer()
         }
     }

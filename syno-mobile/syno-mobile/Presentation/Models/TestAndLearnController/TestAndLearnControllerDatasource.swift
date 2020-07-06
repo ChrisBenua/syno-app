@@ -21,6 +21,8 @@ protocol ITestAndLearnReactor: class {
     
     /// Notifies when should change title
     func onChangeControllerTitle(newMode: TestAndLearnModes)
+    
+    func onShowError(title: String, message: String?)
 }
 
 /// Protocol for storing `TestAndLearnController` state
@@ -258,7 +260,9 @@ class TestAndLearnDictionaryDataSource: NSObject, ITestAndLearnDictionaryDataSou
     }
     
     func didExpandOrCollapseTableView() {
-        self.collectionView.collectionViewLayout.invalidateLayout()
+        //UIView.animate(withDuration: 0.5) {
+            self.collectionView.collectionViewLayout.invalidateLayout()
+        //}
     }
     
     weak var delegate: ITestAndLearnReactor?
@@ -278,7 +282,9 @@ class TestAndLearnDictionaryDataSource: NSObject, ITestAndLearnDictionaryDataSou
 
         let view = self.collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(row: 0, section: 0)) as! TestAndLearnControllerHeader
         updateHeader(header: view)
-        self.collectionView.collectionViewLayout.invalidateLayout()
+        //UIView.animate(withDuration: 0.5) {
+            self.collectionView.collectionViewLayout.invalidateLayout()
+        //}
         delegate?.onChangeControllerTitle(newMode: state.testAndLearnMode)
         Logger.log("Mode in TestAndLearnController changed")
     }
@@ -362,12 +368,19 @@ class TestAndLearnDictionaryDataSource: NSObject, ITestAndLearnDictionaryDataSou
 
 extension TestAndLearnDictionaryDataSource {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if (self.state.testAndLearnMode == .learnMode) {
-            let controller = self.presAssembly.learnController(sourceDict: self.fetchedResultsController.object(at: indexPath))
-            self.delegate?.showLearnController(controller: controller)
+        let dict = self.fetchedResultsController.object(at: indexPath)
+        
+        if dict.getCards().count == 0 {
+            let errMode = self.state.testAndLearnMode == .learnMode ? "обучение" : "тест"
+            self.delegate?.onShowError(title: "Ошибка", message: "Невозможно начать \(errMode). Словарь пуст")
         } else {
-            let contoller = self.presAssembly.testController(sourceDict: self.fetchedResultsController.object(at: indexPath))
-            self.delegate?.showLearnController(controller: contoller)
+            if (self.state.testAndLearnMode == .learnMode) {
+                let controller = self.presAssembly.learnController(sourceDict: dict)
+                self.delegate?.showLearnController(controller: controller)
+            } else {
+                let contoller = self.presAssembly.testController(sourceDict: dict)
+                self.delegate?.showLearnController(controller: contoller)
+            }
         }
     }
     

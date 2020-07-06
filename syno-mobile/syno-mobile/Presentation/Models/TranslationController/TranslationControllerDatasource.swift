@@ -114,10 +114,10 @@ class TranslationControllerDataProvider: ITranslationControllerDataProvider {
     
     func updateAt(ind: Int, newTranslation: ITranslationCellConfiguration) {
         let trans = self.translations![ind]
-        trans.comment = newTranslation.comment
-        trans.sample = newTranslation.sample
-        trans.transcription = newTranslation.transcription
-        trans.translation = newTranslation.translation
+        trans.comment = newTranslation.comment?.trimmingCharacters(in: .whitespacesAndNewlines)
+        trans.sample = newTranslation.sample?.trimmingCharacters(in: .whitespacesAndNewlines)
+        trans.transcription = newTranslation.transcription?.trimmingCharacters(in: .whitespacesAndNewlines)
+        trans.translation = newTranslation.translation?.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
     func add() {
@@ -234,11 +234,17 @@ protocol ITranslationCellDidChangeDelegate: class {
     
     /// Gets last focused point
     func getLastFocusedPoint() -> CGPoint?
+    
+    var didChange: Bool { get }
 }
 
 class TranslationControllerDataSource: NSObject, ITranslationControllerDataSource {
     /// Stores real heights for cells
     var cellHeights: [IndexPath: CGFloat] = [:]
+    
+    var didAddNewTranslation: Bool = false
+    
+    var didChange = false
     
     func getTranscription(for word: String) -> String? {
         if (isAutoPhonemesEnabled) {
@@ -252,17 +258,22 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
     }
     
     func updateAt(ind: Int, newTranslation: ITranslationCellConfiguration) {
+        didChange = true
         self.viewModel.updateAt(ind: ind, newTranslation: newTranslation)
     }
     
     func add() {
+        didChange = true
+        didAddNewTranslation = true
         self.viewModel.add()
-        UIView.performWithoutAnimation {
-            self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-        }
+        //UIView.performWithoutAnimation {
+            self.tableView.reloadData()
+        //}
     }
     
     func deleteAt(ind: Int) {
+        didChange = true
+        didAddNewTranslation = false
         self.viewModel.deleteAt(ind: ind)
         UIView.performWithoutAnimation {
             self.tableView.reloadData()
@@ -275,10 +286,18 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cellHeights[indexPath] = cell.frame.size.height
+        if self.didAddNewTranslation && indexPath.row == 0 {
+            self.didAddNewTranslation = false
+            let myCell = cell as! TranslationTableViewCell
+            myCell.baseShadowView.alpha = 0
+            UIView.animate(withDuration: 0.5) {
+                myCell.baseShadowView.alpha = 1
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return cellHeights[indexPath] ?? 200
+        return cellHeights[indexPath] ?? 300
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -289,8 +308,8 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
     @available(iOS 13.0, *)
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (_) -> UIMenu? in
-            let menu = UIMenu(title: "Actions", children: [
-                UIAction(title: "Delete", image: UIImage.init(systemName: "trash.fill"), attributes: .destructive, handler: { (action) in
+            let menu = UIMenu(title: "Действия", children: [
+                UIAction(title: "Удалить", image: UIImage.init(systemName: "trash.fill"), attributes: .destructive, handler: { (action) in
                     UIView.animate(withDuration: 0, delay: 0.5, animations: { () in }) { (_) in
                         self.deleteAt(ind: indexPath.row)
                     }
@@ -306,6 +325,7 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
         }
         cell.setup(config: items[indexPath.row])
         cell.delegate = self
+        
         return cell
     }
     

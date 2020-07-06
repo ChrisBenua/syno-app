@@ -282,7 +282,7 @@ extension DictionaryControllerTableViewDataSource {
     @available(iOS 13.0, *)
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (_) -> UIMenu? in
-            let menu = UIMenu(title: "Actions", children: [
+            let menu = UIMenu(title: "Действия", children: [
                 UIAction(title: "Удалить", image: UIImage.init(systemName: "trash.fill"), attributes: .destructive, handler: { (action) in
                 Timer.scheduledTimer(withTimeInterval: 0.7, repeats: false) { (_) in
                     self.handleDeletion(indexPath: indexPath)

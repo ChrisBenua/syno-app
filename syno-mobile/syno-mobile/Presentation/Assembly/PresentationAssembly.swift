@@ -12,6 +12,10 @@ protocol IPresentationAssembly {
     /// Creates `DictsViewController`
     func dictsViewController() -> DictsViewController
     
+    func accountConfirmationController() -> AccountConfirmationController
+    
+    func emailForConfirmationController() -> EmailForConfirmationController
+    
     /// Creates `CommonTabBarController`
     func mainTabBarController() -> CommonTabBarController
     
@@ -59,15 +63,23 @@ protocol IPresentationAssembly {
 }
 
 class PresentationAssembly: IPresentationAssembly {
+    func emailForConfirmationController() -> EmailForConfirmationController {
+        return EmailForConfirmationController(model: self.serviceAssembly.emailConfirmationModel, presentationAssembly: self)
+    }
+    
+    func accountConfirmationController() -> AccountConfirmationController {
+        return AccountConfirmationController(model: self.serviceAssembly.confirmationModel)
+    }
+    
     /// Assembly for creating/getting services
     private let serviceAssembly: IServiceAssembly
     
     func loginViewController() -> LoginViewController {
-        return LoginViewController(presAssembly: self, loginModel: LoginModel(loginService: serviceAssembly.loginService), registrationViewController: registerViewController())
+        return LoginViewController(presAssembly: self, loginModel: LoginModel(loginService: serviceAssembly.loginService))
     }
     
     func registerViewController() -> RegistrationViewController {
-        return RegistrationViewController(registerModel: RegistrationModel(registerService: self.serviceAssembly.registerService))
+        return RegistrationViewController(registerModel: self.serviceAssembly.registerModel, assembly: self)
     }
     
     func dictsViewController() -> DictsViewController {
@@ -124,8 +136,10 @@ class PresentationAssembly: IPresentationAssembly {
             //DEBUG TODO
             //return self.mainTabBarController()
             return self.loginViewController()
+            //return self.accountConfirmationController()
         } else {
             return self.loginViewController()
+            //return self.accountConfirmationController()
         }
     }
     
@@ -146,7 +160,7 @@ class PresentationAssembly: IPresentationAssembly {
     }
     
     func loginFromHomeViewController() -> UIViewController {
-        return LoginFromHomeViewController(presAssembly: self, loginModel: LoginModel(loginService: serviceAssembly.loginService), registrationViewController: registerViewController())
+        return LoginFromHomeViewController(presAssembly: self, loginModel: LoginModel(loginService: serviceAssembly.loginService))
     }
     
     func addShareController() -> UIViewController {

@@ -72,9 +72,7 @@ class StorageManager: IStorageCoordinator {
     }
     
     func createAppUser(email: String, password: String, isCurrent: Bool) -> DbAppUser? {
-        DispatchQueue.main.sync {
-            self.userManager.createAppUser(email: email, password: password, isCurrent: isCurrent)
-        }
+        self.userManager.createAppUser(email: email, password: password, isCurrent: isCurrent)
     }
     
     func markAppUserAsCurrent(user: DbAppUser) {

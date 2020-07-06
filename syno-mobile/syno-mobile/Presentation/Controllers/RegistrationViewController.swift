@@ -15,7 +15,7 @@ class RegistrationViewController: UIViewController, IRegistrationReactor {
         
         self.processingSaveView.dismissSavingProcessView()
         
-        self.present(UIAlertController.okAlertController(title: "Registration Failed: \(error)"), animated: true, completion: nil)
+        self.present(UIAlertController.okAlertController(title: "Ошибка", message: "Регистрация не удалась: \(error)"), animated: true, completion: nil)
     }
     
     func success() {
@@ -24,18 +24,21 @@ class RegistrationViewController: UIViewController, IRegistrationReactor {
         
         self.processingSaveView.dismissSavingProcessView()
 
-        let alert = UIAlertController.okAlertController(title: "You registered successfully")
+        let alert = UIAlertController.okAlertController(title: "Регистрация прошла успешно")
         self.present(alert, animated: true, completion: nil)
 
         let when = DispatchTime.now() + 0.6
 
         DispatchQueue.main.asyncAfter(deadline: when, execute: {
             alert.dismiss(animated: true)
+            self.present(self.assembly.accountConfirmationController(), animated: true, completion: nil)
         })
     }
     
     /// Instance that performs layout
     private var layouter: IRegistrationLayouter = RegistrationLayouter()
+    
+    private var assembly: IPresentationAssembly
         
     /// Service responsible for inner logic
     private var model: IRegistrationModel
@@ -43,22 +46,26 @@ class RegistrationViewController: UIViewController, IRegistrationReactor {
     /// Process view
     lazy var processingSaveView: SavingProcessView = {
         let view = SavingProcessView()
-        view.setText(text: "Signing in..")
+        view.setText(text: "Регистрация")
         
         return view
     }()
     
     /// Login button click listener
     @objc func onLoginButtonClick() {
-        self.dismiss(animated: true, completion: nil)
+        (self.layouter.alternateAuthButton() as? UILabel)?.flash(duration: 0.3)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.35) {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     /**
      Creates new `RegistrationViewController`
      - Parameter registerModel: Service that performs inner logic in `RegistrationViewController`
      */
-    init(registerModel: IRegistrationModel) {
+    init(registerModel: IRegistrationModel, assembly: IPresentationAssembly) {
         self.model = registerModel
+        self.assembly = assembly
         super.init(nibName: nil, bundle: nil)
         self.model.reactor = self
     }
@@ -95,6 +102,7 @@ class RegistrationViewController: UIViewController, IRegistrationReactor {
     }
     
     @objc func onSubmitButtonClick() {
+        self.layouter.submitButton().flash(toValue: 0.4, duration: 0.25)
         self.model.register()
     }
 }

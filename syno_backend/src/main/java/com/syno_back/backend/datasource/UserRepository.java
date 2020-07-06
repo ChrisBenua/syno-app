@@ -4,6 +4,7 @@ import com.syno_back.backend.model.DbUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -16,4 +17,6 @@ public interface UserRepository extends JpaRepository<DbUser, Long> {
      * @return Optional with <code>DbUser</code> inside if there is such user
      */
     Optional<DbUser> findByEmail(@Param("email") String email);
+
+    List<DbUser> findByIsVerifiedFalse();
 }

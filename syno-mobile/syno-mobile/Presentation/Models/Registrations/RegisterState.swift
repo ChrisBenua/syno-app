@@ -31,21 +31,28 @@ import UIKit
 }
 
 class RegisterState: IRegisterState {
+    private func check(textField: UITextField) {
+        if ((textField.text?.count ?? 0) > 100) {
+            textField.text = String(textField.text![..<textField.text!.index(textField.text!.startIndex, offsetBy: 100)])
+        }
+    }
     @objc func emailTFDidChange(sender: UITextField) {
+        check(textField: sender)
         self.email = sender.text!
         let _ = isOk()
     }
     
     @objc func passwordTFDidChange(sender: UITextField) {
+        check(textField: sender)
         self.password = sender.text!
         let _ = isOk()
     }
     
     @objc func passwordConfTFDidChange(sender: UITextField) {
+        check(textField: sender)
         self.passwordConfirmation = sender.text!
         let _ = isOk()
     }
-    
     
     var email: String
     

@@ -37,8 +37,8 @@ class CommonUIElements {
     static func defaultSubmitButton(text: String, cornerRadius: CGFloat = 15,
                                     backgroundColor: UIColor = .submitButtonMainColor,
                                     borderColor: CGColor = UIColor.gray.cgColor,
-                                    textColor: UIColor = .black) -> UIButton {
-        let button = UIButton(type: .custom)
+                                    textColor: UIColor = .black, type: UIButton.ButtonType = .custom) -> UIButton {
+        let button = UIButton(type: type)
         layerSetup(view: button, cornerRadius: cornerRadius, borderColor: borderColor)
         button.backgroundColor = backgroundColor
 
