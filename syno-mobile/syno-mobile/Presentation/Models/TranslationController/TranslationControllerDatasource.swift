@@ -235,6 +235,10 @@ protocol ITranslationCellDidChangeDelegate: class {
     /// Gets last focused point
     func getLastFocusedPoint() -> CGPoint?
     
+    var tableView: UITableView! { get set }
+    
+    func addOneTranslationIfNeeded()
+    
     var didChange: Bool { get }
 }
 
@@ -372,6 +376,12 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
         self.controllerDelegate?.scrollToTop()
     }
     
+    func addOneTranslationIfNeeded() {
+        if (self.viewModel.getTranslations().count == 0) {
+            self.add()
+        }
+    }
+    
     /**
      Creates new `TranslationControllerDataSource`
      - Parameter viewModel: Service for data delivery
@@ -384,6 +394,7 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
         self.viewModel.sourceCard = sourceCard
         self.phonemesManager = phonemesManager
         self.isAutoPhonemesEnabled = isAutoPhonemesEnabled
+        super.init()
     }
 }
 

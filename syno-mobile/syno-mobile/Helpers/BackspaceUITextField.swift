@@ -7,3 +7,17 @@
 //
 
 import Foundation
+import UIKit
+
+protocol IBackspaceUITextFieldDelegate: class {
+    func onBackspace(sender: UITextField)
+}
+
+class BackspaceUITextField: UITextField {
+    weak var backspaceDelegate: IBackspaceUITextFieldDelegate?
+    
+    override func deleteBackward() {
+        backspaceDelegate?.onBackspace(sender: self)
+        super.deleteBackward()
+    }
+}

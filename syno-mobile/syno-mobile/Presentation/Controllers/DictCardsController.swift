@@ -23,7 +23,7 @@ class DictCardsController: UIViewController {
         colView.contentInset = UIEdgeInsets(top: 30, left: 15, bottom: 0, right: 15)
         
         colView.register(CardCollectionViewCell.self, forCellWithReuseIdentifier: CardCollectionViewCell.cellId)
-        
+        colView.register(EmptyCardsCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: EmptyCardsCollectionViewHeader.headerId)
         return colView
     }()
     

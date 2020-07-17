@@ -3,6 +3,10 @@ import UIKit
 
 /// Controller for presenting dicts in edit mode
 class DictsViewController: UIViewController, IDictionaryControllerReactor {
+    func showEditController(controller: UIViewController) {
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
     /// Process view for sharing process
     lazy var processingSaveView: SavingProcessView = {
         let view = SavingProcessView()
@@ -73,6 +77,7 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
         colView.contentInset = UIEdgeInsets(top: 30, left: 15, bottom: 0, right: 15)
         
         colView.register(DictionaryCollectionViewCell.self, forCellWithReuseIdentifier: DictionaryCollectionViewCell.cellId)
+        colView.register(EmptyDictsCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: EmptyDictsCollectionViewHeader.headerId)
         
         return colView
     }()

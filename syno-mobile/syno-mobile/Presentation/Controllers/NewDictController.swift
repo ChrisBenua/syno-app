@@ -4,7 +4,7 @@ import UIKit
 /// Controller for creating new dictionary
 class NewDictController: UIViewController {
     /// Service responsible for inner logic in `NewDictController`
-    private var model: INewDictControllerModel
+    private var model: INewOrEditDictControllerModel
     
     /// Text Field for entering name of new dictionary
     lazy var nameTextField: UITextFieldWithLabel = {
@@ -14,6 +14,7 @@ class NewDictController: UIViewController {
         tf.placeholder = "Например, \"Природа\""
         tf.clipsToBounds = true
         tf.layer.cornerRadius = 7
+        tf.text = self.model.getDefaultName()
         
         let label = UILabelWithInsets(padding: UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0))
         label.text = "Название:"
@@ -31,6 +32,7 @@ class NewDictController: UIViewController {
         tf.clipsToBounds = true
         tf.placeholder = "Например, \"ru-en\""
         tf.layer.cornerRadius = 7
+        tf.text = self.model.getDefaultLanguage()
         
         let label = UILabelWithInsets(padding: UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0))
         label.text = "Языки:"
@@ -79,7 +81,7 @@ class NewDictController: UIViewController {
      Creates new `NewDictController`
      - Parameter model: Service responsible for inner logic of `NewDictController`
      */
-    init(model: INewDictControllerModel) {
+    init(model: INewOrEditDictControllerModel) {
         self.model = model
         super.init(nibName: nil, bundle: nil)
     }
@@ -90,7 +92,7 @@ class NewDictController: UIViewController {
     
     /// Submit button click listener
     @objc func onSubmitButtonPressed() {
-        model.createNewDict(newDict: NewDictControllerNewDictDto(name: self.nameTextField.getTextField().text ?? "", language: self.languageTextField.getTextField().text ?? "")) {
+        model.saveNewDict(newDict: NewDictControllerNewDictDto(name: self.nameTextField.getTextField().text ?? "", language: self.languageTextField.getTextField().text ?? "")) {
             DispatchQueue.main.async {
                 self.navigationController?.popViewController(animated: true)
             }

@@ -25,20 +25,32 @@ class NewDictControllerNewDictDto: INewDictControllerNewDictDto {
 }
 
 /// Protocol for service with inner logic of `NewDictController`
-protocol INewDictControllerModel {
+protocol INewOrEditDictControllerModel {
     /**
      Creates new dictionary
      - Parameter newDict: dto describing new dictionary data
      - Parameter completionHandler: completion callback
      */
-    func createNewDict(newDict: INewDictControllerNewDictDto, completionHandler: (() -> Void)?)
+    func saveNewDict(newDict: INewDictControllerNewDictDto, completionHandler: (() -> Void)?)
+    
+    func getDefaultName() -> String?
+    
+    func getDefaultLanguage() -> String?
 }
 
-class NewDictControllerModel: INewDictControllerModel {
+class NewDictControllerModel: INewOrEditDictControllerModel {
+    func getDefaultName() -> String? {
+        return nil
+    }
+    
+    func getDefaultLanguage() -> String? {
+        return nil
+    }
+    
     /// Service for safely interacting with CoreData
     private var storageManager: IStorageCoordinator
     
-    func createNewDict(newDict: INewDictControllerNewDictDto, completionHandler: (() -> Void)?) {
+    func saveNewDict(newDict: INewDictControllerNewDictDto, completionHandler: (() -> Void)?) {
         self.storageManager.stack.saveContext.performAndWait {
             let dict = DbUserDictionary.insertUserDict(into: self.storageManager.stack.saveContext)!
             dict.timeCreated = Date()
@@ -56,5 +68,45 @@ class NewDictControllerModel: INewDictControllerModel {
      */
     init(storageManager: IStorageCoordinator) {
         self.storageManager = storageManager
+    }
+}
+
+class EditDictControllerModel: INewOrEditDictControllerModel {
+    
+    private let storageManager: IStorageCoordinator
+    private var dictToEdit: DbUserDictionary
+    
+    init(storageManager: IStorageCoordinator, dictToEdit: DbUserDictionary) {
+        self.storageManager = storageManager
+        self.dictToEdit = dictToEdit
+    }
+    
+    func saveNewDict(newDict: INewDictControllerNewDictDto, completionHandler: (() -> Void)?) {
+        self.dictToEdit.managedObjectContext?.perform {
+            self.dictToEdit.name = newDict.name
+            self.dictToEdit.language = newDict.language
+            
+            if let context = self.dictToEdit.managedObjectContext {
+                self.storageManager.stack.performSave(with: context, completion: completionHandler)
+            }
+        }
+    }
+    
+    func getDefaultName() -> String? {
+        var dictName: String?
+        self.dictToEdit.managedObjectContext?.performAndWait {
+            dictName = self.dictToEdit.name
+        }
+        
+        return dictName
+    }
+    
+    func getDefaultLanguage() -> String? {
+        var defaultLang: String?
+        self.dictToEdit.managedObjectContext?.performAndWait {
+            defaultLang = self.dictToEdit.language
+        }
+        
+        return defaultLang
     }
 }

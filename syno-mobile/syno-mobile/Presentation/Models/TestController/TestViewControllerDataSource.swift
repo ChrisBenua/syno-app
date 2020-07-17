@@ -273,12 +273,15 @@ class TestViewControllerDataSource: NSObject, ITestViewControllerDataSource, ITe
     
     func endEditingInCell(cell: UITableViewCell) {
         Logger.log("end editing")
-        onFocusedLabelDelegate?.scrollToTop()
+        //onFocusedLabelDelegate?.scrollToTop()
     }
         
     func beginEditingInCell(cell: UITableViewCell) {
         let rect = reactor!.tableView.rectForRow(at: reactor!.tableView.indexPath(for: cell)!)
-        onFocusedLabelDelegate?.scrollToPoint(point: CGPoint(x: rect.origin.x, y: rect.origin.y + rect.width))
+        Logger.log("rect: \(rect)")
+        let point = CGPoint(x: rect.origin.x, y: rect.origin.y + rect.height)
+        
+        onFocusedLabelDelegate?.scrollToPoint(point: point, sender: reactor!.tableView)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -325,6 +328,15 @@ class TestViewControllerDataSource: NSObject, ITestViewControllerDataSource, ITe
     func textDidChange(sender: UITableViewCell, text: String?) {
         let indexPath = reactor!.tableView.indexPath(for: sender)!
         self.state.answers.setAnswer(pos1: self.state.itemNumber, pos2: indexPath.row, answer: text ?? "")
+    }
+    
+    func onReturn(sender: UITableViewCell) {
+        let indexPath = reactor!.tableView.indexPath(for: sender)!
+        if let cell = reactor!.tableView.cellForRow(at: IndexPath(row: indexPath.row + 1, section: indexPath.section)) as? TestControllerTranslationTableViewCell {
+            cell.translationTextField.becomeFirstResponder()
+        } else {
+            //onFocusedLabelDelegate?.scrollToTop()
+        }
     }
     
     /**

@@ -27,7 +27,9 @@ protocol IServiceAssembly {
     var dictionaryControllerDataProvider: IDictionaryControllerDataProvider { get }
     
     /// Service responsible for inner logic inside NewDictionaryController
-    var newDictControllerModel: INewDictControllerModel { get }
+    var newDictControllerModel: INewOrEditDictControllerModel { get }
+    
+    func editDictControllerModel(dictToEdit: DbUserDictionary) -> INewOrEditDictControllerModel
     
     /// Service responsible for sharing dictionaries
     var dictShareService: IDictShareService { get }
@@ -90,7 +92,7 @@ protocol IServiceAssembly {
 
 /// Provides all services realizations
 class ServiceAssembly: IServiceAssembly {
-    var newDictControllerModel: INewDictControllerModel
+    var newDictControllerModel: INewOrEditDictControllerModel
     
     private let coreAssembly: ICoreAssembly
     
@@ -209,5 +211,9 @@ class ServiceAssembly: IServiceAssembly {
     
     func homeControllerDataProvider(presAssembly: IPresentationAssembly) -> IHomeControllerMenuDataProvider {
         return HomeControllerMenuDataProvider(presAssembly: presAssembly, dictControllerModel: self.dictControllerModel(), currentUserManager: self.coreAssembly.storageManager, updateService: self.updateRequestService, transferService: self.transferService)
+    }
+    
+    func editDictControllerModel(dictToEdit: DbUserDictionary) -> INewOrEditDictControllerModel {
+        return EditDictControllerModel(storageManager: self.coreAssembly.storageManager, dictToEdit: dictToEdit)
     }
 }

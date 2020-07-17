@@ -57,7 +57,7 @@ class RegistrationLayouter: LoginRegistrationLayouter, IRegistrationLayouter {
             return tf
         }
         
-        let tf = CommonUIElements.defaultTextField(cornerRadius: 20, edgeInsets: UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0))
+        let tf = CommonUIElements.defaultTextField(cornerRadius: 18, edgeInsets: UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0))
         tf.placeholder = "Подтвердите Пароль"
         tf.isSecureTextEntry = true
         tf.font = .systemFont(ofSize: 20)
@@ -76,7 +76,7 @@ class RegistrationLayouter: LoginRegistrationLayouter, IRegistrationLayouter {
         sv.axis = .vertical
         sv.distribution = .fill
 
-        emailTextField().heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.19).isActive = true
+        emailTextField().heightAnchor.constraint(greaterThanOrEqualTo: sv.heightAnchor, multiplier: 0.19).isActive = true
         passwordTextField().heightAnchor.constraint(equalTo: emailTextField().heightAnchor).isActive = true
         passwordConfirmationTextField().heightAnchor.constraint(equalTo: emailTextField().heightAnchor).isActive = true
         submitButton().heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.19).isActive = true

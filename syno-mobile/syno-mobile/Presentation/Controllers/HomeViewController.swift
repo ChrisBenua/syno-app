@@ -89,7 +89,7 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
         label.isUserInteractionEnabled = true
         label.clipsToBounds = true
         label.layer.cornerRadius = 10
-        label.text = "Копировать Словари анонимного пользователя"
+        label.text = "Копировать словари анонимного пользователя"
         label.numberOfLines = 2
         label.lineBreakMode = .byWordWrapping
         label.backgroundColor = .white
