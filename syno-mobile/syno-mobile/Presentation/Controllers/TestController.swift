@@ -12,8 +12,8 @@ class TestViewController: UIViewController, IScrollableToPoint {
     /// Shown card number
     private var currCardNumber: Int = 0
     
-    func scrollToPoint(point: CGPoint) {
-        lastFocusedPoint = point
+    func scrollToPoint(point: CGPoint, sender: UIView?) {
+        lastFocusedPoint = sender?.convert(point, to: self.view)
     }
     
     func scrollToTop() {
@@ -128,6 +128,7 @@ class TestViewController: UIViewController, IScrollableToPoint {
         }
         
         var nextView: ITestView?
+        let contentView = self.contentView
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
             switch sender.direction {
             case .left:
@@ -147,6 +148,7 @@ class TestViewController: UIViewController, IScrollableToPoint {
                         nextView?.transform = CGAffineTransform(translationX: self.view.frame.width, y: 0)
                     }
                     nextView?.transform = CGAffineTransform(translationX: 0, y: 0)
+                    self.currCardNumber += 1
                 }
                 break
             case .right:
@@ -167,6 +169,7 @@ class TestViewController: UIViewController, IScrollableToPoint {
                         nextView?.transform = CGAffineTransform(translationX: -self.view.frame.width, y: 0)
                     }
                     nextView?.transform = CGAffineTransform(translationX: 0, y: 0)
+                    self.currCardNumber -= 1
                 }
                 break
             default:
@@ -174,20 +177,8 @@ class TestViewController: UIViewController, IScrollableToPoint {
             }
         }) { (_) in
             if (success) {
-                self.contentView.removeFromSuperview()
+                contentView.removeFromSuperview()
                 nextView?.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
-                switch sender.direction {
-                case .left:
-                    if self.currCardNumber < self.testViews.count - 1 {
-                        self.currCardNumber += 1
-                    }
-                case .right:
-                    if self.currCardNumber > 0 {
-                        self.currCardNumber -= 1
-                    }
-                default:
-                    break
-                }
             }
         }
     }
@@ -234,11 +225,12 @@ extension TestViewController {
             Logger.log("lastPoint: \(lastFocusedPoint?.y)")
             Logger.log("keyboard height:\(keyboardHeight)")
             
-            let neededShift = UIScreen.main.bounds.height - lastFocusedPoint!.y - keyboardHeight + 60
+            let neededShift = UIScreen.main.bounds.height - lastFocusedPoint!.y - keyboardHeight
             Logger.log("neededShift: \(neededShift)")
+            Logger.log("currOffset: \(scrollView.contentOffset.y)")
             if (neededShift < 0) {
-                self.scrollView.contentInset.bottom = -neededShift + scrollView.contentOffset.y + 20
-                self.scrollView.setContentOffset(CGPoint(x: 0, y: -neededShift), animated: true)
+                self.scrollView.contentInset.bottom += -neededShift
+                self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollView.contentOffset.y - neededShift), animated: true)
             }
         }
     }

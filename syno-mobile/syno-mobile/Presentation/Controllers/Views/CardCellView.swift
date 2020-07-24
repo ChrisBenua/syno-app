@@ -67,7 +67,7 @@ class CardCollectionViewCell: UICollectionViewCell, IConfigurableCardCell {
     /// Label for displaying card's translated word
     let translatedWordLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.textColor = .headerMainColor
         
         label.textAlignment = .left
@@ -77,7 +77,7 @@ class CardCollectionViewCell: UICollectionViewCell, IConfigurableCardCell {
     /// Label for displaying card's translations
     let translationsLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 20, weight: .light)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .light)
         
         label.textAlignment = .right
         return label

@@ -29,9 +29,11 @@ protocol IConfigurableTestControllerTranslationCell {
 protocol ITestControllerTranslationCellDelegate: class {
     /// User's answer change handler
     func textDidChange(sender: UITableViewCell, text: String?)
+    
+    func onReturn(sender: UITableViewCell)
 }
 
-class TestControllerTranslationTableViewCell: UITableViewCell, IConfigurableTestControllerTranslationCell, UITextFieldDelegate {
+class TestControllerTranslationTableViewCell: UITableViewCell, IConfigurableTestControllerTranslationCell {
     /// Cell's reuse identifier
     static let cellId = "TestControllerTranslationTableViewCellId"
     
@@ -71,6 +73,7 @@ class TestControllerTranslationTableViewCell: UITableViewCell, IConfigurableTest
         tf.backgroundColor = .white
         tf.font = .systemFont(ofSize: 22, weight: .light)
         tf.addTarget(self, action: #selector(onTranslationTextChanged(_:)), for: .editingChanged)
+        tf.delegate = self
         tf.clipsToBounds = true
         
         tf.layer.cornerRadius = 7
@@ -98,5 +101,12 @@ class TestControllerTranslationTableViewCell: UITableViewCell, IConfigurableTest
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension TestControllerTranslationTableViewCell: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.delegate?.onReturn(sender: self)
+        return true
     }
 }

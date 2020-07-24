@@ -126,6 +126,8 @@ protocol IDictionaryControllerTableViewDataSource: ICommonDictionaryControllerDa
     
     func handleDeletion(indexPath: IndexPath)
     
+    func handleEdit(indexPath: IndexPath)
+    
     /// Checks if user is authorized
     func isAuthorized() -> Bool
     
@@ -137,6 +139,8 @@ protocol IDictionaryControllerTableViewDataSource: ICommonDictionaryControllerDa
 protocol IDictionaryControllerReactor: class {
     /// Shows given controller
     func showCardsController(controller: UIViewController)
+    
+    func showEditController(controller: UIViewController)
     
     /// Notifies on item deletion
     func onItemDeleted()
@@ -156,6 +160,11 @@ class DictionaryControllerTableViewDataSource: NSObject, IDictionaryControllerTa
     func handleDeletion(indexPath: IndexPath) {
         self.delegate?.onItemDeleted()
         self.delete(object: self.fetchedResultsController.object(at: indexPath))
+    }
+    
+    func handleEdit(indexPath: IndexPath) {
+        let controller = self.presAssembly.editDictController(dictToEdit: self.fetchedResultsController.object(at: indexPath))
+        self.delegate?.showEditController(controller: controller)
     }
     
     func undoLastDeletion() {
@@ -279,18 +288,36 @@ extension DictionaryControllerTableViewDataSource {
         self.delegate?.showCardsController(controller: controller)
     }
     
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: EmptyDictsCollectionViewHeader.headerId, for: indexPath)
+        
+        return header
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        if let objCount = self.fetchedResultsController.fetchedObjects, objCount.count == 0 {
+            return CGSize(width: collectionView.frame.width, height: 140)
+        }
+        return CGSize.zero
+    }
+    
+    
     @available(iOS 13.0, *)
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (_) -> UIMenu? in
             let menu = UIMenu(title: "Действия", children: [
+                UIAction(title: "Поделиться", image: UIImage.init(systemName: "square.and.arrow.up"), handler: { (action) in
+                    self.handleShare(indexPath: indexPath)
+                }),
+                UIAction(title: "Редактировать", image: UIImage.init(systemName: "square.and.pencil"), handler: { (action) in
+                    self.handleEdit(indexPath: indexPath)
+                }),
                 UIAction(title: "Удалить", image: UIImage.init(systemName: "trash.fill"), attributes: .destructive, handler: { (action) in
                 Timer.scheduledTimer(withTimeInterval: 0.7, repeats: false) { (_) in
                     self.handleDeletion(indexPath: indexPath)
                     }
                 }),
-                UIAction(title: "Поделиться", image: UIImage.init(systemName: "square.and.arrow.up"), handler: { (action) in
-                    self.handleShare(indexPath: indexPath)
-                })
             ])
             return menu
         }

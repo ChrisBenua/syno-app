@@ -4,7 +4,7 @@ import UIKit
 /// Defines actions with view to move view up and down depending on keyboard position
 protocol IScrollableToPoint: class {
     /// Gives info about last focused view's position on screen
-    func scrollToPoint(point: CGPoint)
+    func scrollToPoint(point: CGPoint, sender: UIView?)
     
     /// Notifies when all input view are not focused
     func scrollToTop()
@@ -24,8 +24,8 @@ class TestView: UIView, ITestView {
         parentController?.scrollToTop()
     }
     
-    func scrollToPoint(point: CGPoint) {
-        parentController?.scrollToPoint(point: point)
+    func scrollToPoint(point: CGPoint, sender: UIView?) {
+        parentController?.scrollToPoint(point: point, sender: sender)
     }
     
     weak var parentController: IScrollableToPoint?

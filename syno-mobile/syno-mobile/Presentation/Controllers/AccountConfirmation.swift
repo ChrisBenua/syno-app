@@ -24,7 +24,8 @@ class AccountConfirmationController: UIViewController {
     
     lazy var digitTextFields: [UITextField] = {
         let textFields = (0..<6).map { (_) -> UITextField in
-            let textField = UITextField()
+            let textField = BackspaceUITextField()
+            textField.backspaceDelegate = self
             textField.translatesAutoresizingMaskIntoConstraints = false
             textField.textAlignment = .center
             textField.backgroundColor = UIColor(red: 247.0/255, green: 247.0/255, blue: 247.0/255, alpha: 1)
@@ -130,6 +131,17 @@ class AccountConfirmationController: UIViewController {
     }
 }
 
+extension AccountConfirmationController: IBackspaceUITextFieldDelegate {
+    func onBackspace(sender: UITextField) {
+        if (sender.text?.count ?? 0) == 0, let tfIndex = self.digitTextFields.firstIndex(of: sender) {
+            if tfIndex > 0 {
+                self.digitTextFields[tfIndex - 1].becomeFirstResponder()
+                self.digitTextFields[tfIndex - 1].text = ""
+            }
+        }
+    }
+}
+
 extension AccountConfirmationController: IAccountConfirmationModelDelegate {
     func onSuccess() {
         self.processingSaveView.dismissSavingProcessView()
@@ -160,7 +172,5 @@ extension AccountConfirmationController: IAccountConfirmationModelDelegate {
             alert.dismiss(animated: true, completion: nil)
         })
     }
-    
-    
 }
 

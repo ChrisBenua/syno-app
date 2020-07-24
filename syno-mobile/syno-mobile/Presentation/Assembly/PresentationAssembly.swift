@@ -48,6 +48,8 @@ protocol IPresentationAssembly {
     /// Creates `NewDictController`
     func newDictController() -> UIViewController
     
+    func editDictController(dictToEdit: DbUserDictionary) -> UIViewController
+    
     /// Creates `TestResultsViewController`
     /// - Parameter sourceTest: test which results to present
     func testResultsController(sourceTest: DbUserTest) -> UIViewController
@@ -134,8 +136,8 @@ class PresentationAssembly: IPresentationAssembly {
     func startController() -> UIViewController {
         if (self.serviceAssembly.userAuthHelper.isAuthorized()) {
             //DEBUG TODO
-            //return self.mainTabBarController()
-            return self.loginViewController()
+            return self.mainTabBarController()
+            //return self.loginViewController()
             //return self.accountConfirmationController()
         } else {
             return self.loginViewController()
@@ -149,6 +151,10 @@ class PresentationAssembly: IPresentationAssembly {
     
     func newDictController() -> UIViewController {
         return NewDictController(model: self.serviceAssembly.newDictControllerModel)
+    }
+    
+    func editDictController(dictToEdit: DbUserDictionary) -> UIViewController {
+        return NewDictController(model: self.serviceAssembly.editDictControllerModel(dictToEdit: dictToEdit))
     }
     
     func testResultsController(sourceTest: DbUserTest) -> UIViewController {

@@ -118,7 +118,7 @@ class LoginRegistrationLayouter: ILoginLayouter {
             return passwordTf
         }
         
-        let tf = CommonUIElements.defaultTextField(cornerRadius: 20, edgeInsets: UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0))
+        let tf = CommonUIElements.defaultTextField(cornerRadius: 18, edgeInsets: UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0))
         tf.placeholder = "Пароль"
         tf.isSecureTextEntry = true
         tf.font = .systemFont(ofSize: 20)
@@ -134,7 +134,7 @@ class LoginRegistrationLayouter: ILoginLayouter {
             return emailTf
         }
         
-        let tf = CommonUIElements.defaultTextField(cornerRadius: 20, edgeInsets: UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0))
+        let tf = CommonUIElements.defaultTextField(cornerRadius: 18, edgeInsets: UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0))
         tf.placeholder = "Email"
         tf.font = .systemFont(ofSize: 20)
         tf.translatesAutoresizingMaskIntoConstraints = false
@@ -150,7 +150,7 @@ class LoginRegistrationLayouter: ILoginLayouter {
             return but
         }
         
-        let button = CommonUIElements.defaultSubmitButton(text: "Войти", cornerRadius: 25)
+        let button = CommonUIElements.defaultSubmitButton(text: "Войти", cornerRadius: 18)
         button.setAttributedTitle(NSAttributedString(string: "Войти", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)]), for: UIKit.UIControl.State.normal)
 
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -167,7 +167,7 @@ class LoginRegistrationLayouter: ILoginLayouter {
         sv.axis = .vertical
         sv.distribution = .fill
 
-        emailTextField().heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.26).isActive = true
+        emailTextField().heightAnchor.constraint(greaterThanOrEqualTo: sv.heightAnchor, multiplier: 0.26).isActive = true
         passwordTextField().heightAnchor.constraint(equalTo: emailTextField().heightAnchor).isActive = true
         submitButton().heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.26).isActive = true
 
@@ -269,7 +269,7 @@ class LoginRegistrationLayouter: ILoginLayouter {
         
         sv.addSubview(questionView())
         
-        questionView().anchor(top: _allStackView?.topAnchor, left: nil, bottom: nil, right: _allStackView?.rightAnchor, paddingTop: 40, paddingLeft: 0, paddingBottom: 0, paddingRight: 20, width: 0, height: 0)
+        questionView().anchor(top: _allStackView?.safeAreaLayoutGuide.topAnchor, left: nil, bottom: nil, right: _allStackView?.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 20, width: 0, height: 0)
         questionView().widthAnchor.constraint(lessThanOrEqualTo: _allStackView!.widthAnchor, multiplier: 1, constant: -40).isActive = true
         
         return sv

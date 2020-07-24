@@ -153,6 +153,12 @@ class LoginViewController: UIViewController, ILoginReactor {
         
         self.removeKeyboardObservers()
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        Logger.log("Bounds: \(self.layouter.emailTextField().bounds)")
+        Logger.log("\(self.view.bounds)")
+    }
 }
 
 

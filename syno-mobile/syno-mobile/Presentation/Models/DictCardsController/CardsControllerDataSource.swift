@@ -201,7 +201,7 @@ class CardsControllerDataSource: NSObject, ICardsControllerDataSource {
 
 extension CardsControllerDataSource {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width - 30, height: 50)
+        return CGSize(width: collectionView.frame.width - 30, height: 46)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -214,6 +214,19 @@ extension CardsControllerDataSource {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.delegate?.onSelectedItem(item: self.fetchedResultsController.object(at: indexPath))
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: EmptyCardsCollectionViewHeader.headerId, for: indexPath)
+        
+        return header
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        if let objCount = self.fetchedResultsController.fetchedObjects, objCount.count == 0 {
+            return CGSize(width: collectionView.frame.width, height: 140)
+        }
+        return CGSize.zero
     }
     
     @available(iOS 13.0, *)

@@ -20,6 +20,7 @@ class TranslatedWordView: UIView {
         label.font = .systemFont(ofSize: 20, weight: .regular)
         label.textColor = .headerMainColor
         label.textAlignment = .center
+        label.placeholder = "Переводимое слово"
         
         return label
     }()

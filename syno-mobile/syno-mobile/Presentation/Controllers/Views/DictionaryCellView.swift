@@ -98,7 +98,7 @@ class DictionaryCollectionViewCell: UICollectionViewCell, IConfigurableDictionar
         
         self.contentView.addSubview(mainSV)
         mainSV.spacing = 8
-        mainSV.anchor(top: self.contentView.topAnchor, left: self.contentView.leftAnchor, bottom: self.contentView.bottomAnchor, right: self.contentView.rightAnchor, paddingTop: 0, paddingLeft: 15, paddingBottom: 20, paddingRight: 15, width: 0, height: 0)
+        mainSV.anchor(top: self.contentView.topAnchor, left: self.contentView.leftAnchor, bottom: self.contentView.bottomAnchor, right: self.contentView.rightAnchor, paddingTop: 0, paddingLeft: 12, paddingBottom: 17, paddingRight: 13, width: 0, height: 0)
     }
     
     /// Forbidden to create from storyboard

@@ -74,6 +74,7 @@ class LearnCollectionViewController: UIViewController {
     @objc func handleSwipes(_ sender: UISwipeGestureRecognizer) {
         var nextView: ILearnView?
         var success: Bool = false
+        let contentView = self.contentView
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
             switch sender.direction {
             case .left:
@@ -93,6 +94,7 @@ class LearnCollectionViewController: UIViewController {
                         nextView?.transform = CGAffineTransform(translationX: self.view.frame.width, y: 0)
                     }
                     nextView?.transform = CGAffineTransform(translationX: 0, y: 0)
+                    self.currCardNumber += 1
                 }
             case .right:
                 Logger.log("Right Swipe")
@@ -112,26 +114,15 @@ class LearnCollectionViewController: UIViewController {
                         nextView?.transform = CGAffineTransform(translationX: -self.view.frame.width, y: 0)
                     }
                     nextView?.transform = CGAffineTransform(translationX: 0, y: 0)
+                    self.currCardNumber -= 1
                 }
             default:
                 break
             }
         }) { (_) in
             if (success) {
-                self.contentView.removeFromSuperview()
+                contentView.removeFromSuperview()
                 nextView?.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
-                switch sender.direction {
-                case .left:
-                    if self.currCardNumber < self.data.cardsAmount - 1 {
-                        self.currCardNumber += 1
-                    }
-                case .right:
-                    if self.currCardNumber > 0 {
-                        self.currCardNumber -= 1
-                    }
-                default:
-                    break
-                }
             }
         }
     }
