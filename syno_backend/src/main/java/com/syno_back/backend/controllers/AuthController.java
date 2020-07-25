@@ -8,7 +8,7 @@ import com.syno_back.backend.dto.NewUser;
 import com.syno_back.backend.dto.VerificationRequestDto;
 import com.syno_back.backend.jwt.JwtResponse;
 import com.syno_back.backend.jwt.auth.JwtProvider;
-import com.syno_back.backend.model.DbUser;
+import com.syno_back.backend.service.IAuthControllerService;
 import com.syno_back.backend.service.IEmailService;
 import com.syno_back.backend.service.IVerificationCodeGenerator;
 import org.slf4j.Logger;
@@ -26,7 +26,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -76,6 +75,9 @@ public class AuthController {
 
     @Value("${app.needs-email-verification}")
     private boolean isVerificationEnabled;
+
+    @Autowired
+    private IAuthControllerService authControllerService;
 
     /**
      * Accepts login request
@@ -169,35 +171,13 @@ public class AuthController {
      * @return ResponseEntity&lt;MessageResponse&gt; with failure or success message
      */
     @PostMapping("/signup")
-    public ResponseEntity registerUser(@Valid @RequestBody NewUser newUser) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody NewUser newUser) {
         logger.info("POST: /api/auth/signup : {}", newUser.toString());
-        var candidate = userRepository.findByEmail(newUser.getEmail());
-        if (candidate.isEmpty()) {
-            //additional checking
-
-            var user = new DbUser(newUser.getEmail(), passwordEncoder.encode(newUser.getPassword()));
-            user.setRoles(Arrays.asList(rolesRepository.findByName("ROLE_USER")));
-            if (isVerificationEnabled) {
-                user.setVerified(false);
-                String code = verificationCodeGenerator.generate(newUser.getEmail());
-                user.setVerificationCode(code);
-                try {
-                    emailService.sendVerificationEmail(newUser.getEmail(), code);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return new ResponseEntity<>(new MessageResponse("Error, check your email"), HttpStatus.BAD_REQUEST);
-                }
-            } else {
-                user.setVerified(true);
-            }
-            userRepository.save(user);
-
-            logger.info("User {} is registered now!", newUser.getEmail());
-
-            return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-        } else {
-            logger.info("User with email: {} already exists", newUser.getEmail());
-            return new ResponseEntity<>(new MessageResponse("User already exists!"), HttpStatus.BAD_REQUEST);
+        try {
+            var user = authControllerService.createUser(newUser, List.of("ROLE_USER"), !isVerificationEnabled, isVerificationEnabled);
+            return ResponseEntity.ok(MessageResponse.of("User registered successfully!"));
+        } catch (Exception ex) {
+            return new ResponseEntity<>(MessageResponse.of(ex.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 

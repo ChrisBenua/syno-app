@@ -3,9 +3,11 @@ package com.syno_back.backend.controllers;
 import com.syno_back.backend.datasource.RolesRepository;
 import com.syno_back.backend.datasource.UserRepository;
 import com.syno_back.backend.dto.MessageResponse;
+import com.syno_back.backend.dto.NewUser;
 import com.syno_back.backend.dto.UpdateRequestDto;
 import com.syno_back.backend.dto.UserDictionary;
 import com.syno_back.backend.model.DbUser;
+import com.syno_back.backend.service.IAuthControllerService;
 import com.syno_back.backend.service.IUserDictionaryControllerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +47,9 @@ public class AdminController {
     @Autowired
     private RolesRepository rolesRepository;
 
+    @Autowired
+    private IAuthControllerService authControllerService;
+
     private void createAdminUserIfNeeded() {
         var adminCandidate = userRepository.findByEmail("admin@admin.com");
 
@@ -72,7 +77,7 @@ public class AdminController {
     }
 
     @PostMapping(value = "/update/{email}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateUserDicts(@PathVariable String email, @Valid @RequestBody UpdateRequestDto requestDto) {
         logger.info("POST: api/dicts/update for user {}", email);
 
@@ -82,6 +87,16 @@ public class AdminController {
         } catch (Exception ex) {
             return new ResponseEntity<>(new MessageResponse(String.format("Failed: %s", ex.getMessage())), HttpStatus.BAD_REQUEST);
         }
+    }
 
+    @PostMapping(value = "/create_user")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> createUser(@Valid @RequestBody NewUser newUser) {
+        try {
+            var user = authControllerService.createUser(newUser, List.of("ROLE_USER"), true, false);
+            return ResponseEntity.ok(MessageResponse.of(String.format("User %s created successfully", newUser.getEmail())));
+        } catch (Exception ex) {
+            return new ResponseEntity<>(MessageResponse.of(ex.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 }
