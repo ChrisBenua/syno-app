@@ -1,17 +1,12 @@
 package com.syno_back.backend.controllers;
 
-import com.syno_back.backend.datasource.DbUserDictionaryRepository;
-import com.syno_back.backend.datasource.UserRepository;
 import com.syno_back.backend.dto.MessageResponse;
 import com.syno_back.backend.dto.UpdateRequestDto;
 import com.syno_back.backend.dto.UserDictionary;
-import com.syno_back.backend.model.DbUserDictionary;
-import com.syno_back.backend.service.IDictsUpdateService;
-import com.syno_back.backend.service.IDtoMapper;
+import com.syno_back.backend.service.IUserDictionaryControllerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
-
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,29 +26,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/dicts")
 public class UserDictionaryController {
     private static final Logger logger = LoggerFactory.getLogger(UserDictionaryController.class);
-    /**
-     * Repository for fetching  <code>DbUserDictionary</code>
-     */
-    @Autowired
-    private DbUserDictionaryRepository userDictionaryRepository;
 
-    /**
-     * Repository for fetching <code>DbUser</code>
-     */
     @Autowired
-    private UserRepository userRepository;
-
-    /**
-     * Service for mapping <code>DbUserDictionary</code> to <code>UserDictionary</code>
-     */
-    @Autowired
-    private IDtoMapper<DbUserDictionary, UserDictionary> fromDtoMapper;
-
-    /**
-     * Service for updating/creating/deleting <code>DbUserDictionary</code>
-     */
-    @Autowired
-    private IDictsUpdateService dictsUpdateService;
+    private IUserDictionaryControllerService controllerService;
 
     /**
      * Gets all user's dictionaries
@@ -68,9 +41,8 @@ public class UserDictionaryController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<UserDictionary>> getUserDictionaries(Authentication auth) {
         logger.info("GET: /api/dicts/my_all for user {}", ((User)auth.getPrincipal()).getUsername());
-        var dtoResp = userDictionaryRepository.findByOwner_Email(((User)auth.getPrincipal()).getUsername()).stream().
-                        map((dict) -> fromDtoMapper.convert(dict, null)).collect(Collectors.toList());
-        return ResponseEntity.ok(dtoResp);
+
+        return ResponseEntity.ok(controllerService.allForUser(((User)auth.getPrincipal()).getUsername()).collect(Collectors.toList()));
     }
 
     /**
@@ -81,14 +53,17 @@ public class UserDictionaryController {
      */
     @PostMapping(value = "/update")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity updateUserDicts(Authentication auth, @Valid @RequestBody UpdateRequestDto requestDto) {
+    public ResponseEntity<?> updateUserDicts(Authentication auth, @Valid @RequestBody UpdateRequestDto requestDto) {
         logger.info("POST: api/dicts/update for user {}", ((User)auth.getPrincipal()).getUsername());
 
         String userEmail = ((User)auth.getPrincipal()).getUsername();
-        var owner = userRepository.findByEmail(userEmail);
 
-        dictsUpdateService.performUpdates(owner.get(), requestDto);
+        try {
+            controllerService.performUpdates(userEmail, requestDto);
+            return ResponseEntity.ok(new MessageResponse("Updated successfully"));
+        } catch (Exception ex) {
+            return new ResponseEntity<>(new MessageResponse(String.format("Failed: %s", ex.getMessage())), HttpStatus.BAD_REQUEST);
+        }
 
-        return ResponseEntity.ok(new MessageResponse("Updated successfully"));
     }
 }
