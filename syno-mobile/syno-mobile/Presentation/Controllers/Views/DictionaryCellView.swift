@@ -79,12 +79,16 @@ class DictionaryCollectionViewCell: UICollectionViewCell, IConfigurableDictionar
         self.translationsAmountLabel.text = "\(translationsAmount) \(translationsEnding)"
     }
     
+    lazy var baseShadowView: BaseShadowView = {
+        let view = BaseShadowView()
+        view.cornerRadius = 10
+        view.shadowView.shadowOffset = CGSize(width: 0, height: 4)
+        view.containerViewBackgroundColor = UIColor(red: 240.0/255, green: 240.0/255, blue: 240.0/255, alpha: 1)
+        
+        return view
+    }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        self.backgroundView = UIImageView(image: #imageLiteral(resourceName: "DictCellBackgroung"))
-        
+    lazy var stackView: UIStackView = {
         let transAndLangStackView = UIStackView(arrangedSubviews: [translationsAmountLabel, languageLabel])
         transAndLangStackView.axis = .horizontal;transAndLangStackView.translatesAutoresizingMaskIntoConstraints = false
         transAndLangStackView.distribution = .fillProportionally
@@ -96,9 +100,20 @@ class DictionaryCollectionViewCell: UICollectionViewCell, IConfigurableDictionar
         nameLabel.heightAnchor.constraint(equalTo: mainSV.heightAnchor, multiplier: 0.4).isActive = true
         transAndLangStackView.heightAnchor.constraint(equalTo: cardsAmountLabel.heightAnchor, multiplier: 1).isActive = true
         
-        self.contentView.addSubview(mainSV)
         mainSV.spacing = 8
-        mainSV.anchor(top: self.contentView.topAnchor, left: self.contentView.leftAnchor, bottom: self.contentView.bottomAnchor, right: self.contentView.rightAnchor, paddingTop: 0, paddingLeft: 12, paddingBottom: 17, paddingRight: 13, width: 0, height: 0)
+        
+        
+        return mainSV
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.contentView.addSubview(self.baseShadowView)
+        baseShadowView.anchor(top: self.contentView.topAnchor, left: self.contentView.leftAnchor, bottom: self.contentView.bottomAnchor, right: self.contentView.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        
+        self.baseShadowView.containerView.addSubview(stackView)
+        
+        stackView.anchor(top: self.baseShadowView.topAnchor, left: self.baseShadowView.leftAnchor, bottom: self.baseShadowView.bottomAnchor, right: self.baseShadowView.rightAnchor, paddingTop: 5, paddingLeft: 12, paddingBottom: 15, paddingRight: 12, width: 0, height: 0)
     }
     
     /// Forbidden to create from storyboard

@@ -9,11 +9,11 @@ import com.syno_back.backend.model.DbTranslation;
 import com.syno_back.backend.model.DbUser;
 import com.syno_back.backend.model.DbUserCard;
 import com.syno_back.backend.model.DbUserDictionary;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -21,22 +21,18 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@AutoConfigureMockMvc()
+//@AutoConfigureMockMvc()
 @ActiveProfiles("test")
 public class DictsUpdateServiceTest {
-
-
 
     @Autowired
     private UserRepository userRepository;
@@ -59,12 +55,21 @@ public class DictsUpdateServiceTest {
     @Autowired
     private WebApplicationContext context;
 
-    @BeforeEach
-    void setUp() {
+    @Before
+    public void setUp() {
+        tearDown();
         var mockMVC = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(springSecurity())
                 .build();
+    }
+
+    @After
+    public void tearDown() {
+        translationRepository.deleteAll();
+        userCardRepository.deleteAll();
+        dictionaryRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     private void prepare() {
