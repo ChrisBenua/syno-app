@@ -231,7 +231,7 @@ extension CardsControllerDataSource {
     
     @available(iOS 13.0, *)
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (_) -> UIMenu? in
+        return UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: nil) { (_) -> UIMenu? in
             let menu = UIMenu(title: "Действия", children: [
                 UIAction(title: "Удалить", image: UIImage.init(systemName: "trash.fill"), attributes: .destructive, handler: { (action) in
                     Timer.scheduledTimer(withTimeInterval: 0.9, repeats: false) { (_) in
@@ -241,5 +241,28 @@ extension CardsControllerDataSource {
             ])
             return menu
         }
+    }
+    
+    @available(iOS 13.0, *)
+    func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        return makeTargetedPreview(collection: collectionView, for: configuration)
+    }
+
+    @available(iOS 13.0, *)
+    func collectionView(_ collectionView: UICollectionView, previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        return makeTargetedPreview(collection: collectionView, for: configuration)
+    }
+
+    @available(iOS 13.0, *)
+    private func makeTargetedPreview(collection: UICollectionView, for configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        guard let indexPath = configuration.identifier as? IndexPath else { return nil }
+        // Get the cell for the index of the model
+        guard let cell = collection.cellForItem(at: indexPath) as? CardCollectionViewCell else { return nil }
+        // Set parameters to a circular mask and clear background
+        let parameters = UIPreviewParameters()
+        parameters.backgroundColor = .clear
+
+        // Return a targeted preview using our cell previewView and parameters
+        return UITargetedPreview(view: cell.baseShadowView.containerView, parameters: parameters)
     }
 }

@@ -271,9 +271,9 @@ extension TranslationsCollectionViewController {
                 Logger.log("Needed shift: \(neededShift)")
                 if (neededShift < 0) {
                     Logger.log(scrollView.contentOffset.debugDescription)
-                    self.scrollView.contentInset.bottom = -neededShift + scrollView.contentOffset.y + 20
                     self.scrollView.setContentOffset(CGPoint(x: 0, y: -neededShift + scrollView.contentOffset.y), animated: true)
                 }
+                self.scrollView.contentInset.bottom = 20 + keyboardHeight
             }
         }
     }

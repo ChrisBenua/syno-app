@@ -97,14 +97,15 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     }()
     
     /// Base cell's view with shadow around it
-    lazy var baseShadowView: UIView = {
+    lazy var baseShadowView: BaseShadowView = {
         let view = BaseShadowView()
+        view.layer.cornerRadius = 20
         view.cornerRadius = 20
         view.shadowView.shadowOffset = CGSize(width: 0, height: 4)
         view.containerViewBackgroundColor = UIColor(red: 240.0/255, green: 240.0/255, blue: 240.0/255, alpha: 1)
         
-        view.addSubview(self.stackView)
-        view.addSubview(self.speakButton)
+        view.containerView.addSubview(self.stackView)
+        view.containerView.addSubview(self.speakButton)
         self.stackView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 22, paddingLeft: 15, paddingBottom: 15, paddingRight: 15, width: 0, height: 0)
         
         self.speakButton.anchor(top: view.topAnchor, left: nil, bottom: nil, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 13, width: 0, height: -0)
@@ -119,6 +120,9 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
         self.selectionStyle = .none
         self.backgroundColor = .clear
         self.contentView.addSubview(baseShadowView)
+        self.contentView.layer.cornerRadius = 20
+        //self.layer.cornerRadius = 20
+        self.contentView.clipsToBounds = true
         
         baseShadowView.anchor(top: self.contentView.topAnchor, left: self.contentView.leftAnchor, bottom: self.contentView.bottomAnchor, right: self.contentView.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
     }

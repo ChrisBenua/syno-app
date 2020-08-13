@@ -41,7 +41,7 @@ class CardCollectionViewCell: UICollectionViewCell, IConfigurableCardCell {
     /// Updates `translatedWordLabel` and `translationsLabel`
     func updateUI() {
         self.translatedWordLabel.text = translatedWord
-        var translationsText = (translations ?? []).reduce("", { (res, curr) -> String in
+        var translationsText = (translations ?? []).reversed().reduce("", { (res, curr) -> String in
             if curr.hasSuffix("?") {
                 return res + " " + curr
             } else {
@@ -83,18 +83,33 @@ class CardCollectionViewCell: UICollectionViewCell, IConfigurableCardCell {
         return label
     }()
     
+    lazy var baseShadowView: BaseShadowView = {
+        //let view = BaseShadowView()
+        let view = BaseShadowView(containerViewInsets: UIEdgeInsets(top: 2, left: 0, bottom: 4, right: 0))
+        view.shadowView.layer.shadowOpacity = 0.25
+        view.cornerRadius = 10
+        view.shadowView.shadowOffset = CGSize(width: -1, height: 2.5)
+        view.containerViewBackgroundColor = UIColor(red: 239.0/255, green: 239.0/255, blue: 239.0/255, alpha: 1)
+        
+        return view
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: .zero)
-        self.backgroundView = UIImageView(image: #imageLiteral(resourceName: "CardCellBackground"))
+        //self.backgroundView = UIImageView(image: #imageLiteral(resourceName: "CardCellBackground"))
+        self.contentView.addSubview(baseShadowView)
+        //self.contentView.layer.cornerRadius = 10
+        //self.contentView.clipsToBounds = true
+        baseShadowView.anchor(top: self.contentView.topAnchor, left: self.contentView.leftAnchor, bottom: self.contentView.bottomAnchor, right: self.contentView.rightAnchor, paddingTop: 0, paddingLeft: 3, paddingBottom: 0, paddingRight: 2, width: 0, height: 0)
         
-        self.contentView.addSubview(translatedWordLabel)
+        self.baseShadowView.containerView.addSubview(translatedWordLabel)
         
         translatedWordLabel.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .horizontal)
         
-        self.contentView.addSubview(translationsLabel)
-        translatedWordLabel.anchor(top: self.contentView.topAnchor, left: self.contentView.leftAnchor, bottom: self.contentView.bottomAnchor, right: self.translationsLabel.leftAnchor, paddingTop: 2, paddingLeft: 10, paddingBottom: 5, paddingRight: 10, width: 0, height: 0)
+        self.baseShadowView.containerView.addSubview(translationsLabel)
+        translatedWordLabel.anchor(top: self.baseShadowView.topAnchor, left: self.baseShadowView.leftAnchor, bottom: self.baseShadowView.bottomAnchor, right: self.translationsLabel.leftAnchor, paddingTop: 2, paddingLeft: 6, paddingBottom: 5, paddingRight: 10, width: 0, height: 0)
         
-        translationsLabel.anchor(top: self.contentView.topAnchor, left: nil, bottom: self.contentView.bottomAnchor, right: self.contentView.rightAnchor, paddingTop: 2, paddingLeft: 0, paddingBottom: 5, paddingRight: 10, width: 0, height: 0)
+        translationsLabel.anchor(top: self.baseShadowView.topAnchor, left: nil, bottom: self.baseShadowView.bottomAnchor, right: self.baseShadowView.rightAnchor, paddingTop: 2, paddingLeft: 0, paddingBottom: 5, paddingRight: 7, width: 0, height: 0)
         
     }
     

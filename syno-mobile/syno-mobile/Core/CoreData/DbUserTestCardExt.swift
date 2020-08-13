@@ -28,7 +28,7 @@ extension DbUserTestCard {
         testCard.sourceCard = card
         testCard.sourceTestDict = sourceTestDict
         testCard.translatedWord = card.translatedWord
-        let _translations = card.translations?.allObjects as? [DbTranslation]
+        let _translations = card.translations?.array as? [DbTranslation]
         let translations = _translations ?? []
         var testTranslations: [DbUserTestTranslation] = []
         

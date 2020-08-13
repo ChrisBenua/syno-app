@@ -82,7 +82,7 @@ class LearnControllerDataProvider: ILearnControllerDataProvider {
             card.translatedWord
         })
         self.itemsInCards = cards.map({ (card) -> [UserTranslationDtoForLearnController] in
-            return card.getTranslations().map { (trans) -> UserTranslationDtoForLearnController in
+            return card.getTranslations().reversed().map { (trans) -> UserTranslationDtoForLearnController in
                 return UserTranslationDtoForLearnController.initFrom(translation: trans)
             }
         })

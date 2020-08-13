@@ -105,9 +105,9 @@ class TranslationControllerDataProvider: ITranslationControllerDataProvider {
         
         translations = res.map { (trans) -> TranslationCellWrapper in
             return TranslationCellWrapper(translation: trans.toTranslationCellConfig(), objectId: trans.objectID)
-        }.sorted(by: { (lhs, rhs) -> Bool in
+        }/*.sorted(by: { (lhs, rhs) -> Bool in
             return (lhs.translation ?? "") < (rhs.translation ?? "")
-        })
+        })*/
         
         return translations!
     }
@@ -311,7 +311,7 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
     
     @available(iOS 13.0, *)
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (_) -> UIMenu? in
+        return UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: nil) { (_) -> UIMenu? in
             let menu = UIMenu(title: "Действия", children: [
                 UIAction(title: "Удалить", image: UIImage.init(systemName: "trash.fill"), attributes: .destructive, handler: { (action) in
                     UIView.animate(withDuration: 0, delay: 0.5, animations: { () in }) { (_) in
@@ -321,6 +321,29 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
             ])
             return menu
         }
+    }
+    
+    @available(iOS 13.0, *)
+    func tableView(_ tableView: UITableView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        return makeTargetedPreview(tableView: tableView, for: configuration)
+    }
+    @available(iOS 13.0, *)
+    func tableView(_ tableView: UITableView, previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        return makeTargetedPreview(tableView: tableView, for: configuration)
+    }
+    
+    @available(iOS 13.0, *)
+    private func makeTargetedPreview(tableView: UITableView, for configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        guard let indexPath = configuration.identifier as? IndexPath else { return nil }
+        // Get the cell for the index of the model
+        guard let cell = tableView.cellForRow(at: indexPath) as? TranslationTableViewCell else { return nil }
+        // Set parameters to a circular mask and clear background
+        let parameters = UIPreviewParameters()
+        parameters.visiblePath = UIBezierPath(roundedRect: cell.baseShadowView.containerView.bounds, cornerRadius: 20)
+        parameters.backgroundColor = .clear
+
+        // Return a targeted preview using our cell previewView and parameters
+        return UITargetedPreview(view: cell.baseShadowView.containerView, parameters: parameters)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
