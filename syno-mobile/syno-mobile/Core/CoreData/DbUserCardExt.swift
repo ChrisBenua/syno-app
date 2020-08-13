@@ -4,12 +4,12 @@ import CoreData
 extension DbUserCard {
     /// Gets `DbUserCard` translations array
     func getTranslations() -> [DbTranslation] {
-        return (self.translations?.allObjects ?? []) as! [DbTranslation]
+        return (self.translations?.array ?? []) as! [DbTranslation]
     }
     
     /// Converts `DbUserCard` to `ICardCellConfiguration`
     func toCellConfiguration() -> ICardCellConfiguration {
-        return CardCellConfiguration(translatedWord: self.translatedWord, translations: (self.translations?.allObjects ?? []).map({ (translation) -> String? in
+        return CardCellConfiguration(translatedWord: self.translatedWord, translations: (self.translations?.array ?? []).map({ (translation) -> String? in
             (translation as! DbTranslation).translation
         }).filter({ (str) -> Bool in
             return str != nil

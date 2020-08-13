@@ -24,7 +24,11 @@ class DefaultRequestSender: IRequestSender {
                 if !(200...300).contains(httpResponse.statusCode) {
                     Logger.log("Not 200 status code for \(Parser.self)")
                     guard let unwrappedData = data, let message = try? JSONSerialization.jsonObject(with: unwrappedData, options: .allowFragments) as? [String: String] else {
-                        completionHandler(.error("not 200 status code"))
+                        if httpResponse.statusCode == 403 {
+                            completionHandler(.error("Пожалуйста, авторизуйтесь заново"))
+                        } else {
+                            completionHandler(.error("not 200 status code"))
+                        }
                         return
                     }
                     completionHandler(.error(message["message"]!))

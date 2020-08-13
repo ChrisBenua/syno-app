@@ -17,7 +17,7 @@ class UserCardStorageManager: IUserCardsStorageManager {
             }
             
             if let trans = translation {
-                card?.addToTranslations(NSSet(array: trans))
+                card?.addToTranslations(NSOrderedSet(array: trans))
             }
             if let pin = pin {
                 card?.pin = pin

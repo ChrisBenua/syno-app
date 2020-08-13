@@ -11,7 +11,7 @@ class UserAuthHelper: IUserAuthHelper {
     
     func isAuthorized() -> Bool {
         let curr = Int(Date().timeIntervalSince1970)
-        if ((userDefManager.getTokenTimestamp() == 0) || (curr - userDefManager.getTokenTimestamp() > 86300)) {
+        if ((userDefManager.getTokenTimestamp() == 0) || (curr - userDefManager.getTokenTimestamp() > 86400 * 29)) {
             return false
         }
         

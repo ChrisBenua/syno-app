@@ -92,8 +92,9 @@ class LoginViewController: UIViewController, ILoginReactor {
     
     /// Dismisses current controller and replaces main window controller with `mainTabBarController`
     func afterSuccessfullLogin() {
-        let appdelegate = UIApplication.shared.delegate as! AppDelegate
-        appdelegate.window!.rootViewController = presAssembly.mainTabBarController()
+        let tabBarController = presAssembly.mainTabBarController()
+        tabBarController.modalPresentationStyle = .fullScreen
+        self.present(tabBarController, animated: true, completion: nil)
     }
 
     /// Called when model failed to login user, dismisses `processingSaveView` and present `alertController` with error

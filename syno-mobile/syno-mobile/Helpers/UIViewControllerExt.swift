@@ -9,7 +9,10 @@
 import Foundation
 import UIKit
 
-extension UINavigationController: UINavigationBarDelegate {
+class MyNavigationController: UINavigationController, UINavigationBarDelegate {
+    public func navigationBar(_ navigationBar: UINavigationBar, didPush item: UINavigationItem) {
+        Logger.log(#function)
+    }
     public func navigationBar(_ navigationBar: UINavigationBar, shouldPop item: UINavigationItem) -> Bool {
         if let items = navigationBar.items, viewControllers.count < items.count {
             return true
@@ -25,10 +28,19 @@ extension UINavigationController: UINavigationBarDelegate {
 
         return false
     }
+    
+    public func navigationBar(_ navigationBar: UINavigationBar, shouldPush item: UINavigationItem) -> Bool {
+        return true
+    }
+    
+    public func navigationBar(_ navigationBar: UINavigationBar, didPop item: UINavigationItem) {
+        Logger.log("Popped")
+    }
 }
 
-extension UIViewController {
-    @objc func navigationShouldPopOnBack(completion: @escaping (Bool) -> ()) {
+
+public extension UIViewController {
+    @objc public func navigationShouldPopOnBack(completion: @escaping (Bool) -> ()) {
         completion(true)
     }
 }

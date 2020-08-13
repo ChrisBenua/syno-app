@@ -42,8 +42,8 @@ class TransferGuestDictsToNewAccount: ITransferGuestDictsToNewAccount {
                         let cards: [DbUserCard] = (el.userCards?.toArray() ?? [])
                         return GetDictionaryResponseDto(id: el.serverId, name: el.name ?? "", timeCreated: el.timeCreated ?? Date(), timeModified: el.timeModified ?? Date(), language: el.language, userCards: cards.map({ (card) -> GetCardResponseDto in
                             let trans = card.getTranslations()
-                            return GetCardResponseDto(id: card.serverId, translatedWord: card.translatedWord!, timeCreated: card.timeCreated ?? Date(), timeModified: card.timeModified ?? Date(), translations: trans.map({ (translation) -> GetTranslationDto in
-                                return GetTranslationDto(id: translation.serverId, translation: translation.translation!, transcription: translation.transcription!, comment: translation.comment!, usageSample: translation.usageSample!, timeCreated: translation.timeCreated ?? Date(), timeModified: translation.timeModified ?? Date(), pin: translation.pin!)
+                            return GetCardResponseDto(id: card.serverId, translatedWord: card.translatedWord ?? "", timeCreated: card.timeCreated ?? Date(), timeModified: card.timeModified ?? Date(), translations: trans.map({ (translation) -> GetTranslationDto in
+                                return GetTranslationDto(id: translation.serverId, translation: translation.translation ?? "", transcription: translation.transcription ?? "", comment: translation.comment ?? "", usageSample: translation.usageSample ?? "", timeCreated: translation.timeCreated ?? Date(), timeModified: translation.timeModified ?? Date(), pin: translation.pin!)
                             }), pin: card.pin!)
                         }), pin: el.pin!)
                     }

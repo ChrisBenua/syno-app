@@ -12,7 +12,15 @@ class BaseShadowView: UIView {
     
     var containerViewBackgroundColor: UIColor?
     
-    var cornerRadius: CGFloat?
+    var containerViewInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+    
+    var cornerRadius: CGFloat? {
+        didSet {
+            if let cr = self.cornerRadius {
+                containerView.layer.cornerRadius = cr
+            }
+        }
+    }
     
     var shadowRadius: CGFloat?
     
@@ -36,16 +44,17 @@ class BaseShadowView: UIView {
         shadowView.cornerRadius = self.cornerRadius
     }
     
-    init() {
+    init(containerViewInsets: UIEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)) {
         super.init(frame: .zero)
+        self.containerViewInsets = containerViewInsets
         
         self.addSubview(shadowView)
         
-        shadowView.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 5, width: 0, height: 0)
+        shadowView.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor, paddingTop: containerViewInsets.top, paddingLeft: containerViewInsets.left, paddingBottom: containerViewInsets.bottom, paddingRight: containerViewInsets.right, width: 0, height: 0)
         
         self.addSubview(containerView)
         layerSetUp()
-        containerView.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 5, width: 0, height: 0)
+        containerView.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor, paddingTop: containerViewInsets.top, paddingLeft: containerViewInsets.left, paddingBottom: containerViewInsets.bottom, paddingRight: containerViewInsets.right, width: 0, height: 0)
     }
     
     required init?(coder: NSCoder) {
