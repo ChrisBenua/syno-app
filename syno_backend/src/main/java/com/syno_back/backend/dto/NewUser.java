@@ -29,7 +29,7 @@ public class NewUser implements Serializable {
      */
     @Size(max=100)
     @JsonProperty("password")
-    private String password;
+    @ToString.Exclude private String password;
 
     private static final long serialVersionUID = -1764970284520387975L;
 }

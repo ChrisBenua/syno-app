@@ -2,7 +2,6 @@ package com.syno_back.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -29,7 +28,7 @@ public class LoginUser implements Serializable {
      */
     @Size(max=100)
     @JsonProperty("password")
-    private String password;
+    @ToString.Exclude private String password;
 
     /**
      * Gets user email
