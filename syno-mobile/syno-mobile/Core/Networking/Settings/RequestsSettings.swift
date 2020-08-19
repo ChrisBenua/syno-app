@@ -4,7 +4,7 @@ import Foundation
 class RequestSettings {
     /// Server's host
     //TODO
-    public static let URLPrefix = "http://localhost:8080"
+    public static let URLPrefix = "http://chrisbenua.site:8080"
     /// Server's login end point
     public static let LoginEndPoint = URLPrefix + "/api/auth/signin"
     /// Server's registration end point
