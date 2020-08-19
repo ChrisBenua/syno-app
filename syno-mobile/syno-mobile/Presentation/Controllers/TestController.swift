@@ -128,7 +128,8 @@ class TestViewController: UIViewController, IScrollableToPoint {
         }
         
         var nextView: ITestView?
-        let contentView = self.contentView
+        let currentCardNumber = self.currCardNumber
+        let currContentView = contentView
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
             switch sender.direction {
             case .left:
@@ -176,9 +177,14 @@ class TestViewController: UIViewController, IScrollableToPoint {
                 break
             }
         }) { (_) in
-            if (success) {
-                contentView.removeFromSuperview()
-                nextView?.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
+           if (success) {
+                Logger.log("\(self.currCardNumber) \(currentCardNumber)")
+                if (currentCardNumber != self.currCardNumber) {
+                currContentView.removeFromSuperview()
+                    if let nextView = nextView, self.scrollView.subviews.contains(nextView) {
+                        nextView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
+                    }
+                }
             }
         }
     }

@@ -22,7 +22,7 @@ public class JwtProvider {
      * JWT token expiration time
      */
     @Value("${assm.app.jwtExpiration}")
-    private Integer jwtExpiration = 0;
+    private Long jwtExpiration = 0L;
 
     /**
      * Generates jwt token
@@ -30,10 +30,12 @@ public class JwtProvider {
      * @return JWT token
      */
     public String generateJwtToken(String email) {
+        var date = new Date();
+        var expDate = new Date(date.getTime() + jwtExpiration * 1000);
         return Jwts.builder()
                 .setSubject(email)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + jwtExpiration * 1000))
+                .setIssuedAt(date)
+                .setExpiration(expDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
@@ -45,7 +47,7 @@ public class JwtProvider {
      */
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).setAllowedClockSkewSeconds(jwtExpiration).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
             logger.error(String.format("Invalid JwtSignature: error: %s", e.getMessage()));

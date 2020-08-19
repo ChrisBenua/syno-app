@@ -75,6 +75,8 @@ class LearnCollectionViewController: UIViewController {
         var nextView: ILearnView?
         var success: Bool = false
         let contentView = self.contentView
+        let currentCardNumber = self.currCardNumber
+        let currContentView = contentView
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
             switch sender.direction {
             case .left:
@@ -121,8 +123,13 @@ class LearnCollectionViewController: UIViewController {
             }
         }) { (_) in
             if (success) {
-                contentView.removeFromSuperview()
-                nextView?.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
+                Logger.log("\(self.currCardNumber) \(currentCardNumber)")
+                if (currentCardNumber != self.currCardNumber) {
+                currContentView.removeFromSuperview()
+                    if let nextView = nextView, self.scrollView.subviews.contains(nextView) {
+                        nextView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
+                    }
+                }
             }
         }
     }

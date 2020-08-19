@@ -3,7 +3,8 @@ import Foundation
 /// Class for storing Request URLs
 class RequestSettings {
     /// Server's host
-    public static let URLPrefix = "http://chrisbenua.site:8080"
+    //TODO
+    public static let URLPrefix = "http://localhost:8080"
     /// Server's login end point
     public static let LoginEndPoint = URLPrefix + "/api/auth/signin"
     /// Server's registration end point
