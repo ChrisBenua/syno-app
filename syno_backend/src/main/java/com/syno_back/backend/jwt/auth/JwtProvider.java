@@ -47,7 +47,7 @@ public class JwtProvider {
      */
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(jwtSecret).setAllowedClockSkewSeconds(jwtExpiration * 2).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
             logger.error(String.format("Invalid JwtSignature: error: %s", e.getMessage()));
@@ -70,6 +70,6 @@ public class JwtProvider {
      * @return Subject's email
      */
     public String getEmailFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(jwtSecret).setAllowedClockSkewSeconds(jwtExpiration * 2).parseClaimsJws(token).getBody().getSubject();
     }
 }
