@@ -8,6 +8,8 @@ protocol IDictControllerModel: ITransferGuestDictsToNewAccountDelegate {
     
     func shouldAskToCopyGuestDicts() -> Bool
     
+    func isGuest() -> Bool
+    
     func copyGuestDictsToCurrentUser()
     
     var delegate: ITransferGuestDictsToNewAccountDelegate? {get set}
@@ -21,6 +23,10 @@ class DictControllerModel: IDictControllerModel {
     
     func onFailure(err: String) {
         self.delegate?.onFailure(err: "Произошла ошибка")
+    }
+    
+    func isGuest() -> Bool {
+        return userDefManager.getEmail() == "Guest" || userDefManager.getEmail() == nil
     }
     
     weak var delegate: ITransferGuestDictsToNewAccountDelegate?

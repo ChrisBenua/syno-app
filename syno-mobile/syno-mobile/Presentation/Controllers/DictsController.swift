@@ -150,18 +150,22 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
     
     /// On TabBar plus button click handler
     @objc func onAddNewDictionary() {
-        let actionController = UIAlertController(title: "Новый словарь", message: nil, preferredStyle: .actionSheet)
-        actionController.addAction(UIAlertAction(title: "Свой", style: .default, handler: { (_) in
+        if !model.isGuest() {
+            let actionController = UIAlertController(title: "Новый словарь", message: nil, preferredStyle: .actionSheet)
+            actionController.addAction(UIAlertAction(title: "Свой", style: .default, handler: { (_) in
+                self.navigationController?.pushViewController(self.dataSource.getNewDictController(), animated: true)
+            }))
+            actionController.addAction(UIAlertAction(title: "Добавить по коду", style: .default, handler: { (_) in
+                self.navigationController?.pushViewController(self.dataSource.addShareController(), animated: true)
+            }))
+            actionController.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) in
+                actionController.dismiss(animated: true, completion: nil)
+            }))
+            
+            self.present(actionController, animated: true, completion: nil)
+        } else {
             self.navigationController?.pushViewController(self.dataSource.getNewDictController(), animated: true)
-        }))
-        actionController.addAction(UIAlertAction(title: "Добавить по коду", style: .default, handler: { (_) in
-            self.navigationController?.pushViewController(self.dataSource.addShareController(), animated: true)
-        }))
-        actionController.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) in
-            actionController.dismiss(animated: true, completion: nil)
-        }))
-        
-        self.present(actionController, animated: true, completion: nil)
+        }
     }
     
     /// Ask if user wants to download dictionaries from server
