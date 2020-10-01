@@ -48,6 +48,8 @@ class UserDefaultsManager: IUserDefaultsManager {
     private static let accessTokenTimestampKey: String = "accessTokenTimestampKey"
     
     private static let registerEmailKey: String = "registerEmailTokenKey"
+  
+    private static let versionCheckKey: String = "versionCheckKey"
 
     func saveToken(token: String) {
         UserDefaults.standard.set(token, forKey: UserDefaultsManager.accessTokenKey)

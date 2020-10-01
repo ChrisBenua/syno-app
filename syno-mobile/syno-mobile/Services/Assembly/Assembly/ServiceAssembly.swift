@@ -41,7 +41,7 @@ protocol IServiceAssembly {
     var updateRequestDataPreparator: IUpdateRequestDataPreprator { get }
     
     var confirmationModel: IAccountConfirmationModel { get }
-     
+    
     /// Service responsible for inner logic in DictionaryController
     func dictControllerModel() -> DictControllerModel
     
@@ -56,6 +56,8 @@ protocol IServiceAssembly {
     
     /// Service responsible for delivering data for LearnController
     func learnTranslationsControllerDataProvider(sourceDict: DbUserDictionary) -> ILearnControllerDataProvider
+  
+    func reversedLearnControllerModel(sourceDict: DbUserDictionary) -> IReversedLearnControllerModel
     
     /// Service responsible for delivering data for TestController
     func testViewControllerDataProvider(dictionary: DbUserDictionary) -> ITestViewControllerDataProvider
@@ -137,8 +139,16 @@ class ServiceAssembly: IServiceAssembly {
     var innerBatchUpdatesQueue2: DispatchQueue = DispatchQueue(label: "innerCoreDataDispatchQueue2", attributes: .concurrent)
     
     
+    func setupUpdateActions() {
+    }
+    
+    func executeUpdateActions() {
+        self.coreAssembly.updateActionsExecutor.performActions()
+    }
+    
     init(coreAssembly: ICoreAssembly) {
         self.coreAssembly = coreAssembly
+                
         self.loginService = LoginService(storageManager: self.coreAssembly.storageManager, requestSender: coreAssembly.requestSender, userDefaultsManager: coreAssembly.userDefaultsManager)
         self.registerService = RegisterService(requestSender: coreAssembly.requestSender)
         self.translationsFetchService = DbTranslationFetchService(innerQueue: innerBatchUpdatesQueue,storageManager: coreAssembly.storageManager)
@@ -154,6 +164,9 @@ class ServiceAssembly: IServiceAssembly {
         self.confirmationModel = AccountConfirmationModel(userDefaultsManager: self.coreAssembly.userDefaultsManager, requestSender: self.coreAssembly.requestSender)
         self.emailConfirmationModel = EmailConfirmationModel(requestSender: self.coreAssembly.requestSender, userDefaultsManager: self.coreAssembly.userDefaultsManager)
         self.transferService = TransferGuestDictsToNewAccount(storageManager: self.coreAssembly.storageManager, dictionaryFetchService: self.dictsFetchService)
+        
+        self.setupUpdateActions()
+        self.executeUpdateActions()
     }
     
     func dictControllerModel() -> DictControllerModel {
@@ -174,6 +187,10 @@ class ServiceAssembly: IServiceAssembly {
     
     func learnTranslationsControllerDataProvider(sourceDict: DbUserDictionary) -> ILearnControllerDataProvider {
         return LearnControllerDataProvider(dbUserDict: sourceDict)
+    }
+  
+    func reversedLearnControllerModel(sourceDict: DbUserDictionary) -> IReversedLearnControllerModel {
+        return ReversedLearnControllerModelImpl(dict: sourceDict)
     }
     
     func testViewControllerDataProvider(dictionary: DbUserDictionary) -> ITestViewControllerDataProvider {

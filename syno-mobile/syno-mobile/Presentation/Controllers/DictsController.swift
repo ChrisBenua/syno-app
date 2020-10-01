@@ -3,6 +3,15 @@ import UIKit
 
 /// Controller for presenting dicts in edit mode
 class DictsViewController: UIViewController, IDictionaryControllerReactor {
+    
+    func onStartMoving() {
+        Logger.log("on start moving")
+    }
+    
+    func onStopMoving() {
+        Logger.log("on stop moving")
+    }
+    
     func showEditController(controller: UIViewController) {
         self.navigationController?.pushViewController(controller, animated: true)
     }
@@ -90,6 +99,7 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        Logger.log(#function)
         collectionView.reloadData()
     }
     

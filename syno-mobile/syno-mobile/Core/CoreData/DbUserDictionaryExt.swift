@@ -46,7 +46,7 @@ extension DbUserDictionary {
     static func requestSortedByName(owner: DbAppUser) -> NSFetchRequest<DbUserDictionary> {
         let request: NSFetchRequest<DbUserDictionary> = DbUserDictionary.fetchRequest()
         request.predicate = NSPredicate(format: "owner == %@", owner)
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false)]
+        request.sortDescriptors = [NSSortDescriptor(key: "timeCreated", ascending: false), NSSortDescriptor(key: "name", ascending: false)]
         
         return request
     }

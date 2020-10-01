@@ -13,6 +13,8 @@ protocol ICoreAssembly {
     
     /// Service for generating transcriptions
     var phonemesManager: IPhonemesManager { get }
+    
+    var updateActionsExecutor: IUpdateActionsExecutor { get }
 }
 
 /// Assembly for creating core level services
@@ -21,6 +23,7 @@ class CoreAssembly: ICoreAssembly {
     let userDefaultsManager: IUserDefaultsManager = UserDefaultsManager()
     let storageManager: IStorageCoordinator = StorageManager()
     let phonemesManager: IPhonemesManager
+    let updateActionsExecutor: IUpdateActionsExecutor = UpdateActionsExecutor()
     
     init() {
         self.phonemesManager = PhonemesManager()

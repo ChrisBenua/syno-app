@@ -10,7 +10,12 @@ class BaseShadowView: UIView {
         }
     }
     
-    var containerViewBackgroundColor: UIColor?
+    var containerViewBackgroundColor: UIColor? {
+        didSet {
+            containerView.backgroundColor = self.containerViewBackgroundColor ?? .gray
+            self.layerSetUp()
+        }
+    }
     
     var containerViewInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     

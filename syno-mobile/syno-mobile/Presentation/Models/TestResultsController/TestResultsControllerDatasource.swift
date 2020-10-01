@@ -7,10 +7,14 @@ protocol ITestResultsControllerTranslationDto {
         
     /// True if user has written this `translation` in his test
     var isRightAnswered: Bool { get }
+    
+    var userAnswer: String? { get }
 }
 
 class TestResultsControllerTranslationDto: ITestResultsControllerTranslationDto {
     var translation: String?
+    
+    var userAnswer: String?
     
     var isRightAnswered: Bool
     
@@ -19,9 +23,10 @@ class TestResultsControllerTranslationDto: ITestResultsControllerTranslationDto 
      - Parameter translation: translation
      - Parameter isRightAnswered: Has user written this `translation` in his test
      */
-    init(translation: String?, isRightAnswered: Bool) {
+    init(translation: String?, isRightAnswered: Bool, userAnswer: String?) {
         self.translation = translation
         self.isRightAnswered = isRightAnswered
+        self.userAnswer = userAnswer
     }
 }
 
@@ -150,8 +155,23 @@ class TestResultsControllerDataProvider: ITestResultsControllerDataProvider {
      */
     init(test: DbUserTest) {
         let cardsResults: [ITestResultsControllerCardResultDto] = test.testDict!.getCards().map { (dbUserTestCard) -> ITestResultsControllerCardResultDto in
+            
+            let rightTranslations = dbUserTestCard.getTranslations().map{ $0.translation?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "" }
+            let dbAnswers: [DbUserTestAnswer] = dbUserTestCard.userAnswers?.toArray() ?? []
+            let wrongUserAnswers = dbAnswers.map{ $0.userAnswer ?? "" }.filter { (answer) -> Bool in
+                return !rightTranslations.contains(answer)
+            }
+            var wrongUserAnswerListIndex = 0
+            
             return TestResultsControllerCardResultsDto(translations: dbUserTestCard.getTranslations().map({ (el) -> ITestResultsControllerTranslationDto in
-                return TestResultsControllerTranslationDto(translation: el.translation, isRightAnswered: el.isRightAnswered)
+                var userAnswer: String? = nil
+                if !el.isRightAnswered {
+                    if wrongUserAnswerListIndex < wrongUserAnswers.count {
+                        userAnswer = wrongUserAnswers[wrongUserAnswerListIndex]
+                        wrongUserAnswerListIndex += 1
+                    }
+                }
+                return TestResultsControllerTranslationDto(translation: el.translation, isRightAnswered: el.isRightAnswered, userAnswer: userAnswer)
             }), translatedWord: dbUserTestCard.translatedWord)
         }
         
@@ -248,13 +268,13 @@ class TestResultsControllerDataSource: NSObject, ITestResultsControllerDataSourc
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TestResultsTableViewCell.cellId, for: indexPath) as? TestResultsTableViewCell else {
             fatalError()
         }
-        var color = #colorLiteral(red: 0.9568627451, green: 0.7960784314, blue: 0.8039215686, alpha: 1)
+        var color = #colorLiteral(red: 0.93, green: 0.7812, blue: 0.78616, alpha: 1)
         let trans = self.dataProvider.getTranslationAt(cardPos: section, transPos: row)
         if trans.isRightAnswered {
-            color = #colorLiteral(red: 0.737254902, green: 0.9921568627, blue: 0.7960784314, alpha: 1)
+            color = #colorLiteral(red: 0.819, green: 0.91, blue: 0.8265833333, alpha: 1)
         }
         
-        cell.configure(config: TestResultsTableViewCellConfiguration(translation: trans.translation, backgroundColor: color))
+        cell.configure(config: TestResultsTableViewCellConfiguration(translation: trans.translation, userAnswer: trans.userAnswer, backgroundColor: color))
         
         return cell
     }

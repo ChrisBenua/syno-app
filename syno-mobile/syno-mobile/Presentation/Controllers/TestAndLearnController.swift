@@ -76,10 +76,14 @@ class TestAndLearnViewController: UIViewController {
 }
 
 extension TestAndLearnViewController: ITestAndLearnReactor {
+    func showActionSheetController(controller: UIAlertController) {
+        self.present(controller, animated: true)
+    }
+  
     func onShowError(title: String, message: String?) {
         self.present(UIAlertController.okAlertController(title: title, message: message), animated: true)
     }
-    
+  
     func onChangeControllerTitle(newMode: TestAndLearnModes) {
         if (newMode == .learnMode) {
             self.navigationItem.title = "Обучение"

@@ -66,7 +66,7 @@ class UserDictsFetchService: IUserDictionaryFetchService {
                 }
             }
             
-            for updateDictDto in dicts {
+            for updateDictDto in dicts.sorted(by: { $0.timeCreated > $1.timeCreated }) {
                 if (!updatedPins.contains(updateDictDto.pin)) {
                     self.innerQueue.async {
                     //dispatchGroup.wait()

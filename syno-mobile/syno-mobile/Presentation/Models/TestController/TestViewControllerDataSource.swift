@@ -204,6 +204,13 @@ class TestViewControllerDataProvider: ITestViewControllerDataProvider {
                             return dbTranlsation.translation!.lowercased().trimmingCharacters(in: .whitespaces) == answer.answer.lowercased().trimmingCharacters(in: .whitespaces)
                             }).count > 0) {
                             dbTranlsation.isRightAnswered = true
+                            
+                            currCardAnswers.forEach { (answer) in
+                                if let dbanswer = DbUserTestAnswer.insertUserTestAnswer(into: self.storageManager.stack.mainContext) {
+                                    dbanswer.userAnswer = answer.answer
+                                    dbTestCard.addToUserAnswers(dbanswer)
+                                }
+                            }
                         }
                     }
                 }

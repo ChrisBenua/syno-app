@@ -77,7 +77,7 @@ class TestResultsTableViewHeaderView: UIView, IConfigurableTestResultsHeader {
     func updateUI() {
         self.translatedWordLabel.text = config.translatedWord
         self.cardResultLabel.text = "\(config.rightAnswered)/\(config.allTranslations)"
-        self.cardResultLabel.textColor = GradeToStringAndColor.gradeToColor(gradePercentage: Double(config.rightAnswered) / Double(config.allTranslations) * 100)
+        self.cardResultLabel.textColor = GradeToStringAndColor.strictGradeToColor(gradePercentage: Double(config.rightAnswered) / Double(config.allTranslations) * 100)
     }
     
     /// Main container view

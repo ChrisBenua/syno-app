@@ -9,9 +9,9 @@ class TranslationReadonlyTableViewCell: TranslationTableViewCell {
     
     override func updateUI() {
         super.updateUI()
-        super.commentTextField.isUserInteractionEnabled = false
-        super.sampleTextField.isUserInteractionEnabled = false
-        super.translationTextField.isUserInteractionEnabled = false
-        super.transcriptionTextField.isUserInteractionEnabled = false
+        super.innerView.commentTextField.isUserInteractionEnabled = false
+        super.innerView.sampleTextField.isUserInteractionEnabled = false
+        super.innerView.translationTextField.isUserInteractionEnabled = false
+        super.innerView.transcriptionTextField.isUserInteractionEnabled = false
     }
 }

@@ -120,6 +120,9 @@
 		AAB6CEC92393C4D700AAAF0E /* UserDictionaryStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB6CEC82393C4D700AAAF0E /* UserDictionaryStorageManager.swift */; };
 		AAB6CECB2393C6EE00AAAF0E /* UserCardStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB6CECA2393C6EE00AAAF0E /* UserCardStorageManager.swift */; };
 		AAB6CECD2393C87B00AAAF0E /* UserTranslationStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB6CECC2393C87B00AAAF0E /* UserTranslationStorageManager.swift */; };
+		AABEB2B0250BA61C0064F67E /* ReversedLearnControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABEB2AF250BA61C0064F67E /* ReversedLearnControllerModel.swift */; };
+		AABEB2B2250BAE590064F67E /* ReversedLearnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABEB2B1250BAE590064F67E /* ReversedLearnView.swift */; };
+		AABEB2B4250BBACE0064F67E /* ReversedLearnControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABEB2B3250BBACE0064F67E /* ReversedLearnControllerView.swift */; };
 		AAC2EA7824C1A81F00A41AB9 /* EmptyDictsCollectionViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC2EA7724C1A81F00A41AB9 /* EmptyDictsCollectionViewHeader.swift */; };
 		AAC2EA7A24C1AE6400A41AB9 /* EmptyCardsCollectionViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC2EA7924C1AE6400A41AB9 /* EmptyCardsCollectionViewHeader.swift */; };
 		AAC605752390E5EC00120B77 /* SavingProcessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC605742390E5EC00120B77 /* SavingProcessView.swift */; };
@@ -144,6 +147,8 @@
 		AAEBE75023A3F49F00F48684 /* PlainTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE74F23A3F49E00F48684 /* PlainTableView.swift */; };
 		AAEBE75223A4132200F48684 /* ShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE75123A4132200F48684 /* ShadowView.swift */; };
 		AAEBE75423A4139B00F48684 /* BaseShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE75323A4139B00F48684 /* BaseShadowView.swift */; };
+		AAF056EF2525E9EA00841599 /* UpdateActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF056EE2525E9EA00841599 /* UpdateActions.swift */; };
+		AAF056F42525EC9200841599 /* DbDictionarySequenceNumberAssignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF056F32525EC9200841599 /* DbDictionarySequenceNumberAssignment.swift */; };
 		AAF3FE6F24AB868D003DBBB2 /* UIButtonExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF3FE6E24AB868D003DBBB2 /* UIButtonExt.swift */; };
 		AAF3FE7124AB8851003DBBB2 /* UILabelExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF3FE7024AB8851003DBBB2 /* UILabelExt.swift */; };
 		EBC4E2FE5B509D55C5BEC2A5 /* Pods_syno_mobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7F0E228B93E70E1965BAEE8 /* Pods_syno_mobile.framework */; };
@@ -278,6 +283,9 @@
 		AAB6CEC82393C4D700AAAF0E /* UserDictionaryStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDictionaryStorageManager.swift; sourceTree = "<group>"; };
 		AAB6CECA2393C6EE00AAAF0E /* UserCardStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCardStorageManager.swift; sourceTree = "<group>"; };
 		AAB6CECC2393C87B00AAAF0E /* UserTranslationStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTranslationStorageManager.swift; sourceTree = "<group>"; };
+		AABEB2AF250BA61C0064F67E /* ReversedLearnControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReversedLearnControllerModel.swift; sourceTree = "<group>"; };
+		AABEB2B1250BAE590064F67E /* ReversedLearnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReversedLearnView.swift; sourceTree = "<group>"; };
+		AABEB2B3250BBACE0064F67E /* ReversedLearnControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReversedLearnControllerView.swift; sourceTree = "<group>"; };
 		AAC2EA7724C1A81F00A41AB9 /* EmptyDictsCollectionViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyDictsCollectionViewHeader.swift; sourceTree = "<group>"; };
 		AAC2EA7924C1AE6400A41AB9 /* EmptyCardsCollectionViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCardsCollectionViewHeader.swift; sourceTree = "<group>"; };
 		AAC605742390E5EC00120B77 /* SavingProcessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingProcessView.swift; sourceTree = "<group>"; };
@@ -302,6 +310,8 @@
 		AAEBE74F23A3F49E00F48684 /* PlainTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainTableView.swift; sourceTree = "<group>"; };
 		AAEBE75123A4132200F48684 /* ShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowView.swift; sourceTree = "<group>"; };
 		AAEBE75323A4139B00F48684 /* BaseShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseShadowView.swift; sourceTree = "<group>"; };
+		AAF056EE2525E9EA00841599 /* UpdateActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateActions.swift; sourceTree = "<group>"; };
+		AAF056F32525EC9200841599 /* DbDictionarySequenceNumberAssignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DbDictionarySequenceNumberAssignment.swift; sourceTree = "<group>"; };
 		AAF3FE6E24AB868D003DBBB2 /* UIButtonExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExt.swift; sourceTree = "<group>"; };
 		AAF3FE7024AB8851003DBBB2 /* UILabelExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExt.swift; sourceTree = "<group>"; };
 		B169F42F7A6B5AFCF835DEC5 /* Pods-syno-mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-syno-mobile.release.xcconfig"; path = "Target Support Files/Pods-syno-mobile/Pods-syno-mobile.release.xcconfig"; sourceTree = "<group>"; };
@@ -412,6 +422,7 @@
 			children = (
 				AA12FEC923AFB59000CC8D3B /* LearnViewGenerator.swift */,
 				AA4B780D23C1CB70005A9CC9 /* TestViewGenerator.swift */,
+				AABEB2B1250BAE590064F67E /* ReversedLearnView.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -436,6 +447,7 @@
 		AA1B8751238D9AA800D26FCF /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				AAF056F22525EC4500841599 /* UpdateActions */,
 				AA627D972455F4FB000B7265 /* UserAuthHelper.swift */,
 				AA1B8752238D9ABC00D26FCF /* LoginControllerServices.swift */,
 				AA8700C8239792B000C97E18 /* RegisterControllerServices.swift */,
@@ -664,6 +676,7 @@
 			isa = PBXGroup;
 			children = (
 				AA82AFD2238E91A000A75D92 /* UserDefaultsManager.swift */,
+				AAF056EE2525E9EA00841599 /* UpdateActions.swift */,
 			);
 			path = UserDefaults;
 			sourceTree = "<group>";
@@ -679,6 +692,7 @@
 		AA8C0E0C23891862000CBB73 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				AABEB2AE250BA5CD0064F67E /* ReversedLearnController */,
 				AA55CEC724A7E52D008CF330 /* EmailForConfirmationController */,
 				AA2B771E24A623900081660C /* AccountConfirmationController */,
 				AA7642802451EE9000E388A1 /* AddShareViewController */,
@@ -719,6 +733,7 @@
 				AA76427E2451EE7800E388A1 /* AddShareViewController.swift */,
 				AAADCD6E24A51A23001AB623 /* AccountConfirmation.swift */,
 				AA7CCAE524A7823200544E68 /* EmailForConfirmationController.swift */,
+				AABEB2B3250BBACE0064F67E /* ReversedLearnControllerView.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -788,6 +803,14 @@
 			path = DictCardsController;
 			sourceTree = "<group>";
 		};
+		AABEB2AE250BA5CD0064F67E /* ReversedLearnController */ = {
+			isa = PBXGroup;
+			children = (
+				AABEB2AF250BA61C0064F67E /* ReversedLearnControllerModel.swift */,
+			);
+			path = ReversedLearnController;
+			sourceTree = "<group>";
+		};
 		AAC605732390E5DE00120B77 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -843,6 +866,14 @@
 				AAEBE74D23A39E7B00F48684 /* TranslationControllerDatasource.swift */,
 			);
 			path = TranslationController;
+			sourceTree = "<group>";
+		};
+		AAF056F22525EC4500841599 /* UpdateActions */ = {
+			isa = PBXGroup;
+			children = (
+				AAF056F32525EC9200841599 /* DbDictionarySequenceNumberAssignment.swift */,
+			);
+			path = UpdateActions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1020,9 +1051,11 @@
 				AA8700C9239792B000C97E18 /* RegisterControllerServices.swift in Sources */,
 				AA8C0E10238918FA000CBB73 /* PresentationAssembly.swift in Sources */,
 				AA2B772424A690670081660C /* UIViewControllerExt.swift in Sources */,
+				AABEB2B2250BAE590064F67E /* ReversedLearnView.swift in Sources */,
 				AA1B8759238D9CE100D26FCF /* RootAssembly.swift in Sources */,
 				AAD4A2E523ABAB3100394693 /* DbUserTestDictExt.swift in Sources */,
 				AA8700D52399170B00C97E18 /* RegistrationModel.swift in Sources */,
+				AABEB2B0250BA61C0064F67E /* ReversedLearnControllerModel.swift in Sources */,
 				AA1B874D238D2A2400D26FCF /* RequestsSettings.swift in Sources */,
 				AAEBE74E23A39E7B00F48684 /* TranslationControllerDatasource.swift in Sources */,
 				AA2B772224A6298B0081660C /* ConfirmAccountRequest.swift in Sources */,
@@ -1081,6 +1114,7 @@
 				AAD4A2E723ABB15400394693 /* DbUserTestExt.swift in Sources */,
 				AA8700D72399225900C97E18 /* DictsController.swift in Sources */,
 				AAB6CEC72393C1D200AAAF0E /* AppUserStorageManager.swift in Sources */,
+				AAF056EF2525E9EA00841599 /* UpdateActions.swift in Sources */,
 				AA8700DF23993F9900C97E18 /* CommonTabBarController.swift in Sources */,
 				AA6A03B923AC9C7500902FBE /* LearnController.swift in Sources */,
 				AA2B772024A623AF0081660C /* AccountConfirmationModel.swift in Sources */,
@@ -1121,6 +1155,7 @@
 				AAC6057F2391237B00120B77 /* DictionaryResponse.swift in Sources */,
 				AA1B874A238D29F300D26FCF /* LoginRequest.swift in Sources */,
 				AAF3FE7124AB8851003DBBB2 /* UILabelExt.swift in Sources */,
+				AAF056F42525EC9200841599 /* DbDictionarySequenceNumberAssignment.swift in Sources */,
 				AAC6057B2390F86700120B77 /* RegistrationLayouter.swift in Sources */,
 				AA8700E623994ACE00C97E18 /* DictControllerModel.swift in Sources */,
 				AAD4A2E123ABA59900394693 /* DbUserTestCardExt.swift in Sources */,
@@ -1144,6 +1179,7 @@
 				49A160CBD53E96CBBA9E3354 /* LoginResponse.swift in Sources */,
 				AA55CEC924A7E547008CF330 /* EmailForConfirmationModel.swift in Sources */,
 				49A1646F9BDD6D3757510F85 /* UIAlertController.swift in Sources */,
+				AABEB2B4250BBACE0064F67E /* ReversedLearnControllerView.swift in Sources */,
 				AA38AD73244B11FE007C2069 /* RecentTestTableViewCell.swift in Sources */,
 				AA88C7DE2442242D002E3549 /* TestResultsTableViewCell.swift in Sources */,
 				AAD4A2EE23ABE1E200394693 /* NSSetExt.swift in Sources */,
@@ -1309,6 +1345,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chrisbenua.synomobile;
 				PRODUCT_NAME = Syno;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1331,6 +1368,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chrisbenua.synomobile;
 				PRODUCT_NAME = Syno;
 				SWIFT_VERSION = 5.0;

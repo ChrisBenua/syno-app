@@ -5,12 +5,17 @@ import UIKit
 protocol ITestResultsTableViewCellConfiguration {
     /// Current translation
     var translation: String? { get }
+    
+    var userAnswer: String? { get }
+    
     /// Cells background color
     var backgroundColor: UIColor { get }
 }
 
 class TestResultsTableViewCellConfiguration: ITestResultsTableViewCellConfiguration {
     var translation: String?
+    
+    var userAnswer: String?
     
     var backgroundColor: UIColor
     
@@ -19,8 +24,9 @@ class TestResultsTableViewCellConfiguration: ITestResultsTableViewCellConfigurat
      - Parameter translation: Current translation
      - Parameter backgroundColor:Cells background color
      */
-    init(translation: String?, backgroundColor: UIColor) {
+    init(translation: String?, userAnswer: String?, backgroundColor: UIColor) {
         self.translation = translation
+        self.userAnswer = userAnswer
         self.backgroundColor = backgroundColor
     }
 }
@@ -42,6 +48,14 @@ class TestResultsTableViewCell: UITableViewCell, IConfigurableTestResultsTableVi
     func configure(config: ITestResultsTableViewCellConfiguration) {
         self.translationLabel.text = config.translation
         self.baseShadowView.shadowView.backgroundColor = config.backgroundColor
+        
+        if let userAnswer = config.userAnswer, !userAnswer.isEmpty {
+            self.userAnswerStackView.isHidden = false
+            self.usersAnswerLabel.text = userAnswer
+        } else {
+            self.userAnswerStackView.isHidden = true
+        }
+        
     }
     
     /// Label for displaying current translation
@@ -53,14 +67,45 @@ class TestResultsTableViewCell: UITableViewCell, IConfigurableTestResultsTableVi
         return label
     }()
     
+    lazy var usersAnswerTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Ваш ответ:"
+        label.font = .systemFont(ofSize: 14)
+        label.textAlignment = .left
+        label.backgroundColor = .clear
+        return label
+    }()
+    
+    lazy var usersAnswerLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 18)
+        label.textAlignment = .left
+        label.backgroundColor = .clear
+        return label
+    }()
+    
+    lazy var userAnswerStackView: UIStackView = {
+        let sv = UIStackView(arrangedSubviews: [usersAnswerTitleLabel, usersAnswerLabel])
+        sv.axis = .vertical
+        sv.isHidden = true
+        return sv
+    }()
+    
+    lazy var allStackView: UIStackView = {
+        let sv = UIStackView(arrangedSubviews: [translationLabel, userAnswerStackView])
+        sv.spacing = 5
+        sv.axis = .vertical
+        return sv
+    }()
+    
     /// Main view
     lazy var baseShadowView: BaseShadowView = {
         let view = BaseShadowView()
         view.cornerRadius = 20
         view.shadowView.shadowOffset = CGSize(width: 0, height: 4)
         view.bringSubviewToFront(view.shadowView)
-        view.addSubview(self.translationLabel)
-        self.translationLabel.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 15, paddingLeft: 15, paddingBottom: 15, paddingRight: 15, width: 0, height: 0)
+        view.addSubview(self.allStackView)
+        self.allStackView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 15, paddingLeft: 15, paddingBottom: 15, paddingRight: 15, width: 0, height: 0)
         return view
     }()
     

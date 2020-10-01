@@ -74,7 +74,6 @@ class AppUserStorageManager: IAppUserStorageManager {
             res = try! self.stack.mainContext.fetch(DbAppUser.requestActive())
         }
         return res.first
-        
     }
     
     func markAppUserAsCurrent(user: DbAppUser) {

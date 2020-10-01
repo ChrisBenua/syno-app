@@ -340,12 +340,7 @@ extension DictionaryControllerTableViewDataSource {
         guard let cell = collection.cellForItem(at: indexPath) as? DictionaryCollectionViewCell else { return nil }
         // Set parameters to a circular mask and clear background
         let parameters = UIPreviewParameters()
-        //parameters.backgroundColor = .clear
-        //parameters.visiblePath = UIBezierPath(ovalIn: cell.baseShadowView.bounds)
-        //parameters.visiblePath = UIBezierPath(roundedRect: cell.baseShadowView.bounds, cornerRadius: cell.stackView.layer.cornerRadius)
-
-
-        // Return a targeted preview using our cell previewView and parameters
+        
         return UITargetedPreview(view: cell.baseShadowView.containerView, parameters: parameters)
     }
 }

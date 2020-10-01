@@ -127,9 +127,9 @@ class LearnControllerTableViewDataSource: NSObject, ILearnControllerTableViewDat
         if indexPath.row == 0 && didAddNew {
             let myCell = cell as! TranslationReadonlyTableViewCell
             didAddNew = false
-            myCell.baseShadowView.alpha = 0
+            myCell.innerView.baseShadowView.alpha = 0
             UIView.animate(withDuration: 0.5) {
-                myCell.baseShadowView.alpha = 1
+                myCell.innerView.baseShadowView.alpha = 1
             }
         }
     }
