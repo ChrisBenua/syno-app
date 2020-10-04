@@ -37,7 +37,8 @@ class TransferGuestDictsToNewAccount: ITransferGuestDictsToNewAccount {
             newUser = try self.storageManager.stack.mainContext.fetch(DbAppUser.requestByEmail(email: newUserEmail)).first!
                 let arr = try self.storageManager.stack.mainContext.fetch(DbAppUser.requestByEmail(email: "Guest"))
                 if let guest = arr.first {
-                    let dicts: [DbUserDictionary] = guest.dictionaries?.toArray() ?? []
+                    var dicts: [DbUserDictionary] = guest.getDictionaries(includeDeletedManually: false)
+//                    dicts = dicts.filter{ !$0.wasDeletedManually }
                     let dictDto: [GetDictionaryResponseDto] = dicts.map { (el) -> GetDictionaryResponseDto in
                         let cards: [DbUserCard] = (el.userCards?.toArray() ?? [])
                         return GetDictionaryResponseDto(id: el.serverId, name: el.name ?? "", timeCreated: el.timeCreated ?? Date(), timeModified: el.timeModified ?? Date(), language: el.language, userCards: cards.map({ (card) -> GetCardResponseDto in
@@ -66,7 +67,7 @@ class TransferGuestDictsToNewAccount: ITransferGuestDictsToNewAccount {
                 let arr2 = try self.storageManager.stack.mainContext.fetch(DbAppUser.requestActive())
                 let arr = try self.storageManager.stack.mainContext.fetch(DbAppUser.requestByEmail(email: "Guest"))
                 if arr2.count > 0 {
-                    if (arr2.first!.dictionaries?.count ?? 0) > 0 {
+                    if (arr2.first!.getDictionaries(includeDeletedManually: false).count ?? 0) > 0 {
                         need = false
                         return
                     }

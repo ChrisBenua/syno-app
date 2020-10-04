@@ -68,7 +68,9 @@ class DictionaryControllerDataProvider: IDictionaryControllerDataProvider {
         if deletedObjects.count > 0 {
             self.appUserManager.stack.saveContext.performAndWait {
                 for el in deletedObjects {
-                    self.appUserManager.stack.saveContext.delete( self.appUserManager.stack.saveContext.object(with: el))
+                    if let dict = self.appUserManager.stack.saveContext.object(with: el) as? DbUserDictionary {
+                        dict.wasDeletedManually = true
+                    }
                 }
             }
             deletedObjects = []
@@ -79,7 +81,8 @@ class DictionaryControllerDataProvider: IDictionaryControllerDataProvider {
         self.appUserManager.stack.mainContext.undoManager = UndoManager()
         self.undoManager = self.appUserManager.stack.mainContext.undoManager
         self.undoManager?.beginUndoGrouping()
-        self.appUserManager.stack.mainContext.delete(object)
+        //self.appUserManager.stack.mainContext.delete(object)
+        (object as? DbUserDictionary)?.wasDeletedManually = true
         let objectId = object.objectID
         
         self.commitSaveContextChanges()

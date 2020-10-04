@@ -141,6 +141,8 @@
 		AAD4A2EC23ABD4B300394693 /* TestAndLearnCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD4A2EB23ABD4B300394693 /* TestAndLearnCollectionViewCell.swift */; };
 		AAD4A2EE23ABE1E200394693 /* NSSetExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD4A2ED23ABE1E200394693 /* NSSetExt.swift */; };
 		AAD4A2F123ABE74E00394693 /* TestAndLearnControllerHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD4A2F023ABE74E00394693 /* TestAndLearnControllerHeader.swift */; };
+		AADBA1EC2529E99200F22429 /* DictionaryTrashController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADBA1EB2529E99200F22429 /* DictionaryTrashController.swift */; };
+		AADBA1F12529EA4400F22429 /* DictionaryTrashControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADBA1F02529EA4400F22429 /* DictionaryTrashControllerDataSource.swift */; };
 		AAEBE74923A37FDE00F48684 /* TranslationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE74823A37FDE00F48684 /* TranslationCollectionViewCell.swift */; };
 		AAEBE74B23A39DE400F48684 /* TranslationsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE74A23A39DE400F48684 /* TranslationsCollectionViewController.swift */; };
 		AAEBE74E23A39E7B00F48684 /* TranslationControllerDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE74D23A39E7B00F48684 /* TranslationControllerDatasource.swift */; };
@@ -304,6 +306,8 @@
 		AAD4A2EB23ABD4B300394693 /* TestAndLearnCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAndLearnCollectionViewCell.swift; sourceTree = "<group>"; };
 		AAD4A2ED23ABE1E200394693 /* NSSetExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSSetExt.swift; sourceTree = "<group>"; };
 		AAD4A2F023ABE74E00394693 /* TestAndLearnControllerHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAndLearnControllerHeader.swift; sourceTree = "<group>"; };
+		AADBA1EB2529E99200F22429 /* DictionaryTrashController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryTrashController.swift; sourceTree = "<group>"; };
+		AADBA1F02529EA4400F22429 /* DictionaryTrashControllerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryTrashControllerDataSource.swift; sourceTree = "<group>"; };
 		AAEBE74823A37FDE00F48684 /* TranslationCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationCollectionViewCell.swift; sourceTree = "<group>"; };
 		AAEBE74A23A39DE400F48684 /* TranslationsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsCollectionViewController.swift; sourceTree = "<group>"; };
 		AAEBE74D23A39E7B00F48684 /* TranslationControllerDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationControllerDatasource.swift; sourceTree = "<group>"; };
@@ -692,6 +696,7 @@
 		AA8C0E0C23891862000CBB73 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				AADBA1EF2529EA2600F22429 /* DictionaryTrashController */,
 				AABEB2AE250BA5CD0064F67E /* ReversedLearnController */,
 				AA55CEC724A7E52D008CF330 /* EmailForConfirmationController */,
 				AA2B771E24A623900081660C /* AccountConfirmationController */,
@@ -734,6 +739,7 @@
 				AAADCD6E24A51A23001AB623 /* AccountConfirmation.swift */,
 				AA7CCAE524A7823200544E68 /* EmailForConfirmationController.swift */,
 				AABEB2B3250BBACE0064F67E /* ReversedLearnControllerView.swift */,
+				AADBA1EB2529E99200F22429 /* DictionaryTrashController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -858,6 +864,14 @@
 				AAD4A2E923ABD1F800394693 /* TestAndLearnControllerDatasource.swift */,
 			);
 			path = TestAndLearnController;
+			sourceTree = "<group>";
+		};
+		AADBA1EF2529EA2600F22429 /* DictionaryTrashController */ = {
+			isa = PBXGroup;
+			children = (
+				AADBA1F02529EA4400F22429 /* DictionaryTrashControllerDataSource.swift */,
+			);
+			path = DictionaryTrashController;
 			sourceTree = "<group>";
 		};
 		AAEBE74C23A39E5500F48684 /* TranslationController */ = {
@@ -1123,6 +1137,7 @@
 				AAA5F2CF23A2958600661811 /* CardsControllerDataSource.swift in Sources */,
 				AA38AD7C244CB8A5007C2069 /* HomeControllerUserHeader.swift in Sources */,
 				AA4B780A23C138D4005A9CC9 /* TestViewControllerDataSource.swift in Sources */,
+				AADBA1F12529EA4400F22429 /* DictionaryTrashControllerDataSource.swift in Sources */,
 				AA1B8757238D9C1800D26FCF /* CoreAssembly.swift in Sources */,
 				AA36867B2444D92A003599D0 /* PhonemesManager.swift in Sources */,
 				AA82AFD3238E91A000A75D92 /* UserDefaultsManager.swift in Sources */,
@@ -1154,6 +1169,7 @@
 				AA4B780E23C1CB70005A9CC9 /* TestViewGenerator.swift in Sources */,
 				AAC6057F2391237B00120B77 /* DictionaryResponse.swift in Sources */,
 				AA1B874A238D29F300D26FCF /* LoginRequest.swift in Sources */,
+				AADBA1EC2529E99200F22429 /* DictionaryTrashController.swift in Sources */,
 				AAF3FE7124AB8851003DBBB2 /* UILabelExt.swift in Sources */,
 				AAF056F42525EC9200841599 /* DbDictionarySequenceNumberAssignment.swift in Sources */,
 				AAC6057B2390F86700120B77 /* RegistrationLayouter.swift in Sources */,
@@ -1337,7 +1353,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 8LJXAKA3QW;
 				INFOPLIST_FILE = "syno-mobile/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1345,7 +1361,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chrisbenua.synomobile;
 				PRODUCT_NAME = Syno;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1360,7 +1376,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 8LJXAKA3QW;
 				INFOPLIST_FILE = "syno-mobile/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1368,7 +1384,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chrisbenua.synomobile;
 				PRODUCT_NAME = Syno;
 				SWIFT_VERSION = 5.0;

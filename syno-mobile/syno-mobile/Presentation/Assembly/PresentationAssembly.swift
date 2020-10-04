@@ -64,6 +64,8 @@ protocol IPresentationAssembly {
     
     /// Creates `AddShareViewController`
     func addShareController() -> UIViewController
+    
+    func trashController() -> UIViewController
 }
 
 class PresentationAssembly: IPresentationAssembly {
@@ -185,6 +187,10 @@ class PresentationAssembly: IPresentationAssembly {
     
     func addShareController() -> UIViewController {
         return AddShareViewController(shareModel: self.serviceAssembly.addShareModel())
+    }
+    
+    func trashController() -> UIViewController {
+        return DictsTrashViewController(datasource: self.serviceAssembly.trashDictionariesDataSource(presAssembly: self))
     }
     
     /**

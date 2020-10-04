@@ -13,7 +13,7 @@ class UpdateRequestDataPreprator: IUpdateRequestDataPreprator {
         var dicts: [DbUserDictionary] = []
         var dto: UpdateRequestDto!
         user?.managedObjectContext?.performAndWait {
-            dicts = user?.dictionaries?.toArray() ?? []
+            dicts = user?.getDictionaries(includeDeletedManually: false) ?? []
             
             dto = UpdateRequestDto(existingDictPins: dicts.map({ (el) -> String in
                 return el.pin!

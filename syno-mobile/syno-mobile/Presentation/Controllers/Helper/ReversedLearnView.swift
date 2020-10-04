@@ -1,6 +1,17 @@
 import Foundation
 import UIKit
 
+class UIViewWithPadding: UIView {
+  init(view: UIView, padding: UIEdgeInsets) {
+    super.init(frame: .zero)
+    self.addSubview(view)
+    view.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor, paddingTop: padding.top, paddingLeft: padding.left, paddingBottom: padding.bottom, paddingRight: padding.right, width: 0, height: 0)
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+}
 
 class ReversedLearnView: UIView {
   struct State {
@@ -13,6 +24,8 @@ class ReversedLearnView: UIView {
   }
   private var state: State
   private var model: IReversedLearnControllerModel
+    
+  var buttonHeightConstraint: NSLayoutConstraint!
   
   lazy var compactTranslationViews: [UILabel] = {
     let translations = model.getCard(at: state.cardNumber).translations
@@ -59,6 +72,7 @@ class ReversedLearnView: UIView {
     label.font = .systemFont(ofSize: 20)
     label.text = "\(self.state.cardNumber + 1)/\(self.model.getCardsCount())"
     label.translatesAutoresizingMaskIntoConstraints = false
+    label.textAlignment = .center
     return label
   }()
   
@@ -94,6 +108,12 @@ class ReversedLearnView: UIView {
     return button
   }()
   
+  lazy var showAnswerButtonWrapper: UIView = {
+    let showAnswerViewWrapper = UIViewWithPadding(view: showAnswerButton, padding: .init(top: 40, left: 19, bottom: 0, right: 19))
+
+    return showAnswerViewWrapper
+  }()
+    
   @objc func onButtonTouchBegan() {
     Logger.log(#function)
     animateIn()
@@ -120,22 +140,30 @@ class ReversedLearnView: UIView {
   
   @objc func onShowAnswerButtonClicked() {
     animateOut()
-    self.showAnswerButton.flash(toValue: 0.5, duration: 0.25)
-    if state.state == .noanswer {
-      self.state.state = .answer
-      
-      UIView.transition(with: self.showAnswerButton, duration: 0.8, options: .transitionCrossDissolve, animations: {
-        self.showAnswerButton.setTitle("Показать Карточки", for: .normal)
-      })
-      
-      Logger.log("onShowAnswerButtonClicked")
+    //self.showAnswerButton.flash(toValue: 0.5, duration: 0.25)
     
-      self.cardsHolderViewHeightAnchor?.isActive = false
+    if state.state == .noanswer {
+        self.state.state = .answer
+        Logger.log("onShowAnswerButtonClicked")
 
-      UIView.animate(withDuration: 0.5) {
-        self.answerView.alpha = 1
-        self.cardsHolderView.alpha = 1
-      }
+        self.cardsHolderViewHeightAnchor?.isActive = false
+  
+        UIView.animate(withDuration: 0.5, animations: {
+            self.showAnswerButton.alpha = 0
+        }) { (_) in
+            self.layoutIfNeeded()
+            //self.buttonHeightConstraint.constant = 0
+            //self.topButtonConstraint.constant = 0
+            UIView.animate(withDuration: 0.5) {
+                self.showAnswerButtonWrapper.isHidden = true
+                self.allStackView.layoutIfNeeded()
+            }
+        }
+    
+        UIView.animate(withDuration: 0.5) {
+            self.answerView.alpha = 1
+            self.cardsHolderView.alpha = 1
+        }
     }
   }
   
@@ -152,6 +180,19 @@ class ReversedLearnView: UIView {
     sv.spacing = 10
     return sv
   }()
+    
+  lazy var allStackView: UIStackView = {
+    let stackViewWrapper = UIViewWithPadding(view: stackView, padding: .init(top: 20, left: 20, bottom: 20, right: 20))
+    self.compactTranslationsContainerView.addSubview(stackViewWrapper)
+    stackViewWrapper.anchor(top: compactTranslationsContainerView.topAnchor, left: compactTranslationsContainerView.leftAnchor, bottom: compactTranslationsContainerView.bottomAnchor, right: compactTranslationsContainerView.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+    let answerViewWrapper = UIViewWithPadding(view: answerView, padding: .init(top: 20, left: 15, bottom: 0, right: 15))
+    let cardsHolderViewWrapper = UIViewWithPadding(view: cardsHolderView, padding: .init(top: 20, left: 0, bottom: 10, right: 0))
+    let sv = UIStackView(arrangedSubviews: [headerLabel, compactTranslationsContainerView, showAnswerButtonWrapper, answerViewWrapper, cardsHolderViewWrapper])
+    sv.setCustomSpacing(10, after: headerLabel)
+    sv.axis = .vertical
+    
+    return sv
+  }()
   
   lazy var cardsHolderView: UIView = {
     let sv = UIStackView(arrangedSubviews: self.translationCardViews)
@@ -166,24 +207,32 @@ class ReversedLearnView: UIView {
   var cardsHolderViewHeightAnchor: NSLayoutConstraint!
   
   private func layout() {
-    self.compactTranslationsContainerView.addSubview(stackView)
-    stackView.anchor(top: compactTranslationsContainerView.topAnchor, left: compactTranslationsContainerView.leftAnchor, bottom: compactTranslationsContainerView.bottomAnchor, right: compactTranslationsContainerView.rightAnchor, paddingTop: 20, paddingLeft: 20, paddingBottom: 20, paddingRight: 20, width: 0, height: 0)
+    self.addSubview(allStackView)
+    allStackView.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor, paddingTop: 10, paddingLeft: 13.5, paddingBottom: 0, paddingRight: 13.5, width: 0, height: 0)
+    //
     
-    self.addSubview(headerLabel)
-    self.addSubview(compactTranslationsContainerView)
-    
-    self.headerLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 20).isActive = true
-    self.headerLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-    self.compactTranslationsContainerView.anchor(top: headerLabel.bottomAnchor, left: self.leftAnchor, bottom: nil, right: self.rightAnchor, paddingTop: 10, paddingLeft: 13.5, paddingBottom: 0, paddingRight: 13.5, width: 0, height: 0)
-    
-    
-    self.addSubview(showAnswerButton)
-    self.addSubview(answerView)
-    self.addSubview(cardsHolderView)
-    
-    showAnswerButton.anchor(top: compactTranslationsContainerView.bottomAnchor, left: compactTranslationsContainerView.leftAnchor, bottom: nil, right: compactTranslationsContainerView.rightAnchor, paddingTop: 40, paddingLeft: 19, paddingBottom: 0, paddingRight: 19, width: 0, height: 40)
-    answerView.anchor(top: showAnswerButton.bottomAnchor, left: compactTranslationsContainerView.leftAnchor, bottom: nil, right: compactTranslationsContainerView.rightAnchor, paddingTop: 20, paddingLeft: 15, paddingBottom: 0, paddingRight: 15, width: 0, height: 0)
-    cardsHolderView.anchor(top: answerView.bottomAnchor, left: compactTranslationsContainerView.leftAnchor, bottom: self.bottomAnchor, right: compactTranslationsContainerView.rightAnchor, paddingTop: 20, paddingLeft: 0, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
+//    stackView.anchor(top: compactTranslationsContainerView.topAnchor, left: compactTranslationsContainerView.leftAnchor, bottom: compactTranslationsContainerView.bottomAnchor, right: compactTranslationsContainerView.rightAnchor, paddingTop: 20, paddingLeft: 20, paddingBottom: 20, paddingRight: 20, width: 0, height: 0)
+//
+//    self.addSubview(headerLabel)
+//    self.addSubview(compactTranslationsContainerView)
+//
+//    self.headerLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 20).isActive = true
+//    self.headerLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+//    self.compactTranslationsContainerView.anchor(top: headerLabel.bottomAnchor, left: self.leftAnchor, bottom: nil, right: self.rightAnchor, paddingTop: 10, paddingLeft: 13.5, paddingBottom: 0, paddingRight: 13.5, width: 0, height: 0)
+//
+//
+//    self.addSubview(showAnswerButton)
+//    self.addSubview(answerView)
+//    self.addSubview(cardsHolderView)
+//    self.topButtonConstraint = self.showAnswerButton.topAnchor.constraint(equalTo: compactTranslationsContainerView.bottomAnchor, constant: 40)
+    self.buttonHeightConstraint = self.showAnswerButton.heightAnchor.constraint(equalToConstant: 40)
+
+    self.buttonHeightConstraint.isActive = true
+//    self.topButtonConstraint.isActive = true
+//
+//    showAnswerButton.anchor(top: nil, left: compactTranslationsContainerView.leftAnchor, bottom: nil, right: compactTranslationsContainerView.rightAnchor, paddingTop: 0, paddingLeft: 19, paddingBottom: 0, paddingRight: 19, width: 0, height: 0)
+//    answerView.anchor(top: showAnswerButton.bottomAnchor, left: compactTranslationsContainerView.leftAnchor, bottom: nil, right: compactTranslationsContainerView.rightAnchor, paddingTop: 20, paddingLeft: 15, paddingBottom: 0, paddingRight: 15, width: 0, height: 0)
+//    cardsHolderView.anchor(top: answerView.bottomAnchor, left: compactTranslationsContainerView.leftAnchor, bottom: self.bottomAnchor, right: compactTranslationsContainerView.rightAnchor, paddingTop: 20, paddingLeft: 0, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
   }
   
   init(state: State, model: IReversedLearnControllerModel) {

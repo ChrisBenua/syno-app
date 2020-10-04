@@ -107,9 +107,9 @@ class TranslationsCollectionViewController: UIViewController {
         view.addSubview(self.tableView)
         view.addSubview(self.controlsView)
         
-        self.controlsView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        self.controlsView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 11.5, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         
-        self.tableView.anchor(top: self.controlsView.bottomAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
+        self.tableView.anchor(top: self.controlsView.bottomAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: -2, paddingLeft: 0, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
         self.tableView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -30).isActive = true
         self.tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         

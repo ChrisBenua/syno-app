@@ -1,7 +1,6 @@
 package com.syno_back.backend.model;
 
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -51,7 +50,6 @@ public class DbUserDictionary {
      * Time when <code>DbUserDictionary</code> was created
      */
     @Setter
-    @CreationTimestamp
     @Column(name="time_created")
     private LocalDateTime timeCreated;
 
@@ -148,6 +146,9 @@ public class DbUserDictionary {
     private void setUUID() {
         if (pin == null)
             this.pin = UUID.randomUUID().toString();
+        if (timeCreated == null) {
+            this.timeCreated = LocalDateTime.now();
+        }
     }
 
     @Override

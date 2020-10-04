@@ -34,6 +34,7 @@
         <attribute name="serverId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="timeCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="timeModified" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="wasDeletedManually" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DbAppUser" inverseName="dictionaries" inverseEntity="DbAppUser"/>
         <relationship name="tests" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DbUserTest" inverseName="targetedDict" inverseEntity="DbUserTest"/>
         <relationship name="userCards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DbUserCard" inverseName="sourceDictionary" inverseEntity="DbUserCard"/>
@@ -72,7 +73,7 @@
         <element name="DbAppUser" positionX="-397.75390625" positionY="-244.33203125" width="128" height="58"/>
         <element name="DbTranslation" positionX="-27.65625" positionY="-24.08984375" width="128" height="43"/>
         <element name="DbUserCard" positionX="-36.62890625" positionY="-164.203125" width="128" height="28"/>
-        <element name="DbUserDictionary" positionX="-212.55078125" positionY="-223.0859375" width="128" height="178"/>
+        <element name="DbUserDictionary" positionX="-212.55078125" positionY="-223.0859375" width="128" height="193"/>
         <element name="DbUserTest" positionX="-448.88671875" positionY="-149.23046875" width="128" height="118"/>
         <element name="DbUserTestAnswer" positionX="-213.88671875" positionY="176.20703125" width="128" height="58"/>
         <element name="DbUserTestCard" positionX="-388.578125" positionY="65.109375" width="128" height="103"/>

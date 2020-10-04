@@ -70,18 +70,17 @@ class TestView: UIView, ITestView {
     lazy var headerView: UIView = {
         let view = UIView()
         
-        let sepView = UIView(); sepView.translatesAutoresizingMaskIntoConstraints = false
         let sepView1 = UIView(); sepView1.translatesAutoresizingMaskIntoConstraints = false
         
-        let sv = UIStackView(arrangedSubviews: [cardNumberLabel, sepView, translatedWordView, sepView1, translationsNumberLabel])
+        let sv = UIStackView(arrangedSubviews: [cardNumberLabel, translatedWordView, sepView1, translationsNumberLabel])
         sv.axis = .vertical
         sv.distribution = .fill
+        sv.setCustomSpacing(10, after: cardNumberLabel)
         
-        sepView.heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.2).isActive = true
         sepView1.heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.15).isActive = true
         
         view.addSubview(sv)
-        sv.anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        sv.anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         sv.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         sv.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1).isActive = true
         
@@ -140,14 +139,14 @@ class TestView: UIView, ITestView {
         view.backgroundColor = .clear
         view.translatesAutoresizingMaskIntoConstraints = false
         
-        view.addSubview(self.controlsView)
+        //view.addSubview(self.controlsView)
         view.addSubview(self.tableView)
         
-        self.controlsView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 5, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+//        self.controlsView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 5, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         
-        self.tableView.anchor(top: self.controlsView.bottomAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 10, paddingRight: 15, width: 0, height: 0)
+        self.tableView.anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 13, paddingLeft: 0, paddingBottom: 13, paddingRight: 0, width: 0, height: 0)
         self.tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        self.tableView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -25).isActive = true
+        self.tableView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -22).isActive = true
         
         return view
     }()

@@ -90,6 +90,10 @@ protocol IServiceAssembly {
     var updateRequestService: IUpdateRequestService { get }
     
     var transferService: ITransferGuestDictsToNewAccount { get }
+    
+    var trashDictionariesDataProvider: ITrashDictionaryControllerDataProvider { get }
+    
+    func trashDictionariesDataSource(presAssembly: IPresentationAssembly) -> ITrashDictionaryControllerTableViewDataSource
 }
 
 /// Provides all services realizations
@@ -131,6 +135,8 @@ class ServiceAssembly: IServiceAssembly {
     var dictionaryControllerDataProvider: IDictionaryControllerDataProvider
     
     var dictShareService: IDictShareService
+    
+    lazy var trashDictionariesDataProvider: ITrashDictionaryControllerDataProvider = TrashDictionaryControllerDataProvider(storageCoordinator: self.coreAssembly.storageManager)
     
     var innerBatchUpdatesQueue: DispatchQueue = DispatchQueue(label: "innerCoreDataDispatchQueue", attributes: .concurrent)
     
@@ -232,5 +238,9 @@ class ServiceAssembly: IServiceAssembly {
     
     func editDictControllerModel(dictToEdit: DbUserDictionary) -> INewOrEditDictControllerModel {
         return EditDictControllerModel(storageManager: self.coreAssembly.storageManager, dictToEdit: dictToEdit)
+    }
+    
+    func trashDictionariesDataSource(presAssembly: IPresentationAssembly) -> ITrashDictionaryControllerTableViewDataSource {
+        return TrashDictionaryControllerTableViewDataSource(presAssembly: presAssembly, dataProvider: self.trashDictionariesDataProvider)
     }
 }
