@@ -162,6 +162,11 @@ extension ReversedLearnCollectionViewController: UIScrollViewDelegate {
 
 extension ReversedLearnCollectionViewController: UIGestureRecognizerDelegate {
 func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    if let view = otherGestureRecognizer.view as? UIScrollView {
+        if let _ = view.superview as? UIScrollableTextField {
+            return false
+        }
+    }
     return true
   }
 }

@@ -70,7 +70,7 @@ class NewDictController: UIViewController {
     }()
   
     @objc func onLanguageTextFieldTextChanged() {
-        let text = self.languageTextField.getTextField().text
+        let text = (self.languageTextField.getTextField()).text
         Logger.log("\(text)")
         if let index = text?.distance(of: "-") {
             if index > 0 && index < (text?.count ?? 0) - 1 {

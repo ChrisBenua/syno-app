@@ -47,20 +47,16 @@ class ReversedLearnView: UIView {
     }
   }()
   
-  lazy var translationCardViews: [TranslationTableViewCellContentView] = {
+  lazy var translationCardViews: [TranslationReadonlyTableViewCellContentView] = {
     let translations = model.getCard(at: state.cardNumber).translations
-    return translations.map { (translation) -> TranslationTableViewCellContentView in
-      let cell = TranslationTableViewCellContentView(padding: UIEdgeInsets(top: 27, left: 20, bottom: 15, right: 20), speakButtonPadding: UIEdgeInsets(top: 12.5, left: 0, bottom: 0, right: 15))
-      cell.translationTextField.isUserInteractionEnabled = false
+    return translations.map { (translation) -> TranslationReadonlyTableViewCellContentView in
+      let cell = TranslationReadonlyTableViewCellContentView(padding: UIEdgeInsets(top: 27, left: 20, bottom: 15, right: 20), speakButtonPadding: UIEdgeInsets(top: 12.5, left: 0, bottom: 0, right: 15))
       cell.translationTextField.text = translation.translation
       
-      cell.transcriptionTextField.isUserInteractionEnabled = false
       cell.transcriptionTextField.text = translation.transcription
       
-      cell.commentTextField.isUserInteractionEnabled = false
       cell.commentTextField.text = translation.comment
       
-      cell.sampleTextField.isUserInteractionEnabled = false
       cell.sampleTextField.text = translation.sample
       
       return cell

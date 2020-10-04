@@ -186,6 +186,11 @@ extension LearnCollectionViewController: UIScrollViewDelegate {
 
 extension LearnCollectionViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        if let view = otherGestureRecognizer.view as? UIScrollView {
+            if let superView = view.superview as? UIScrollableTextField {
+                return false
+            }
+        }
         return true
     }
 }

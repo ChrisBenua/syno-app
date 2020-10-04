@@ -143,6 +143,7 @@
 		AAD4A2F123ABE74E00394693 /* TestAndLearnControllerHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD4A2F023ABE74E00394693 /* TestAndLearnControllerHeader.swift */; };
 		AADBA1EC2529E99200F22429 /* DictionaryTrashController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADBA1EB2529E99200F22429 /* DictionaryTrashController.swift */; };
 		AADBA1F12529EA4400F22429 /* DictionaryTrashControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADBA1F02529EA4400F22429 /* DictionaryTrashControllerDataSource.swift */; };
+		AADBA1F5252A2D3F00F22429 /* UIScrollableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADBA1F4252A2D3F00F22429 /* UIScrollableTextField.swift */; };
 		AAEBE74923A37FDE00F48684 /* TranslationCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE74823A37FDE00F48684 /* TranslationCollectionViewCell.swift */; };
 		AAEBE74B23A39DE400F48684 /* TranslationsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE74A23A39DE400F48684 /* TranslationsCollectionViewController.swift */; };
 		AAEBE74E23A39E7B00F48684 /* TranslationControllerDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEBE74D23A39E7B00F48684 /* TranslationControllerDatasource.swift */; };
@@ -308,6 +309,7 @@
 		AAD4A2F023ABE74E00394693 /* TestAndLearnControllerHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAndLearnControllerHeader.swift; sourceTree = "<group>"; };
 		AADBA1EB2529E99200F22429 /* DictionaryTrashController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryTrashController.swift; sourceTree = "<group>"; };
 		AADBA1F02529EA4400F22429 /* DictionaryTrashControllerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryTrashControllerDataSource.swift; sourceTree = "<group>"; };
+		AADBA1F4252A2D3F00F22429 /* UIScrollableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollableTextField.swift; sourceTree = "<group>"; };
 		AAEBE74823A37FDE00F48684 /* TranslationCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationCollectionViewCell.swift; sourceTree = "<group>"; };
 		AAEBE74A23A39DE400F48684 /* TranslationsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsCollectionViewController.swift; sourceTree = "<group>"; };
 		AAEBE74D23A39E7B00F48684 /* TranslationControllerDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationControllerDatasource.swift; sourceTree = "<group>"; };
@@ -842,6 +844,7 @@
 				AA7642832451F08200E388A1 /* GetDictShareView.swift */,
 				AAC2EA7724C1A81F00A41AB9 /* EmptyDictsCollectionViewHeader.swift */,
 				AAC2EA7924C1AE6400A41AB9 /* EmptyCardsCollectionViewHeader.swift */,
+				AADBA1F4252A2D3F00F22429 /* UIScrollableTextField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1170,6 +1173,7 @@
 				AAC6057F2391237B00120B77 /* DictionaryResponse.swift in Sources */,
 				AA1B874A238D29F300D26FCF /* LoginRequest.swift in Sources */,
 				AADBA1EC2529E99200F22429 /* DictionaryTrashController.swift in Sources */,
+				AADBA1F5252A2D3F00F22429 /* UIScrollableTextField.swift in Sources */,
 				AAF3FE7124AB8851003DBBB2 /* UILabelExt.swift in Sources */,
 				AAF056F42525EC9200841599 /* DbDictionarySequenceNumberAssignment.swift in Sources */,
 				AAC6057B2390F86700120B77 /* RegistrationLayouter.swift in Sources */,
