@@ -98,6 +98,22 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
         
         return label
     }()
+  
+    private func onShowAlertController(title: String?, message: String?, action: (() -> ())?) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(
+            UIAlertAction(title: "Ok", style: .default, handler: { (_) in
+                action?()
+            })
+        )
+        alertController.addAction(
+            UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
+                alertController.dismiss(animated: true, completion: nil)
+            })
+        )
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
     
     @objc func onCopyFromGuestLabelClick() {
         self.dataProvider.copyGuestDicts()
@@ -105,7 +121,9 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
     
     /// `createCopyLabel` click listener
     @objc func onCreateCopyLabelClick() {
-        self.dataProvider.onUploadDataToServer()
+        onShowAlertController(title: "Вы уверены, что хотите создать резервную копию?", message: nil) {
+            self.dataProvider.onUploadDataToServer()
+        }
     }
     
     /// Label for downloading copy from server
@@ -119,13 +137,31 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
         
         label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onDownloadCopyLabelClick)))
 
-        
         return label
     }()
     
+    lazy var openTrashLabel: UILabel = {
+        let label = UILabelWithInsets(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))
+        label.isUserInteractionEnabled = true
+        label.clipsToBounds = true
+        label.layer.cornerRadius = 10
+        label.text = "Открыть корзину Словарей"
+        label.backgroundColor = .white
+        
+        label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onOpenTrashController)))
+
+        return label
+    }()
+    
+    @objc func onOpenTrashController() {
+        self.dataProvider.onTrashAction()
+    }
+    
     /// `downloadCopyLabel` click listener
     @objc func onDownloadCopyLabelClick() {
-        self.dataProvider.onDownloadDataFromServer()
+        self.onShowAlertController(title: "Вы уверены, что хотите загрузить резервную копию?", message: "Все Словари, которых нет в предыдущей резервной копии будут удалены") {
+            self.dataProvider.onDownloadDataFromServer()
+        }
     }
     
     /// Wrapper-view with `createCopyLabel` and `downloadCopyLabel`
@@ -142,13 +178,32 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
         let sv = UIStackView(arrangedSubviews: views)
         sv.axis = .vertical
         sv.distribution = .fill
-        sv.spacing = 13
+        sv.spacing = 10
         
         view.addSubview(sv)
         
-        sv.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 16, paddingLeft: 13, paddingBottom: 16, paddingRight: 13, width: 0, height: 0)
+        sv.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 15, paddingLeft: 15, paddingBottom: 15, paddingRight: 15, width: 0, height: 0)
         
         return view
+    }()
+    
+    lazy var trashActionsView: UIView = {
+         let view = BaseShadowView()
+         
+         view.cornerRadius = 12
+         view.shadowView.shadowOffset = CGSize(width: 0, height: 4)
+         view.containerViewBackgroundColor = UIColor(red: 240.0/255, green: 240.0/255, blue: 240.0/255, alpha: 1)
+         
+         let sv = UIStackView(arrangedSubviews: [self.openTrashLabel])
+         sv.axis = .vertical
+         sv.distribution = .fill
+         sv.spacing = 13
+         
+         view.addSubview(sv)
+         
+        sv.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 15, paddingLeft: 15, paddingBottom: 15, paddingRight: 15, width: 0, height: 0)
+         
+         return view
     }()
     
     /// Main view
@@ -159,10 +214,12 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
         view.containerViewBackgroundColor = UIColor(red: 247.0/255, green: 247.0/255, blue: 247.0/255, alpha: 1)
         
         view.addSubview(self.loginView)
+        view.addSubview(self.trashActionsView)
         view.addSubview(self.actionsView)
         
-        self.loginView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 13, paddingLeft: 13, paddingBottom: 0, paddingRight: 13, width: 0, height: 0)
-        self.actionsView.anchor(top: self.loginView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 35, paddingLeft: 13, paddingBottom: 13, paddingRight: 13, width: 0, height: 0)
+        self.loginView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 15, paddingLeft: 15, paddingBottom: 0, paddingRight: 15, width: 0, height: 0)
+        self.trashActionsView.anchor(top: self.loginView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 25, paddingLeft: 15, paddingBottom: 0, paddingRight: 15, width: 0, height: 0)
+        self.actionsView.anchor(top: self.trashActionsView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 25, paddingLeft: 15, paddingBottom: 15, paddingRight: 15, width: 0, height: 0)
         
         return view
     }()

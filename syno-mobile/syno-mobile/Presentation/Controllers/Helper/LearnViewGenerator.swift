@@ -72,14 +72,14 @@ class LearnView: UIView, ILearnView {
         
         let translationsNumberLabel = self.translationsNumberLabel
         
-        let sepView = UIView(); sepView.translatesAutoresizingMaskIntoConstraints = false
         let sepView1 = UIView(); sepView1.translatesAutoresizingMaskIntoConstraints = false
         
-        let sv = UIStackView(arrangedSubviews: [cardNumberLabel, sepView, translatedWordView, sepView1, translationsNumberLabel])
+        let sv = UIStackView(arrangedSubviews: [cardNumberLabel, translatedWordView, sepView1, translationsNumberLabel])
         sv.axis = .vertical
         sv.distribution = .fill
+        sv.setCustomSpacing(10, after: cardNumberLabel)
         
-        sepView.heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.2).isActive = true
+        //sepView.heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.2).isActive = true
         sepView1.heightAnchor.constraint(equalTo: sv.heightAnchor, multiplier: 0.15).isActive = true
         
         view.addSubview(sv)
@@ -102,8 +102,8 @@ class LearnView: UIView, ILearnView {
         view.addSubview(plusOneButton)
         view.addSubview(showAllButton)
         
-        plusOneButton.anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 10, paddingRight: 30, width: 0, height: 0)
-        showAllButton.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: nil, paddingTop: 10, paddingLeft: 30, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
+        plusOneButton.anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 10, paddingRight: 27.5, width: 0, height: 0)
+        showAllButton.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: nil, paddingTop: 10, paddingLeft: 27.5, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
         
         plusOneButton.widthAnchor.constraint(equalTo: showAllButton.widthAnchor).isActive = true
         showAllButton.widthAnchor.constraint(greaterThanOrEqualTo: view.widthAnchor, multiplier: 0.15).isActive = true

@@ -33,6 +33,8 @@ protocol IPresentationAssembly {
     /// Creates `LearnCollectionViewController`
     /// - Parameter sourceDict: Dictionary which cards will be displayed
     func learnController(sourceDict: DbUserDictionary) -> LearnCollectionViewController
+  
+    func reversedLearnController(sourceDict: DbUserDictionary) -> ReversedLearnCollectionViewController
     
     /// Creates `TestViewController`
     /// - Parameter sourceDict: to `sourceDict` new test will be attached
@@ -62,6 +64,8 @@ protocol IPresentationAssembly {
     
     /// Creates `AddShareViewController`
     func addShareController() -> UIViewController
+    
+    func trashController() -> UIViewController
 }
 
 class PresentationAssembly: IPresentationAssembly {
@@ -117,6 +121,18 @@ class PresentationAssembly: IPresentationAssembly {
         
         return LearnCollectionViewController(data: LearnViewControllerData(cardsAmount: viewModel.count, dictName: viewModel.dictName), learnViews: views)
     }
+  
+    func reversedLearnController(sourceDict: DbUserDictionary) -> ReversedLearnCollectionViewController {
+      let model = self.serviceAssembly.reversedLearnControllerModel(sourceDict: sourceDict)
+      
+      var views: [ReversedLearnView] = []
+      
+      for i in 0..<model.getCardsCount() {
+        let view = ReversedLearnViewGenerator().generate(model: model, state: ReversedLearnView.State(cardNumber: i))
+        views.append(view)
+      }
+      return ReversedLearnCollectionViewController(model: model, learnViews: views)
+    }
     
     func testController(sourceDict: DbUserDictionary) -> TestViewController {
         let cardsAmount = sourceDict.getCards().count
@@ -171,6 +187,10 @@ class PresentationAssembly: IPresentationAssembly {
     
     func addShareController() -> UIViewController {
         return AddShareViewController(shareModel: self.serviceAssembly.addShareModel())
+    }
+    
+    func trashController() -> UIViewController {
+        return DictsTrashViewController(datasource: self.serviceAssembly.trashDictionariesDataSource(presAssembly: self))
     }
     
     /**

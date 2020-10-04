@@ -9,6 +9,18 @@
 import Foundation
 import UIKit
 
+class EmptyDictTrashCollectionViewHeader: EmptyDictsCollectionViewHeader {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        label.text = "Ваша Корзина пуста"
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 class EmptyDictsCollectionViewHeader: UICollectionViewCell {
     static let headerId = "EmptyDictsCollectionViewHeaderШв"
 

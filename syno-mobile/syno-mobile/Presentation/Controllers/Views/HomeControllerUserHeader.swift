@@ -75,7 +75,7 @@ class HomeControllerUserHeader: UIView {
      */
     init(email: String) {
         super.init(frame: .zero)
-        self.userEmailLabel.text = "Email: " + email
+        self.userEmailLabel.text = email
         self.addSubview(stackView)
         stackView.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor, paddingTop: 10, paddingLeft: 15, paddingBottom: 10, paddingRight: 10, width: 0, height: 0)
     }

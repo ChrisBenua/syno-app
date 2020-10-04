@@ -20,6 +20,7 @@ protocol IHomeControllerDataProviderDelegate: UIViewController {
 
 /// Defines needed functions for inner logic of `HomeViewController`
 protocol IHomeControllerMenuDataProvider {
+    func onTrashAction()
     func onSignInAction()
     func onUploadDataToServer()
     func onDownloadDataFromServer()
@@ -76,6 +77,11 @@ class HomeControllerMenuDataProvider: NSObject, IHomeControllerMenuDataProvider 
     /// Hanles sign in action
     func onSignInAction() {
         let controller = self.presAssembly.loginFromHomeViewController()
+        self.delegate?.showController(controller: controller)
+    }
+    
+    func onTrashAction() {
+        let controller = self.presAssembly.trashController()
         self.delegate?.showController(controller: controller)
     }
     

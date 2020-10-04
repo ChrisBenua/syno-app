@@ -34,7 +34,10 @@ class UserDictsFetchService: IUserDictionaryFetchService {
         self.storageManager.stack.saveContext.performAndWait {
             let ownerInSaveContext = self.storageManager.stack.saveContext.object(with: owner.objectID) as! DbAppUser
             var toRemove: [DbUserDictionary] = []
-            let allUserDicts: [DbUserDictionary] = ownerInSaveContext.dictionaries?.toArray() ?? []
+            let allUserDicts: [DbUserDictionary] = ownerInSaveContext.getDictionaries(includeDeletedManually: false)
+            //allUserDicts = allUserDicts.filter{ !$0.wasDeletedManually }
+            let trashDicts: [DbUserDictionary] = ownerInSaveContext.getDictionaries(includeDeletedManually: true).filter({ $0.wasDeletedManually })
+            
             for dict in allUserDicts {
                 if (!existingPins.contains(dict.pin!)) {
                     toRemove.append(dict)
@@ -61,15 +64,19 @@ class UserDictsFetchService: IUserDictionaryFetchService {
             
             if (shouldDelete) {
                 for el in toRemove {
-                    ownerInSaveContext.removeFromDictionaries(el)
-                    self.storageManager.stack.saveContext.delete(el)
+                    el.wasDeletedManually = true
                 }
             }
             
-            for updateDictDto in dicts {
+            for updateDictDto in dicts.sorted(by: { $0.timeCreated > $1.timeCreated }) {
                 if (!updatedPins.contains(updateDictDto.pin)) {
+                    if let dict = trashDicts.first(where: { $0.pin == updateDictDto.pin }) {
+                        ownerInSaveContext.removeFromDictionaries(dict)
+                        self.storageManager.stack.saveContext.delete(dict)
+                    }
                     self.innerQueue.async {
                     //dispatchGroup.wait()
+                    Logger.log("Dict: name: \(updateDictDto.name), \(updateDictDto.timeCreated)")
                     dispatchGroup.enter()
                         self.storageManager.createUserDictionary(owner: ownerInSaveContext, name: updateDictDto.name, timeCreated: updateDictDto.timeCreated, timeModified: updateDictDto.timeModified, language: updateDictDto.language, serverId: updateDictDto.id, cards: nil, pin: updateDictDto.pin) { (newDict) in
                             self.cardsFetchService.updateCards(cards: updateDictDto.userCards, doSave: true, sourceDict: newDict, completion: { () in

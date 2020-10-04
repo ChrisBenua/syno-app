@@ -45,8 +45,16 @@ extension DbUserDictionary {
     /// Creates `NSFetchRequest` to fetch given `DbAppUser` dictionaries sorted by name
     static func requestSortedByName(owner: DbAppUser) -> NSFetchRequest<DbUserDictionary> {
         let request: NSFetchRequest<DbUserDictionary> = DbUserDictionary.fetchRequest()
-        request.predicate = NSPredicate(format: "owner == %@", owner)
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false)]
+        request.predicate = NSPredicate(format: "owner == %@ AND wasDeletedManually == NO", owner)
+        request.sortDescriptors = [NSSortDescriptor(key: "timeCreated", ascending: false), NSSortDescriptor(key: "name", ascending: false)]
+        
+        return request
+    }
+    
+    static func requestDeletedSortedByDate(owner: DbAppUser) -> NSFetchRequest<DbUserDictionary> {
+        let request: NSFetchRequest<DbUserDictionary> = DbUserDictionary.fetchRequest()
+        request.predicate = NSPredicate(format: "owner == %@ AND wasDeletedManually == YES", owner)
+        request.sortDescriptors = [NSSortDescriptor(key: "timeCreated", ascending: false), NSSortDescriptor(key: "name", ascending: false)]
         
         return request
     }

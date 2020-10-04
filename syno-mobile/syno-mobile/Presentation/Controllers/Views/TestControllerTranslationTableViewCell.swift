@@ -69,7 +69,7 @@ class TestControllerTranslationTableViewCell: UITableViewCell, IConfigurableTest
     
     /// TextField for displaying and editing answer
     lazy var translationTextField: UITextField = {
-        let tf = UITextFieldWithInsets(insets: UIEdgeInsets(top: 2, left: 10, bottom: 2, right: 10))
+        let tf = UITextFieldWithInsets(insets: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
         tf.backgroundColor = .white
         tf.font = .systemFont(ofSize: 22, weight: .light)
         tf.addTarget(self, action: #selector(onTranslationTextChanged(_:)), for: .editingChanged)
@@ -96,7 +96,7 @@ class TestControllerTranslationTableViewCell: UITableViewCell, IConfigurableTest
         
         translationTextField.delegate = self
         
-        translationTextField.anchor(top: self.contentView.topAnchor, left: self.contentView.leftAnchor, bottom: self.contentView.bottomAnchor, right: self.contentView.rightAnchor, paddingTop: 10, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 0)
+        translationTextField.anchor(top: self.contentView.topAnchor, left: self.contentView.leftAnchor, bottom: self.contentView.bottomAnchor, right: self.contentView.rightAnchor, paddingTop: 8, paddingLeft: 10, paddingBottom: 8, paddingRight: 10, width: 0, height: 0)
     }
     
     required init?(coder: NSCoder) {

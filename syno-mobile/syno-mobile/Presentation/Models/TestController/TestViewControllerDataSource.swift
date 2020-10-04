@@ -204,6 +204,13 @@ class TestViewControllerDataProvider: ITestViewControllerDataProvider {
                             return dbTranlsation.translation!.lowercased().trimmingCharacters(in: .whitespaces) == answer.answer.lowercased().trimmingCharacters(in: .whitespaces)
                             }).count > 0) {
                             dbTranlsation.isRightAnswered = true
+                            
+                            currCardAnswers.forEach { (answer) in
+                                if let dbanswer = DbUserTestAnswer.insertUserTestAnswer(into: self.storageManager.stack.mainContext) {
+                                    dbanswer.userAnswer = answer.answer
+                                    dbTestCard.addToUserAnswers(dbanswer)
+                                }
+                            }
                         }
                     }
                 }
@@ -297,22 +304,21 @@ class TestViewControllerDataSource: NSObject, ITestViewControllerDataSource, ITe
         cell.setup(config: TestControllerTranslationCellConfiguration(translation: state.answers[state.itemNumber][indexPath.row].answer))
         return cell
     }
-
     
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let removeAction = UIContextualAction(style: .normal, title: "Remove") { (action, view, _) in
-            if let cell = tableView.cellForRow(at: indexPath) {
-                self.onDeleteLineForAnswer(sender: cell)
-            }
-        }
-        
-        removeAction.image = #imageLiteral(resourceName: "criss-cross")
-        
-        removeAction.backgroundColor = UIColor(red: 240.0/255, green: 240.0/255, blue: 240.0/255, alpha: 1.0)
-        let config = UISwipeActionsConfiguration(actions: [removeAction])
-        config.performsFirstActionWithFullSwipe = false
-        return config
-    }
+//    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+//        let removeAction = UIContextualAction(style: .normal, title: "Remove") { (action, view, _) in
+//            if let cell = tableView.cellForRow(at: indexPath) {
+//                self.onDeleteLineForAnswer(sender: cell)
+//            }
+//        }
+//
+//        removeAction.image = #imageLiteral(resourceName: "criss-cross")
+//
+//        removeAction.backgroundColor = UIColor(red: 240.0/255, green: 240.0/255, blue: 240.0/255, alpha: 1.0)
+//        let config = UISwipeActionsConfiguration(actions: [removeAction])
+//        config.performsFirstActionWithFullSwipe = false
+//        return config
+//    }
     
     func onAddLineForAnswer() {
         self.state.answers.append(pos: state.itemNumber, answer: TestControllerAnswer(answer: ""))

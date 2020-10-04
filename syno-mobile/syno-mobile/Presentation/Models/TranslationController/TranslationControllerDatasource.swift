@@ -293,9 +293,9 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
         if self.didAddNewTranslation && indexPath.row == 0 {
             self.didAddNewTranslation = false
             let myCell = cell as! TranslationTableViewCell
-            myCell.baseShadowView.alpha = 0
+            myCell.innerView.baseShadowView.alpha = 0
             UIView.animate(withDuration: 0.5) {
-                myCell.baseShadowView.alpha = 1
+                myCell.innerView.baseShadowView.alpha = 1
             }
         }
     }
@@ -339,11 +339,11 @@ class TranslationControllerDataSource: NSObject, ITranslationControllerDataSourc
         guard let cell = tableView.cellForRow(at: indexPath) as? TranslationTableViewCell else { return nil }
         // Set parameters to a circular mask and clear background
         let parameters = UIPreviewParameters()
-        parameters.visiblePath = UIBezierPath(roundedRect: cell.baseShadowView.containerView.bounds, cornerRadius: 20)
+        parameters.visiblePath = UIBezierPath(roundedRect: cell.innerView.baseShadowView.containerView.bounds, cornerRadius: 20)
         parameters.backgroundColor = .clear
 
         // Return a targeted preview using our cell previewView and parameters
-        return UITargetedPreview(view: cell.baseShadowView.containerView, parameters: parameters)
+        return UITargetedPreview(view: cell.innerView.baseShadowView.containerView, parameters: parameters)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

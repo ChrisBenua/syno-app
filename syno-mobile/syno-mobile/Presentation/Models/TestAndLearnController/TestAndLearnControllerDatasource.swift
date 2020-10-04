@@ -18,6 +18,8 @@ protocol ITestAndLearnStateReactor: class {
 protocol ITestAndLearnReactor: class {
     /// Shows new view controller
     func showLearnController(controller: UIViewController)
+  
+    func showActionSheetController(controller: UIAlertController)
     
     /// Notifies when should change title
     func onChangeControllerTitle(newMode: TestAndLearnModes)
@@ -375,8 +377,27 @@ extension TestAndLearnDictionaryDataSource {
             self.delegate?.onShowError(title: "Ошибка", message: "Невозможно начать \(errMode). Словарь пуст")
         } else {
             if (self.state.testAndLearnMode == .learnMode) {
-                let controller = self.presAssembly.learnController(sourceDict: dict)
-                self.delegate?.showLearnController(controller: controller)
+                let actionController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+              actionController.addAction(UIAlertAction(title: "Обычный(" + (self.fetchedResultsController.object(at: indexPath).language ?? "") + ")", style: .default, handler: { (_) in
+                  let controller = self.presAssembly.learnController(sourceDict: dict)
+                  self.delegate?.showLearnController(controller: controller)
+              }))
+              let language = self.fetchedResultsController.object(at: indexPath).language ?? ""
+              var reversedLanguage = language.split(whereSeparator: { (ch) -> Bool in
+                !ch.isLetter
+              }).reversed().reduce("", { $0 + "-" + $1 })
+              if reversedLanguage.count > 1 && reversedLanguage.first == "-" {
+                  reversedLanguage = reversedLanguage.substring(from: reversedLanguage.index(after: reversedLanguage.startIndex))
+              }
+              actionController.addAction(UIAlertAction(title: "Наоборот(" + reversedLanguage + ")", style: .default, handler: { (_) in
+                  
+                  let controller = self.presAssembly.reversedLearnController(sourceDict: dict)
+                  self.delegate?.showLearnController(controller: controller)
+              }))
+              actionController.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) in
+                  actionController.dismiss(animated: true)
+              }))
+              self.delegate?.showActionSheetController(controller: actionController)
             } else {
                 let contoller = self.presAssembly.testController(sourceDict: dict)
                 self.delegate?.showLearnController(controller: contoller)
