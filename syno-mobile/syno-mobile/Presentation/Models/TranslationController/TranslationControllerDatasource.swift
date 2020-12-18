@@ -43,6 +43,13 @@ protocol ITranslationControllerDataSource: UITableViewDataSource, UITableViewDel
 
 /// `DbTranslation` dto
 class TranslationCellWrapper: ITranslationCellConfiguration {
+    
+    var translationsLanguage: String? {
+        get {
+            return self.translationCellConfiguration.translationsLanguage
+        }
+    }
+    
     var translation: String? {
         get {
             return self.translationCellConfiguration.translation
@@ -121,7 +128,7 @@ class TranslationControllerDataProvider: ITranslationControllerDataProvider {
     }
     
     func add() {
-        self.translations?.insert(TranslationCellWrapper(translation: TranslationCellConfiguration(translation: "", transcription: "", comment: "", sample: ""), objectId: nil), at: 0)
+        self.translations?.insert(TranslationCellWrapper(translation: TranslationCellConfiguration(translation: "", transcription: "", comment: "", sample: "", translationsLanguage: self._sourceCard.sourceDictionary?.getTranslationsLanguage()), objectId: nil), at: 0)
     }
     
     func deleteAt(ind: Int) {
@@ -152,7 +159,7 @@ class TranslationControllerDataProvider: ITranslationControllerDataProvider {
                 if let transWord = self.newTranslatedWord {
                     card.translatedWord = transWord
                 }
-                
+                var newTranslations: [DbTranslation] = []
                 for trans in self.translations ?? [] {
                     if let objId = trans.transObjectID {
                         let dbTranslation = self.storageCoordinator.stack.saveContext.object(with: objId) as! DbTranslation
@@ -168,8 +175,14 @@ class TranslationControllerDataProvider: ITranslationControllerDataProvider {
                         dbTranslation?.usageSample = trans.sample
                         dbTranslation?.sourceCard = card
                         dbTranslation?.timeCreated = Date()
+                      
+                        if let tr = dbTranslation {
+                            newTranslations.append(tr)
+                        }
                     }
                 }
+              
+                card.translations = NSOrderedSet(array: newTranslations + card.getTranslations())
                 
                 for delObjId in self.shouldDeleteTransObjectIds {
                     let obj = self.storageCoordinator.stack.saveContext.object(with: delObjId)

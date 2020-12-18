@@ -3,6 +3,9 @@ import UIKit
 import AVFoundation
 
 class TranslationReadonlyTableViewCellContentView: UIView {
+
+  var translationsLanguage: String?
+    
   lazy var stackView: UIStackView = {
       let stackView = UIStackView(arrangedSubviews: [translationContainerView, transcriptionContainerView, commentContainerView, self.sampleContainer])
       stackView.axis = .vertical
@@ -154,7 +157,11 @@ class TranslationReadonlyTableViewCellContentView: UIView {
   }()
   
   @objc func onSpeakButtonPressed() {
-      AVSpeechSynthesizer().speak(AVSpeechUtterance(string: self.translationTextField.text ?? ""))
+    let utterance = AVSpeechUtterance(string: self.translationTextField.text ?? "")
+    if let lan = self.translationsLanguage {
+        utterance.voice = AVSpeechSynthesisVoice(language: ToLocale.getLocale(str: lan))
+    }
+    AVSpeechSynthesizer().speak(utterance)
   }
 }
 
@@ -171,6 +178,8 @@ class TranslationReadonlyTableViewCell: UITableViewCell, IConfigurableTranslatio
     var comment: String?
     
     var sample: String?
+    
+    var translationsLanguage: String?
     
     /// Delegate for notifying on editing events
     weak var delegate: ITranslationCellDidChangeDelegate?
@@ -189,6 +198,7 @@ class TranslationReadonlyTableViewCell: UITableViewCell, IConfigurableTranslatio
         self.innerView.transcriptionTextField.text = transcription
         self.innerView.commentTextField.text = comment
         self.innerView.sampleTextField.text = sample
+        self.innerView.translationsLanguage = translationsLanguage
     }
     
     /**
@@ -200,6 +210,7 @@ class TranslationReadonlyTableViewCell: UITableViewCell, IConfigurableTranslatio
         self.comment = config.comment
         self.sample = config.sample
         self.transcription = config.transcription
+        self.translationsLanguage = config.translationsLanguage
         
         updateUI()
     }

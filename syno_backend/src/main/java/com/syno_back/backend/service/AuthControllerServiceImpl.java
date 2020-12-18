@@ -48,6 +48,9 @@ public class AuthControllerServiceImpl implements IAuthControllerService {
                 try {
                     emailService.sendVerificationEmail(newUser.getEmail(), code);
                 } catch (Exception e) {
+                    logger.error("Failed to send email for new user {}", newUser.getEmail());
+                    logger.error("Exception: e: {}", e.getLocalizedMessage(), e);
+
                     e.printStackTrace();
                     throw new RuntimeException("Error, check your email");
                 }

@@ -2,6 +2,57 @@ import Foundation
 import AVFoundation
 import UIKit
 
+class ToLocale {
+    public static func getLocale(str: String) -> String {
+        let known = ["en": "en-GB", "de": "de-DE", "fr": "fr-FR", "jp": "ja-JP", "es": "es-ES", "ru": "ru-RU"];
+        let res = known[str] ?? "en-GB"
+        Logger.log(res)
+        return res
+    }
+}
+
+protocol ICustomToolbarSuggestionViewDelegate: class {
+    func onClick(suggestion: String)
+}
+
+class CustomToolbarSuggestionView: UIView {
+    weak var delegate: ICustomToolbarSuggestionViewDelegate?
+    
+    lazy var suggestionLabel: UILabel = {
+        let label = UILabel()
+        label.isUserInteractionEnabled = true
+        let reco = UILongPressGestureRecognizer(target: self, action: #selector(onClick(_:)))
+        reco.minimumPressDuration = 0
+        label.addGestureRecognizer(reco)
+        
+        return label
+    }()
+    
+    @objc func onClick(_ sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            UIView.transition(with: self.suggestionLabel, duration: 0.2, options: .transitionCrossDissolve, animations: {
+                self.suggestionLabel.textColor = .lightGray
+            }, completion: nil)
+        }
+        if sender.state == .ended {
+            UIView.transition(with: self.suggestionLabel, duration: 0.2, options: .transitionCrossDissolve, animations: {
+                self.suggestionLabel.textColor = .black
+            }, completion: nil)
+            self.delegate?.onClick(suggestion: self.suggestionLabel.text ?? "")
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.addSubview(suggestionLabel)
+        suggestionLabel.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 /// Protocol for defining data for `TranslationTableViewCell`
 protocol ITranslationCellConfiguration {
     /// One of word translations
@@ -12,6 +63,8 @@ protocol ITranslationCellConfiguration {
     var comment: String? { get set }
     /// User's usage sample
     var sample: String? { get set }
+    
+    var translationsLanguage: String? { get }
 }
 
 class TranslationCellConfiguration: ITranslationCellConfiguration {
@@ -23,6 +76,8 @@ class TranslationCellConfiguration: ITranslationCellConfiguration {
     
     var sample: String?
     
+    var translationsLanguage: String?
+    
     /**
      Creates new `TranslationCellConfiguration`
      - Parameter translation: One of word translations
@@ -30,11 +85,12 @@ class TranslationCellConfiguration: ITranslationCellConfiguration {
      - Parameter comment: user's comment
      - Parameter sample: User's usage sample
      */
-    init(translation: String?, transcription: String?, comment: String?, sample: String?) {
+    init(translation: String?, transcription: String?, comment: String?, sample: String?, translationsLanguage: String?) {
         self.translation = translation
         self.transcription = transcription
         self.comment = comment
         self.sample = sample
+        self.translationsLanguage = translationsLanguage
     }
 }
 
@@ -56,6 +112,7 @@ class TranslationTableViewCellContentView: UIView {
   
   var padding: UIEdgeInsets
   var speakButtonPadding: UIEdgeInsets
+  var translationsLanguage: String?
   
   /// Base cell's view with shadow around it
   lazy var baseShadowView: BaseShadowView = {
@@ -109,6 +166,11 @@ class TranslationTableViewCellContentView: UIView {
   
       return tf
   }()
+    
+    lazy var suggestionView: CustomToolbarSuggestionView = {
+        let suggestionView = CustomToolbarSuggestionView()
+        return suggestionView
+    }()
   
   ///Text field for displaying and editing `transcription`
   lazy var transcriptionTextField: UITextField = {
@@ -116,10 +178,23 @@ class TranslationTableViewCellContentView: UIView {
       tf.layer.borderWidth = 0
       tf.placeholder = "Транскрипция"
       tf.font = UIFont.systemFont(ofSize: 18)
-      
+      tf.autocapitalizationType = .none
+      tf.autocorrectionType = .no
+      let toolbar = UIToolbar()
+      let customItem = UIBarButtonItem(customView: suggestionView)
+      let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+      let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.done, target: self, action: #selector(onDoneButtonClick))
+
+      toolbar.setItems([customItem, flexibleSpace, doneButton], animated: false)
+      toolbar.sizeToFit()
+      tf.inputAccessoryView = toolbar
       
       return tf
   }()
+    
+    @objc func onDoneButtonClick() {
+        self.transcriptionTextField.resignFirstResponder()
+    }
   
   /// Text field for displaying and editing `sample`
   lazy var sampleTextField: UITextField = {
@@ -183,7 +258,11 @@ class TranslationTableViewCellContentView: UIView {
   }()
   
   @objc func onSpeakButtonPressed() {
-      AVSpeechSynthesizer().speak(AVSpeechUtterance(string: self.translationTextField.text ?? ""))
+      let utterance = AVSpeechUtterance(string: self.translationTextField.text ?? "")
+      if let lan = self.translationsLanguage {
+          utterance.voice = AVSpeechSynthesisVoice(language: ToLocale.getLocale(str: lan))
+      }
+      AVSpeechSynthesizer().speak(utterance)
   }
 }
 
@@ -200,6 +279,8 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     var comment: String?
     
     var sample: String?
+    
+    var translationsLanguage: String?
     
     /// Delegate for notifying on editing events
     weak var delegate: ITranslationCellDidChangeDelegate?
@@ -218,6 +299,7 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
         self.innerView.transcriptionTextField.text = transcription
         self.innerView.commentTextField.text = comment
         self.innerView.sampleTextField.text = sample
+        self.innerView.translationsLanguage = self.translationsLanguage
     }
     
     /**
@@ -229,11 +311,16 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
         self.comment = config.comment
         self.sample = config.sample
         self.transcription = config.transcription
+        self.translationsLanguage = config.translationsLanguage
         
         updateUI()
+        if !(config.translation ?? "").isEmpty {
+            self.updateTranscriptionSuggestion(text: config.translation ?? "")
+        }
     }
     
     func setupEvents() {
+        self.innerView.suggestionView.delegate = self
         self.innerView.sampleTextField.delegate = self
         self.innerView.sampleTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         self.innerView.sampleTextField.addTarget(self, action: #selector(didEndEditingTextField(_:)), for: .editingDidEnd)
@@ -282,6 +369,10 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     
     /// On begin editing in textField event listener
     @objc func editingDidBegin(_ textField: UITextField) {
+        if textField == self.innerView.transcriptionTextField {
+            self.updateTranscriptionSuggestion(text: self.innerView.translationTextField.text ?? "")
+            Logger.log("transcriptionTextField suggestion view frame: \(textField.frame)")
+        }
         let bottomTextFieldPointYCoord = textField.frame.origin.y + textField.bounds.height
         
         let point = CGPoint(x: textField.frame.origin.x, y: bottomTextFieldPointYCoord)
@@ -289,15 +380,15 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
         self.delegate?.setLastFocusedPoint(point: lastFocusedTextFieldBottomPoint!, sender: self)
     }
     
+    private func updateTranscriptionSuggestion(text: String) {
+        self.innerView.suggestionView.suggestionLabel.text = self.delegate?.getTranscription(for: text)
+        self.innerView.suggestionView.suggestionLabel.sizeToFit()
+    }
+    
     /// On ended editing in textFields event listener
     @objc func didEndEditingTextField(_ textField: UITextField) {
         if textField == self.innerView.translationTextField && self.innerView.translationTextField.isUserInteractionEnabled {
-            if (self.innerView.transcriptionTextField.text ?? "").count == 0 {
-                let res = self.delegate?.getTranscription(for: textField.text ?? "")
-                Logger.log("Transcription: \(res)")
-                self.innerView.transcriptionTextField.text = res
-                textFieldDidChange(self.innerView.transcriptionTextField)
-            }
+            self.updateTranscriptionSuggestion(text: textField.text ?? "")
         }
         
         var ok = true
@@ -322,7 +413,7 @@ class TranslationTableViewCell: UITableViewCell, IConfigurableTranslationCell, I
     
     /// Generates cell's configuration
     func generateCellConf() -> TranslationCellConfiguration {
-        return TranslationCellConfiguration(translation: self.innerView.translationTextField.text, transcription: self.innerView.transcriptionTextField.text, comment: self.innerView.commentTextField.text, sample: self.innerView.sampleTextField.text)
+        return TranslationCellConfiguration(translation: self.innerView.translationTextField.text, transcription: self.innerView.transcriptionTextField.text, comment: self.innerView.commentTextField.text, sample: self.innerView.sampleTextField.text, translationsLanguage: self.translationsLanguage)
     }
     
     /// `speakButton` click listener: speaks given word
@@ -338,5 +429,13 @@ extension TranslationTableViewCell: UITextFieldDelegate {
             arr[ind + 1].becomeFirstResponder()
         }
         return true
+    }
+}
+
+extension TranslationTableViewCell: ICustomToolbarSuggestionViewDelegate {
+    func onClick(suggestion: String) {
+        Logger.log("Transcription: \(suggestion)")
+        self.innerView.transcriptionTextField.text = suggestion
+        textFieldDidChange(self.innerView.transcriptionTextField)
     }
 }

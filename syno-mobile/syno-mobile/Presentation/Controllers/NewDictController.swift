@@ -119,9 +119,9 @@ class NewDictController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-        self.navigationItem.title = "Новый словарь"
+        self.navigationItem.title = self.model.getDefaultName() == nil ? "Новый словарь" : "Редактирование"
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Добавить", style: .done, target: self, action: #selector(onSubmitButtonPressed))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: self.model.getDefaultName() == nil ? "Добавить" : "Сохранить", style: .done, target: self, action: #selector(onSubmitButtonPressed))
         self.navigationItem.rightBarButtonItem?.isEnabled = false
         
         self.view.addSubview(baseShadowView)

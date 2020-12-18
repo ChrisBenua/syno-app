@@ -1,6 +1,29 @@
 import Foundation
 import UIKit
 
+extension String {
+    func lowercaseAndPunctuationRemoval() -> String {
+        let str = self.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+        var characters: [Character] = []
+        var index = str.startIndex
+        for _ in 1..<max(str.count, 1) {
+            if !(str[index] == " " && str[str.index(after: index)] == " ") {
+                characters.append(str[index])
+            }
+            index = str.index(after: index)
+        }
+        if str.count > 0 {
+            characters.append(str[index])
+            characters = characters.filter { (ch) -> Bool in
+                (!ch.isPunctuation && !ch.isWhitespace) || (ch == "-" || ch == "—" || ch == "–")
+            }
+            Logger.log("After erasure - " + String(characters))
+        }
+        
+        return String(characters)
+    }
+}
+
 /// Dto for user input in `TestViewController`
 protocol ITestControllerAnswer {
     /// User's answer
@@ -201,16 +224,17 @@ class TestViewControllerDataProvider: ITestViewControllerDataProvider {
                     
                     for dbTranlsation in transArr {
                         if (currCardAnswers.filter({ (answer) -> Bool in
-                            return dbTranlsation.translation!.lowercased().trimmingCharacters(in: .whitespaces) == answer.answer.lowercased().trimmingCharacters(in: .whitespaces)
+                            return dbTranlsation.translation!.lowercaseAndPunctuationRemoval() == answer.answer.lowercaseAndPunctuationRemoval()
                             }).count > 0) {
                             dbTranlsation.isRightAnswered = true
-                            
-                            currCardAnswers.forEach { (answer) in
-                                if let dbanswer = DbUserTestAnswer.insertUserTestAnswer(into: self.storageManager.stack.mainContext) {
-                                    dbanswer.userAnswer = answer.answer
-                                    dbTestCard.addToUserAnswers(dbanswer)
-                                }
-                            }
+                        }
+                    }
+                    Logger.log("Card answers: \(dbTestCard.translatedWord)")
+                    currCardAnswers.forEach { (answer) in
+                        if let dbanswer = DbUserTestAnswer.insertUserTestAnswer(into: self.storageManager.stack.mainContext) {
+                            Logger.log("\t\(answer.answer)")
+                            dbanswer.userAnswer = answer.answer
+                            dbTestCard.addToUserAnswers(dbanswer)
                         }
                     }
                 }

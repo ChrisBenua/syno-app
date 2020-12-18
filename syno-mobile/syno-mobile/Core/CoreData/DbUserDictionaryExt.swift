@@ -2,6 +2,14 @@ import Foundation
 import CoreData
 
 extension DbUserDictionary {
+    
+    func getTranslationsLanguage() -> String? {
+        if let lan = self.language?.split(separator: "-").last {
+            return String(lan)
+        }
+        return nil
+    }
+    
     /// Gets `DbUserDictionary` cards array
     func getCards() -> [DbUserCard] {
         return (self.userCards?.allObjects ?? []) as! [DbUserCard]

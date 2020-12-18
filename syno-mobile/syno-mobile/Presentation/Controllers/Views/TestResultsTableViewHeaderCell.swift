@@ -108,6 +108,7 @@ class TestResultsTableViewHeaderView: UIView, IConfigurableTestResultsHeader {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20)
         label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         
         return label
     }()

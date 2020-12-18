@@ -4,7 +4,7 @@ import CoreData
 extension DbTranslation {
     /// Converts `DbTranslation` to `ITranslationCellConfiguration`
     func toTranslationCellConfig() -> ITranslationCellConfiguration {
-        return TranslationCellConfiguration(translation: translation, transcription: transcription, comment: comment, sample: usageSample)
+        return TranslationCellConfiguration(translation: translation, transcription: transcription, comment: comment, sample: usageSample, translationsLanguage: self.sourceCard?.sourceDictionary?.getTranslationsLanguage())
     }
     
     /// Creates new empty `DbTranslation` and inserts it in given context

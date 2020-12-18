@@ -59,6 +59,8 @@ class LearnView: UIView, ILearnView {
     /// View for displaying current translated word
     lazy var translatedWordView: TranslatedWordView = {
         let translatedWordView = TranslatedWordView()
+        translatedWordView.translatedWordLabel.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .horizontal)
+        translatedWordView.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .horizontal)
         translatedWordView.translatedWordLabel.isUserInteractionEnabled = false
         
         return translatedWordView
@@ -86,7 +88,7 @@ class LearnView: UIView, ILearnView {
         sv.anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         sv.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         sv.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1).isActive = true
-        
+        sv.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .horizontal)
         return view
     }()
     
@@ -175,7 +177,9 @@ class LearnView: UIView, ILearnView {
         
         self.headerView.anchor(top: view.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         self.headerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        self.headerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40).isActive = true
+        self.headerView.widthAnchor.constraint(greaterThanOrEqualTo: view.widthAnchor, constant: -40).isActive = true
+        self.headerView.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor, constant: 0).isActive = true
+      
         
         self.collectionContainerView.anchor(top: self.headerView.bottomAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 10, paddingLeft: 0, paddingBottom: 20, paddingRight: 0, width: 0, height: 0)
         self.collectionContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true

@@ -128,6 +128,8 @@ public class AuthController {
                 try {
                     emailService.sendVerificationEmail(email, code);
                 } catch (Exception e) {
+                    logger.error("Failed to resend email for user {}", email);
+                    logger.error("Exception: e: {}", e.getLocalizedMessage(), e);
                     e.printStackTrace();
                     return new ResponseEntity<>(new MessageResponse("Error, check your email"), HttpStatus.BAD_REQUEST);
                 }

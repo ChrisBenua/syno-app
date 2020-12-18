@@ -44,9 +44,12 @@ protocol ILearnControllerDataProvider {
     var count: Int { get }
     /// Dictionary name
     var dictName: String? { get }
+    
+    var translationsLanguage: String? { get }
 }
 
 class LearnControllerDataProvider: ILearnControllerDataProvider {
+    
     func getTranslatedWord(cardPos: Int) -> String? {
         return translatedWords[cardPos]
     }
@@ -71,6 +74,8 @@ class LearnControllerDataProvider: ILearnControllerDataProvider {
     
     var dictName: String?
     
+    var translationsLanguage: String?
+    
     /**
      Creates new ``
      - Parameter dbUserDict: `DbUserDictionary` to create learn controller for
@@ -78,6 +83,9 @@ class LearnControllerDataProvider: ILearnControllerDataProvider {
     init(dbUserDict: DbUserDictionary) {
         self.dictName = dbUserDict.name
         let cards = dbUserDict.getCards().shuffled()
+        
+        self.translationsLanguage = dbUserDict.getTranslationsLanguage()
+        
         self.translatedWords = cards.map({ (card) -> String? in
             card.translatedWord
         })
@@ -144,7 +152,7 @@ class LearnControllerTableViewDataSource: NSObject, ILearnControllerTableViewDat
         }
         let transDto = self.viewModel.getItem(cardPos: self.state.itemNumber, transPos: self.state.translationsShown - indexPath.row - 1)
         
-        cell.setup(config: TranslationCellConfiguration(translation: transDto.translation, transcription: transDto.transcription, comment: transDto.comment, sample: transDto.sample))
+        cell.setup(config: TranslationCellConfiguration(translation: transDto.translation, transcription: transDto.transcription, comment: transDto.comment, sample: transDto.sample, translationsLanguage: viewModel.translationsLanguage))
         
         return cell
     }
