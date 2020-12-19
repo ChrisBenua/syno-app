@@ -27,4 +27,12 @@ public class MainController {
         }
         return null;
     }
+
+    @GetMapping(
+            value = "/share/uuid={id}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public @ResponseBody Object getShare() {
+        return getAssociation();
+    }
 }

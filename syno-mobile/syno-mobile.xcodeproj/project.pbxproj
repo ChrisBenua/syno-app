@@ -143,6 +143,7 @@
 		AAD4A2EC23ABD4B300394693 /* TestAndLearnCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD4A2EB23ABD4B300394693 /* TestAndLearnCollectionViewCell.swift */; };
 		AAD4A2EE23ABE1E200394693 /* NSSetExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD4A2ED23ABE1E200394693 /* NSSetExt.swift */; };
 		AAD4A2F123ABE74E00394693 /* TestAndLearnControllerHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD4A2F023ABE74E00394693 /* TestAndLearnControllerHeader.swift */; };
+		AAD7D89F258E4EFA00427C81 /* Syno.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = AAD7D89C258E34D400427C81 /* Syno.entitlements */; };
 		AADBA1EC2529E99200F22429 /* DictionaryTrashController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADBA1EB2529E99200F22429 /* DictionaryTrashController.swift */; };
 		AADBA1F12529EA4400F22429 /* DictionaryTrashControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADBA1F02529EA4400F22429 /* DictionaryTrashControllerDataSource.swift */; };
 		AADBA1F5252A2D3F00F22429 /* UIScrollableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADBA1F4252A2D3F00F22429 /* UIScrollableTextField.swift */; };
@@ -993,6 +994,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAD7D89F258E4EFA00427C81 /* Syno.entitlements in Resources */,
 				AA94BC29238841FD00B2F16F /* LaunchScreen.storyboard in Resources */,
 				AA3686792444C228003599D0 /* phonemes.txt in Resources */,
 				AA94BC26238841FD00B2F16F /* Assets.xcassets in Resources */,
@@ -1376,7 +1378,7 @@
 				CODE_SIGN_ENTITLEMENTS = "syno-mobile/Syno.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 8LJXAKA3QW;
 				INFOPLIST_FILE = "syno-mobile/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1400,7 +1402,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "syno-mobile/Syno.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 8LJXAKA3QW;
 				INFOPLIST_FILE = "syno-mobile/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
