@@ -4,7 +4,7 @@
     "details": [
       {
         "appID": "3RDV84F3G7.com.chrisbenua.synomobile",
-        "paths": ["*"]
+        "paths": ["*", "/"]
       }
     ]
   }
