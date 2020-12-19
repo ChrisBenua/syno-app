@@ -311,6 +311,7 @@
 		AAD4A2EB23ABD4B300394693 /* TestAndLearnCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAndLearnCollectionViewCell.swift; sourceTree = "<group>"; };
 		AAD4A2ED23ABE1E200394693 /* NSSetExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSSetExt.swift; sourceTree = "<group>"; };
 		AAD4A2F023ABE74E00394693 /* TestAndLearnControllerHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAndLearnControllerHeader.swift; sourceTree = "<group>"; };
+		AAD7D89C258E34D400427C81 /* Syno.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Syno.entitlements; sourceTree = "<group>"; };
 		AADBA1EB2529E99200F22429 /* DictionaryTrashController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryTrashController.swift; sourceTree = "<group>"; };
 		AADBA1F02529EA4400F22429 /* DictionaryTrashControllerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryTrashControllerDataSource.swift; sourceTree = "<group>"; };
 		AADBA1F4252A2D3F00F22429 /* UIScrollableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollableTextField.swift; sourceTree = "<group>"; };
@@ -794,6 +795,7 @@
 		AA94BC1B238841F300B2F16F /* syno-mobile */ = {
 			isa = PBXGroup;
 			children = (
+				AAD7D89C258E34D400427C81 /* Syno.entitlements */,
 				AA8C0E06238917F4000CBB73 /* Helpers */,
 				AA8C0E05238917E8000CBB73 /* Services */,
 				AA8C0E04238917DC000CBB73 /* Presentation */,
@@ -1371,6 +1373,7 @@
 			baseConfigurationReference = F0EE8DE7560F63269D26781C /* Pods-syno-mobile.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "syno-mobile/Syno.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1381,7 +1384,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-
 				MARKETING_VERSION = 1.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chrisbenua.synomobile;
 				PRODUCT_NAME = Syno;
@@ -1396,6 +1398,7 @@
 			baseConfigurationReference = B169F42F7A6B5AFCF835DEC5 /* Pods-syno-mobile.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "syno-mobile/Syno.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8LJXAKA3QW;
@@ -1405,7 +1408,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.2;				PRODUCT_BUNDLE_IDENTIFIER = com.chrisbenua.synomobile;
+				MARKETING_VERSION = 1.3.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chrisbenua.synomobile;
 				PRODUCT_NAME = Syno;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
