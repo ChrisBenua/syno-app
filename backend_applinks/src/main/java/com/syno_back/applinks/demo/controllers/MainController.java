@@ -17,22 +17,17 @@ public class MainController {
             value = "/apple-app-site-association",
             produces = "application/pkcs7-mime"
     )
-    public @ResponseBody Object getAssociation() {
+    public @ResponseBody Object getAssociation() throws IOException {
         Resource resource = new ClassPathResource("/static/association.json");
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(resource.getInputStream(), Object.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+
+        return resource.getInputStream();
     }
 
     @GetMapping(
             value = "/share/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public @ResponseBody Object getShare(@PathVariable String id) {
+    public @ResponseBody Object getShare(@PathVariable String id) throws IOException {
         return getAssociation();
     }
 }
