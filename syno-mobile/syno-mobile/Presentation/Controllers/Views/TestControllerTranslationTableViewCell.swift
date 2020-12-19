@@ -72,7 +72,7 @@ class TestControllerTranslationTableViewCell: UITableViewCell, IConfigurableTest
         let tf = UITextFieldWithInsets(insets: UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8))
         tf.backgroundColor = .white
         tf.font = .systemFont(ofSize: 22, weight: .light)
-        tf.addTarget(self, action: #selector(onTranslationTextChanged(_:)), for: .editingChanged)
+        tf.addTarget(self, action: #selector(onTranslationTextChanged(_:)), for: .allEditingEvents)
         tf.delegate = self
         tf.clipsToBounds = true
         

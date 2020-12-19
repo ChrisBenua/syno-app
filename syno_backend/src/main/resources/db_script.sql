@@ -112,3 +112,6 @@ ALTER TABLE public.dict_shares
 ALTER TABLE public.dict_shares
     ADD CONSTRAINT dict_share_dict_fkey FOREIGN KEY (dict_id)
     REFERENCES public.user_dictionaries (id) MATCH SIMPLE;
+
+ALTER TABLE public.users ADD COLUMN is_verified boolean default false;
+ALTER TABLE public.users ADD COLUMN verification_code character varying;

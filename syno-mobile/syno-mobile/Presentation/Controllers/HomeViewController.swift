@@ -153,6 +153,23 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
         return label
     }()
     
+    lazy var openCongratsLabel: UILabel = {
+        let label = UILabelWithInsets(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))
+        label.isUserInteractionEnabled = true
+        label.clipsToBounds = true
+        label.layer.cornerRadius = 10
+        label.text = "Поздравление для Полечки"
+        label.backgroundColor = .white
+        
+        label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onOpenCongratulationsController)))
+        
+        return label
+    }()
+    
+    @objc func onOpenCongratulationsController() {
+        self.dataProvider.onCongratsAction()
+    }
+    
     @objc func onOpenTrashController() {
         self.dataProvider.onTrashAction()
     }
@@ -206,6 +223,20 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
          return view
     }()
     
+    lazy var congratsActionsView: UIView = {
+       let view = BaseShadowView()
+        view.cornerRadius = 12
+        view.shadowView.shadowOffset = CGSize(width: 0, height: 4)
+        view.containerViewBackgroundColor = UIColor(red: 240.0/255, green: 240.0/255, blue: 240.0/255, alpha: 1)
+        
+        let sv = UIStackView(arrangedSubviews: [self.openCongratsLabel]); sv.axis = .vertical; sv.distribution = .fill; sv.spacing = 13;
+        view.addSubview(sv)
+        
+        sv.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 15, paddingLeft: 15, paddingBottom: 15, paddingRight: 15, width: 0, height: 0)
+        
+        return view
+    }()
+    
     /// Main view
     lazy var mainContainerView: UIView = {
         let view = BaseShadowView()
@@ -213,13 +244,16 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
         view.shadowView.shadowOffset = CGSize(width: 0, height: 4)
         view.containerViewBackgroundColor = UIColor(red: 247.0/255, green: 247.0/255, blue: 247.0/255, alpha: 1)
         
-        view.addSubview(self.loginView)
-        view.addSubview(self.trashActionsView)
-        view.addSubview(self.actionsView)
+        let stackView = UIStackView(arrangedSubviews: [self.loginView, self.trashActionsView, self.actionsView])
+        stackView.axis = .vertical
+        stackView.spacing = 25
         
-        self.loginView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 15, paddingLeft: 15, paddingBottom: 0, paddingRight: 15, width: 0, height: 0)
-        self.trashActionsView.anchor(top: self.loginView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 25, paddingLeft: 15, paddingBottom: 0, paddingRight: 15, width: 0, height: 0)
-        self.actionsView.anchor(top: self.trashActionsView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 25, paddingLeft: 15, paddingBottom: 15, paddingRight: 15, width: 0, height: 0)
+        if (dataProvider.isShowingCongratsLabel()) {
+            stackView.insertArrangedSubview(self.congratsActionsView, at: 1)
+        }
+        
+        view.addSubview(stackView)
+        stackView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, padding: UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15))
         
         return view
     }()

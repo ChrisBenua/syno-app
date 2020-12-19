@@ -138,6 +138,12 @@ protocol IDictionaryControllerTableViewDataSource: ICommonDictionaryControllerDa
     func createShare(dict: DbUserDictionary)
 }
 
+
+enum ShowSharingResultViewConfiguration {
+    case success(code: String, dictName: String)
+    case failure(alertTitle: String, alertText: String)
+}
+
 /// `IDictionaryControllerTableViewDataSource` event handler
 protocol IDictionaryControllerReactor: class {
     /// Shows given controller
@@ -152,7 +158,7 @@ protocol IDictionaryControllerReactor: class {
     func showSharingProcessView()
     
     /// Show share's result AlertController
-    func showSharingResultView(text: String, title: String)
+    func showSharingResultView(result: ShowSharingResultViewConfiguration)
 }
 
 class DictionaryControllerTableViewDataSource: NSObject, IDictionaryControllerTableViewDataSource {
@@ -240,7 +246,7 @@ class DictionaryControllerTableViewDataSource: NSObject, IDictionaryControllerTa
     }
     
     func addShareController() -> UIViewController {
-        return self.presAssembly.addShareController()
+        return self.presAssembly.addShareController(uuid: nil)
     }
     
     func createShare(dict: DbUserDictionary) {
@@ -249,9 +255,9 @@ class DictionaryControllerTableViewDataSource: NSObject, IDictionaryControllerTa
             DispatchQueue.main.async {
                 switch result {
                 case .success(let str):
-                    self.delegate?.showSharingResultView(text: str, title: "Успех!")
+                    self.delegate?.showSharingResultView(result: .success(code: str.code, dictName: dict.name ?? ""))
                 case .error(let err):
-                    self.delegate?.showSharingResultView(text: err, title: "Ошибка!")
+                    self.delegate?.showSharingResultView(result: .failure(alertTitle: "Ошибка", alertText: err))
                 }
             }
         }

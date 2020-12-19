@@ -21,11 +21,13 @@ protocol IHomeControllerDataProviderDelegate: UIViewController {
 /// Defines needed functions for inner logic of `HomeViewController`
 protocol IHomeControllerMenuDataProvider {
     func onTrashAction()
+    func onCongratsAction()
     func onSignInAction()
     func onUploadDataToServer()
     func onDownloadDataFromServer()
     var delegate: IHomeControllerDataProviderDelegate? { get set }
     func userEmail() -> String
+    func isShowingCongratsLabel() -> Bool
     func copyGuestDicts()
     func isGuest() -> Bool
 }
@@ -80,9 +82,23 @@ class HomeControllerMenuDataProvider: NSObject, IHomeControllerMenuDataProvider 
         self.delegate?.showController(controller: controller)
     }
     
+    func onCongratsAction() {
+        let controller = self.presAssembly.congratsController()
+        self.delegate?.showController(controller: controller)
+    }
+    
     func onTrashAction() {
         let controller = self.presAssembly.trashController()
         self.delegate?.showController(controller: controller)
+    }
+    
+    private func validateDate() -> Bool {
+        let components = Calendar.current.dateComponents(Set<Calendar.Component>([.day, .month]), from: Date())
+        return (components.day! >= 28 && components.month! == 12) || (components.day! <= 7 && components.month! == 1)
+    }
+    
+    func isShowingCongratsLabel() -> Bool {
+        return (self.userEmail() == "apollinariya.fomina@mail.ru" && validateDate()) || (self.userEmail() == "testuser@nowhere.com")
     }
     
     /// Handler uploading dictionaries to server

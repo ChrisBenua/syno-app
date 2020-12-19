@@ -42,6 +42,8 @@ protocol IServiceAssembly {
     
     var confirmationModel: IAccountConfirmationModel { get }
     
+    var congratulationsModel: ICongratulationsControllerModel { get }
+    
     /// Service responsible for inner logic in DictionaryController
     func dictControllerModel() -> DictControllerModel
     
@@ -135,6 +137,8 @@ class ServiceAssembly: IServiceAssembly {
     var dictionaryControllerDataProvider: IDictionaryControllerDataProvider
     
     var dictShareService: IDictShareService
+    
+    var congratulationsModel: ICongratulationsControllerModel = CongratulationsControllerModelImpl()
     
     lazy var trashDictionariesDataProvider: ITrashDictionaryControllerDataProvider = TrashDictionaryControllerDataProvider(storageCoordinator: self.coreAssembly.storageManager)
     

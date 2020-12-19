@@ -2,6 +2,11 @@ import Foundation
 import CoreData
 import UIKit
 
+struct DictShareServiceCreateShareResponse {
+    let message: String
+    let code: String
+}
+
 /// Protocol for creating and getting dictionary shares
 protocol IDictShareService {
     /**
@@ -9,7 +14,7 @@ protocol IDictShareService {
      - Parameter dictObjectId: Id of dictionary to be shared
      - Parameter completion: completion callback
      */
-    func createShare(dictObjectID: NSManagedObjectID, completion: ((Result<String>) -> ())?)
+    func createShare(dictObjectID: NSManagedObjectID, completion: ((Result<DictShareServiceCreateShareResponse>) -> ())?)
     
     /**
       Gets share and copies dictionary to current user
@@ -29,7 +34,7 @@ class DictShareService: IDictShareService {
     
     private var dictsFetchService: IUserDictionaryFetchService
     
-    func createShare(dictObjectID: NSManagedObjectID, completion: ((Result<String>) -> ())?) {
+    func createShare(dictObjectID: NSManagedObjectID, completion: ((Result<DictShareServiceCreateShareResponse>) -> ())?) {
         if (storageManager.getCurrentUserEmail() != "Guest") {
             let dictPin = (self.storageManager.stack.mainContext.object(with: dictObjectID) as! DbUserDictionary).pin!
             let requestConfig = RequestFactory.BackendRequests.createShare(dto: NewDictShare(shareDictPin: dictPin), userDefManager: userDefManager)
@@ -37,7 +42,7 @@ class DictShareService: IDictShareService {
                 switch result {
                 case .success(let messageDto):
                     UIPasteboard.general.string = messageDto.message
-                    completion?(.success("Код: \(messageDto.message) скопирован"))
+                    completion?(.success(.init(message: "Код: \(messageDto.message) скопирован", code: messageDto.message)))
                 case .error(let err):
                     completion?(.error(err))
                 }

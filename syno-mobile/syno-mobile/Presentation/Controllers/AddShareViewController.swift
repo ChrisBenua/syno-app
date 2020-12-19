@@ -57,10 +57,14 @@ class AddShareViewController: UIViewController, IAddShareModelDelegate, IGetDict
      Creates new `AddShareViewController`
      - Parameter shareModel: service responsible for inner logic `AddShareViewController`
      */
-    init(shareModel: IAddShareModel) {
+    init(shareModel: IAddShareModel, uuid: String?) {
         self.shareModel = shareModel
         super.init(nibName: nil, bundle: nil)
         self.shareModel.delegate = self
+        
+        if let uuid = uuid {
+            self.shareView.shareUUIDInputView.getTextView().text = uuid
+        }
     }
     
     required init?(coder: NSCoder) {

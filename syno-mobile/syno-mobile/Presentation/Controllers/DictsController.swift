@@ -22,14 +22,31 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
     }
     
     /// Show success alert controller
-    func showSharingResultView(text: String, title: String) {
+    func showSharingResultView(result: ShowSharingResultViewConfiguration) {
         processingSaveView.dismissSavingProcessView()
         
-        let alertController = UIAlertController(title: title, message: text, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (_) in
-            alertController.dismiss(animated: true, completion: nil)
-        }))
-        self.present(alertController, animated: true, completion: nil)
+        switch result {
+        case .success(let code, let dictName):
+            let url = URL(string: "synoapp:share?uuid=\(code)")
+            let activityController = UIActivityViewController(activityItems: ["Dictionary \"\(dictName)\"\n\n", url], applicationActivities: nil)
+            activityController.completionWithItemsHandler = {
+                (activityType: UIActivity.ActivityType?, success: Bool, params: [Any]?, erorr: Error?) in
+                if activityType == UIActivity.ActivityType.copyToPasteboard && success {
+                    let alertController = UIAlertController(title: nil, message: "Скопировано успешно!", preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (_) in
+                        alertController.dismiss(animated: true, completion: nil)
+                    }))
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            }
+            self.present(activityController, animated: true)
+        case .failure(let alertTitle, let alertText):
+            let alertController = UIAlertController(title: alertTitle, message: alertText, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (_) in
+                alertController.dismiss(animated: true, completion: nil)
+            }))
+            self.present(alertController, animated: true, completion: nil)
+        }
     }
     
     func showCardsController(controller: UIViewController) {

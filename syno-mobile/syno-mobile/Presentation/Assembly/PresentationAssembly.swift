@@ -63,9 +63,11 @@ protocol IPresentationAssembly {
     func loginFromHomeViewController() -> UIViewController
     
     /// Creates `AddShareViewController`
-    func addShareController() -> UIViewController
+    func addShareController(uuid: String?) -> UIViewController
     
     func trashController() -> UIViewController
+    
+    func congratsController() -> UIViewController
 }
 
 class PresentationAssembly: IPresentationAssembly {
@@ -185,12 +187,16 @@ class PresentationAssembly: IPresentationAssembly {
         return LoginFromHomeViewController(presAssembly: self, loginModel: LoginModel(loginService: serviceAssembly.loginService))
     }
     
-    func addShareController() -> UIViewController {
-        return AddShareViewController(shareModel: self.serviceAssembly.addShareModel())
+    func addShareController(uuid: String?) -> UIViewController {
+        return AddShareViewController(shareModel: self.serviceAssembly.addShareModel(), uuid: uuid)
     }
     
     func trashController() -> UIViewController {
         return DictsTrashViewController(datasource: self.serviceAssembly.trashDictionariesDataSource(presAssembly: self))
+    }
+    
+    func congratsController() -> UIViewController {
+        return CongratulationsController(model: self.serviceAssembly.congratulationsModel)
     }
     
     /**

@@ -44,6 +44,8 @@
 		AA38AD78244C5E60007C2069 /* HomeViewControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA38AD77244C5E60007C2069 /* HomeViewControllerModel.swift */; };
 		AA38AD7A244C6C88007C2069 /* PinGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA38AD79244C6C88007C2069 /* PinGenerator.swift */; };
 		AA38AD7C244CB8A5007C2069 /* HomeControllerUserHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA38AD7B244CB8A5007C2069 /* HomeControllerUserHeader.swift */; };
+		AA3FE2D4258BA56700B4C982 /* CongratulationsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3FE2D3258BA56700B4C982 /* CongratulationsController.swift */; };
+		AA3FE2D9258BA6D100B4C982 /* CongratulationsControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3FE2D8258BA6D100B4C982 /* CongratulationsControllerModel.swift */; };
 		AA4B780723C136E9005A9CC9 /* TestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4B780623C136E9005A9CC9 /* TestController.swift */; };
 		AA4B780A23C138D4005A9CC9 /* TestViewControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4B780923C138D4005A9CC9 /* TestViewControllerDataSource.swift */; };
 		AA4B780C23C1BF29005A9CC9 /* TestControllerTranslationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4B780B23C1BF29005A9CC9 /* TestControllerTranslationTableViewCell.swift */; };
@@ -206,6 +208,8 @@
 		AA38AD77244C5E60007C2069 /* HomeViewControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewControllerModel.swift; sourceTree = "<group>"; };
 		AA38AD79244C6C88007C2069 /* PinGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinGenerator.swift; sourceTree = "<group>"; };
 		AA38AD7B244CB8A5007C2069 /* HomeControllerUserHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeControllerUserHeader.swift; sourceTree = "<group>"; };
+		AA3FE2D3258BA56700B4C982 /* CongratulationsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CongratulationsController.swift; sourceTree = "<group>"; };
+		AA3FE2D8258BA6D100B4C982 /* CongratulationsControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CongratulationsControllerModel.swift; sourceTree = "<group>"; };
 		AA4B780623C136E9005A9CC9 /* TestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestController.swift; sourceTree = "<group>"; };
 		AA4B780923C138D4005A9CC9 /* TestViewControllerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewControllerDataSource.swift; sourceTree = "<group>"; };
 		AA4B780B23C1BF29005A9CC9 /* TestControllerTranslationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestControllerTranslationTableViewCell.swift; sourceTree = "<group>"; };
@@ -510,6 +514,14 @@
 			path = HomeViewController;
 			sourceTree = "<group>";
 		};
+		AA3FE2D7258BA6B300B4C982 /* CongratulationsController */ = {
+			isa = PBXGroup;
+			children = (
+				AA3FE2D8258BA6D100B4C982 /* CongratulationsControllerModel.swift */,
+			);
+			path = CongratulationsController;
+			sourceTree = "<group>";
+		};
 		AA4B780823C13885005A9CC9 /* TestController */ = {
 			isa = PBXGroup;
 			children = (
@@ -698,6 +710,7 @@
 		AA8C0E0C23891862000CBB73 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				AA3FE2D7258BA6B300B4C982 /* CongratulationsController */,
 				AADBA1EF2529EA2600F22429 /* DictionaryTrashController */,
 				AABEB2AE250BA5CD0064F67E /* ReversedLearnController */,
 				AA55CEC724A7E52D008CF330 /* EmailForConfirmationController */,
@@ -742,6 +755,7 @@
 				AA7CCAE524A7823200544E68 /* EmailForConfirmationController.swift */,
 				AABEB2B3250BBACE0064F67E /* ReversedLearnControllerView.swift */,
 				AADBA1EB2529E99200F22429 /* DictionaryTrashController.swift */,
+				AA3FE2D3258BA56700B4C982 /* CongratulationsController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1064,6 +1078,7 @@
 				AA33108624AA147100EF5665 /* TransferGuestDictsToNewAccount.swift in Sources */,
 				AAD4A2F123ABE74E00394693 /* TestAndLearnControllerHeader.swift in Sources */,
 				AA8700CF2398270C00C97E18 /* TranslationFetchService.swift in Sources */,
+				AA3FE2D4258BA56700B4C982 /* CongratulationsController.swift in Sources */,
 				AA59DF34244E4F76005E6FC0 /* UpdateUserDictionaryDto.swift in Sources */,
 				AA8700C9239792B000C97E18 /* RegisterControllerServices.swift in Sources */,
 				AA8C0E10238918FA000CBB73 /* PresentationAssembly.swift in Sources */,
@@ -1173,6 +1188,7 @@
 				AAC6057F2391237B00120B77 /* DictionaryResponse.swift in Sources */,
 				AA1B874A238D29F300D26FCF /* LoginRequest.swift in Sources */,
 				AADBA1EC2529E99200F22429 /* DictionaryTrashController.swift in Sources */,
+				AA3FE2D9258BA6D100B4C982 /* CongratulationsControllerModel.swift in Sources */,
 				AADBA1F5252A2D3F00F22429 /* UIScrollableTextField.swift in Sources */,
 				AAF3FE7124AB8851003DBBB2 /* UILabelExt.swift in Sources */,
 				AAF056F42525EC9200841599 /* DbDictionarySequenceNumberAssignment.swift in Sources */,
@@ -1365,7 +1381,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.1;
+
+				MARKETING_VERSION = 1.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chrisbenua.synomobile;
 				PRODUCT_NAME = Syno;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1388,8 +1405,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.chrisbenua.synomobile;
+				MARKETING_VERSION = 1.3.2;				PRODUCT_BUNDLE_IDENTIFIER = com.chrisbenua.synomobile;
 				PRODUCT_NAME = Syno;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
