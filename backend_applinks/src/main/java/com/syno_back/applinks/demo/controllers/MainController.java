@@ -15,7 +15,7 @@ public class MainController {
 
     @GetMapping(
             value = "/apple-app-site-association",
-            produces = MediaType.APPLICATION_JSON_VALUE
+            produces = "application/pkcs7-mime"
     )
     public @ResponseBody Object getAssociation() {
         Resource resource = new ClassPathResource("/static/association.json");
