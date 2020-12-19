@@ -29,10 +29,10 @@ public class MainController {
     }
 
     @GetMapping(
-            value = "/share/uuid={id}",
+            value = "/share/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public @ResponseBody Object getShare() {
+    public @ResponseBody Object getShare(@PathVariable String id) {
         return getAssociation();
     }
 }

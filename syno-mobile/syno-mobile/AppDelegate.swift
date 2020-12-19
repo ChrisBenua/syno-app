@@ -32,6 +32,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+            let url = userActivity.webpageURL,
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: true),
+            let params = components.queryItems else {
+              return false
+          }
+        if let dictShareUuid = params.first(where: { $0.name == "uuid" })?.value {
+            showShareController(uuid: dictShareUuid)
+            return true
+        }
+        return false
+    }
+    
+    private func showShareController(uuid: String) {
+        let controller = rootAssembly.presentationAssembly.addShareController(uuid: uuid)
+        if let tabBarController = window?.rootViewController as? CommonTabBarController, let current = tabBarController.selectedViewController {
+            (current as? UINavigationController)?.pushViewController(controller, animated: true)
+        } else {
+            if let loginController = window?.rootViewController as? LoginViewController {
+                let alertController = UIAlertController.okAlertController(title: "Ошибка", message: "Чтобы скачать Словарь необходимо войти в учетную запись")
+                loginController.present(alertController, animated: true)
+            }
+        }
+    }
+    
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         Logger.log(#function)
         let sendingAppId = options[.sourceApplication]
@@ -46,17 +72,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if let dictShareUuid = params.first(where: { $0.name == "uuid" })?.value, action == "share" {
             Logger.log("action: \(action), uuid: \(dictShareUuid)")
+            showShareController(uuid: dictShareUuid)
             
-            let controller = rootAssembly.presentationAssembly.addShareController(uuid: dictShareUuid)
-            if let tabBarController = window?.rootViewController as? CommonTabBarController, let current = tabBarController.selectedViewController {
-                (current as? UINavigationController)?.pushViewController(controller, animated: true)
-            } else {
-                if let loginController = window?.rootViewController as? LoginViewController {
-                    let alertController = UIAlertController.okAlertController(title: "Ошибка", message: "Чтобы скачать Словарь необходимо войти в учетную запись")
-                    //alertController.addAction(.okAction)
-                    loginController.present(alertController, animated: true)
-                }
-            }
             return true
         } else {
             Logger.log("Missing dictshareuuid")
