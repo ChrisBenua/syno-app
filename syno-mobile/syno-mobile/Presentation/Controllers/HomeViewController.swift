@@ -3,6 +3,15 @@ import UIKit
 
 /// Controller for main actions: create copy on server, download copy from server, login as different user
 class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate, IHomeControllerUserHeaderDelegate {
+    
+    func commonClickableLabelConfiguration() -> ClickableUILabel.Configuration.Builder {
+        return ClickableUILabel.Configuration.Builder()
+            .animationDuration(0.3)
+            .backgroundColor(.white)
+            .pressedBackgroundColor(UIColor.white.makeDarkerBy(steps: -0.015))
+            //.build()
+    }
+    
     func onSuccessGuestCopy() {
         let alert = UIAlertController.okAlertController(title: "Успех!")
         self.present(alert, animated: true, completion: nil)
@@ -57,27 +66,20 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
     
     /// View with login form info
     lazy var loginView: UIView = {
-        let view = BaseShadowView()
-        view.cornerRadius = 10
-        view.shadowView.shadowOffset = CGSize(width: 0, height: 4)
-        view.containerViewBackgroundColor = UIColor(red: 240.0/255, green: 240.0/255, blue: 240.0/255, alpha: 1)
-        
         let v = HomeControllerUserHeader(email: self.dataProvider.userEmail())
         v.delegate = self
-        view.addSubview(v)
-        v.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 10, paddingRight: 0, width: 0, height: 0)
         
-        return view
+        return v
     }()
     
     /// Label for creating copy on server
     lazy var createCopyLabel: UILabel = {
-        let label = UILabelWithInsets(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))
+        let label = ClickableUILabel(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))//UILabelWithInsets(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))
+        label.setConfiguration(config: commonClickableLabelConfiguration().build())
         label.isUserInteractionEnabled = true
         label.clipsToBounds = true
         label.layer.cornerRadius = 10
-        label.text = "Создать резервную копию"
-        label.backgroundColor = .white
+        label.text = "Создание резервной копии"
         
         label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onCreateCopyLabelClick)))
         
@@ -85,14 +87,14 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
     }()
     
     lazy var copyFromGuestLabel: UILabel = {
-        let label = UILabelWithInsets(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))
+        let label = ClickableUILabel(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))//UILabelWithInsets(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))
+        label.setConfiguration(config: commonClickableLabelConfiguration().build())
         label.isUserInteractionEnabled = true
         label.clipsToBounds = true
         label.layer.cornerRadius = 10
         label.text = "Копировать словари анонимного пользователя"
         label.numberOfLines = 2
         label.lineBreakMode = .byWordWrapping
-        label.backgroundColor = .white
         
         label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onCopyFromGuestLabelClick)))
         
@@ -128,12 +130,12 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
     
     /// Label for downloading copy from server
     lazy var downloadCopyLabel: UILabel = {
-        let label = UILabelWithInsets(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))
+        let label = ClickableUILabel(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))//UILabelWithInsets(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))
+        label.setConfiguration(config: commonClickableLabelConfiguration().build())
         label.isUserInteractionEnabled = true
         label.clipsToBounds = true
         label.layer.cornerRadius = 10
-        label.text = "Загрузить резервную копию"
-        label.backgroundColor = .white
+        label.text = "Импорт резервной копии"
         
         label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onDownloadCopyLabelClick)))
 
@@ -141,12 +143,12 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
     }()
     
     lazy var openTrashLabel: UILabel = {
-        let label = UILabelWithInsets(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))
+        let label = ClickableUILabel(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))//UILabelWithInsets(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))
+        label.setConfiguration(config: commonClickableLabelConfiguration().parentAnimationDepth(1).build())
         label.isUserInteractionEnabled = true
         label.clipsToBounds = true
         label.layer.cornerRadius = 10
         label.text = "Открыть корзину Словарей"
-        label.backgroundColor = .white
         
         label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onOpenTrashController)))
 
@@ -154,12 +156,12 @@ class HomeViewController: UIViewController, IHomeControllerDataProviderDelegate,
     }()
     
     lazy var openCongratsLabel: UILabel = {
-        let label = UILabelWithInsets(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))
+        let label = ClickableUILabel(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))//UILabelWithInsets(padding: UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7))
+        label.setConfiguration(config: commonClickableLabelConfiguration().parentAnimationDepth(1).build())
         label.isUserInteractionEnabled = true
         label.clipsToBounds = true
         label.layer.cornerRadius = 10
         label.text = "Поздравление для Полечки"
-        label.backgroundColor = .white
         
         label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onOpenCongratulationsController)))
         

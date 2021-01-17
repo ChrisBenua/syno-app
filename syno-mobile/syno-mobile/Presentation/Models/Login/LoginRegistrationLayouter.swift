@@ -150,10 +150,18 @@ class LoginRegistrationLayouter: ILoginLayouter {
             return but
         }
         
-        let button = CommonUIElements.defaultSubmitButton(text: "Войти", cornerRadius: 18)
-        button.setAttributedTitle(NSAttributedString(string: "Войти", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)]), for: UIKit.UIControl.State.normal)
-
+        let button = CustomUIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.setAttributedTitle(NSAttributedString(string: "Войти", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)]), for: UIKit.UIControl.State.normal)
+        let config = CustomUIButtonConfigurationBuilder()
+            .setAnimationDuration(0.3)
+            .setCornerRadius(15)
+            .setBackgroundColor(UIColor.submitButtonMainColor.cgColor)
+            .setPressedBackgroundColor(UIColor.submitButtonMainColor.makeDarkerBy(steps: 0.07).cgColor)
+            .setPressedShadowRadius(0)
+            .setButtonTransform(.init(scaleX: 0.98, y: 0.98))
+            .build()
+        button.setConfiguration(configuration: config)
         
         _submitButton = button
         return _submitButton!

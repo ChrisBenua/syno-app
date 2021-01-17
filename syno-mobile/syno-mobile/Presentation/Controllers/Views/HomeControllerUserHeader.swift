@@ -41,6 +41,19 @@ class HomeControllerUserHeader: UIView {
         delegate?.onShowLogin()
     }
     
+    
+    lazy var shadowView: UIView = {
+        let view = BaseShadowView()
+        view.cornerRadius = 10
+        view.shadowView.shadowOffset = CGSize(width: 0, height: 4)
+        view.containerViewBackgroundColor = UIColor(red: 240.0/255, green: 240.0/255, blue: 240.0/255, alpha: 1)
+        
+        view.addSubview(stackView)
+        stackView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 20, paddingLeft: 15, paddingBottom: 20, paddingRight: 10, width: 0, height: 0)
+        
+        return view
+    }()
+    
     /// User icon imageView
     lazy var imageView: UIImageView = {
         let imView = UIImageView(image: #imageLiteral(resourceName: "AVATAR"))
@@ -69,6 +82,30 @@ class HomeControllerUserHeader: UIView {
         return view
     }()
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        UIView.animate(withDuration: 0.3) {
+            self.transform = .init(scaleX: 0.955, y: 0.955)
+        }
+        
+        super.touchesBegan(touches, with: event)
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        UIView.animate(withDuration: 0.3) {
+            self.transform = .identity
+        }
+        
+        super.touchesEnded(touches, with: event)
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        UIView.animate(withDuration: 0.3) {
+            self.transform = .identity
+        }
+        
+        super.touchesCancelled(touches, with: event)
+    }
+    
     /**
      Creates new `HomeControllerUserHeader` with given email
      - Parameter email: last logged in user's email
@@ -76,8 +113,8 @@ class HomeControllerUserHeader: UIView {
     init(email: String) {
         super.init(frame: .zero)
         self.userEmailLabel.text = email
-        self.addSubview(stackView)
-        stackView.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor, paddingTop: 10, paddingLeft: 15, paddingBottom: 10, paddingRight: 10, width: 0, height: 0)
+        self.addSubview(shadowView)
+        shadowView.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
     }
     
     required init?(coder: NSCoder) {

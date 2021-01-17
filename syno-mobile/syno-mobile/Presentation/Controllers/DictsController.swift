@@ -23,11 +23,13 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
     
     /// Show success alert controller
     func showSharingResultView(result: ShowSharingResultViewConfiguration) {
-        processingSaveView.dismissSavingProcessView()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.processingSaveView.dismissSavingProcessView()
+        }
         
         switch result {
         case .success(let code, let dictName):
-            let url = URL(string: "synoapp:share?uuid=\(code)")
+            let url = URL(string: "https://chrisbenua.site/share/\(code)")
             let activityController = UIActivityViewController(activityItems: ["Dictionary \"\(dictName)\"\n\n", url], applicationActivities: nil)
             activityController.completionWithItemsHandler = {
                 (activityType: UIActivity.ActivityType?, success: Bool, params: [Any]?, erorr: Error?) in

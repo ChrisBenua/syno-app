@@ -4,6 +4,10 @@ import UIKit
 /// Defines needed actions with LearnView
 protocol ILearnView: UIView, ILearnControllerDataSourceReactor {
     var controlsView: UIView { get }
+    
+    func editAssociatedCard()
+    
+    func refreshData()
 }
 
 class LearnView: UIView, ILearnView {
@@ -21,6 +25,14 @@ class LearnView: UIView, ILearnView {
         translatedWordView.translatedWordLabel.text = self.dataSource.viewModel.getTranslatedWord(cardPos: self.dataSource.state.itemNumber)
     }
     
+    func editAssociatedCard() {
+        self.dataSource.showEditCardController()
+    }
+    
+    func refreshData() {
+        self.dataSource.refreshData()
+    }
+    
     /// TableView with translations
     lazy var tableView: UITableView = {
         let tableView = PlainTableView()
@@ -35,7 +47,7 @@ class LearnView: UIView, ILearnView {
     }()
     
     /// Wrapper view for `tableView` and `controlsView`
-    lazy var collectionContainerView: UIView = {
+    lazy var collectionContainerView: BaseShadowView = {
         let view = BaseShadowView()
         view.shadowView.shadowOffset = CGSize(width: 0, height: 4)
 
@@ -44,15 +56,23 @@ class LearnView: UIView, ILearnView {
         view.backgroundColor = .clear
         view.translatesAutoresizingMaskIntoConstraints = false
         
-        view.addSubview(self.controlsView)
-        view.addSubview(self.tableView)
-        
-        self.controlsView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 5, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-        
-        self.tableView.anchor(top: self.controlsView.bottomAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 10, paddingRight: 15, width: 0, height: 0)
-        self.tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        self.tableView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -25).isActive = true
-        
+        let tableViewWrapper = UIView()
+        tableViewWrapper.addSubview(tableView)
+        tableView.anchor(top: tableViewWrapper.topAnchor, left: tableViewWrapper.leftAnchor, bottom: tableViewWrapper.bottomAnchor, right: tableViewWrapper.rightAnchor, padding: .init(top: 0, left: 12.5, bottom: 10, right: 12.5))
+        let sv = UIStackView(arrangedSubviews: [self.controlsView, tableViewWrapper])
+        sv.axis = .vertical
+
+        view.containerView.addSubview(sv)
+        sv.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, padding: .init(top: 5, left: 0, bottom: 0, right: 0))
+//
+//        view.addSubview(controlsView)
+//        view.addSubview(tableView)
+//        self.controlsView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 5, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+//
+//        self.tableView.anchor(top: self.controlsView.bottomAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 10, paddingRight: 15, width: 0, height: 0)
+//        self.tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+//        self.tableView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -25).isActive = true
+//
         return view
     }()
     
@@ -207,10 +227,57 @@ class LearnView: UIView, ILearnView {
 }
 
 extension LearnView: ILearnControllerDataSourceReactor {
+    func showController(controller: UIViewController) {
+        self.parentViewController?.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func onUpdateWholeView() {
+        self.tableView.reloadData()
+        
+        hideControlsIfNeeded()
+        self.setHeaderData()
+    }
+    
     func addItems(indexPaths: [IndexPath]) {
         //UIView.performWithoutAnimation {
-            self.tableView.reloadData()
+        self.tableView.reloadData()
+        
+        hideControlsIfNeeded()
         //}
+    }
+    
+    func hideControlsIfNeeded() {
+        if self.dataSource.viewModel.getItems(currCardPos: self.dataSource.state.itemNumber).count == self.dataSource.state.translationsShown {
+            UIView.animate(withDuration: 0.6, animations: {
+                self.plusOneButton.alpha = 0
+                self.showAllButton.alpha = 0
+            }) { (_) in
+                self.collectionContainerView.shadowView.isAnimatable = true
+                self.collectionContainerView.shadowView.animationDuration = 0.5
+                UIView.animate(withDuration: 0.5) {
+                    self.plusOneButton.isHidden = true
+                    self.showAllButton.isHidden = true
+                    self.controlsView.isHidden = true
+                } completion: { (_) in
+                    self.collectionContainerView.shadowView.isAnimatable = false
+                }
+            }
+        } else if (self.controlsView.isHidden) {
+            self.collectionContainerView.shadowView.isAnimatable = true
+            self.collectionContainerView.shadowView.animationDuration = 0.5
+            UIView.animate(withDuration: 0.5) {
+                self.plusOneButton.isHidden = false
+                self.showAllButton.isHidden = false
+                self.controlsView.isHidden = false
+            } completion: { (_) in
+                UIView.animate(withDuration: 0.6) {
+                    self.plusOneButton.alpha = 1
+                    self.showAllButton.alpha = 1
+                } completion: { (_) in
+                    self.collectionContainerView.shadowView.isAnimatable = false
+                }
+            }
+        }
     }
 }
 
@@ -224,5 +291,11 @@ class LearnViewGenerator {
      */
     func generate(dataSource: ILearnControllerTableViewDataSource, actionsDelegate: ILearnControllerActionsDelegate?, scrollViewDelegate: UIScrollViewDelegate?) -> LearnView {
         return LearnView(dataSource: dataSource, actionsDelegate: actionsDelegate, scrollViewDelegate: scrollViewDelegate)
+    }
+}
+
+extension UIResponder {
+    public var parentViewController: UIViewController? {
+        return next as? UIViewController ?? next?.parentViewController
     }
 }

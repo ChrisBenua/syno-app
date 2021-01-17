@@ -70,6 +70,10 @@ class LearnCollectionViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
+    @objc func editCard() {
+        learnViews[currCardNumber].editAssociatedCard()
+    }
+    
     /// SwipeGestureRecognizer handler
     @objc func handleSwipes(_ sender: UISwipeGestureRecognizer) {
         var nextView: ILearnView?
@@ -152,6 +156,7 @@ class LearnCollectionViewController: UIViewController {
         self.tabBarController?.tabBar.isHidden = true
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Закончить", style: .done, target: self, action: #selector(endLearn))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Редактировать", style: .done, target: self, action: #selector(editCard))
         
         self.view.backgroundColor = .white
         
@@ -159,6 +164,12 @@ class LearnCollectionViewController: UIViewController {
         scrollView.anchor(top: self.view.topAnchor, left: self.view.leftAnchor, bottom: self.view.bottomAnchor, right: self.view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: UIScreen.main.bounds.width, height: 0)
         self.navigationItem.title = self.data.dictName
         self.navigationItem.setHidesBackButton(true, animated:true)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.contentView.refreshData()
     }
     
     /**

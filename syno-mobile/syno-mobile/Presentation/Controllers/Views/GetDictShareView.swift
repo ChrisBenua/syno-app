@@ -7,6 +7,10 @@ protocol IGetDictShareDelegate: class {
     func didSubmitText(text: String)
 }
 
+class TextViewWithPadding: UITextView {
+
+}
+
 /// View for receiving shared dict
 class GetDictShareView: UIView {
     /// Event handler
@@ -20,7 +24,7 @@ class GetDictShareView: UIView {
         textView.layer.cornerRadius = 10
         
         textView.textContainerInset = UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7)
-        
+        //textView.
         textView.font = .systemFont(ofSize: 19)
         
         let label = UILabelWithInsets(padding: UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0))
@@ -33,7 +37,19 @@ class GetDictShareView: UIView {
     
     /// Button for submission
     lazy var submitButton: UIButton = {
-        let button = CommonUIElements.defaultSubmitButton(text: "Загрузить", cornerRadius: 15, textColor: .white)
+        let config = CustomUIButtonConfigurationBuilder()
+            .setAnimationDuration(0.6)
+            .setBackgroundColor(UIColor.submitButtonMainColor.cgColor)
+            .setPressedBackgroundColor(UIColor.submitButtonMainColor.makeDarkerBy(steps: 0.07).cgColor)
+            .setCornerRadius(15)
+            .setBasicShadowRadius(0)
+            .setPressedShadowRadius(3)
+            .build()
+            //.setShadowColor(<#T##color: CGColor##CGColor#>)
+        
+        let button = CustomUIButton()
+        button.setConfiguration(configuration: config)
+        button.setAttributedTitle(NSAttributedString(string: "Загрузить", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white]), for: .normal)
         
         button.addTarget(self, action: #selector(onSubmit), for: .touchUpInside)
         
@@ -53,8 +69,8 @@ class GetDictShareView: UIView {
         sv.distribution = .fill
         
         sepView.heightAnchor.constraint(equalTo: self.submitButton.heightAnchor, multiplier: 1).isActive = true
-        self.submitButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        self.shareUUIDInputView.heightAnchor.constraint(greaterThanOrEqualToConstant: 70).isActive = true
+        self.submitButton.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        self.shareUUIDInputView.heightAnchor.constraint(greaterThanOrEqualToConstant: 80).isActive = true
         
         return sv
     }()

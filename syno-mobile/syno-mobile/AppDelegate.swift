@@ -35,12 +35,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
             let url = userActivity.webpageURL,
-            let components = URLComponents(url: url, resolvingAgainstBaseURL: true),
-            let params = components.queryItems else {
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
               return false
           }
-        if let dictShareUuid = params.first(where: { $0.name == "uuid" })?.value {
-            showShareController(uuid: dictShareUuid)
+        if let dictShareUuid = components.path.split(separator: "/").last {
+            showShareController(uuid: String(dictShareUuid))
             return true
         }
         return false

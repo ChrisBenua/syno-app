@@ -58,6 +58,7 @@
 		AA59DF38244E5051005E6FC0 /* UpdateUserTranslationDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59DF37244E5051005E6FC0 /* UpdateUserTranslationDto.swift */; };
 		AA59DF3D244E5693005E6FC0 /* UpdateDictsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59DF3C244E5693005E6FC0 /* UpdateDictsRequest.swift */; };
 		AA59DF3F244E5884005E6FC0 /* UpdateRequestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59DF3E244E5884005E6FC0 /* UpdateRequestService.swift */; };
+		AA61C4D8258E7BCE00CB2CA1 /* CustomUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA61C4D7258E7BCE00CB2CA1 /* CustomUIButton.swift */; };
 		AA627D982455F4FC000B7265 /* UserAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA627D972455F4FB000B7265 /* UserAuthHelper.swift */; };
 		AA6A03B923AC9C7500902FBE /* LearnController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6A03B823AC9C7500902FBE /* LearnController.swift */; };
 		AA6A03BC23AC9CE400902FBE /* LearnControllerTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6A03BB23AC9CE400902FBE /* LearnControllerTableViewDataSource.swift */; };
@@ -223,6 +224,7 @@
 		AA59DF37244E5051005E6FC0 /* UpdateUserTranslationDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUserTranslationDto.swift; sourceTree = "<group>"; };
 		AA59DF3C244E5693005E6FC0 /* UpdateDictsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateDictsRequest.swift; sourceTree = "<group>"; };
 		AA59DF3E244E5884005E6FC0 /* UpdateRequestService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateRequestService.swift; sourceTree = "<group>"; };
+		AA61C4D7258E7BCE00CB2CA1 /* CustomUIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUIButton.swift; sourceTree = "<group>"; };
 		AA627D972455F4FB000B7265 /* UserAuthHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAuthHelper.swift; sourceTree = "<group>"; };
 		AA6A03B823AC9C7500902FBE /* LearnController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnController.swift; sourceTree = "<group>"; };
 		AA6A03BB23AC9CE400902FBE /* LearnControllerTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnControllerTableViewDataSource.swift; sourceTree = "<group>"; };
@@ -769,6 +771,7 @@
 				49A16C3F31A1006430FFAF12 /* UITextFieldWithInsets.swift */,
 				AAA2998A243CCD51007327DB /* UITextFieldWithLabel.swift */,
 				AAA29992243E27FB007327DB /* UITextViewWithLabel.swift */,
+				AA61C4D7258E7BCE00CB2CA1 /* CustomUIButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1119,6 +1122,7 @@
 				AA76427B2451BE5800E388A1 /* GetShareRequest.swift in Sources */,
 				AAD4A2E323ABA81D00394693 /* DbUserTestAnswerExt.swift in Sources */,
 				AA38AD78244C5E60007C2069 /* HomeViewControllerModel.swift in Sources */,
+				AA61C4D8258E7BCE00CB2CA1 /* CustomUIButton.swift in Sources */,
 				AAC605792390F04700120B77 /* LoginRegistrationLayouter.swift in Sources */,
 				AA1B8755238D9B9700D26FCF /* ServiceAssembly.swift in Sources */,
 				AA8C0E1623892051000CBB73 /* CommonUIElements.swift in Sources */,
@@ -1378,7 +1382,7 @@
 				CODE_SIGN_ENTITLEMENTS = "syno-mobile/Syno.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 8LJXAKA3QW;
 				INFOPLIST_FILE = "syno-mobile/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1402,7 +1406,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "syno-mobile/Syno.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 8LJXAKA3QW;
 				INFOPLIST_FILE = "syno-mobile/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;

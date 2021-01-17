@@ -59,7 +59,7 @@ class LoginViewController: UIViewController, ILoginReactor {
     
     ///  `submitButton` click listener
     @objc func submitLoginCredentials() {
-        self.layouter.submitButton().flash(toValue: 0.4, duration: 0.25)
+        //self.layouter.submitButton().flash(toValue: 0.4, duration: 0.25)
         self.loginModel.login(loginState: LoginState(email: layouter.emailTextField().text ?? "", password: layouter.passwordTextField().text ?? ""))
     }
     
@@ -94,7 +94,13 @@ class LoginViewController: UIViewController, ILoginReactor {
     func afterSuccessfullLogin() {
         let tabBarController = presAssembly.mainTabBarController()
         tabBarController.modalPresentationStyle = .fullScreen
-        self.present(tabBarController, animated: true, completion: nil)
+        if let window = (UIApplication.shared.delegate as? AppDelegate)?.window {
+            (UIApplication.shared.delegate as? AppDelegate)?.window?.rootViewController = tabBarController
+        //self.present(tabBarController, animated: true, completion: {
+            UIView.transition(with: window, duration: 0.6, options: .transitionCrossDissolve, animations: {}) { (complete) in
+            }
+        }
+        //})
     }
 
     /// Called when model failed to login user, dismisses `processingSaveView` and present `alertController` with error

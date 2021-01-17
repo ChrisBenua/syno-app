@@ -33,8 +33,8 @@ class UIScrollableTextField: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        Logger.log("scrollView \(textField.frame)")
-        Logger.log("textfield \(textField.frame)")
+        //Logger.log("scrollView \(textField.frame)")
+        //Logger.log("textfield \(textField.frame)")
     }
     
     init(textField: UITextField) {

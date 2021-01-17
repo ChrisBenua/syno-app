@@ -196,7 +196,7 @@ class ServiceAssembly: IServiceAssembly {
     }
     
     func learnTranslationsControllerDataProvider(sourceDict: DbUserDictionary) -> ILearnControllerDataProvider {
-        return LearnControllerDataProvider(dbUserDict: sourceDict)
+        return LearnControllerDataProvider(dbUserDict: sourceDict, storeManager: self.coreAssembly.storageManager)
     }
   
     func reversedLearnControllerModel(sourceDict: DbUserDictionary) -> IReversedLearnControllerModel {

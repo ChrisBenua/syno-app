@@ -1,4 +1,5 @@
 import Foundation
+import CoreData
 import UIKit
 
 /// Protocol for storing user progress in `LearnController`
@@ -40,6 +41,11 @@ protocol ILearnControllerDataProvider {
     func getItems(currCardPos: Int) -> [UserTranslationDtoForLearnController]
     /// Gets translated word for given card
     func getTranslatedWord(cardPos: Int) -> String?
+    
+    func getDbCard(currCardPos: Int) -> DbUserCard?
+    
+    func updateCard(currCardPos: Int)
+    
     /// Total amount of cards
     var count: Int { get }
     /// Dictionary name
@@ -55,11 +61,30 @@ class LearnControllerDataProvider: ILearnControllerDataProvider {
     }
     
     func getItem(cardPos: Int, transPos: Int) -> UserTranslationDtoForLearnController {
-        return itemsInCards[cardPos][transPos]
+        return itemsInCards[cardPos].translations[transPos]
     }
     
     func getItems(currCardPos: Int) -> [UserTranslationDtoForLearnController] {
-        return itemsInCards[currCardPos]
+        return itemsInCards[currCardPos].translations
+    }
+    
+    func getDbCard(currCardPos: Int) -> DbUserCard? {
+        var card: DbUserCard? = nil
+        storageManager.stack.mainContext.performAndWait {
+            card = storageManager.stack.mainContext.object(with: itemsInCards[currCardPos].cardManagedObjectId) as? DbUserCard
+        }
+        return card
+    }
+    
+    func updateCard(currCardPos: Int) {
+        var card: DbUserCard? = nil
+        storageManager.stack.mainContext.performAndWait {
+            card = storageManager.stack.mainContext.object(with: itemsInCards[currCardPos].cardManagedObjectId) as? DbUserCard
+        }
+        if let card = card {
+            self.itemsInCards[currCardPos] = UserCardDtoForLearnController.initFrom(userCard: card)
+            self.translatedWords[currCardPos] = card.translatedWord ?? ""
+        }
     }
     
     var count: Int {
@@ -68,10 +93,14 @@ class LearnControllerDataProvider: ILearnControllerDataProvider {
         }
     }
     /// `UserTranslationDtoForLearnController` storage
-    private var itemsInCards: [[UserTranslationDtoForLearnController]]
+    private var itemsInCards: [UserCardDtoForLearnController]//UserCardDtoForLearnController
     /// Translated words for each card
     private var translatedWords: [String?]
     
+    private var storageManager: IStorageCoordinator
+    
+    private var dictionaryObjectId: NSManagedObjectID
+        
     var dictName: String?
     
     var translationsLanguage: String?
@@ -80,8 +109,10 @@ class LearnControllerDataProvider: ILearnControllerDataProvider {
      Creates new ``
      - Parameter dbUserDict: `DbUserDictionary` to create learn controller for
      */
-    init(dbUserDict: DbUserDictionary) {
+    init(dbUserDict: DbUserDictionary, storeManager: IStorageCoordinator) {
+        self.dictionaryObjectId = dbUserDict.objectID
         self.dictName = dbUserDict.name
+        self.storageManager = storeManager
         let cards = dbUserDict.getCards().shuffled()
         
         self.translationsLanguage = dbUserDict.getTranslationsLanguage()
@@ -89,10 +120,8 @@ class LearnControllerDataProvider: ILearnControllerDataProvider {
         self.translatedWords = cards.map({ (card) -> String? in
             card.translatedWord
         })
-        self.itemsInCards = cards.map({ (card) -> [UserTranslationDtoForLearnController] in
-            return card.getTranslations().reversed().map { (trans) -> UserTranslationDtoForLearnController in
-                return UserTranslationDtoForLearnController.initFrom(translation: trans)
-            }
+        self.itemsInCards = cards.map({ (card) -> UserCardDtoForLearnController in
+            return UserCardDtoForLearnController.initFrom(userCard: card)
         })
     }
 }
@@ -105,6 +134,8 @@ protocol ILearnControllerTableViewDataSource: UITableViewDataSource, UITableView
     var state: ILearnControllerState { get }
     /// event handler
     var delegate: ILearnControllerDataSourceReactor? { get set }
+    
+    func refreshData()
 }
 
 /// Protocol for view's interaction with `ILearnControllerTableViewDataSource`
@@ -113,15 +144,22 @@ protocol ILearnControllerActionsDelegate: class {
     func onPlusOne()
     /// Shows all translation
     func onShowAll()
+    
+    func showEditCardController()
 }
 
 /// `ILearnControllerTableViewDataSource` event handler
 protocol ILearnControllerDataSourceReactor: class {
     /// adds new rows to table view
     func addItems(indexPaths: [IndexPath])
+    
+    func showController(controller: UIViewController)
+    
+    func onUpdateWholeView()
 }
 
 class LearnControllerTableViewDataSource: NSObject, ILearnControllerTableViewDataSource {
+    private var presentationAssembly: IPresentationAssembly
     
     weak var delegate: ILearnControllerDataSourceReactor?
     
@@ -130,6 +168,10 @@ class LearnControllerTableViewDataSource: NSObject, ILearnControllerTableViewDat
     var state: ILearnControllerState
     
     var didAddNew: Bool = false
+    
+    var translationsShown: Int {
+        return min(state.translationsShown, viewModel.getItems(currCardPos: self.state.itemNumber).count)
+    }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == 0 && didAddNew {
@@ -143,14 +185,15 @@ class LearnControllerTableViewDataSource: NSObject, ILearnControllerTableViewDat
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return state.translationsShown
+        self.state.translationsShown = translationsShown
+        return translationsShown
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TranslationReadonlyTableViewCell.cellId(), for: indexPath) as? TranslationReadonlyTableViewCell else {
             fatalError()
         }
-        let transDto = self.viewModel.getItem(cardPos: self.state.itemNumber, transPos: self.state.translationsShown - indexPath.row - 1)
+        let transDto = self.viewModel.getItem(cardPos: self.state.itemNumber, transPos: self.translationsShown - indexPath.row - 1)
         
         cell.setup(config: TranslationCellConfiguration(translation: transDto.translation, transcription: transDto.transcription, comment: transDto.comment, sample: transDto.sample, translationsLanguage: viewModel.translationsLanguage))
         
@@ -161,8 +204,9 @@ class LearnControllerTableViewDataSource: NSObject, ILearnControllerTableViewDat
      Creates new `LearnControllerTableViewDataSource` with default state
      - Parameter viewModel: data delivery service
      */
-    init(viewModel: ILearnControllerDataProvider) {
+    init(viewModel: ILearnControllerDataProvider, presentationAssembly: IPresentationAssembly) {
         self.viewModel = viewModel
+        self.presentationAssembly = presentationAssembly
         self.state = LearnControllerState()
     }
     
@@ -171,8 +215,9 @@ class LearnControllerTableViewDataSource: NSObject, ILearnControllerTableViewDat
     - Parameter viewModel: data delivery service
     - Parameter state: given state
     */
-    init(viewModel: ILearnControllerDataProvider, state: ILearnControllerState) {
+    init(viewModel: ILearnControllerDataProvider, state: ILearnControllerState, presentationAssembly: IPresentationAssembly) {
         self.viewModel = viewModel
+        self.presentationAssembly = presentationAssembly
         self.state = state
     }
     
@@ -191,5 +236,17 @@ class LearnControllerTableViewDataSource: NSObject, ILearnControllerTableViewDat
         didAddNew = true
         self.state.translationsShown = self.viewModel.getItems(currCardPos: self.state.itemNumber).count
         delegate?.addItems(indexPaths: items)
+    }
+    
+    func showEditCardController() {
+        if let card = self.viewModel.getDbCard(currCardPos: self.state.itemNumber) {
+            let controller = presentationAssembly.translationsViewController(sourceCard: card)
+            self.delegate?.showController(controller: controller)
+        }
+    }
+    
+    func refreshData() {
+        self.viewModel.updateCard(currCardPos: self.state.itemNumber)
+        self.delegate?.onUpdateWholeView()
     }
 }

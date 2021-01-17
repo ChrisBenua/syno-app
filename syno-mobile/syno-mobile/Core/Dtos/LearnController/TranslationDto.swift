@@ -1,4 +1,5 @@
 import Foundation
+import CoreData
 
 /// DTO class for passing `DbTranslation` copy to `LearnViewController`
 class UserTranslationDtoForLearnController {

@@ -116,7 +116,7 @@ class PresentationAssembly: IPresentationAssembly {
         var views: [ILearnView] = []
         
         for i in 0..<viewModel.count {
-            let ithDataSource = LearnControllerTableViewDataSource(viewModel: viewModel, state: LearnControllerState(itemNumber: i))
+            let ithDataSource = LearnControllerTableViewDataSource(viewModel: viewModel, state: LearnControllerState(itemNumber: i), presentationAssembly: self)
             views.append(LearnViewGenerator().generate(dataSource: ithDataSource, actionsDelegate: ithDataSource, scrollViewDelegate: nil))
             ithDataSource.delegate = views.last!
         }
