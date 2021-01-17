@@ -16,6 +16,17 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
         return view
     }()
     
+    lazy var searchController: UISearchController = {
+        let resultsController = self.dataSource.getSearchResultsController()
+        let controller = UISearchController(searchResultsController: resultsController)
+        (resultsController as? DictsSearchController)?.searchController = controller
+        (resultsController as? DictsSearchController)?.realController = self
+        
+        controller.searchBar.scopeButtonTitles = ["Словари", "Карточки"]
+        
+        return controller
+    }()
+    
     /// shows `processingSaveView`
     func showSharingProcessView() {
         processingSaveView.showSavingProcessView(sourceView: self)
@@ -27,28 +38,7 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
             self.processingSaveView.dismissSavingProcessView()
         }
         
-        switch result {
-        case .success(let code, let dictName):
-            let url = URL(string: "https://chrisbenua.site/share/\(code)")
-            let activityController = UIActivityViewController(activityItems: ["Dictionary \"\(dictName)\"\n\n", url], applicationActivities: nil)
-            activityController.completionWithItemsHandler = {
-                (activityType: UIActivity.ActivityType?, success: Bool, params: [Any]?, erorr: Error?) in
-                if activityType == UIActivity.ActivityType.copyToPasteboard && success {
-                    let alertController = UIAlertController(title: nil, message: "Скопировано успешно!", preferredStyle: .alert)
-                    alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (_) in
-                        alertController.dismiss(animated: true, completion: nil)
-                    }))
-                    self.present(alertController, animated: true, completion: nil)
-                }
-            }
-            self.present(activityController, animated: true)
-        case .failure(let alertTitle, let alertText):
-            let alertController = UIAlertController(title: alertTitle, message: alertText, preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (_) in
-                alertController.dismiss(animated: true, completion: nil)
-            }))
-            self.present(alertController, animated: true, completion: nil)
-        }
+        DictShareHelper.showSharingResultView(controller: self, result: result)
     }
     
     func showCardsController(controller: UIViewController) {
@@ -116,6 +106,9 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
     
     override func viewDidLoad() {
         self.navigationItem.title = "Словари"
+        self.navigationItem.searchController = searchController
+        self.navigationItem.hidesSearchBarWhenScrolling = true
+        self.definesPresentationContext = true
 
         self.dataSource.performFetch()
         self.dataSource.delegate = self

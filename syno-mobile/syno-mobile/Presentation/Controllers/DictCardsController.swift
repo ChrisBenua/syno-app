@@ -54,7 +54,7 @@ class DictCardsController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = "Карточки"
+        self.navigationItem.title = self.dataSource.dictionaryName
         
         self.dataSource.performFetch()
         self.view.addSubview(self.collectionView)

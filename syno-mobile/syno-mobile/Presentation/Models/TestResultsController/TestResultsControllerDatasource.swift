@@ -1,5 +1,6 @@
 import Foundation
 import UIKit
+import CoreData
 
 /// Translations object to be presented on `TestResultsController`
 protocol ITestResultsControllerTranslationDto {
@@ -9,6 +10,8 @@ protocol ITestResultsControllerTranslationDto {
     var isRightAnswered: Bool { get }
     
     var userAnswer: String? { get }
+    
+    var sourceCardObjectId: NSManagedObjectID { get }
 }
 
 class TestResultsControllerTranslationDto: ITestResultsControllerTranslationDto {
@@ -18,15 +21,17 @@ class TestResultsControllerTranslationDto: ITestResultsControllerTranslationDto 
     
     var isRightAnswered: Bool
     
+    var sourceCardObjectId: NSManagedObjectID
     /**
      Creates new `TestResultsControllerTranslationDto`
      - Parameter translation: translation
      - Parameter isRightAnswered: Has user written this `translation` in his test
      */
-    init(translation: String?, isRightAnswered: Bool, userAnswer: String?) {
+    init(translation: String?, isRightAnswered: Bool, userAnswer: String?, sourceCardObjectId: NSManagedObjectID) {
         self.translation = translation
         self.isRightAnswered = isRightAnswered
         self.userAnswer = userAnswer
+        self.sourceCardObjectId = sourceCardObjectId
     }
 }
 
@@ -171,7 +176,7 @@ class TestResultsControllerDataProvider: ITestResultsControllerDataProvider {
                         wrongUserAnswerListIndex += 1
                     }
                 }
-                return TestResultsControllerTranslationDto(translation: el.translation, isRightAnswered: el.isRightAnswered, userAnswer: userAnswer)
+                return TestResultsControllerTranslationDto(translation: el.translation, isRightAnswered: el.isRightAnswered, userAnswer: userAnswer, sourceCardObjectId: dbUserTestCard.sourceCard!.objectID)
             }), translatedWord: dbUserTestCard.translatedWord)
         }
         
@@ -179,8 +184,14 @@ class TestResultsControllerDataProvider: ITestResultsControllerDataProvider {
     }
 }
 
+protocol ITestResultsControllerDataSourceReactor: class {
+    func onShowController(controller: UIViewController)
+}
+
 /// Service responsible for filling table view with results and whole `TestResultsController`
 protocol ITestResultsControllerDataSource: UITableViewDelegate, UITableViewDataSource, ITestResultsHeaderViewDelegate {
+    var reactor: ITestResultsControllerDataSourceReactor? { get set }
+    
     /// Gets test's dictionary name
     func getDictName() -> String?
     
@@ -218,10 +229,15 @@ class TestResultsControllerState: ITestResultsControllerState {
 }
 
 class TestResultsControllerDataSource: NSObject, ITestResultsControllerDataSource {
+    weak var reactor: ITestResultsControllerDataSourceReactor?
     /// Service for delivering data for filling table view
     private var dataProvider: ITestResultsControllerDataProvider
     /// Instance for saving `TestResultsControllerDataSource` state
     private var state: ITestResultsControllerState
+    
+    private var presentationAssembly: IPresentationAssembly
+    
+    private var storageManager: IStorageCoordinator
     
     var tableView: UITableView!
     
@@ -279,6 +295,15 @@ class TestResultsControllerDataSource: NSObject, ITestResultsControllerDataSourc
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let mainContext = storageManager.stack.mainContext
+        mainContext.performAndWait {
+            if let card = mainContext.object(with: self.dataProvider.getTranslationAt(cardPos: indexPath.section, transPos: indexPath.row).sourceCardObjectId) as? DbUserCard {
+                self.reactor?.onShowController(controller: self.presentationAssembly.translationsViewController(sourceCard: card))
+            }
+        }
+    }
+    
     func didChangeExpandStateAt(section: Int) {
         self.state.lastToggle = section
         self.state.isSectionExpanded[section].toggle()
@@ -298,8 +323,10 @@ class TestResultsControllerDataSource: NSObject, ITestResultsControllerDataSourc
      - Parameter dataProvider: service responsible for delivering data to this instance
      - Parameter state: `TestResultsControllerDataSource` initial state
      */
-    init(dataProvider: ITestResultsControllerDataProvider, state: ITestResultsControllerState) {
+    init(dataProvider: ITestResultsControllerDataProvider, presentationAssembly: IPresentationAssembly, storageManager: IStorageCoordinator, state: ITestResultsControllerState) {
         self.dataProvider = dataProvider
+        self.presentationAssembly = presentationAssembly
+        self.storageManager = storageManager
         self.state = state
     }
 }

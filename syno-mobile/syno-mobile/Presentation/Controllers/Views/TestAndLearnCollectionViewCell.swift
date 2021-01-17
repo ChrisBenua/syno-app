@@ -44,14 +44,19 @@ class TestAndLearnCollectionViewCell: UICollectionViewCell, IConfigurableTestAnd
     /// Last cell's configuration
     var config: ITestAndLearnCellConfiguration?
     
+    private var gradeLabelRightAnchor: NSLayoutConstraint!
+    private var gradeLabelCenterYAnchor: NSLayoutConstraint!
+    
     /// Wrapper view for `gradeLabel` and `languageLabel`
     lazy var gradeAndLanguageView: UIView = {
         let view = UIView()
         view.addSubview(self.gradeLabel)
         view.addSubview(self.languageLabel)
         
-        self.gradeLabel.anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 2, paddingRight: 0, width: 0, height: 0)
-        self.gradeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        self.gradeLabel.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: nil, paddingTop: 0, paddingLeft: -15, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        gradeLabelCenterYAnchor = self.gradeLabel.centerYAnchor.constraint(equalTo: languageLabel.centerYAnchor)
+        self.gradeLabelCenterYAnchor.isActive = true
+        //self.gradeLabel.setContentHuggingPriority(.defaultLow, for: .vertical)
         
         self.languageLabel.anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         
@@ -118,7 +123,26 @@ class TestAndLearnCollectionViewCell: UICollectionViewCell, IConfigurableTestAnd
     func updateUI() {
         self.gradeLabel.text = GradeToStringAndColor.gradeToStringAndColor(gradePercentage: self.config!.gradePercentage).0
         if self.config != nil {
-            self.gradeLabel.textColor = GradeToStringAndColor.gradeToStringAndColor(gradePercentage: self.config!.gradePercentage).1
+            let result = GradeToStringAndColor.gradeToStringAndColor(gradePercentage: self.config!.gradePercentage)
+            self.gradeLabel.textColor = result.1
+            if !result.2 {
+                self.gradeLabel.font = .systemFont(ofSize: 11, weight: .light)
+                self.gradeLabel.textColor = .lightGray
+                
+                self.gradeLabelRightAnchor.isActive = false
+                self.gradeLabelRightAnchor = self.gradeLabel.rightAnchor.constraint(equalTo: self.languageLabel.leftAnchor, constant: 4.5 * 2)
+                self.gradeLabelRightAnchor.isActive = true
+                self.gradeLabelCenterYAnchor.constant = 0.5
+                self.layoutIfNeeded()
+            } else {
+                self.gradeLabel.font = .systemFont(ofSize: 17, weight: .regular)
+                
+                self.gradeLabelRightAnchor.isActive = false
+                self.gradeLabelRightAnchor = self.gradeLabel.rightAnchor.constraint(equalTo: self.gradeAndLanguageView.rightAnchor, constant: 15)
+                self.gradeLabelRightAnchor.isActive = true
+                self.gradeLabelCenterYAnchor.constant = 0
+                self.layoutIfNeeded()
+            }
         }
         self.nameLabel.text = self.config?.dictionaryName
         self.languageLabel.text = self.config?.language
@@ -133,7 +157,10 @@ class TestAndLearnCollectionViewCell: UICollectionViewCell, IConfigurableTestAnd
         super.init(frame: frame)
         
         self.contentView.addSubview(baseShadowView)
-        
+        self.gradeLabel.leftAnchor.constraint(equalTo: self.gradeAndLanguageView.leftAnchor, constant: -15).isActive = true
+        self.gradeLabelRightAnchor = gradeLabel.rightAnchor.constraint(equalTo: self.gradeAndLanguageView.rightAnchor, constant: 15)
+        self.gradeLabelRightAnchor.isActive = true
+
         baseShadowView.anchor(top: self.contentView.topAnchor, left: self.contentView.leftAnchor, bottom: self.contentView.bottomAnchor, right: self.contentView.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
     }
     

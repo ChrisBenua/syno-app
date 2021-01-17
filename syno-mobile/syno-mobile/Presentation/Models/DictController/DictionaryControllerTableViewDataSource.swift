@@ -136,6 +136,8 @@ protocol IDictionaryControllerTableViewDataSource: ICommonDictionaryControllerDa
     
     /// Creates share for given dictionary
     func createShare(dict: DbUserDictionary)
+    
+    func getSearchResultsController() -> UIViewController
 }
 
 
@@ -261,6 +263,10 @@ class DictionaryControllerTableViewDataSource: NSObject, IDictionaryControllerTa
                 }
             }
         }
+    }
+    
+    func getSearchResultsController() -> UIViewController {
+        return self.presAssembly.dictsSearchController()
     }
     
     /**

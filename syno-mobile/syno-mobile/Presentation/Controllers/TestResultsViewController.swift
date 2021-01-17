@@ -125,9 +125,16 @@ class TestResultsViewController: UIViewController {
     init(dataSource: ITestResultsControllerDataSource) {
         self.dataSource = dataSource
         super.init(nibName: nil, bundle: nil)
+        self.dataSource.reactor = self
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension TestResultsViewController: ITestResultsControllerDataSourceReactor {
+    func onShowController(controller: UIViewController) {
+        self.navigationController?.pushViewController(controller, animated: true)
     }
 }

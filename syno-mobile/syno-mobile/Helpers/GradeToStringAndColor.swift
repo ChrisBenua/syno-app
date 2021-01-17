@@ -31,9 +31,9 @@ class GradeToStringAndColor {
     }
     
     /// Converts grade to string description and color
-    static func gradeToStringAndColor(gradePercentage: Double) -> (String, UIColor) {
-        let str = gradePercentage > -0.5 ? "\(Int(gradePercentage))%" : "N/A"
+    static func gradeToStringAndColor(gradePercentage: Double) -> (String, UIColor, Bool) {
+        let str = gradePercentage > -0.5 ? "\(Int(gradePercentage))%" : "Нет результата"
         
-        return (str, gradeToColor(gradePercentage: gradePercentage))
+        return (str, gradeToColor(gradePercentage: gradePercentage), gradePercentage > -0.5)
     }
 }

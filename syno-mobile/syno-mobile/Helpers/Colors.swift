@@ -11,6 +11,10 @@ extension UIColor {
     /// Main text color for highlighted text
     static let headerMainColor = UIColor(red: 81.0/255, green: 110.0/255, blue: 139.0/255, alpha: 1.0)
     
+    static let dictsSearchHeaderMainColor = #colorLiteral(red: 0.2286044974, green: 0.3248293059, blue: 0.4210541144, alpha: 1)
+    
+    static let highlightTextColor = #colorLiteral(red: 0.9979823232, green: 0.5370767117, blue: 0.007075123955, alpha: 1)
+    
     /// Alternative button color
     static let anotherButtonMainColor = UIColor(red: 96.0/255, green: 157.0/255, blue: 248.0/255, alpha: 1.0)
     

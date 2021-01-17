@@ -74,7 +74,7 @@ protocol IServiceAssembly {
     func testResultsControllerDataProvider(sourceTest: DbUserTest) -> ITestResultsControllerDataProvider
     
     /// Service responsible for data formatting for TestResultsController
-    func testResultsControllerDataSource(sourceTest: DbUserTest) -> ITestResultsControllerDataSource
+    func testResultsControllerDataSource(sourceTest: DbUserTest, presentationAssembly: IPresentationAssembly) -> ITestResultsControllerDataSource
     
     /// Service responsible for delivering data to RecentTestsView
     func recentTestsDataProvider() -> IRecentTestsDataProvider
@@ -94,6 +94,12 @@ protocol IServiceAssembly {
     var transferService: ITransferGuestDictsToNewAccount { get }
     
     var trashDictionariesDataProvider: ITrashDictionaryControllerDataProvider { get }
+    
+    var dictsSearchControllerDataProvider: IDictsSearchControllerDataProvider { get }
+    
+    var dictsSearchControllerDataSource: IDictsSearchControllerDataSource { get }
+    
+    func dictsSearchControllerModel(presAssembly: IPresentationAssembly) -> IDictsSearchControllerModel
     
     func trashDictionariesDataSource(presAssembly: IPresentationAssembly) -> ITrashDictionaryControllerTableViewDataSource
 }
@@ -141,6 +147,14 @@ class ServiceAssembly: IServiceAssembly {
     var congratulationsModel: ICongratulationsControllerModel = CongratulationsControllerModelImpl()
     
     lazy var trashDictionariesDataProvider: ITrashDictionaryControllerDataProvider = TrashDictionaryControllerDataProvider(storageCoordinator: self.coreAssembly.storageManager)
+    
+    func dictsSearchControllerModel(presAssembly: IPresentationAssembly) -> IDictsSearchControllerModel {
+        return DictsSearchControllerModelImpl(dataSource: self.dictsSearchControllerDataSource, presentationAssembly: presAssembly)
+    }
+    
+    lazy var dictsSearchControllerDataSource: IDictsSearchControllerDataSource = DictsSearchControllerDataSourceImpl(dataProvider: self.dictsSearchControllerDataProvider, shareService: self.dictShareService)
+    
+    lazy var dictsSearchControllerDataProvider: IDictsSearchControllerDataProvider = DictsSearchControllerDataProviderImpl(storageManager: self.coreAssembly.storageManager)
     
     var innerBatchUpdatesQueue: DispatchQueue = DispatchQueue(label: "innerCoreDataDispatchQueue", attributes: .concurrent)
     
@@ -219,9 +233,9 @@ class ServiceAssembly: IServiceAssembly {
         return TestResultsControllerDataProvider(test: sourceTest)
     }
     
-    func testResultsControllerDataSource(sourceTest: DbUserTest) -> ITestResultsControllerDataSource {
+    func testResultsControllerDataSource(sourceTest: DbUserTest, presentationAssembly: IPresentationAssembly) -> ITestResultsControllerDataSource {
         let dataProvider = testResultsControllerDataProvider(sourceTest: sourceTest)
-        return TestResultsControllerDataSource(dataProvider: dataProvider, state: TestResultsControllerState(withDefaultSize: dataProvider.totalCards()))
+        return TestResultsControllerDataSource(dataProvider: dataProvider, presentationAssembly: presentationAssembly, storageManager: self.coreAssembly.storageManager, state: TestResultsControllerState(withDefaultSize: dataProvider.totalCards()))
     }
     
     func recentTestsDataProvider() -> IRecentTestsDataProvider {

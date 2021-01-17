@@ -133,6 +133,7 @@ class TestResultsTableViewHeaderView: UIView, IConfigurableTestResultsHeader {
         button.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         
         button.transform = CGAffineTransform(rotationAngle: CGFloat.pi - 1e-7)
+        button.isUserInteractionEnabled = false
         
         return button
     }()

@@ -104,6 +104,8 @@ protocol ICardsControllerDataSource: UICollectionViewDataSource, UICollectionVie
     /// CollectionView selection event handler
     var delegate: ICardsDataSourceReactor? { get set }
     
+    var dictionaryName: String { get }
+    
     /// Performs fetch for `NSFetchedResultsController`
     func performFetch()
     
@@ -186,6 +188,10 @@ class CardsControllerDataSource: NSObject, ICardsControllerDataSource {
     
     func commitChanges() {
         self.viewModel.commitChanges()
+    }
+    
+    var dictionaryName: String {
+        return sourceDict.name ?? ""
     }
     
     /**

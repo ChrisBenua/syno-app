@@ -37,6 +37,14 @@ extension DbUserCard {
         return request
     }
     
+    static func requestAllCardsWith(owner: DbAppUser) -> NSFetchRequest<DbUserCard> {
+        let request: NSFetchRequest = DbUserCard.fetchRequest()
+        request.predicate = NSPredicate(format: "sourceDictionary.owner == %@ AND sourceDictionary.wasDeletedManually == NO", owner)
+        request.sortDescriptors = [NSSortDescriptor(key: "translatedWord", ascending: true)]
+        
+        return request
+    }
+    
     /// Gets `DbUserCard` with given `objectId` in given `context`
     static func getCardWith(objectId: NSManagedObjectID, context: NSManagedObjectContext) -> DbUserCard? {
         return context.object(with: objectId) as? DbUserCard

@@ -29,6 +29,8 @@ class CardCellConfiguration: ICardCellConfiguration {
 protocol IConfigurableCardCell {
     /// Fills data inside cell
     func setup(configuration: ICardCellConfiguration)
+    
+    func setup(configuration: ICardCellConfiguration, textToHighlight: String)
 }
 
 /// Collection view cell for displaying card in edit mode
@@ -37,11 +39,21 @@ class CardCollectionViewCell: UICollectionViewCell, IConfigurableCardCell {
 
     var translatedWord: String?
     var translations: [String]?
+    private var textToHighlight: String? = nil
     
     /// Updates `translatedWordLabel` and `translationsLabel`
     func updateUI() {
         self.translatedWordLabel.text = translatedWord
-        var translationsText = (translations ?? []).reversed().reduce("", { (res, curr) -> String in
+        var translationsOrder = Array((translations ?? []).reversed())
+        
+        if let textToHighlight = textToHighlight {
+            let predicate: (String) -> Bool = { (str) in
+                return str.lowercased().starts(with: textToHighlight)
+            }
+            translationsOrder = Array(translationsOrder.filter(predicate)) + Array(translationsOrder.filter{ !predicate($0) })
+        }
+        
+        var translationsText = translationsOrder.reduce("", { (res, curr) -> String in
             if curr.hasSuffix("?") {
                 return res + " " + curr
             } else {
@@ -55,11 +67,25 @@ class CardCollectionViewCell: UICollectionViewCell, IConfigurableCardCell {
         }
         
         self.translationsLabel.text = translationsText
+        
+        if let textToHighlight = textToHighlight {
+            self.translationsLabel.highlight(searchedText: textToHighlight, color: .highlightTextColor)
+            self.translatedWordLabel.highlight(searchedText: textToHighlight, color: .highlightTextColor)
+        }
     }
     
     func setup(configuration: ICardCellConfiguration) {
         self.translatedWord = configuration.translatedWord
         self.translations = configuration.translations
+        self.textToHighlight = nil
+        
+        updateUI()
+    }
+    
+    func setup(configuration: ICardCellConfiguration, textToHighlight: String) {
+        self.translatedWord = configuration.translatedWord
+        self.translations = configuration.translations
+        self.textToHighlight = textToHighlight
         
         updateUI()
     }
@@ -117,4 +143,33 @@ class CardCollectionViewCell: UICollectionViewCell, IConfigurableCardCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+extension UILabel {
+    func highlight(searchedText: String?..., color: UIColor = .red) {
+        guard let txtLabel = self.text else { return }
+
+        let attributeTxt = NSMutableAttributedString(string: txtLabel)
+
+        searchedText.forEach {
+            if let searchedText = $0?.lowercased() {
+                var range = NSRange(location: 0, length: attributeTxt.length)
+
+                while (range.location != NSNotFound) {
+                    range = attributeTxt.mutableString.range(of: searchedText, options: .caseInsensitive, range: range)
+                    if (range.location != NSNotFound) {
+                        if range.location == 0 || txtLabel[txtLabel.index(txtLabel.startIndex, offsetBy: range.location - 1)] == " " {
+                            attributeTxt.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: range)
+                            attributeTxt.addAttribute(NSAttributedString.Key.font, value: UIFont.boldSystemFont(ofSize: self.font.pointSize), range: range)
+                        }
+                        let location = range.location + range.length
+                        range = NSRange(location: location, length: attributeTxt.length - location)
+                    }
+                }
+            }
+        }
+
+        self.attributedText = attributeTxt
+    }
+
 }

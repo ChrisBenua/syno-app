@@ -18,6 +18,10 @@
 		49A16EAD0C4E81E88AF1AD63 /* IRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A166F813DC9E880D839D0A /* IRequest.swift */; };
 		97F228A90ED0055E61FF55C6 /* Pods_syno_mobileTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10F1548EA7F86F27E43B50F4 /* Pods_syno_mobileTests.framework */; };
 		AA006B4924C03864002CECB6 /* BackspaceUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA006B4824C03864002CECB6 /* BackspaceUITextField.swift */; };
+		AA10BD8125B445580086C4BB /* DictsSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10BD8025B445580086C4BB /* DictsSearchController.swift */; };
+		AA10BD8625B447D10086C4BB /* DictsSearchControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10BD8525B447D10086C4BB /* DictsSearchControllerDataSource.swift */; };
+		AA10BD8C25B45C0E0086C4BB /* DictsSearchDictNameHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10BD8B25B45C0E0086C4BB /* DictsSearchDictNameHeader.swift */; };
+		AA10BD9025B4A1430086C4BB /* DictShareHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10BD8F25B4A1430086C4BB /* DictShareHelper.swift */; };
 		AA12FECA23AFB59100CC8D3B /* LearnViewGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA12FEC923AFB59000CC8D3B /* LearnViewGenerator.swift */; };
 		AA1B874A238D29F300D26FCF /* LoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B8749238D29F300D26FCF /* LoginRequest.swift */; };
 		AA1B874D238D2A2400D26FCF /* RequestsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B874C238D2A2400D26FCF /* RequestsSettings.swift */; };
@@ -184,6 +188,10 @@
 		49A16D95769370F236C3331C /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		9E89B3D67049DB56FF1AD9C7 /* Pods-syno-mobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-syno-mobileTests.release.xcconfig"; path = "Target Support Files/Pods-syno-mobileTests/Pods-syno-mobileTests.release.xcconfig"; sourceTree = "<group>"; };
 		AA006B4824C03864002CECB6 /* BackspaceUITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackspaceUITextField.swift; sourceTree = "<group>"; };
+		AA10BD8025B445580086C4BB /* DictsSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictsSearchController.swift; sourceTree = "<group>"; };
+		AA10BD8525B447D10086C4BB /* DictsSearchControllerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictsSearchControllerDataSource.swift; sourceTree = "<group>"; };
+		AA10BD8B25B45C0E0086C4BB /* DictsSearchDictNameHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictsSearchDictNameHeader.swift; sourceTree = "<group>"; };
+		AA10BD8F25B4A1430086C4BB /* DictShareHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictShareHelper.swift; sourceTree = "<group>"; };
 		AA12FEC923AFB59000CC8D3B /* LearnViewGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnViewGenerator.swift; sourceTree = "<group>"; };
 		AA1B8749238D29F300D26FCF /* LoginRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRequest.swift; sourceTree = "<group>"; };
 		AA1B874C238D2A2400D26FCF /* RequestsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsSettings.swift; sourceTree = "<group>"; };
@@ -431,6 +439,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		AA10BD8425B447BD0086C4BB /* DictsSearchController */ = {
+			isa = PBXGroup;
+			children = (
+				AA10BD8525B447D10086C4BB /* DictsSearchControllerDataSource.swift */,
+			);
+			path = DictsSearchController;
+			sourceTree = "<group>";
+		};
 		AA12FEC823AFB57B00CC8D3B /* Helper */ = {
 			isa = PBXGroup;
 			children = (
@@ -652,6 +668,7 @@
 				AAF3FE6E24AB868D003DBBB2 /* UIButtonExt.swift */,
 				AAF3FE7024AB8851003DBBB2 /* UILabelExt.swift */,
 				AA006B4824C03864002CECB6 /* BackspaceUITextField.swift */,
+				AA10BD8F25B4A1430086C4BB /* DictShareHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -714,6 +731,7 @@
 		AA8C0E0C23891862000CBB73 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				AA10BD8425B447BD0086C4BB /* DictsSearchController */,
 				AA3FE2D7258BA6B300B4C982 /* CongratulationsController */,
 				AADBA1EF2529EA2600F22429 /* DictionaryTrashController */,
 				AABEB2AE250BA5CD0064F67E /* ReversedLearnController */,
@@ -760,6 +778,7 @@
 				AABEB2B3250BBACE0064F67E /* ReversedLearnControllerView.swift */,
 				AADBA1EB2529E99200F22429 /* DictionaryTrashController.swift */,
 				AA3FE2D3258BA56700B4C982 /* CongratulationsController.swift */,
+				AA10BD8025B445580086C4BB /* DictsSearchController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -865,6 +884,7 @@
 				AAC2EA7724C1A81F00A41AB9 /* EmptyDictsCollectionViewHeader.swift */,
 				AAC2EA7924C1AE6400A41AB9 /* EmptyCardsCollectionViewHeader.swift */,
 				AADBA1F4252A2D3F00F22429 /* UIScrollableTextField.swift */,
+				AA10BD8B25B45C0E0086C4BB /* DictsSearchDictNameHeader.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1091,6 +1111,7 @@
 				AA8C0E10238918FA000CBB73 /* PresentationAssembly.swift in Sources */,
 				AA2B772424A690670081660C /* UIViewControllerExt.swift in Sources */,
 				AABEB2B2250BAE590064F67E /* ReversedLearnView.swift in Sources */,
+				AA10BD9025B4A1430086C4BB /* DictShareHelper.swift in Sources */,
 				AA1B8759238D9CE100D26FCF /* RootAssembly.swift in Sources */,
 				AAD4A2E523ABAB3100394693 /* DbUserTestDictExt.swift in Sources */,
 				AA8700D52399170B00C97E18 /* RegistrationModel.swift in Sources */,
@@ -1107,6 +1128,7 @@
 				AAC2EA7A24C1AE6400A41AB9 /* EmptyCardsCollectionViewHeader.swift in Sources */,
 				AA8C0E18238921EC000CBB73 /* Anchor.swift in Sources */,
 				AA6A03BC23AC9CE400902FBE /* LearnControllerTableViewDataSource.swift in Sources */,
+				AA10BD8125B445580086C4BB /* DictsSearchController.swift in Sources */,
 				AAB6CECD2393C87B00AAAF0E /* UserTranslationStorageManager.swift in Sources */,
 				AA8C0E1B23892A0F000CBB73 /* UILabelWithInsets.swift in Sources */,
 				AAC605752390E5EC00120B77 /* SavingProcessView.swift in Sources */,
@@ -1134,6 +1156,7 @@
 				AAB6CEC52393BA1C00AAAF0E /* DbTranslationExt.swift in Sources */,
 				AAEBE74B23A39DE400F48684 /* TranslationsCollectionViewController.swift in Sources */,
 				AA75298423A7B016004120A0 /* TestAndLearnController.swift in Sources */,
+				AA10BD8C25B45C0E0086C4BB /* DictsSearchDictNameHeader.swift in Sources */,
 				AA94BC21238841F300B2F16F /* LoginViewController.swift in Sources */,
 				AAB6CEC32392EC2000AAAF0E /* DbUserCardExt.swift in Sources */,
 				AA268FAE244092C9005AE946 /* NewDictController.swift in Sources */,
@@ -1170,6 +1193,7 @@
 				AA8700D323990F5400C97E18 /* UserDictsFetchService.swift in Sources */,
 				AA7642842451F08200E388A1 /* GetDictShareView.swift in Sources */,
 				AAEBE75423A4139B00F48684 /* BaseShadowView.swift in Sources */,
+				AA10BD8625B447D10086C4BB /* DictsSearchControllerDataSource.swift in Sources */,
 				AAC605772390EA0100120B77 /* RegistrationViewController.swift in Sources */,
 				AA8700E1239942FF00C97E18 /* DictsFetchResultsControllerDelegate.swift in Sources */,
 				AA4B780C23C1BF29005A9CC9 /* TestControllerTranslationTableViewCell.swift in Sources */,
@@ -1382,7 +1406,7 @@
 				CODE_SIGN_ENTITLEMENTS = "syno-mobile/Syno.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 8LJXAKA3QW;
 				INFOPLIST_FILE = "syno-mobile/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1390,7 +1414,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.2;
+				MARKETING_VERSION = 1.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chrisbenua.synomobile;
 				PRODUCT_NAME = Syno;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1406,7 +1430,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "syno-mobile/Syno.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 8LJXAKA3QW;
 				INFOPLIST_FILE = "syno-mobile/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1414,7 +1438,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.2;
+				MARKETING_VERSION = 1.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chrisbenua.synomobile;
 				PRODUCT_NAME = Syno;
 				SWIFT_VERSION = 5.0;

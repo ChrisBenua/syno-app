@@ -68,6 +68,8 @@ protocol IPresentationAssembly {
     func trashController() -> UIViewController
     
     func congratsController() -> UIViewController
+    
+    func dictsSearchController() -> UIViewController
 }
 
 class PresentationAssembly: IPresentationAssembly {
@@ -176,7 +178,7 @@ class PresentationAssembly: IPresentationAssembly {
     }
     
     func testResultsController(sourceTest: DbUserTest) -> UIViewController {
-        return TestResultsViewController(dataSource: self.serviceAssembly.testResultsControllerDataSource(sourceTest: sourceTest))
+        return TestResultsViewController(dataSource: self.serviceAssembly.testResultsControllerDataSource(sourceTest: sourceTest, presentationAssembly: self))
     }
     
     func homeController() -> UIViewController {
@@ -197,6 +199,10 @@ class PresentationAssembly: IPresentationAssembly {
     
     func congratsController() -> UIViewController {
         return CongratulationsController(model: self.serviceAssembly.congratulationsModel)
+    }
+    
+    func dictsSearchController() -> UIViewController {
+        return DictsSearchController(model: self.serviceAssembly.dictsSearchControllerModel(presAssembly: self))
     }
     
     /**

@@ -59,6 +59,14 @@ extension DbUserDictionary {
         return request
     }
     
+    static func requestFilteredSortedByName(owner: DbAppUser, searchText: String) -> NSFetchRequest<DbUserDictionary> {
+        let request: NSFetchRequest<DbUserDictionary> = DbUserDictionary.fetchRequest()
+        request.predicate = NSPredicate(format: "owner == %@ AND name CONTAINS[cd] %@ AND wasDeletedManually == NO", owner, searchText)
+        request.sortDescriptors = [NSSortDescriptor(key: "timeCreated", ascending: false), NSSortDescriptor(key: "name", ascending: false)]
+        
+        return request
+    }
+    
     static func requestDeletedSortedByDate(owner: DbAppUser) -> NSFetchRequest<DbUserDictionary> {
         let request: NSFetchRequest<DbUserDictionary> = DbUserDictionary.fetchRequest()
         request.predicate = NSPredicate(format: "owner == %@ AND wasDeletedManually == YES", owner)
