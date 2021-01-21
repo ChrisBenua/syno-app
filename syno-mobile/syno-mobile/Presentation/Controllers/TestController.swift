@@ -183,6 +183,7 @@ class TestViewController: UIViewController, IScrollableToPoint {
                 currContentView.removeFromSuperview()
                     if let nextView = nextView, self.scrollView.subviews.contains(nextView) {
                         nextView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor).isActive = true
+                        nextView.makeFirstTextFieldResponder()
                     }
                 }
             }
@@ -212,6 +213,7 @@ class TestViewController: UIViewController, IScrollableToPoint {
         self.addKeyboardObservers(showSelector: #selector(showKeyboard(notification:)), hideSelector: #selector(hideKeyboard(notification:)))
         
         scrollView.anchor(top: self.view.topAnchor, left: self.view.leftAnchor, bottom: self.view.bottomAnchor, right: self.view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: UIScreen.main.bounds.width, height: 0)
+        contentView.makeFirstTextFieldResponder()
     }
 }
 
@@ -231,12 +233,14 @@ extension TestViewController {
             Logger.log("lastPoint: \(lastFocusedPoint?.y)")
             Logger.log("keyboard height:\(keyboardHeight)")
             
-            let neededShift = UIScreen.main.bounds.height - lastFocusedPoint!.y - keyboardHeight
-            Logger.log("neededShift: \(neededShift)")
-            Logger.log("currOffset: \(scrollView.contentOffset.y)")
-            if (neededShift < 0) {
-                self.scrollView.contentInset.bottom += -neededShift
-                self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollView.contentOffset.y - neededShift), animated: true)
+            if let lastFocusedPoint = lastFocusedPoint {
+                let neededShift = UIScreen.main.bounds.height - lastFocusedPoint.y - keyboardHeight
+                Logger.log("neededShift: \(neededShift)")
+                Logger.log("currOffset: \(scrollView.contentOffset.y)")
+                if (neededShift < 0) {
+                    self.scrollView.contentInset.bottom += -neededShift
+                    self.scrollView.setContentOffset(CGPoint(x: 0, y: scrollView.contentOffset.y - neededShift), animated: true)
+                }
             }
         }
     }

@@ -87,7 +87,7 @@ class TranslationsCollectionViewController: UIViewController {
         
         tableView.separatorStyle = .none
         
-        tableView.contentInset = UIEdgeInsets(top: 30, left: 0, bottom: 10, right: 0)
+        //tableView.contentInset = UIEdgeInsets(top: 30, left: 0, bottom: 10, right: 0)
         
         tableView.register(TranslationTableViewCell.self, forCellReuseIdentifier: TranslationTableViewCell.cellId())
         

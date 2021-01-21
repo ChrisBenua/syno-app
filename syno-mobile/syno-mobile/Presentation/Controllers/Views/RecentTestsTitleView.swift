@@ -47,6 +47,7 @@ class RecentTestsTitleView: UIView {
         let button = UIButton()
         button.backgroundColor = .clear
         let image = #imageLiteral(resourceName: "Vector 30")
+        button.isUserInteractionEnabled = false
         
         button.setImage(image, for: .normal)
         button.setContentHuggingPriority(.defaultHigh, for: .horizontal)

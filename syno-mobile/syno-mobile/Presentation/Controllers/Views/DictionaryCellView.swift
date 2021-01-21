@@ -92,13 +92,15 @@ class DictionaryCollectionViewCell: UICollectionViewCell, IConfigurableDictionar
         let transAndLangStackView = UIStackView(arrangedSubviews: [translationsAmountLabel, languageLabel])
         transAndLangStackView.axis = .horizontal;transAndLangStackView.translatesAutoresizingMaskIntoConstraints = false
         transAndLangStackView.distribution = .fillProportionally
+        let view = UIView(); view.setContentHuggingPriority(.defaultLow, for: .vertical)
         
-        
-        let mainSV = UIStackView(arrangedSubviews: [nameLabel, cardsAmountLabel, transAndLangStackView])
+        let mainSV = UIStackView(arrangedSubviews: [nameLabel, view, cardsAmountLabel, transAndLangStackView])
+        mainSV.setCustomSpacing(0, after: nameLabel)
+        mainSV.setCustomSpacing(0, after: view)
         mainSV.axis = .vertical; mainSV.translatesAutoresizingMaskIntoConstraints = false
         mainSV.distribution = .fill
-        nameLabel.heightAnchor.constraint(equalTo: mainSV.heightAnchor, multiplier: 0.4).isActive = true
-        transAndLangStackView.heightAnchor.constraint(equalTo: cardsAmountLabel.heightAnchor, multiplier: 1).isActive = true
+        //nameLabel.heightAnchor.constraint(equalTo: mainSV.heightAnchor, multiplier: 0.4).isActive = true
+        //transAndLangStackView.heightAnchor.constraint(equalTo: cardsAmountLabel.heightAnchor, multiplier: 1).isActive = true
         
         mainSV.spacing = 8
         
@@ -113,7 +115,7 @@ class DictionaryCollectionViewCell: UICollectionViewCell, IConfigurableDictionar
         
         self.baseShadowView.containerView.addSubview(stackView)
         
-        stackView.anchor(top: self.baseShadowView.topAnchor, left: self.baseShadowView.leftAnchor, bottom: self.baseShadowView.bottomAnchor, right: self.baseShadowView.rightAnchor, paddingTop: 5, paddingLeft: 12, paddingBottom: 15, paddingRight: 12, width: 0, height: 0)
+        stackView.anchor(top: self.baseShadowView.topAnchor, left: self.baseShadowView.leftAnchor, bottom: self.baseShadowView.bottomAnchor, right: self.baseShadowView.rightAnchor, paddingTop: 9, paddingLeft: 12, paddingBottom: 14, paddingRight: 12, width: 0, height: 0)
     }
     
     /// Forbidden to create from storyboard

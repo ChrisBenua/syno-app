@@ -84,7 +84,7 @@ class DictsViewController: UIViewController, IDictionaryControllerReactor {
         colView.backgroundColor = .white
         colView.delegate = self.dataSource
         
-        colView.contentInset = UIEdgeInsets(top: 30, left: 15, bottom: 0, right: 15)
+        colView.contentInset = UIEdgeInsets(top: 20, left: 15, bottom: 20, right: 15)
         
         colView.register(DictionaryCollectionViewCell.self, forCellWithReuseIdentifier: DictionaryCollectionViewCell.cellId)
         colView.register(EmptyDictsCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: EmptyDictsCollectionViewHeader.headerId)

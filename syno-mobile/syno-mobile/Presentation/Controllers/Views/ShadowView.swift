@@ -23,7 +23,6 @@ class ShadowView: UIView {
     
     /// Setting up shadow
     func setupShadow() {
-        Logger.log("setupShadow: \(bounds)")
         self.layer.cornerRadius = cornerRadius ?? 8
 
         self.layer.shadowColor = UIColor.gray.cgColor

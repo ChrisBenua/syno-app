@@ -61,7 +61,7 @@ protocol ITestResultsHeaderViewDelegate: class {
 }
 
 /// Class for displaying section header in TestResultsController
-class TestResultsTableViewHeaderView: UIView, IConfigurableTestResultsHeader {
+class TestResultsTableViewHeaderView: UIView, IConfigurableTestResultsHeader, UIGestureRecognizerDelegate {
             
     var config: ITestResultsHeaderConfiguration!
     
@@ -140,7 +140,10 @@ class TestResultsTableViewHeaderView: UIView, IConfigurableTestResultsHeader {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.baseShadowView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(expandButtonClicked)))
+        let gr = UITapGestureRecognizer(target: self, action: #selector(expandButtonClicked))
+        gr.cancelsTouchesInView = false
+        gr.delegate = self
+        self.baseShadowView.addGestureRecognizer(gr)
         self.addSubview(self.baseShadowView)
         self.baseShadowView.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
     }
@@ -177,3 +180,71 @@ class TestResultsTableViewHeaderView: UIView, IConfigurableTestResultsHeader {
         self.delegate?.didChangeExpandStateAt(section: self.config.section)
     }
 }
+
+class TestResultsTableViewMainHeader: UIView {
+    /// Label for user's result
+    lazy var resultTextLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Результат"
+        label.font = .systemFont(ofSize: 26)
+        label.textAlignment = .right
+        
+        return label
+    }()
+    
+    /// Label for user's result grade
+    lazy var resultPercentageLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 26)
+        label.textAlignment = .left
+        
+        return label
+    }()
+    
+    /// Label for report
+    lazy var reportTextLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Отчёт"
+        label.font = .systemFont(ofSize: 26)
+        label.textAlignment = .center
+        
+        return label
+    }()
+    
+    func setPercentage(percentage: Double) {
+        let result = GradeToStringAndColor.gradeToStringAndColor(gradePercentage: percentage)
+        resultPercentageLabel.textColor = result.1
+        resultPercentageLabel.text = result.0
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        layout()
+    }
+    
+    private func layout() {
+        let innerView = UIView()
+        
+        let sv = UIStackView(arrangedSubviews: [self.resultTextLabel, self.resultPercentageLabel])
+        sv.axis = .horizontal
+        sv.distribution = .fill
+        sv.spacing = 20
+        innerView.addSubview(sv)
+        sv.stickToSuperviewEdges([.top, .bottom])
+        sv.centerXAnchor.constraint(equalTo: innerView.centerXAnchor).isActive = true
+        
+        let stackView = UIStackView(arrangedSubviews: [innerView, self.reportTextLabel])
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.spacing = 20
+        
+        self.addSubview(stackView)
+        stackView.stickToSuperviewEdges(.all, insets: .init(top: 20, left: 20, bottom: 20, right: 20))
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+

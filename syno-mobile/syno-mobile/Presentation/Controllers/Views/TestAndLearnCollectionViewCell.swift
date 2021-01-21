@@ -44,8 +44,7 @@ class TestAndLearnCollectionViewCell: UICollectionViewCell, IConfigurableTestAnd
     /// Last cell's configuration
     var config: ITestAndLearnCellConfiguration?
     
-    private var gradeLabelRightAnchor: NSLayoutConstraint!
-    private var gradeLabelCenterYAnchor: NSLayoutConstraint!
+    private var gradeLabelConstrains: AnchoredConstraints = AnchoredConstraints()
     
     /// Wrapper view for `gradeLabel` and `languageLabel`
     lazy var gradeAndLanguageView: UIView = {
@@ -54,8 +53,8 @@ class TestAndLearnCollectionViewCell: UICollectionViewCell, IConfigurableTestAnd
         view.addSubview(self.languageLabel)
         
         self.gradeLabel.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: nil, paddingTop: 0, paddingLeft: -15, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-        gradeLabelCenterYAnchor = self.gradeLabel.centerYAnchor.constraint(equalTo: languageLabel.centerYAnchor)
-        self.gradeLabelCenterYAnchor.isActive = true
+        gradeLabelConstrains.vertical = self.gradeLabel.centerYAnchor.constraint(equalTo: languageLabel.centerYAnchor)
+        gradeLabelConstrains.vertical?.isActive = true
         //self.gradeLabel.setContentHuggingPriority(.defaultLow, for: .vertical)
         
         self.languageLabel.anchor(top: view.topAnchor, left: nil, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
@@ -95,26 +94,25 @@ class TestAndLearnCollectionViewCell: UICollectionViewCell, IConfigurableTestAnd
     
     /// Stack-view with all elements inside
     lazy var stackView: UIStackView = {
-        let sepView = UIView();sepView.translatesAutoresizingMaskIntoConstraints = false
+        let sepView = UIView();sepView.setContentHuggingPriority(.defaultLow, for: .vertical)
+        
         let stackView = UIStackView(arrangedSubviews: [self.nameLabel, sepView, self.gradeAndLanguageView])
         stackView.axis = .vertical
         stackView.distribution = .fill
         stackView.spacing = 5
-        
-        sepView.heightAnchor.constraint(equalTo: stackView.heightAnchor, multiplier: 0.3).isActive = true
-        
+                
         return stackView
     }()
     
     /// Main view
     lazy var baseShadowView: UIView = {
         let view = BaseShadowView()
-        view.cornerRadius = 20
+        view.cornerRadius = 10
         view.shadowView.shadowOffset = CGSize(width: 0, height: 4)
         view.containerViewBackgroundColor = UIColor(red: 240.0/255, green: 240.0/255, blue: 240.0/255, alpha: 1)
         
-        view.addSubview(self.stackView)
-        self.stackView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 10, paddingLeft: 15, paddingBottom: 10, paddingRight: 15, width: 0, height: 0)
+        view.containerView.addSubview(self.stackView)
+        self.stackView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 9, paddingLeft: 12, paddingBottom: 14, paddingRight: 12, width: 0, height: 0)
         
         return view
     }()
@@ -126,22 +124,9 @@ class TestAndLearnCollectionViewCell: UICollectionViewCell, IConfigurableTestAnd
             let result = GradeToStringAndColor.gradeToStringAndColor(gradePercentage: self.config!.gradePercentage)
             self.gradeLabel.textColor = result.1
             if !result.2 {
-                self.gradeLabel.font = .systemFont(ofSize: 11, weight: .light)
-                self.gradeLabel.textColor = .lightGray
-                
-                self.gradeLabelRightAnchor.isActive = false
-                self.gradeLabelRightAnchor = self.gradeLabel.rightAnchor.constraint(equalTo: self.languageLabel.leftAnchor, constant: 4.5 * 2)
-                self.gradeLabelRightAnchor.isActive = true
-                self.gradeLabelCenterYAnchor.constant = 0.5
-                self.layoutIfNeeded()
+                self.configureConstraintsForEmptyResult()
             } else {
-                self.gradeLabel.font = .systemFont(ofSize: 17, weight: .regular)
-                
-                self.gradeLabelRightAnchor.isActive = false
-                self.gradeLabelRightAnchor = self.gradeLabel.rightAnchor.constraint(equalTo: self.gradeAndLanguageView.rightAnchor, constant: 15)
-                self.gradeLabelRightAnchor.isActive = true
-                self.gradeLabelCenterYAnchor.constant = 0
-                self.layoutIfNeeded()
+                self.configureConstraintsForSomeResult()
             }
         }
         self.nameLabel.text = self.config?.dictionaryName
@@ -157,11 +142,36 @@ class TestAndLearnCollectionViewCell: UICollectionViewCell, IConfigurableTestAnd
         super.init(frame: frame)
         
         self.contentView.addSubview(baseShadowView)
-        self.gradeLabel.leftAnchor.constraint(equalTo: self.gradeAndLanguageView.leftAnchor, constant: -15).isActive = true
-        self.gradeLabelRightAnchor = gradeLabel.rightAnchor.constraint(equalTo: self.gradeAndLanguageView.rightAnchor, constant: 15)
-        self.gradeLabelRightAnchor.isActive = true
+        self.configureInitialsConstraints()
 
         baseShadowView.anchor(top: self.contentView.topAnchor, left: self.contentView.leftAnchor, bottom: self.contentView.bottomAnchor, right: self.contentView.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+    }
+    
+    private func configureConstraintsForEmptyResult() {
+        self.gradeLabel.font = .systemFont(ofSize: 11, weight: .light)
+        self.gradeLabel.textColor = .lightGray
+        
+        self.gradeLabelConstrains.trailing?.isActive = false
+        self.gradeLabelConstrains.trailing? = self.gradeLabel.rightAnchor.constraint(equalTo: self.languageLabel.leftAnchor, constant: 4.5 * 2)
+        self.gradeLabelConstrains.trailing?.isActive = true
+        self.gradeLabelConstrains.vertical?.constant = 0.5
+        self.layoutIfNeeded()
+    }
+    
+    private func configureConstraintsForSomeResult() {
+        self.gradeLabel.font = .systemFont(ofSize: 17, weight: .regular)
+        
+        self.gradeLabelConstrains.trailing?.isActive = false
+        self.gradeLabelConstrains.trailing = self.gradeLabel.rightAnchor.constraint(equalTo: self.gradeAndLanguageView.rightAnchor, constant: 15)
+        self.gradeLabelConstrains.trailing?.isActive = true
+        self.gradeLabelConstrains.vertical?.constant = 0
+        self.layoutIfNeeded()
+    }
+    
+    private func configureInitialsConstraints() {
+        self.gradeLabel.leftAnchor.constraint(equalTo: self.gradeAndLanguageView.leftAnchor, constant: -15).isActive = true
+        self.gradeLabelConstrains.trailing = gradeLabel.rightAnchor.constraint(equalTo: self.gradeAndLanguageView.rightAnchor, constant: 15)
+        self.gradeLabelConstrains.trailing?.isActive = true
     }
     
     /// Forbidden to init from storyboard

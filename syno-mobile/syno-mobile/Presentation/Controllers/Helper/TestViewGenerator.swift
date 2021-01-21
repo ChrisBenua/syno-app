@@ -14,12 +14,19 @@ protocol IScrollableToPoint: class {
 protocol ITestView: UIView, ITestViewControllerDataSourceReactor, IScrollableToPoint {
     var tableView: UITableView { get }
     var parentController: IScrollableToPoint? { get set }
+    func makeFirstTextFieldResponder()
     
     var model: ITestViewControllerModel { get }
 }
 
 /// View for TestController with only 1 card
 class TestView: UIView, ITestView {
+    func makeFirstTextFieldResponder() {
+        if let cell = self.tableView.cellForRow(at: IndexPath(item: 0, section: 0)) as? TestControllerTranslationTableViewCell {
+            cell.translationTextField.becomeFirstResponder()
+        }
+    }
+    
     func scrollToTop() {
         parentController?.scrollToTop()
     }

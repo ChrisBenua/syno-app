@@ -186,6 +186,8 @@ class TestResultsControllerDataProvider: ITestResultsControllerDataProvider {
 
 protocol ITestResultsControllerDataSourceReactor: class {
     func onShowController(controller: UIViewController)
+    
+    func onScrollToRect(view: UIView, cellRect: CGRect)
 }
 
 /// Service responsible for filling table view with results and whole `TestResultsController`
@@ -307,7 +309,13 @@ class TestResultsControllerDataSource: NSObject, ITestResultsControllerDataSourc
     func didChangeExpandStateAt(section: Int) {
         self.state.lastToggle = section
         self.state.isSectionExpanded[section].toggle()
-        self.tableView.reloadData()
+        (self.tableView as! PlainTableView).reloadDataWithCompletion {
+            if (self.state.isSectionExpanded[section]) {
+                self.reactor?.onScrollToRect(view: self.tableView, cellRect: self.tableView.rectForRow(at: IndexPath(row: self.dataProvider.getCardAt(pos: section).translations.count - 1, section: section)))
+            } else {
+                self.reactor?.onScrollToRect(view: self.tableView, cellRect: self.tableView.headerView(forSection: section)?.frame ?? .zero)
+            }
+        }
     }
     
     func getDictName() -> String? {

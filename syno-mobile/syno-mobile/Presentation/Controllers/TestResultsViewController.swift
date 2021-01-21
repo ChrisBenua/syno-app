@@ -47,7 +47,7 @@ class TestResultsViewController: UIViewController {
         tableView.dataSource = self.dataSource
         
         tableView.register(TestResultsTableViewCell.self, forCellReuseIdentifier: TestResultsTableViewCell.cellId)
-        
+        tableView.contentInset = .init(top: 0, left: 0, bottom: 5, right: 0)
         return tableView
     }()
     
@@ -95,8 +95,8 @@ class TestResultsViewController: UIViewController {
         scrollView.showsHorizontalScrollIndicator = true
         
         scrollView.addSubview(self.contentView)
-        self.contentView.anchor(top: scrollView.contentLayoutGuide.topAnchor, left: nil, bottom: scrollView.contentLayoutGuide.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-        self.contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+        self.contentView.anchor(top: scrollView.contentLayoutGuide.topAnchor, left: scrollView.leftAnchor, bottom: scrollView.contentLayoutGuide.bottomAnchor, right: scrollView.rightAnchor, paddingTop: 0, paddingLeft: 5, paddingBottom: 0, paddingRight: 5, width: 0, height: 0)
+        //self.contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
         self.contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -10).isActive = true
         
         return scrollView
@@ -107,10 +107,11 @@ class TestResultsViewController: UIViewController {
         self.tabBarController?.tabBar.isHidden = false
         self.view.backgroundColor = .white
         self.view.addSubview(scrollView)
-        scrollView.anchor(top: self.view.topAnchor, left: self.view.leftAnchor, bottom: self.view.bottomAnchor, right: self.view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: UIScreen.main.bounds.width, height: 0)
+        scrollView.anchor(top: self.view.topAnchor, left: self.view.leftAnchor, bottom: self.view.safeAreaLayoutGuide.bottomAnchor, right: self.view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: UIScreen.main.bounds.width, height: 0)
         self.navigationItem.title = "Результат: " + (self.dataSource.getDictName() ?? "")
         self.navigationItem.hidesBackButton = true
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Закончить", style: .done, target: self, action: #selector(goBackToTestAndLearnController))
+        //scrollView.contentSize = self.contentView.frame.size
     }
     
     /// End button click listener
@@ -136,5 +137,16 @@ class TestResultsViewController: UIViewController {
 extension TestResultsViewController: ITestResultsControllerDataSourceReactor {
     func onShowController(controller: UIViewController) {
         self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func onScrollToRect(view: UIView, cellRect: CGRect) {
+        var rect = view.convert(cellRect, to: scrollView)
+        rect.origin.y += 40
+        rect.origin.y = min(scrollView.contentSize.height - rect.size.height, rect.origin.y)
+//        let containter = CGRect(x: scrollView.contentOffset.x, y: scrollView.contentOffset.y, width: scrollView.frame.size.width, height: scrollView.frame.size.height)
+//        if (!rect.intersects(containter)) {
+//            self.scrollView.setContentOffset(CGPoint(x: self.scrollView.contentOffset.x, y: rect.maxY - scrollView.frame.size.height), animated: true)
+//        }
+        self.scrollView.scrollRectToVisible(rect, animated: true)
     }
 }

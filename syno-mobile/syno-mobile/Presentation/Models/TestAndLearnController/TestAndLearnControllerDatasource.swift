@@ -204,7 +204,7 @@ class RecentTestsDataSource: NSObject, IRecentTestsDataSource {
         let myCell = cell as! RecentTestTableViewCell
         myCell.baseShadowView.alpha = 0
         
-        UIView.animate(withDuration: 0.3 * TimeInterval(indexPath.row), animations: {
+        UIView.animate(withDuration: 0.3 * TimeInterval(indexPath.row) + 0.2, animations: {
             myCell.baseShadowView.alpha = 1
         })
     }

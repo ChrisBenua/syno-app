@@ -3,6 +3,8 @@ import UIKit
 
 /// TableView without scrolling
 class PlainTableView: UITableView {
+    var reloadDataCompletionBlock: (() -> Void)?
+
     override var contentSize:CGSize {
         didSet {
             invalidateIntrinsicContentSize()
@@ -19,7 +21,7 @@ class PlainTableView: UITableView {
 
     override var intrinsicContentSize: CGSize {
         layoutIfNeeded()
-        return CGSize(width: UIView.noIntrinsicMetric, height: contentSize.height)
+        return CGSize(width: UIView.noIntrinsicMetric, height: contentSize.height + contentInset.top + contentInset.bottom)
     }
     
     override func reloadData() {
@@ -35,6 +37,18 @@ class PlainTableView: UITableView {
     override func insertRows(at indexPaths: [IndexPath], with animation: UITableView.RowAnimation) {
         super.insertRows(at: indexPaths, with: animation)
         self.invalidateIntrinsicContentSize()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.reloadDataCompletionBlock?()
+        self.reloadDataCompletionBlock = nil
+    }
+    
+    func reloadDataWithCompletion(completion: @escaping () -> Void) {
+        reloadDataCompletionBlock = completion
+        self.reloadData()
     }
     
     override init(frame: CGRect, style: UITableView.Style) {
