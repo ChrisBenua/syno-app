@@ -30,7 +30,7 @@ class TestAndLearnViewController: UIViewController {
         colView.backgroundColor = .white
         colView.delegate = self.dataSource
         
-        colView.contentInset = UIEdgeInsets(top: 5, left: 15, bottom: 0, right: 15)
+        colView.contentInset = UIEdgeInsets(top: 5, left: 15, bottom: 20, right: 15)
         
         colView.register(TestAndLearnCollectionViewCell.self, forCellWithReuseIdentifier: TestAndLearnCollectionViewCell.cellId)
         colView.register(TestAndLearnControllerHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TestAndLearnControllerHeader.headerId)

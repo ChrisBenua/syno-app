@@ -19,6 +19,8 @@ class DictsSearchController: UIViewController {
         return view
     }()
     
+    private let bottomInset: CGFloat = 10
+    
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let colView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -27,7 +29,7 @@ class DictsSearchController: UIViewController {
         colView.delegate = self.model.dataSource
         colView.dataSource = self.model.dataSource
         
-        colView.contentInset = UIEdgeInsets(top: 30, left: 15, bottom: 0, right: 15)
+        colView.contentInset = UIEdgeInsets(top: 30, left: 15, bottom: bottomInset, right: 15)
         
         colView.register(DictionaryCollectionViewCell.self, forCellWithReuseIdentifier: DictionaryCollectionViewCell.cellId)
         colView.register(CardCollectionViewCell.self, forCellWithReuseIdentifier: CardCollectionViewCell.cellId)
@@ -46,6 +48,9 @@ class DictsSearchController: UIViewController {
         
         self.view.addSubview(collectionView)
         collectionView.anchor(top: self.view.topAnchor, left: self.view.leftAnchor, bottom: self.view.bottomAnchor, right: self.view.rightAnchor)
+        
+        self.addKeyboardObservers(showSelector: #selector(showKeyboard(notification:)), hideSelector: #selector(hideKeyboard(notification:)))
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(clearKeyboard)))
     }
     
     required init?(coder: NSCoder) {
@@ -95,6 +100,27 @@ extension DictsSearchController: DictsSearchControllerModelDelegate {
         }
         
         DictShareHelper.showSharingResultView(controller: self, result: result)
+    }
+    
+    @objc func showKeyboard(notification: NSNotification) {
+        if let keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height {
+            let tabbarHeight = self.realController.tabBarController?.tabBar.frame.height ?? 0
+            self.collectionView.contentInset.bottom = keyboardHeight + bottomInset - tabbarHeight
+            self.collectionView.verticalScrollIndicatorInsets = .init(top: 0, left: 0, bottom: keyboardHeight - tabbarHeight, right: 0)
+        }
+    }
+    
+    /// Shifts view back when keyboard is hidden
+    @objc func hideKeyboard(notification: NSNotification) {
+        Logger.log("Hide")
+        if let keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height {
+            self.collectionView.contentInset.bottom = bottomInset
+            self.collectionView.verticalScrollIndicatorInsets = .init(top: 0, left: 0, bottom: 0, right: 0)
+        }
+    }
+    
+    @objc func clearKeyboard() {
+        self.view.window?.endEditing(false)
     }
 }
 

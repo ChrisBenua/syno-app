@@ -155,8 +155,8 @@ class LearnCollectionViewController: UIViewController {
         
         self.tabBarController?.tabBar.isHidden = true
         
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Закончить", style: .done, target: self, action: #selector(endLearn))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Редактировать", style: .done, target: self, action: #selector(editCard))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Закончить", style: .done, target: self, action: #selector(endLearn))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Редактировать", style: .done, target: self, action: #selector(editCard))
         
         self.view.backgroundColor = .white
         

@@ -73,8 +73,8 @@ class TestViewController: UIViewController, IScrollableToPoint {
         
         self.tabBarController?.tabBar.isHidden = true
         
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Закончить", style: .done, target: self, action: #selector(endTest))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Отмена", style: .done, target: self, action: #selector(cancelTest))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Закончить", style: .done, target: self, action: #selector(endTest))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отмена", style: .done, target: self, action: #selector(cancelTest))
         
         self.view.backgroundColor = .white
         

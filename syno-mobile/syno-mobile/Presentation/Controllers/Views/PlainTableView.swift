@@ -1,6 +1,22 @@
 import Foundation
 import UIKit
 
+class UITableViewReloadCompletion: UITableView {
+    var reloadDataCompletionBlock: (() -> Void)?
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.reloadDataCompletionBlock?()
+        self.reloadDataCompletionBlock = nil
+    }
+    
+    func reloadDataWithCompletion(completion: @escaping () -> Void) {
+        reloadDataCompletionBlock = completion
+        self.reloadData()
+    }
+}
+
 /// TableView without scrolling
 class PlainTableView: UITableView {
     var reloadDataCompletionBlock: (() -> Void)?
