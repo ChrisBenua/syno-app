@@ -102,6 +102,8 @@ protocol IServiceAssembly {
     func dictsSearchControllerModel(presAssembly: IPresentationAssembly) -> IDictsSearchControllerModel
     
     func trashDictionariesDataSource(presAssembly: IPresentationAssembly) -> ITrashDictionaryControllerTableViewDataSource
+    
+    func voiceNarrationModel(dict: DbUserDictionary) -> IVoiceNarrationService
 }
 
 /// Provides all services realizations
@@ -260,5 +262,9 @@ class ServiceAssembly: IServiceAssembly {
     
     func trashDictionariesDataSource(presAssembly: IPresentationAssembly) -> ITrashDictionaryControllerTableViewDataSource {
         return TrashDictionaryControllerTableViewDataSource(presAssembly: presAssembly, dataProvider: self.trashDictionariesDataProvider)
+    }
+    
+    func voiceNarrationModel(dict: DbUserDictionary) -> IVoiceNarrationService {
+        return IVoiceNarrationServiceImpl(storageManager: self.coreAssembly.storageManager, dict: dict)
     }
 }

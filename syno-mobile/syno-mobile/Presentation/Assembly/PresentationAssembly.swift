@@ -70,6 +70,8 @@ protocol IPresentationAssembly {
     func congratsController() -> UIViewController
     
     func dictsSearchController() -> UIViewController
+    
+    func voiceDictionaryNarrationController(dictionary: DbUserDictionary) -> UIViewController
 }
 
 class PresentationAssembly: IPresentationAssembly {
@@ -203,6 +205,10 @@ class PresentationAssembly: IPresentationAssembly {
     
     func dictsSearchController() -> UIViewController {
         return DictsSearchController(model: self.serviceAssembly.dictsSearchControllerModel(presAssembly: self))
+    }
+    
+    func voiceDictionaryNarrationController(dictionary: DbUserDictionary) -> UIViewController {
+        return VoiceDictionaryNarrationController(model: self.serviceAssembly.voiceNarrationModel(dict: dictionary))
     }
     
     /**

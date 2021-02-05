@@ -394,6 +394,9 @@ extension TestAndLearnDictionaryDataSource {
                   let controller = self.presAssembly.reversedLearnController(sourceDict: dict)
                   self.delegate?.showLearnController(controller: controller)
               }))
+                actionController.addAction(UIAlertAction(title: "Режим прослушивания", style: .default, handler: { (_) in
+                    self.delegate?.showLearnController(controller: self.presAssembly.voiceDictionaryNarrationController(dictionary: dict))
+                }))
               actionController.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { (_) in
                   actionController.dismiss(animated: true)
               }))

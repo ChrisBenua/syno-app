@@ -1,4 +1,5 @@
 import UIKit
+import AVFoundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,6 +19,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         //launchOptions[.]
+        
+        let session = AVAudioSession.sharedInstance()
+        do {
+            try session.setCategory(.playback)
+            try session.setActive(true, options: .notifyOthersOnDeactivation)
+        } catch _ {
+            Logger.log("Error in activation AVAudioSession")
+        }
+        
         rootAssembly = RootAssembly()
         Logger.log(#function)
         let appearance = UINavigationBar.appearance()
