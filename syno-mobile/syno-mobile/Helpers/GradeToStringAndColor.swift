@@ -5,10 +5,7 @@ import UIKit
 class GradeToStringAndColor {
     /// Converts grade to color
     static func gradeToColor(gradePercentage: Double) -> UIColor {
-        let colors = [UIColor(red: 18.0/255, green: 171.0/255, blue: 79.0/255, alpha: 1),
-                      UIColor(red: 134.0/255, green: 240.0/255, blue: 0.0/255, alpha: 1),
-                      UIColor(red: 198.0/255, green: 211.0/255, blue: 49.0/255, alpha: 1),
-            UIColor(red: 245/255, green: 89/255, blue: 89/255, alpha: 1)]
+        let colors = GradeColors.colors
         let colorsRange = [80.0, 60.0, 40.0, 0.0]
         let colorIndex = colorsRange.firstIndex { (val) -> Bool in
             val <= gradePercentage + 0.0001
@@ -19,8 +16,7 @@ class GradeToStringAndColor {
     }
     
     static func strictGradeToColor(gradePercentage: Double) -> UIColor {
-        let colors = [#colorLiteral(red: 0.4797319953, green: 0.6705882353, blue: 0.3921568627, alpha: 1),
-                      #colorLiteral(red: 0.9607843137, green: 0.5321290219, blue: 0.5392732768, alpha: 1)]
+        let colors = GradeColors.strictColors
         let colorsRange = [99.0, 0.0]
         let colorIndex = colorsRange.firstIndex { (val) -> Bool in
             val <= gradePercentage + 0.0001
@@ -35,5 +31,18 @@ class GradeToStringAndColor {
         let str = gradePercentage > -0.5 ? "\(Int(gradePercentage))%" : "Нет результата"
         
         return (str, gradeToColor(gradePercentage: gradePercentage), gradePercentage > -0.5)
+    }
+    
+    private enum GradeColors {
+        private static let green = UIColor(red: 122.0/255, green: 171.0/255, blue: 100.0/255, alpha: 1)
+        private static let red = UIColor(red: 245.0/255, green: 136.0/255, blue: 138.0/255, alpha: 1)
+        
+        static let strictColors = [green, red]
+        static let colors = [
+            green,
+            UIColor(red: 134.0/255, green: 240.0/255, blue: 0, alpha: 1.0),
+            UIColor(red: 198.0/255, green: 211.0/255, blue: 49.0/255, alpha: 1.0),
+            red
+        ]
     }
 }

@@ -26,6 +26,7 @@ class DictsSearchController: UIViewController {
         let colView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         colView.alwaysBounceVertical = true
         colView.backgroundColor = .white
+        colView.allowsSelection = true
         colView.delegate = self.model.dataSource
         colView.dataSource = self.model.dataSource
         
@@ -50,7 +51,9 @@ class DictsSearchController: UIViewController {
         collectionView.anchor(top: self.view.topAnchor, left: self.view.leftAnchor, bottom: self.view.bottomAnchor, right: self.view.rightAnchor)
         
         self.addKeyboardObservers(showSelector: #selector(showKeyboard(notification:)), hideSelector: #selector(hideKeyboard(notification:)))
-        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(clearKeyboard)))
+        let gr = UITapGestureRecognizer(target: self, action: #selector(clearKeyboard))
+        gr.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(gr)
     }
     
     required init?(coder: NSCoder) {

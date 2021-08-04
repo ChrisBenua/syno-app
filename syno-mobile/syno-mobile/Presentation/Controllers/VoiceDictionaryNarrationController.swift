@@ -240,6 +240,12 @@ class VoiceDictionaryNarrationController: UIViewController {
         }
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        self.speechSynthesizer?.stopSpeaking(at: .immediate)
+    }
+    
     init(model: IVoiceNarrationService) {
         self.model = model
         self.views = self.model.singleNarrationServices.map({ (singleDictModel) -> VoiceDictionaryNarrationView in

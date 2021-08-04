@@ -21,7 +21,7 @@ protocol ISingleVoiceNarrationService: AVSpeechSynthesizerDelegate {
     func refresh()
 }
 
-protocol IVoiceNarrationServiceDelegate: class {
+protocol IVoiceNarrationServiceDelegate: AnyObject {
     func onCompletedCurrCard()
     func onCancelled()
 }

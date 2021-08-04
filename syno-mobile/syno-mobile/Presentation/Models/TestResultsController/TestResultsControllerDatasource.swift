@@ -161,10 +161,10 @@ class TestResultsControllerDataProvider: ITestResultsControllerDataProvider {
     init(test: DbUserTest) {
         let cardsResults: [ITestResultsControllerCardResultDto] = test.testDict!.getCards().map { (dbUserTestCard) -> ITestResultsControllerCardResultDto in
             
-            let rightTranslations = dbUserTestCard.getTranslations().map{ $0.translation?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "" }
+            let rightTranslations = dbUserTestCard.getTranslations().map{ $0.translation?.lowercaseAndPunctuationRemoval() ?? "" }
             let dbAnswers: [DbUserTestAnswer] = dbUserTestCard.userAnswers?.toArray() ?? []
             let wrongUserAnswers = dbAnswers.map{ $0.userAnswer ?? "" }.filter { (answer) -> Bool in
-                return !rightTranslations.contains(answer)
+                return !rightTranslations.contains(answer.lowercaseAndPunctuationRemoval())
             }
             var wrongUserAnswerListIndex = 0
             

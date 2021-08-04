@@ -9,13 +9,13 @@
 import Foundation
 import UIKit
 
-@objc protocol IVoiceDictionaryNarrationController: class {
+@objc protocol IVoiceDictionaryNarrationController: AnyObject {
     @objc func playOrPause()
 }
 
 class VoiceDictionaryNarrationView: UIView {
     private var model: ISingleVoiceNarrationService
-    var dictionaryNarrationController: IVoiceDictionaryNarrationController! {
+    weak var dictionaryNarrationController: IVoiceDictionaryNarrationController! {
         didSet {
             playPauseButton.addTarget(dictionaryNarrationController, action: #selector(IVoiceDictionaryNarrationController.playOrPause), for: .touchUpInside)
         }

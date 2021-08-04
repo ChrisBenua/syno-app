@@ -4,14 +4,14 @@ import UIKit
 
 class ToLocale {
     public static func getLocale(str: String) -> String {
-        let known = ["en": "en-GB", "de": "de-DE", "fr": "fr-FR", "jp": "ja-JP", "es": "es-ES", "ru": "ru-RU"];
-        let res = known[str] ?? "en-GB"
+        let known = ["en": "en-US", "de": "de-DE", "fr": "fr-FR", "jp": "ja-JP", "es": "es-ES", "ru": "ru-RU"];
+        let res = known[str] ?? "en-US"
         Logger.log(res)
         return res
     }
 }
 
-protocol ICustomToolbarSuggestionViewDelegate: class {
+protocol ICustomToolbarSuggestionViewDelegate: AnyObject {
     func onClick(suggestion: String)
 }
 
