@@ -85,13 +85,13 @@ class CustomUIButtonConfigurationBuilder {
 class CustomUIButton: UIButton {
   
   private var shadowLayer: CAShapeLayer!
-  private var configuration: CustomUIButtonConfiguration!
+  private var configuration_: CustomUIButtonConfiguration!
   
   override var isEnabled: Bool {
     willSet {
       if newValue != isEnabled {
         Logger.log("animation ISENABLED: \(isEnabled) \(newValue)")
-        self.animateButtonColor(key: "fillColor", toColor: newValue ? self.configuration.backgroundColor : self.configuration.disabledBackgroundColor)
+        self.animateButtonColor(key: "fillColor", toColor: newValue ? self.configuration_.backgroundColor : self.configuration_.disabledBackgroundColor)
       }
     }
   }
@@ -104,7 +104,7 @@ class CustomUIButton: UIButton {
     animation.toValue = toColor
     animation.fillMode = .forwards
     animation.isRemovedOnCompletion = false
-    animation.duration = self.configuration.animationDuration * 2
+    animation.duration = self.configuration_.animationDuration * 2
     self.shadowLayer?.removeAnimation(forKey: key)
     self.shadowLayer?.add(animation, forKey: key)
   }
@@ -114,10 +114,10 @@ class CustomUIButton: UIButton {
     let key = "shadowRadiusIn"
     let animation = CABasicAnimation(keyPath: "shadowRadius")
     animation.fromValue = self.shadowLayer.shadowRadius
-    animation.toValue = self.configuration.pressedShadowRadius
+    animation.toValue = self.configuration_.pressedShadowRadius
     animation.isRemovedOnCompletion = false
     animation.fillMode = .forwards
-    animation.duration = self.configuration.animationDuration
+    animation.duration = self.configuration_.animationDuration
     
     for key in [key, "shadowRadiusOut"] {
       self.shadowLayer.removeAnimation(forKey: key)
@@ -127,10 +127,10 @@ class CustomUIButton: UIButton {
     let key2 = "fillColorIn"
     let animation2 = CABasicAnimation(keyPath: "fillColor")
     animation2.fromValue = self.shadowLayer.presentation()!.fillColor
-    animation2.toValue = configuration.pressedBackgroundColor
+    animation2.toValue = configuration_.pressedBackgroundColor
     animation2.isRemovedOnCompletion = false
     animation2.fillMode = .forwards
-    animation2.duration = self.configuration.animationDuration
+    animation2.duration = self.configuration_.animationDuration
     
     for key in [key2, "fillColorOut"] {
       self.shadowLayer.removeAnimation(forKey: key)
@@ -145,10 +145,10 @@ class CustomUIButton: UIButton {
     let removeKeys = [key, "shadowRadiusIn"]
     let animation = CABasicAnimation(keyPath: "shadowRadius")
     animation.fromValue = self.shadowLayer.presentation()?.value(forKeyPath: "shadowRadius") ?? 4
-    animation.toValue = self.configuration.basicShadowRadius
+    animation.toValue = self.configuration_.basicShadowRadius
     animation.isRemovedOnCompletion = false
     animation.fillMode = .forwards
-    animation.duration = self.configuration.animationDuration
+    animation.duration = self.configuration_.animationDuration
     
     for key in removeKeys {
       self.shadowLayer.removeAnimation(forKey: key)
@@ -158,10 +158,10 @@ class CustomUIButton: UIButton {
     let key2 = "fillColorOut"
     let animation2 = CABasicAnimation(keyPath: "fillColor")
     animation2.fromValue = self.shadowLayer.presentation()?.value(forKeyPath: "fillColor")
-    animation2.toValue = configuration.backgroundColor
+    animation2.toValue = configuration_.backgroundColor
     animation2.isRemovedOnCompletion = false
     animation2.fillMode = .forwards
-    animation2.duration = self.configuration.animationDuration
+    animation2.duration = self.configuration_.animationDuration
     
     for key in [key2, "fillColorIn"] {
       self.shadowLayer.removeAnimation(forKey: key)
@@ -170,14 +170,14 @@ class CustomUIButton: UIButton {
   }
   
   private func updateLayer() {
-    shadowLayer?.cornerRadius = configuration.cornerRadius
+    shadowLayer?.cornerRadius = configuration_.cornerRadius
     //Logger.log("shadow layer \(shadowLayer?.fillColor)")
-    shadowLayer?.fillColor = isEnabled ? configuration.backgroundColor : configuration.disabledBackgroundColor
+    shadowLayer?.fillColor = isEnabled ? configuration_.backgroundColor : configuration_.disabledBackgroundColor
 
-    shadowLayer?.shadowColor = configuration.shadowColor
+    shadowLayer?.shadowColor = configuration_.shadowColor
     shadowLayer?.shadowOffset = CGSize(width: 0, height: 0)
-    shadowLayer?.shadowOpacity = configuration.shadowOpacity
-    shadowLayer?.shadowRadius = configuration.basicShadowRadius
+    shadowLayer?.shadowOpacity = configuration_.shadowOpacity
+    shadowLayer?.shadowRadius = configuration_.basicShadowRadius
   }
   
   private func makeLayer() {
@@ -190,12 +190,12 @@ class CustomUIButton: UIButton {
   }
   
   private func updateLayerPath() {
-    shadowLayer?.path = UIBezierPath(roundedRect: bounds, cornerRadius: configuration.cornerRadius).cgPath
-    shadowLayer?.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: configuration.cornerRadius).cgPath
+    shadowLayer?.path = UIBezierPath(roundedRect: bounds, cornerRadius: configuration_.cornerRadius).cgPath
+    shadowLayer?.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: configuration_.cornerRadius).cgPath
   }
   
   func setConfiguration(configuration: CustomUIButtonConfiguration) {
-    self.configuration = configuration
+    self.configuration_ = configuration
     self.updateLayer()
     self.updateLayerPath()
     self.layoutIfNeeded()
@@ -212,7 +212,7 @@ class CustomUIButton: UIButton {
     Logger.log(#function)
     self.animateIn()
     UIView.animate(withDuration: 0.3) {
-      self.transform = self.configuration.buttonTransform
+      self.transform = self.configuration_.buttonTransform
     }
     
     super.touchesBegan(touches, with: event)

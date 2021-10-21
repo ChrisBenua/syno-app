@@ -34,14 +34,14 @@ class GradeToStringAndColor {
     }
     
     private enum GradeColors {
-        private static let green = UIColor(red: 122.0/255, green: 171.0/255, blue: 100.0/255, alpha: 1)
-        private static let red = UIColor(red: 245.0/255, green: 136.0/255, blue: 138.0/255, alpha: 1)
+        private static let green = UIColor(red: 137.0/255, green: 190.0/255, blue: 113.0/255, alpha: 1)
+        private static let red = UIColor(red: 239.0/255, green: 165.0/255, blue: 167.0/255, alpha: 1)
         
         static let strictColors = [green, red]
         static let colors = [
             green,
-            UIColor(red: 134.0/255, green: 240.0/255, blue: 0, alpha: 1.0),
-            UIColor(red: 198.0/255, green: 211.0/255, blue: 49.0/255, alpha: 1.0),
+            UIColor(red: 225.0/255, green: 209.0/255, blue: 124.0/255, alpha: 1.0),
+            UIColor(red: 238.0/255, green: 191.0/255, blue: 148.0/255, alpha: 1.0),
             red
         ]
     }

@@ -54,6 +54,17 @@
 		AA4B780A23C138D4005A9CC9 /* TestViewControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4B780923C138D4005A9CC9 /* TestViewControllerDataSource.swift */; };
 		AA4B780C23C1BF29005A9CC9 /* TestControllerTranslationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4B780B23C1BF29005A9CC9 /* TestControllerTranslationTableViewCell.swift */; };
 		AA4B780E23C1CB70005A9CC9 /* TestViewGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4B780D23C1CB70005A9CC9 /* TestViewGenerator.swift */; };
+		AA519B072720211800C1EDD7 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA519B062720211800C1EDD7 /* WidgetKit.framework */; };
+		AA519B092720211800C1EDD7 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA519B082720211800C1EDD7 /* SwiftUI.framework */; };
+		AA519B0C2720211800C1EDD7 /* SynoWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA519B0B2720211800C1EDD7 /* SynoWidget.swift */; };
+		AA519B0F2720211900C1EDD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA519B0E2720211900C1EDD7 /* Assets.xcassets */; };
+		AA519B112720211900C1EDD7 /* SynoWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = AA519B0D2720211800C1EDD7 /* SynoWidget.intentdefinition */; };
+		AA519B122720211900C1EDD7 /* SynoWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = AA519B0D2720211800C1EDD7 /* SynoWidget.intentdefinition */; };
+		AA519B152720211900C1EDD7 /* SynoWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = AA519B052720211800C1EDD7 /* SynoWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AA519B1E2720234100C1EDD7 /* CardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA519B1A272022DF00C1EDD7 /* CardData.swift */; };
+		AA519B1F2720234500C1EDD7 /* SynoCardDataTimelineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA519B1C272022FE00C1EDD7 /* SynoCardDataTimelineProvider.swift */; };
+		AA519B232720244200C1EDD7 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA519B21272023EF00C1EDD7 /* CardView.swift */; };
+		AA519B2427202C0300C1EDD7 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8C0E1323891DE6000CBB73 /* Colors.swift */; };
 		AA55CEC924A7E547008CF330 /* EmailForConfirmationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA55CEC824A7E547008CF330 /* EmailForConfirmationModel.swift */; };
 		AA55CECB24A7E688008CF330 /* ResendConfirmationEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA55CECA24A7E688008CF330 /* ResendConfirmationEmailRequest.swift */; };
 		AA59DF32244E4F41005E6FC0 /* UpdateRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA59DF31244E4F41005E6FC0 /* UpdateRequestDto.swift */; };
@@ -169,6 +180,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		AA519B132720211900C1EDD7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA94BC11238841F300B2F16F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA519B042720211800C1EDD7;
+			remoteInfo = SynoWidgetExtension;
+		};
 		AA94BC30238841FD00B2F16F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AA94BC11238841F300B2F16F /* Project object */;
@@ -177,6 +195,20 @@
 			remoteInfo = "syno-mobile";
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		AA519B162720211900C1EDD7 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				AA519B152720211900C1EDD7 /* SynoWidgetExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		10F1548EA7F86F27E43B50F4 /* Pods_syno_mobileTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_syno_mobileTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -227,6 +259,16 @@
 		AA4B780923C138D4005A9CC9 /* TestViewControllerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewControllerDataSource.swift; sourceTree = "<group>"; };
 		AA4B780B23C1BF29005A9CC9 /* TestControllerTranslationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestControllerTranslationTableViewCell.swift; sourceTree = "<group>"; };
 		AA4B780D23C1CB70005A9CC9 /* TestViewGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewGenerator.swift; sourceTree = "<group>"; };
+		AA519B052720211800C1EDD7 /* SynoWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SynoWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA519B062720211800C1EDD7 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		AA519B082720211800C1EDD7 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		AA519B0B2720211800C1EDD7 /* SynoWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynoWidget.swift; sourceTree = "<group>"; };
+		AA519B0D2720211800C1EDD7 /* SynoWidget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = SynoWidget.intentdefinition; sourceTree = "<group>"; };
+		AA519B0E2720211900C1EDD7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AA519B102720211900C1EDD7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA519B1A272022DF00C1EDD7 /* CardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardData.swift; sourceTree = "<group>"; };
+		AA519B1C272022FE00C1EDD7 /* SynoCardDataTimelineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynoCardDataTimelineProvider.swift; sourceTree = "<group>"; };
+		AA519B21272023EF00C1EDD7 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		AA55CEC824A7E547008CF330 /* EmailForConfirmationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailForConfirmationModel.swift; sourceTree = "<group>"; };
 		AA55CECA24A7E688008CF330 /* ResendConfirmationEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResendConfirmationEmailRequest.swift; sourceTree = "<group>"; };
 		AA59DF31244E4F41005E6FC0 /* UpdateRequestDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateRequestDto.swift; sourceTree = "<group>"; };
@@ -349,6 +391,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		AA519B022720211800C1EDD7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA519B092720211800C1EDD7 /* SwiftUI.framework in Frameworks */,
+				AA519B072720211800C1EDD7 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AA94BC16238841F300B2F16F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -441,6 +492,8 @@
 			children = (
 				B7F0E228B93E70E1965BAEE8 /* Pods_syno_mobile.framework */,
 				10F1548EA7F86F27E43B50F4 /* Pods_syno_mobileTests.framework */,
+				AA519B062720211800C1EDD7 /* WidgetKit.framework */,
+				AA519B082720211800C1EDD7 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -555,6 +608,28 @@
 				AA4B780923C138D4005A9CC9 /* TestViewControllerDataSource.swift */,
 			);
 			path = TestController;
+			sourceTree = "<group>";
+		};
+		AA519B0A2720211800C1EDD7 /* SynoWidget */ = {
+			isa = PBXGroup;
+			children = (
+				AA519B20272023D300C1EDD7 /* Views */,
+				AA519B0B2720211800C1EDD7 /* SynoWidget.swift */,
+				AA519B1A272022DF00C1EDD7 /* CardData.swift */,
+				AA519B1C272022FE00C1EDD7 /* SynoCardDataTimelineProvider.swift */,
+				AA519B0D2720211800C1EDD7 /* SynoWidget.intentdefinition */,
+				AA519B0E2720211900C1EDD7 /* Assets.xcassets */,
+				AA519B102720211900C1EDD7 /* Info.plist */,
+			);
+			path = SynoWidget;
+			sourceTree = "<group>";
+		};
+		AA519B20272023D300C1EDD7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AA519B21272023EF00C1EDD7 /* CardView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		AA55CEC724A7E52D008CF330 /* EmailForConfirmationController */ = {
@@ -809,6 +884,7 @@
 			children = (
 				AA94BC1B238841F300B2F16F /* syno-mobile */,
 				AA94BC32238841FD00B2F16F /* syno-mobileTests */,
+				AA519B0A2720211800C1EDD7 /* SynoWidget */,
 				AA94BC1A238841F300B2F16F /* Products */,
 				36134224D03934F78797817A /* Pods */,
 				A43AF3D689E0EB42BABE144D /* Frameworks */,
@@ -820,6 +896,7 @@
 			children = (
 				AA94BC19238841F300B2F16F /* Syno.app */,
 				AA94BC2F238841FD00B2F16F /* syno-mobileTests.xctest */,
+				AA519B052720211800C1EDD7 /* SynoWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -953,6 +1030,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		AA519B042720211800C1EDD7 /* SynoWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA519B192720211900C1EDD7 /* Build configuration list for PBXNativeTarget "SynoWidgetExtension" */;
+			buildPhases = (
+				AA519B012720211800C1EDD7 /* Sources */,
+				AA519B022720211800C1EDD7 /* Frameworks */,
+				AA519B032720211800C1EDD7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SynoWidgetExtension;
+			productName = SynoWidgetExtension;
+			productReference = AA519B052720211800C1EDD7 /* SynoWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		AA94BC18238841F300B2F16F /* syno-mobile */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = AA94BC38238841FD00B2F16F /* Build configuration list for PBXNativeTarget "syno-mobile" */;
@@ -962,10 +1056,12 @@
 				AA94BC16238841F300B2F16F /* Frameworks */,
 				AA94BC17238841F300B2F16F /* Resources */,
 				2BB162CD3EFF6E576598C725 /* [CP] Embed Pods Frameworks */,
+				AA519B162720211900C1EDD7 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				AA519B142720211900C1EDD7 /* PBXTargetDependency */,
 			);
 			name = "syno-mobile";
 			productName = "syno-mobile";
@@ -997,10 +1093,13 @@
 		AA94BC11238841F300B2F16F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1120;
+				LastSwiftUpdateCheck = 1300;
 				LastUpgradeCheck = 1120;
 				ORGANIZATIONNAME = "Christian Benua";
 				TargetAttributes = {
+					AA519B042720211800C1EDD7 = {
+						CreatedOnToolsVersion = 13.0;
+					};
 					AA94BC18238841F300B2F16F = {
 						CreatedOnToolsVersion = 11.2;
 					};
@@ -1025,11 +1124,20 @@
 			targets = (
 				AA94BC18238841F300B2F16F /* syno-mobile */,
 				AA94BC2E238841FD00B2F16F /* syno-mobileTests */,
+				AA519B042720211800C1EDD7 /* SynoWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		AA519B032720211800C1EDD7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA519B0F2720211900C1EDD7 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AA94BC17238841F300B2F16F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1115,6 +1223,19 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		AA519B012720211800C1EDD7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA519B1F2720234500C1EDD7 /* SynoCardDataTimelineProvider.swift in Sources */,
+				AA519B2427202C0300C1EDD7 /* Colors.swift in Sources */,
+				AA519B1E2720234100C1EDD7 /* CardData.swift in Sources */,
+				AA519B0C2720211800C1EDD7 /* SynoWidget.swift in Sources */,
+				AA519B112720211900C1EDD7 /* SynoWidget.intentdefinition in Sources */,
+				AA519B232720244200C1EDD7 /* CardView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AA94BC15238841F300B2F16F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1220,6 +1341,7 @@
 				AA627D982455F4FC000B7265 /* UserAuthHelper.swift in Sources */,
 				AAEBE75023A3F49F00F48684 /* PlainTableView.swift in Sources */,
 				AA8700D1239900F800C97E18 /* UserCardsFetchService.swift in Sources */,
+				AA519B122720211900C1EDD7 /* SynoWidget.intentdefinition in Sources */,
 				AA8700CD23981DF600C97E18 /* RegisterState.swift in Sources */,
 				AA6A03BE23ACA26A00902FBE /* TranslationReadonlyTableViewCell.swift in Sources */,
 				AAB31060245B0C7B0029FC66 /* NumbersEndingHelper.swift in Sources */,
@@ -1285,6 +1407,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		AA519B142720211900C1EDD7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AA519B042720211800C1EDD7 /* SynoWidgetExtension */;
+			targetProxy = AA519B132720211900C1EDD7 /* PBXContainerItemProxy */;
+		};
 		AA94BC31238841FD00B2F16F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = AA94BC18238841F300B2F16F /* syno-mobile */;
@@ -1304,6 +1431,67 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		AA519B172720211900C1EDD7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8LJXAKA3QW;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SynoWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SynoWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Christian Benua. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chrisbenua.synomobile.SynoWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		AA519B182720211900C1EDD7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8LJXAKA3QW;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SynoWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SynoWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Christian Benua. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chrisbenua.synomobile.SynoWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 		AA94BC36238841FD00B2F16F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1422,11 +1610,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F0EE8DE7560F63269D26781C /* Pods-syno-mobile.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "syno-mobile/Syno.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 8LJXAKA3QW;
 				INFOPLIST_FILE = "syno-mobile/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1434,7 +1623,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.3;
+				MARKETING_VERSION = 1.3.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chrisbenua.synomobile;
 				PRODUCT_NAME = Syno;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1447,10 +1636,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B169F42F7A6B5AFCF835DEC5 /* Pods-syno-mobile.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "syno-mobile/Syno.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 8LJXAKA3QW;
 				INFOPLIST_FILE = "syno-mobile/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1458,7 +1648,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.3;
+				MARKETING_VERSION = 1.3.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chrisbenua.synomobile;
 				PRODUCT_NAME = Syno;
 				SWIFT_VERSION = 5.0;
@@ -1515,6 +1705,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		AA519B192720211900C1EDD7 /* Build configuration list for PBXNativeTarget "SynoWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA519B172720211900C1EDD7 /* Debug */,
+				AA519B182720211900C1EDD7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		AA94BC14238841F300B2F16F /* Build configuration list for PBXProject "syno-mobile" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
