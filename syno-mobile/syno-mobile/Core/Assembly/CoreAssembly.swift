@@ -26,10 +26,14 @@ class CoreAssembly: ICoreAssembly {
     let storageManager: IStorageCoordinator = StorageManager()
     let phonemesManager: IPhonemesManager
     let updateActionsExecutor: IUpdateActionsExecutor = UpdateActionsExecutor()
-    lazy var updateWidgetDataTask: UpdateWidgetDataTaskPerforming = UpdateWidgetDataTask(storageManager: storageManager, widgetUserDefaults: WidgetUserDefaults())
+    private let widgetUserDefaults: WidgetUserDefaults = WidgetUserDefaults()
+    lazy var updateWidgetDataTask: UpdateWidgetDataTaskPerforming = UpdateWidgetDataTask(storageManager: storageManager, widgetUserDefaults: widgetUserDefaults)
     
     init() {
         self.phonemesManager = PhonemesManager()
         phonemesManager.initialize()
+        if widgetUserDefaults.cardData == nil {
+            self.updateWidgetDataTask.updateWidgetDataOnFirstFetch()
+        }
     }
 }
