@@ -29,11 +29,11 @@ struct SynoWidget: Widget {
 
     var body: some WidgetConfiguration {
         IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: SynoCardDataTimelineProvider()) { entry in
-            SynoWidgetEntryView(entry: entry)
+          SynoWidgetEntryView(entry: entry).unredacted()
         }
         .supportedFamilies([.systemMedium])
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("Виджет с Вашими карточками")
+        .description("Обновляется каждый день в 6 часов утра")
     }
 }
 
@@ -44,12 +44,12 @@ struct SynoWidget_Previews: PreviewProvider {
     }
 }
 
-private let placeholderCardData = CardData(
+private let placeholderCardData = WidgetUserDefaults.CardData(
   translatedWord: "Закат",
   translations: [
-    CardData.Translation(translation: "SundownSundown", transcription: "ˈsʌndaʊn"),
-    CardData.Translation(translation: "Sunset", transcription: "ˈsʌnset"),
-    CardData.Translation(translation: "Dusk", transcription: "dʌsk"),
-    CardData.Translation(translation: "Nightfall", transcription: "ˈnaɪtfɔːl")
+    WidgetUserDefaults.CardData.Translation(translation: "SundownSundown", transcription: "ˈsʌndaʊn"),
+    WidgetUserDefaults.CardData.Translation(translation: "Sunset", transcription: "ˈsʌnset"),
+    WidgetUserDefaults.CardData.Translation(translation: "Dusk", transcription: "dʌsk"),
+    WidgetUserDefaults.CardData.Translation(translation: "Nightfall", transcription: "ˈnaɪtfɔːl")
   ]
 )

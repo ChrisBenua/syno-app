@@ -11,43 +11,34 @@ import WidgetKit
 
 struct SynoCardDataEntry: TimelineEntry {
   var date: Date
-  var cardData: CardData
+  var cardData: WidgetUserDefaults.CardData
 }
 
 struct SynoCardDataTimelineProvider: IntentTimelineProvider {
+  private let widgetUserDefaults = WidgetUserDefaults()
+
   func placeholder(in context: Context) -> SynoCardDataEntry {
     SynoCardDataEntry(date: Date(), cardData: placeholderCardData)
   }
   
   func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SynoCardDataEntry) -> ()) {
-    let entry = SynoCardDataEntry(date: Date(), cardData: placeholderCardData)
+    let entry = SynoCardDataEntry(date: Date(), cardData: widgetUserDefaults.cardData ?? placeholderCardData)
     completion(entry)
   }
   
-  func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<SynoCardDataEntry>) -> ()) {
-    //var entries: [SynoCardDataEntry] = []
-    
-    // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-//    let currentDate = Date()
-//    for hourOffset in 0 ..< 5 {
-//      let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-//      let entry = SimpleEntry(date: entryDate, configuration: configuration)
-//      entries.append(entry)
-//    }
-    let entry = placeholderCardData
-    
-    let timeline = Timeline(entries: [SynoCardDataEntry(date: Date(), cardData: entry)], policy: .atEnd)
+  func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<SynoCardDataEntry>) -> ()) {    
+    let timeline = Timeline(entries: [SynoCardDataEntry(date: Date(), cardData: widgetUserDefaults.cardData ?? placeholderCardData)], policy: .never)
     completion(timeline)
   }
 }
 
-private let placeholderCardData = CardData(
+private let placeholderCardData = WidgetUserDefaults.CardData(
   translatedWord: "Закат",
   translations: [
-    CardData.Translation(translation: "Sundown", transcription: "ˈsʌndaʊn"),
-    CardData.Translation(translation: "Sunset", transcription: "ˈsʌnset"),
-    CardData.Translation(translation: "Dusk", transcription: "dʌsk"),
-    CardData.Translation(translation: "Nightfall", transcription: "ˈnaɪtfɔːl"),
+    WidgetUserDefaults.CardData.Translation(translation: "Sundown", transcription: "ˈsʌndaʊn"),
+    WidgetUserDefaults.CardData.Translation(translation: "Sunset", transcription: "ˈsʌnset"),
+    WidgetUserDefaults.CardData.Translation(translation: "Dusk", transcription: "dʌsk"),
+    WidgetUserDefaults.CardData.Translation(translation: "Nightfall", transcription: "ˈnaɪtfɔːl"),
   ]
 )
 

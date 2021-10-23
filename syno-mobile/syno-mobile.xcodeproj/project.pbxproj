@@ -16,6 +16,9 @@
 		49A1669737ADB0F82BF2FAEB /* RequestFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A168DA7A99FB558A3BD4E1 /* RequestFactory.swift */; };
 		49A16D5B5C7461F5D99EAB36 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A16D95769370F236C3331C /* Debug.swift */; };
 		49A16EAD0C4E81E88AF1AD63 /* IRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A166F813DC9E880D839D0A /* IRequest.swift */; };
+		52036B6A2724739C00B8FC1F /* AppGroupUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52036B692724739C00B8FC1F /* AppGroupUserDefaults.swift */; };
+		52036B6D2724745E00B8FC1F /* AppGroupUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52036B692724739C00B8FC1F /* AppGroupUserDefaults.swift */; };
+		52036B7027247E6F00B8FC1F /* UpdateWidgetDataTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52036B6F27247E6F00B8FC1F /* UpdateWidgetDataTask.swift */; };
 		97F228A90ED0055E61FF55C6 /* Pods_syno_mobileTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10F1548EA7F86F27E43B50F4 /* Pods_syno_mobileTests.framework */; };
 		AA006B4924C03864002CECB6 /* BackspaceUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA006B4824C03864002CECB6 /* BackspaceUITextField.swift */; };
 		AA10BD8125B445580086C4BB /* DictsSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10BD8025B445580086C4BB /* DictsSearchController.swift */; };
@@ -221,6 +224,9 @@
 		49A16C3F31A1006430FFAF12 /* UITextFieldWithInsets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextFieldWithInsets.swift; sourceTree = "<group>"; };
 		49A16D30F945B03CCAC0533F /* IParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IParser.swift; sourceTree = "<group>"; };
 		49A16D95769370F236C3331C /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
+		52036B68272472F100B8FC1F /* SynoWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SynoWidgetExtension.entitlements; sourceTree = "<group>"; };
+		52036B692724739C00B8FC1F /* AppGroupUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroupUserDefaults.swift; sourceTree = "<group>"; };
+		52036B6F27247E6F00B8FC1F /* UpdateWidgetDataTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateWidgetDataTask.swift; sourceTree = "<group>"; };
 		9E89B3D67049DB56FF1AD9C7 /* Pods-syno-mobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-syno-mobileTests.release.xcconfig"; path = "Target Support Files/Pods-syno-mobileTests/Pods-syno-mobileTests.release.xcconfig"; sourceTree = "<group>"; };
 		AA006B4824C03864002CECB6 /* BackspaceUITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackspaceUITextField.swift; sourceTree = "<group>"; };
 		AA10BD8025B445580086C4BB /* DictsSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictsSearchController.swift; sourceTree = "<group>"; };
@@ -487,6 +493,22 @@
 			path = Dtos;
 			sourceTree = "<group>";
 		};
+		52036B6C2724743D00B8FC1F /* AppGroup */ = {
+			isa = PBXGroup;
+			children = (
+				52036B692724739C00B8FC1F /* AppGroupUserDefaults.swift */,
+			);
+			path = AppGroup;
+			sourceTree = "<group>";
+		};
+		52036B6E27247E5C00B8FC1F /* BackgroundTasks */ = {
+			isa = PBXGroup;
+			children = (
+				52036B6F27247E6F00B8FC1F /* UpdateWidgetDataTask.swift */,
+			);
+			path = BackgroundTasks;
+			sourceTree = "<group>";
+		};
 		A43AF3D689E0EB42BABE144D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -705,6 +727,7 @@
 		AA8C0E03238917CB000CBB73 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				52036B6E27247E5C00B8FC1F /* BackgroundTasks */,
 				AA3686772444C204003599D0 /* Resources */,
 				AA8C0E0A2389184D000CBB73 /* UserDefaults */,
 				AA8C0E092389183C000CBB73 /* CoreData */,
@@ -796,6 +819,7 @@
 		AA8C0E0A2389184D000CBB73 /* UserDefaults */ = {
 			isa = PBXGroup;
 			children = (
+				52036B6C2724743D00B8FC1F /* AppGroup */,
 				AA82AFD2238E91A000A75D92 /* UserDefaultsManager.swift */,
 				AAF056EE2525E9EA00841599 /* UpdateActions.swift */,
 			);
@@ -882,6 +906,7 @@
 		AA94BC10238841F300B2F16F = {
 			isa = PBXGroup;
 			children = (
+				52036B68272472F100B8FC1F /* SynoWidgetExtension.entitlements */,
 				AA94BC1B238841F300B2F16F /* syno-mobile */,
 				AA94BC32238841FD00B2F16F /* syno-mobileTests */,
 				AA519B0A2720211800C1EDD7 /* SynoWidget */,
@@ -1228,6 +1253,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA519B1F2720234500C1EDD7 /* SynoCardDataTimelineProvider.swift in Sources */,
+				52036B6D2724745E00B8FC1F /* AppGroupUserDefaults.swift in Sources */,
 				AA519B2427202C0300C1EDD7 /* Colors.swift in Sources */,
 				AA519B1E2720234100C1EDD7 /* CardData.swift in Sources */,
 				AA519B0C2720211800C1EDD7 /* SynoWidget.swift in Sources */,
@@ -1270,6 +1296,7 @@
 				AA6A03BC23AC9CE400902FBE /* LearnControllerTableViewDataSource.swift in Sources */,
 				AA10BD8125B445580086C4BB /* DictsSearchController.swift in Sources */,
 				AAB6CECD2393C87B00AAAF0E /* UserTranslationStorageManager.swift in Sources */,
+				52036B7027247E6F00B8FC1F /* UpdateWidgetDataTask.swift in Sources */,
 				AA8C0E1B23892A0F000CBB73 /* UILabelWithInsets.swift in Sources */,
 				AAC605752390E5EC00120B77 /* SavingProcessView.swift in Sources */,
 				AA88C7DC24421D13002E3549 /* TestResultsControllerDatasource.swift in Sources */,
@@ -1374,6 +1401,7 @@
 				AAB6CEC92393C4D700AAAF0E /* UserDictionaryStorageManager.swift in Sources */,
 				AAB6CEBB2392E40600AAAF0E /* CoreDataStack.swift in Sources */,
 				AA006B4924C03864002CECB6 /* BackspaceUITextField.swift in Sources */,
+				52036B6A2724739C00B8FC1F /* AppGroupUserDefaults.swift in Sources */,
 				AA1B8753238D9ABC00D26FCF /* LoginControllerServices.swift in Sources */,
 				AA7642822451EEAC00E388A1 /* AddShareViewControllerModel.swift in Sources */,
 				AA8700CB239793A300C97E18 /* MessageResponse.swift in Sources */,
@@ -1438,6 +1466,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = SynoWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1469,6 +1498,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = SynoWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8LJXAKA3QW;

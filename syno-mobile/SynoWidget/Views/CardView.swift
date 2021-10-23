@@ -7,9 +7,10 @@
 //
 
 import SwiftUI
+import Foundation
 
 struct CardView: View {
-  let cardData: CardData
+  let cardData: WidgetUserDefaults.CardData
   
   var body: some View {
     HStack(alignment: .center, spacing: 0) {
@@ -21,15 +22,14 @@ struct CardView: View {
           TranslationView(translation: $0)
         }
       }.padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
-      //.background(color.cornerRadius(10))
       Spacer(minLength: 0)
     }.padding(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 0))
   }
 }
 
 struct CardView2: View {
-  let cardData: CardData
-  var displayedTranslations: [CardData.Translation] {
+  let cardData: WidgetUserDefaults.CardData
+  var displayedTranslations: [WidgetUserDefaults.CardData.Translation] {
     Array(cardData.translations.prefix(3))
   }
   
@@ -40,7 +40,6 @@ struct CardView2: View {
         TranslatedWordView2(translatedWord: cardData.translatedWord)
         Spacer(minLength: 0)
         VStack(alignment: .leading, spacing: 2) {
-          //List {
           ForEach(Array(displayedTranslations.enumerated()), id: \.element.translation) {
             TranslationView2(translation: $0.element, index: $0.offset)
             if $0.offset < displayedTranslations.count - 1 {
@@ -49,17 +48,14 @@ struct CardView2: View {
               }
             }
           }
-          //}
         }.padding(EdgeInsets(top: 5, leading: 8, bottom: 5, trailing: 8))
         .background(color.cornerRadius(16))
-        //
         
         Spacer(minLength: 13)
       }.frame(maxWidth: .infinity)
-        .padding(EdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12))
+        .padding(EdgeInsets(top: 0, leading: 14, bottom: 0, trailing: 14))
         .background(RadialGradient(colors: [greenColor, endColor], center: UnitPoint(x: 0.5, y: 0), startRadius: 20, endRadius: container.size.height))
-    }
-
+    }.embedInLink(url: cardData.deeplink.flatMap{ URL(string: $0) })
   }
 }
 
@@ -72,7 +68,6 @@ struct TranslatedWordView: View {
       .bold()
       .foregroundColor(Color(.headerMainColor))
       .padding(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
-      //.background(color.cornerRadius(10))
   }
 }
 
@@ -84,13 +79,12 @@ struct TranslatedWordView2: View {
       .font(.system(.title2))
       .bold()
       .foregroundColor(Color(.headerMainColor))
-      //.padding(EdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4))
-      //.background(color.cornerRadius(6))
+
   }
 }
 
 struct TranslationView: View {
-  let translation: CardData.Translation
+  let translation: WidgetUserDefaults.CardData.Translation
   
   var body: some View {
     GeometryReader { container in
@@ -107,20 +101,18 @@ struct TranslationView: View {
         Spacer(minLength: 0)
 
       }.padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
-      //.frame(maxWidth: container.size.width, alignment: .leading)
         .background(color.cornerRadius(10))
     }
   }
 }
 
 struct TranslationView2: View {
-  let translation: CardData.Translation
+  let translation: WidgetUserDefaults.CardData.Translation
   let index: Int
   
   var body: some View {
       HStack {
         HStack(alignment: .center) {
-          //Spacer(minLength: 0)
           Text(translation.translation)
             .font(.system(.body)).layoutPriority(1000)
           if let transcription = translation.transcription {
@@ -131,8 +123,19 @@ struct TranslationView2: View {
           Spacer(minLength: 0)
         }
       }.frame(maxWidth: .infinity).padding(EdgeInsets(top: 3, leading: 5, bottom: 2, trailing: 5))
-      //.frame(maxWidth: container.size.width, alignment: .leading)
-      //  .background(backgroundColor.cornerRadius(3))
+  }
+}
+
+private extension View {
+  @ViewBuilder
+  func embedInLink(url: URL?) -> some View {
+    if let url = url {
+      Link(destination: url) {
+        self
+      }
+    } else {
+      self
+    }
   }
 }
 
