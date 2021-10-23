@@ -196,7 +196,7 @@ class ServiceAssembly: IServiceAssembly {
     }
     
     func dictControllerModel() -> DictControllerModel {
-        return DictControllerModel(userDictsFetchService: dictsFetchService, sender: self.coreAssembly.requestSender, userDefManager: self.coreAssembly.userDefaultsManager, appUserManager: self.coreAssembly.storageManager, transferService: self.transferService)
+      return DictControllerModel(userDictsFetchService: dictsFetchService, sender: self.coreAssembly.requestSender, userDefManager: self.coreAssembly.userDefaultsManager, appUserManager: self.coreAssembly.storageManager, transferService: self.transferService, updateWidgetDataTaskPerforming: coreAssembly.updateWidgetDataTask)
     }
     
     func cardsControllerDataProvider() -> ICardsControllerDataProvider {

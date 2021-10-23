@@ -15,6 +15,8 @@ protocol ICoreAssembly {
     var phonemesManager: IPhonemesManager { get }
     
     var updateActionsExecutor: IUpdateActionsExecutor { get }
+
+    var updateWidgetDataTask: UpdateWidgetDataTaskPerforming { get }
 }
 
 /// Assembly for creating core level services
@@ -24,6 +26,7 @@ class CoreAssembly: ICoreAssembly {
     let storageManager: IStorageCoordinator = StorageManager()
     let phonemesManager: IPhonemesManager
     let updateActionsExecutor: IUpdateActionsExecutor = UpdateActionsExecutor()
+    lazy var updateWidgetDataTask: UpdateWidgetDataTaskPerforming = UpdateWidgetDataTask(storageManager: storageManager, widgetUserDefaults: WidgetUserDefaults())
     
     init() {
         self.phonemesManager = PhonemesManager()

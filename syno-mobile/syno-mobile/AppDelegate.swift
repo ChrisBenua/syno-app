@@ -38,27 +38,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let controller = rootAssembly.presentationAssembly.startController()
         window?.rootViewController = controller
+
+        rootAssembly.coreAssembly.updateWidgetDataTask.registerUpdateWidgetDataTask()
         
         return true
     }
     
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
-            let url = userActivity.webpageURL,
-            let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
-              return false
-          }
-        if let dictShareUuid = components.path.split(separator: "/").last {
-            showShareController(uuid: String(dictShareUuid))
-            return true
-        }
-        return false
+      guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+            let url = userActivity.webpageURL else { return false }
+      return handleDeeplink(url: url)
     }
     
     private func showShareController(uuid: String) {
         let controller = rootAssembly.presentationAssembly.addShareController(uuid: uuid)
-        if let tabBarController = window?.rootViewController as? CommonTabBarController, let current = tabBarController.selectedViewController {
-            (current as? UINavigationController)?.pushViewController(controller, animated: true)
+        if let current = getCurrentNavigationController() {
+            current.pushViewController(controller, animated: true)
         } else {
             if let loginController = window?.rootViewController as? LoginViewController {
                 let alertController = UIAlertController.okAlertController(title: "Ошибка", message: "Чтобы скачать Словарь необходимо войти в учетную запись")
@@ -66,28 +61,57 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-    
+
+    private func showSpecificCardController(dictId: String, cardId: String) {
+      if let controller = getCurrentNavigationController() {
+        guard let dict = try? rootAssembly.coreAssembly.storageManager.stack.mainContext.fetch(DbUserDictionary.requestByPin(pin: dictId)).first else { return }
+        guard let card = dict.getCards().first(where: { $0.pin == cardId }) else { return }
+        let dictController = rootAssembly.presentationAssembly.cardsViewController(sourceDict: dict)
+        let cardController = rootAssembly.presentationAssembly.translationsViewController(sourceCard: card)
+        controller.pushViewController(dictController, animated: false)
+        controller.pushViewController(cardController, animated: true)
+      }
+    }
+
+    private func getCurrentNavigationController() -> UINavigationController? {
+      if let tabBarController = window?.rootViewController as? CommonTabBarController, let current = tabBarController.selectedViewController {
+        return current as? UINavigationController
+      } else {
+        return nil
+      }
+    }
+
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         Logger.log(#function)
         let sendingAppId = options[.sourceApplication]
         Logger.log("Source application = \(sendingAppId ?? "Unknown")")
         
-        guard let components = NSURLComponents(url: url, resolvingAgainstBaseURL: true),
-              let action = components.path,
-              let params = components.queryItems else {
-            Logger.log("Invalid URL or album path missing")
-            return false
-        }
-        
-        if let dictShareUuid = params.first(where: { $0.name == "uuid" })?.value, action == "share" {
-            Logger.log("action: \(action), uuid: \(dictShareUuid)")
-            showShareController(uuid: dictShareUuid)
-            
-            return true
-        } else {
-            Logger.log("Missing dictshareuuid")
-            return false
-        }
+        return handleDeeplink(url: url)
     }
+
+    private func handleDeeplink(url: URL) -> Bool {
+      guard let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+          Logger.log("Invalid URL")
+          return false
+      }
+      let action = urlComponents.path
+      let components = url.pathComponents
+
+      if action.starts(with: "/share"), let dictShareUuid = urlComponents.path.split(separator: "/").last {
+          showShareController(uuid: String(dictShareUuid))
+          return true
+      } else if components.count >= 2, components[1] == "widgetOpenCard",
+                let params = urlComponents.queryItems,
+                let dictId = params.first(where: { $0.name == "dictId" })?.value,
+                let cardId = params.first(where: { $0.name == "cardId" })?.value
+      {
+          showSpecificCardController(dictId: dictId, cardId: cardId)
+          return true
+      }
+      else {
+          Logger.log("Missing dictshareuuid")
+          return false
+      }
+  }
 }
 

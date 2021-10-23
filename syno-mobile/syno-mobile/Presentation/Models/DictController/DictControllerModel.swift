@@ -40,6 +40,8 @@ class DictControllerModel: IDictControllerModel {
     /// Service for fetching/updating information about current user
     private let appUserManager: IStorageCoordinator
     
+    private let updateWidgetDataTaskPerforming: UpdateWidgetDataTaskPerforming
+
     private var transferService: ITransferGuestDictsToNewAccount
     
     /**
@@ -49,12 +51,20 @@ class DictControllerModel: IDictControllerModel {
      - Parameter userDefManager:Service for setting/getting data from `UserDefaults`
      - Parameter appUserManager: Service for fetching/updating information about current user
      */
-    init(userDictsFetchService: IUserDictionaryFetchService, sender: IRequestSender, userDefManager: IUserDefaultsManager, appUserManager: IStorageCoordinator, transferService: ITransferGuestDictsToNewAccount) {
+    init(
+      userDictsFetchService: IUserDictionaryFetchService,
+      sender: IRequestSender,
+      userDefManager: IUserDefaultsManager,
+      appUserManager: IStorageCoordinator,
+      transferService: ITransferGuestDictsToNewAccount,
+      updateWidgetDataTaskPerforming: UpdateWidgetDataTaskPerforming
+    ) {
         self.userDictsFetchService = userDictsFetchService
         self.requestSender = sender
         self.userDefManager = userDefManager
         self.appUserManager = appUserManager
         self.transferService = transferService
+        self.updateWidgetDataTaskPerforming = updateWidgetDataTaskPerforming
         self.transferService.delegate = self
     }
     
@@ -65,6 +75,7 @@ class DictControllerModel: IDictControllerModel {
     func copyGuestDictsToCurrentUser() {
         transferService.delegate = self
         transferService.transferToUser(newUserEmail: self.userDefManager.getEmail()!)
+        updateWidgetDataTaskPerforming.updateWidgetDataOnFirstFetch()
     }
     
     func initialFetch(completion: ((Bool) -> ())? = nil) {
@@ -74,6 +85,7 @@ class DictControllerModel: IDictControllerModel {
                     let user = self.appUserManager.getCurrentAppUser()!
                     self.userDictsFetchService.updateDicts(dicts: dtos, owner: user, shouldDelete: true, completion: {
                         completion?(true)
+                        self.updateWidgetDataTaskPerforming.updateWidgetDataOnFirstFetch()
                     })
                 case .error(let str):
                     Logger.log("Error while doing init fetch in dicts controller: \(#function)")

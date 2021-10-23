@@ -74,4 +74,11 @@ extension DbUserDictionary {
         
         return request
     }
+
+    static func requestByPin(pin: String) -> NSFetchRequest<DbUserDictionary> {
+        let request: NSFetchRequest<DbUserDictionary> = DbUserDictionary.fetchRequest()
+        request.predicate = NSPredicate(format: "pin == %@", pin)
+
+        return request
+  }
 }
