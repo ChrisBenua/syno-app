@@ -15,12 +15,14 @@ import WidgetKit
 protocol UpdateWidgetDataTaskPerforming {
   func updateWidgetDataOnFirstFetch()
   func registerUpdateWidgetDataTask()
+  func scheduleUpdateWidgetData()
 }
 
 
 class UpdateWidgetDataTask: UpdateWidgetDataTaskPerforming {
   private let storageManager: IStorageCoordinator
   private let widgetUserDefaults: WidgetUserDefaults
+  private let userDefaults = UpdateWidgetDataTaskUserDefaults()
 
   init(storageManager: IStorageCoordinator, widgetUserDefaults: WidgetUserDefaults) {
     self.storageManager = storageManager
@@ -38,37 +40,73 @@ class UpdateWidgetDataTask: UpdateWidgetDataTaskPerforming {
       operation.completionBlock = {
         task.setTaskCompleted(success: !operation.isCancelled)
       }
-      OperationQueue.main.addOperation(operation)
+      OperationQueue().addOperation(operation)
     }
   }
 
   func updateWidgetDataOnFirstFetch() {
     if #available(iOS 14.0, *) {
       let operation = UpdateWidgetDataOperation(storageManager: storageManager, widgetUserDefaults: widgetUserDefaults)
-      OperationQueue.main.addOperation(operation)
+      OperationQueue().addOperation(operation)
     }
   }
 
-  private func scheduleUpdateWidgetData() {
-    let calendar = Calendar.current
+  func scheduleUpdateWidgetData() {
+    let nextMorning = nextMorning()
+    if userDefaults.lastScheduledDate == nextMorning { return }
     let request = BGAppRefreshTaskRequest(identifier: "com.chrisbenua.synomobile.updateWidgetData")
-    guard let tomorrow = calendar.date(byAdding: .day, value: 1, to: Date()) else { return }
-    let tomorrowMorning = calendar.date(byAdding: .hour, value: 6, to: calendar.startOfDay(for: tomorrow))
-    request.earliestBeginDate = tomorrowMorning
+    request.earliestBeginDate = nextMorning
 
    do {
-      try BGTaskScheduler.shared.submit(request)
+     try BGTaskScheduler.shared.submit(request)
+     userDefaults.lastScheduledDate = nextMorning
    } catch {
-      print("Could not schedule app refresh: \(error)")
+     print("Could not schedule app refresh: \(error)")
    }
+  }
+
+  private func nextMorning() -> Date {
+    let calendar = Calendar.current
+    if calendar.component(.hour, from: Date()) < 6 {
+      return calendar.date(byAdding: .hour, value: 6, to: calendar.startOfDay(for: Date()))!
+    } else {
+      let tomorrow = calendar.date(byAdding: .day, value: 1, to: Date())!
+      let tomorrowMorning = calendar.date(byAdding: .hour, value: 6, to: calendar.startOfDay(for: tomorrow))!
+      return tomorrowMorning
+    }
   }
 
   func registerUpdateWidgetDataTask() {
     BGTaskScheduler.shared.register(
       forTaskWithIdentifier: "com.chrisbenua.synomobile.updateWidgetData",
-      using: .main) { task in
+      using: nil) { task in
         self.updateWidgetData(task: task)
       }
+  }
+}
+
+private class UpdateWidgetDataTaskUserDefaults {
+  @UserDefaultsDataValue<String>(key: "UpdateWidgetDataTask.lastScheduledDate", userDefaults: .standard)
+  private var lastScheduledDateString
+
+  private lazy var dateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+    formatter.timeZone = TimeZone.current
+    return formatter
+  }()
+
+  var lastScheduledDate: Date? {
+    get {
+      lastScheduledDateString.flatMap(dateFormatter.date(from:))
+    }
+    set {
+      if let newValue = newValue {
+        lastScheduledDateString = dateFormatter.string(from: newValue)
+      } else {
+        lastScheduledDateString = nil
+      }
+    }
   }
 }
 

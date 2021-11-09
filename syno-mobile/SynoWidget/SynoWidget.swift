@@ -17,19 +17,27 @@ struct SimpleEntry: TimelineEntry {
 
 struct SynoWidgetEntryView : View {
     var entry: SynoCardDataTimelineProvider.Entry
+    let colors: SynoWidgetTheme
 
     var body: some View {
-      CardView2(cardData: entry.cardData)
+      CardView2(cardData: entry.cardData, colors: colors.cardsColors)
     }
 }
 
-@main
+enum SynoWidgetTheme: String {
+  case light
+  case dark
+}
+
 struct SynoWidget: Widget {
-    let kind: String = "SynoWidget"
+    var kind: String {
+      "SynoWidget" + colors.rawValue
+    }
+    var colors: SynoWidgetTheme = .light
 
     var body: some WidgetConfiguration {
         IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: SynoCardDataTimelineProvider()) { entry in
-          SynoWidgetEntryView(entry: entry).unredacted()
+          SynoWidgetEntryView(entry: entry, colors: colors).unredacted()
         }
         .supportedFamilies([.systemMedium])
         .configurationDisplayName("Виджет с Вашими карточками")
@@ -37,11 +45,31 @@ struct SynoWidget: Widget {
     }
 }
 
+@main
+struct SynoWidgetsBundle: WidgetBundle {
+  @WidgetBundleBuilder
+  var body: some Widget {
+    SynoWidget(colors: .light)
+    SynoWidget(colors: .dark)
+  }
+}
+
 struct SynoWidget_Previews: PreviewProvider {
     static var previews: some View {
-        SynoWidgetEntryView(entry: SynoCardDataEntry(date: Date(), cardData: placeholderCardData))
+      SynoWidgetEntryView(entry: SynoCardDataEntry(date: Date(), cardData: placeholderCardData), colors: .dark)
             .previewContext(WidgetPreviewContext(family: .systemMedium))
     }
+}
+
+private extension SynoWidgetTheme {
+  var cardsColors: CardViewColors {
+    switch self {
+    case .light:
+      return .light
+    case .dark:
+      return .dark
+    }
+  }
 }
 
 private let placeholderCardData = WidgetUserDefaults.CardData(

@@ -40,6 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = controller
 
         rootAssembly.coreAssembly.updateWidgetDataTask.registerUpdateWidgetDataTask()
+        rootAssembly.coreAssembly.updateWidgetDataTask.scheduleUpdateWidgetData()
         
         return true
     }

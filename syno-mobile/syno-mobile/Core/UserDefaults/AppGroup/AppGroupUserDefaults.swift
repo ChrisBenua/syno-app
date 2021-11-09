@@ -41,8 +41,12 @@ struct UserDefaultsDataValue<T: Codable> {
       return try? JSONDecoder().decode(T.self, from: data)
     }
     set {
-      guard let data = try? JSONEncoder().encode(newValue) else { return }
-      userDefaults.set(data, forKey: key)
+      if let newValue = newValue {
+        guard let data = try? JSONEncoder().encode(newValue) else { return }
+        userDefaults.set(data, forKey: key)
+      } else {
+        userDefaults.removeObject(forKey: key)
+      }
     }
   }
 }

@@ -2,11 +2,6 @@ import Foundation
 import CoreData
 
 extension DbUserCard {
-    /// Gets `DbUserCard` translations array
-    func getTranslations() -> [DbTranslation] {
-        return (self.translations?.array ?? []) as! [DbTranslation]
-    }
-    
     /// Converts `DbUserCard` to `ICardCellConfiguration`
     func toCellConfiguration() -> ICardCellConfiguration {
         return CardCellConfiguration(translatedWord: self.translatedWord, translations: (self.translations?.array ?? []).map({ (translation) -> String? in

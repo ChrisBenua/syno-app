@@ -9,12 +9,7 @@ extension DbUserDictionary {
         }
         return nil
     }
-    
-    /// Gets `DbUserDictionary` cards array
-    func getCards() -> [DbUserCard] {
-        return (self.userCards?.allObjects ?? []) as! [DbUserCard]
-    }
-    
+  
     /// Converts `DbUserDictionary` to `ITestAndLearnCellConfiguration`
     func toTestAndLearnCellConfiguration() -> ITestAndLearnCellConfiguration {
         let allTest: [DbUserTest] = self.tests?.toArray() ?? []

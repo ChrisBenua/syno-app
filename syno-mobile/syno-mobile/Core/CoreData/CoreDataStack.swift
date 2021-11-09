@@ -3,8 +3,6 @@ import CoreData
 
 /// Service protocol for configuring `CoreData`
 protocol ICoreDataStack {
-    /// `URL` for database
-    var storeURL: URL { get }
     /// Stores object model
     var managedObjectModel: NSManagedObjectModel { get set }
     /// Main `NSPersistentStoreCoordinator` for `managedObjectModel`
@@ -25,10 +23,21 @@ protocol ICoreDataStack {
 }
 
 class CoreDataStack: ICoreDataStack {
-    var storeURL: URL {
+    @UserDefaultsBacked(key: "didMigrate")
+    private var didMigrate: Bool = false
+
+    var oldStoreURL: URL {
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        Logger.log("storeURL: \(documentsURL.absoluteString)")
-        return documentsURL.appendingPathComponent("Mystore12.sqlite")
+        let storeUrl = documentsURL.appendingPathComponent("Mystore12.sqlite")
+        Logger.log("oldStoreURL: \(storeUrl.absoluteString)")
+        return storeUrl
+    }
+
+    var newStoreURL: URL {
+      let fileManager = FileManager.default
+      let appGroupStoreURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: AppGroup.syno.rawValue)!.appendingPathComponent("Mystore12.sqlite")
+      Logger.log("new storeURL: \(appGroupStoreURL.absoluteString)")
+      return appGroupStoreURL
     }
     /// Name of `xcdatamodeld` file
     let dataModelName = "Model"
@@ -45,7 +54,11 @@ class CoreDataStack: ICoreDataStack {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
         let options = [NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true]
         do {
-            try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: self.storeURL, options: options)
+          if didMigrate {
+            try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: self.newStoreURL, options: options)
+          } else {
+            try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: self.oldStoreURL, options: options)
+          }
         } catch let err {
             assert(false)
         }
@@ -76,6 +89,12 @@ class CoreDataStack: ICoreDataStack {
         
         return saveContext
     }()
+
+    init() {
+      if !didMigrate {
+        migrate()
+      }
+    }
     
     func performSave(with context: NSManagedObjectContext, completion: (() -> Void)? = nil) {
         context.perform {
@@ -97,4 +116,42 @@ class CoreDataStack: ICoreDataStack {
             }
         }
     }
+
+    private func migrate() {
+      let coordinator = persistantStoreCoordinator
+      if let oldStore = coordinator.persistentStore(for: oldStoreURL) {
+        do {
+          try coordinator.migratePersistentStore(oldStore, to: newStoreURL, options: nil, withType: NSSQLiteStoreType)
+          self.didMigrate = true
+        } catch let error {
+          print(error)
+        }
+      }
+    }
+}
+
+@propertyWrapper struct UserDefaultsBacked<Value> {
+  var wrappedValue: Value {
+    get {
+      let value = storage.value(forKey: key) as? Value
+      return value ?? defaultValue
+    }
+    set {
+      storage.setValue(newValue, forKey: key)
+    }
+  }
+
+  private let key: String
+  private let defaultValue: Value
+  private let storage: UserDefaults
+
+  init(
+    wrappedValue defaultValue: Value,
+    key: String,
+    storage: UserDefaults = .standard
+  ) {
+    self.defaultValue = defaultValue
+    self.key = key
+    self.storage = storage
+  }
 }

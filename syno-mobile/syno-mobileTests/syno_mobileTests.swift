@@ -7,7 +7,6 @@
 //
 
 import XCTest
-@testable import syno_mobile
 
 class syno_mobileTests: XCTestCase {
 

@@ -11,15 +11,16 @@ import Foundation
 
 struct CardView: View {
   let cardData: WidgetUserDefaults.CardData
+  let colors: CardViewColors
   
   var body: some View {
     HStack(alignment: .center, spacing: 0) {
       Spacer(minLength: 0)
-      TranslatedWordView(translatedWord: cardData.translatedWord)
+      TranslatedWordView(translatedWord: cardData.translatedWord, colors: colors)
       Spacer(minLength: 0)
       VStack(alignment: .leading, spacing: 4) {
         ForEach(cardData.translations.prefix(3), id: \.translation) {
-          TranslationView(translation: $0)
+          TranslationView(translation: $0, colors: colors)
         }
       }.padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
       Spacer(minLength: 0)
@@ -29,6 +30,7 @@ struct CardView: View {
 
 struct CardView2: View {
   let cardData: WidgetUserDefaults.CardData
+  let colors: CardViewColors
   var displayedTranslations: [WidgetUserDefaults.CardData.Translation] {
     Array(cardData.translations.prefix(3))
   }
@@ -37,88 +39,94 @@ struct CardView2: View {
     GeometryReader { container in
       VStack(alignment: .center, spacing: 0) {
         Spacer(minLength: 5).frame(maxHeight: 7)
-        TranslatedWordView2(translatedWord: cardData.translatedWord)
+        TranslatedWordView2(translatedWord: cardData.translatedWord, colors: colors)
         Spacer(minLength: 0)
         VStack(alignment: .leading, spacing: 2) {
           ForEach(Array(displayedTranslations.enumerated()), id: \.element.translation) {
-            TranslationView2(translation: $0.element, index: $0.offset)
+            TranslationView2(translation: $0.element, colors: colors)
             if $0.offset < displayedTranslations.count - 1 {
               HStack {
-                Rectangle().stroke(lineWidth: 0).frame(maxHeight: 1).background(Color.gray.opacity(0.3)).padding(EdgeInsets(top: 0, leading: 7, bottom: 0, trailing: 2))
+                Rectangle().stroke(lineWidth: 0).frame(height: 1).background(Color.gray.opacity(0.3)).padding(EdgeInsets(top: 0, leading: 7, bottom: 0, trailing: 2))
               }
             }
           }
         }.padding(EdgeInsets(top: 5, leading: 8, bottom: 5, trailing: 8))
-        .background(color.cornerRadius(16))
+          .background(Color(colors.translationBackgroundColor).cornerRadius(16))
         
         Spacer(minLength: 13)
       }.frame(maxWidth: .infinity)
         .padding(EdgeInsets(top: 0, leading: 14, bottom: 0, trailing: 14))
-        .background(RadialGradient(colors: [greenColor, endColor], center: UnitPoint(x: 0.5, y: 0), startRadius: 20, endRadius: container.size.height))
+        .background(colors.backgroundView(container.size.width))
     }.embedInLink(url: cardData.deeplink.flatMap{ URL(string: $0) })
   }
 }
 
 struct TranslatedWordView: View {
   let translatedWord: String
+  let colors: CardViewColors
   
   var body: some View {
     Text(translatedWord)
       .font(.system(.title2))
       .bold()
-      .foregroundColor(Color(.headerMainColor))
+      .foregroundColor(Color(colors.headerColor))
       .padding(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
   }
 }
 
 struct TranslatedWordView2: View {
   let translatedWord: String
+  let colors: CardViewColors
   
   var body: some View {
     Text(translatedWord)
       .font(.system(.title2))
       .bold()
-      .foregroundColor(Color(.headerMainColor))
+      .foregroundColor(Color(colors.headerColor))
 
   }
 }
 
 struct TranslationView: View {
   let translation: WidgetUserDefaults.CardData.Translation
+  let colors: CardViewColors
   
   var body: some View {
     GeometryReader { container in
       HStack {
         VStack(alignment: .leading) {
           Text(translation.translation)
-            .font(.system(.body)).layoutPriority(1000)
+            .font(.system(.body))
+            .foregroundColor(Color(colors.translationForegroundColor))
+            .layoutPriority(1000)
           if let transcription = translation.transcription {
             Text(transcription)
               .font(.footnote)
-              .foregroundColor(Color(UIColor.secondaryLabel))
+              .foregroundColor(Color(colors.transcriptionForegroundColor))
           }
         }
         Spacer(minLength: 0)
 
       }.padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
-        .background(color.cornerRadius(10))
     }
   }
 }
 
 struct TranslationView2: View {
   let translation: WidgetUserDefaults.CardData.Translation
-  let index: Int
-  
+  let colors: CardViewColors
+
   var body: some View {
       HStack {
         HStack(alignment: .center) {
           Text(translation.translation)
-            .font(.system(.body)).layoutPriority(1000)
+            .font(.system(.body))
+            .foregroundColor(Color(colors.translationForegroundColor))
+            .layoutPriority(1000)
           if let transcription = translation.transcription {
             Text(transcription)
               .font(.footnote)
-              .foregroundColor(Color(UIColor.secondaryLabel))
+              .foregroundColor(Color(colors.transcriptionForegroundColor))
           }
           Spacer(minLength: 0)
         }
@@ -138,9 +146,3 @@ private extension View {
     }
   }
 }
-
-private let color = Color(red: 241.0 / 255, green: 241.0 / 255, blue: 241.0 / 255)
-private let backgroundColor = Color(red: 137.0 / 255, green: 190.0 / 255, blue: 113.0 / 255, opacity: 0.1)
-private let greenColor = Color(red: 137.0 / 255, green: 190.0 / 255, blue: 113.0 / 255, opacity: 0.1)
-private let endColor = Color(red: 137.0 / 255, green: 190.0 / 255, blue: 113.0 / 255, opacity: 0.05)
-
